@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import List, Optional, Any
 
 
@@ -24,7 +24,7 @@ class MatchBreakdownSchema(BaseModel):
 # === Student Profile ===
 class StudentProfile(BaseModel):
     full_name: str
-    email: str
+    email: EmailStr
     age: Optional[int] = None
     region: Optional[str] = None
     school: Optional[str] = None
@@ -61,12 +61,22 @@ class StudentProfile(BaseModel):
     is_4ps_listahanan: Optional[bool] = False
     parent_occupation: Optional[str] = None
     documents: Optional[List[dict]] = []
+    # RA 10173 — must be true to submit (validated server-side)
+    privacy_consent: bool = False
+    privacy_consent_version: Optional[str] = "ra10173-v1"
+
+    @field_validator("privacy_consent")
+    @classmethod
+    def require_privacy_consent(cls, v: bool) -> bool:
+        if not v:
+            raise ValueError("You must accept the privacy notice to continue (Data Privacy Act of 2012 / RA 10173).")
+        return v
 
 
 class StudentProfileResponse(BaseModel):
     id: int
     full_name: str
-    email: str
+    email: EmailStr
     age: Optional[int] = None
     region: Optional[str] = None
     school: Optional[str] = None
@@ -102,6 +112,8 @@ class StudentProfileResponse(BaseModel):
     is_4ps_listahanan: Optional[bool] = False
     parent_occupation: Optional[str] = None
     documents: Optional[List[dict]] = []
+    privacy_consent_at: Optional[datetime] = None
+    privacy_consent_version: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -225,6 +237,21 @@ class MatchResponse(BaseModel):
     benefit_total_value: Optional[int] = None
     application_deadline: Optional[str] = None
     required_documents: Optional[List[str]] = []
+
+
+# === Upcoming Scholarship (Cycle Prediction) ===
+class UpcomingScholarship(BaseModel):
+    id: int
+    title: str
+    provider: Optional[str] = None
+    cycle_type: Optional[str] = None
+    last_open_date: Optional[str] = None
+    last_close_date: Optional[str] = None
+    predicted_next_open: Optional[str] = None
+    link: Optional[str] = None
+    description: Optional[str] = None
+    benefit_tuition: Optional[bool] = None
+    benefit_total_value: Optional[int] = None
 
 
 # === Match History ===

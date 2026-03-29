@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { apiFetch } from "../api/client";
+import { NetworkError, apiFetch } from "../api/client";
 
 const AUTH_TOKEN_KEY = "auth_token";
 
@@ -20,6 +20,8 @@ interface AuthContextType {
   token: string | null;
   user: AuthUser | null;
   loading: boolean;
+  authError: string | null;
+  clearAuthError: () => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -34,6 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const setToken = useCallback((t: string | null) => {
     if (t) {
@@ -44,6 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setTokenState(t);
   }, []);
 
+  const clearAuthError = useCallback(() => setAuthError(null), []);
+
   const fetchUser = useCallback(
     async (t: string) => {
       try {
@@ -51,15 +56,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           headers: { Authorization: `Bearer ${t}` },
         });
         if (!res.ok) {
-          setToken(null);
-          setUser(null);
+          if (res.status === 401 || res.status === 403) {
+            setToken(null);
+            setUser(null);
+            setAuthError(null);
+          } else {
+            setAuthError(`Could not verify session (${res.status}). Will retry when the server is available.`);
+          }
           return;
         }
         const data = await res.json();
         setUser({ id: data.id, email: data.email, role: data.role ?? "student" });
-      } catch {
-        setToken(null);
-        setUser(null);
+        setAuthError(null);
+      } catch (err) {
+        if (err instanceof NetworkError) {
+          setAuthError("Server unreachable — your session is preserved. Try again when you are online.");
+          return;
+        }
+        setAuthError("Something went wrong while loading your account.");
       }
     },
     [setToken]
@@ -88,6 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await res.json();
       setToken(data.access_token);
       setUser({ id: data.user_id, email, role: data.role ?? "student" });
+      setAuthError(null);
     },
     [setToken]
   );
@@ -106,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await res.json();
       setToken(data.access_token);
       setUser({ id: data.user_id, email, role: data.role ?? "student" });
+      setAuthError(null);
     },
     [setToken]
   );
@@ -113,6 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setToken(null);
     setUser(null);
+    setAuthError(null);
   }, [setToken]);
 
   const authHeaders = useCallback(
@@ -125,7 +142,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, loading, login, register, logout, authHeaders }}
+      value={{
+        token,
+        user,
+        loading,
+        authError,
+        clearAuthError,
+        login,
+        register,
+        logout,
+        authHeaders,
+      }}
     >
       {children}
     </AuthContext.Provider>

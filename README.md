@@ -107,6 +107,12 @@ Install dependencies:
 
 pip install -r requirements.txt
 
+Copy `.env.example` to `.env` in the project root. For **local development**, keep `AUTH_DISABLED=true` and `RUN_MIGRATIONS_ON_STARTUP=true` so you can use the app without logging in and migrations apply on server start. For **production**, set `AUTH_DISABLED=false`, a strong `SECRET_KEY`, and run migrations via your host’s release command (see `docs/DEPLOYMENT.md`).
+
+Run database migrations (if not using startup migrations):
+
+alembic upgrade head
+
 Seed the database with scholarship data:
 
 python seed_data.py

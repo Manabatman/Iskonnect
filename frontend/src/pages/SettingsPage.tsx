@@ -74,10 +74,10 @@ export function SettingsPage() {
 
         <div className="mt-12">
           <Link
-            to="/"
+            to="/dashboard"
             className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700"
           >
-            ← Back to Home
+            ← Back to dashboard
           </Link>
         </div>
       </div>

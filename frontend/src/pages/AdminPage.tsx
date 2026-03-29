@@ -4,7 +4,7 @@ import type { ScholarshipInfo } from "../types";
 import { apiFetch } from "../api/client";
 
 function getAuthHeaders(): HeadersInit {
-  const token = localStorage.getItem("iskonnect_token");
+  const token = localStorage.getItem("auth_token");
   const headers: HeadersInit = { "Content-Type": "application/json" };
   if (token) headers["Authorization"] = `Bearer ${token}`;
   return headers;
@@ -63,8 +63,8 @@ export function AdminPage() {
           <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
             {error}
             <p className="mt-2 text-sm">
-              <Link to="/" className="text-primary-600 hover:underline">
-                Return home
+              <Link to="/dashboard" className="text-primary-600 hover:underline">
+                Return to dashboard
               </Link>
             </p>
           </div>
@@ -79,7 +79,7 @@ export function AdminPage() {
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Admin – Scholarships</h2>
           <Link
-            to="/"
+            to="/dashboard"
             className="text-sm font-medium text-primary-600 hover:text-primary-700"
           >
             Back to app

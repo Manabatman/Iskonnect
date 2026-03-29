@@ -2,7 +2,6 @@
 Match service - orchestrates hard filtering, scoring, and result assembly.
 """
 
-import json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,20 +11,7 @@ from app.scoring import WeightedDeterministicScorer
 from app.taxonomy.regions import normalize_region
 from app.taxonomy.income_brackets import get_income_bracket
 from app.documents.readiness import compute_readiness
-
-
-def _parse_json_list(val, default=None):
-    if val is None:
-        return default or []
-    if isinstance(val, list):
-        return val
-    if isinstance(val, str):
-        try:
-            p = json.loads(val)
-            return p if isinstance(p, list) else (default or [])
-        except (json.JSONDecodeError, TypeError):
-            return [x.strip() for x in val.split(",") if x.strip()] or (default or [])
-    return default or []
+from app.utils.json_helpers import parse_json
 
 
 def _get_field_match_level(
@@ -189,7 +175,7 @@ class MatchService:
 
     def _build_scoring_payload(self, profile: dict, scholarship: dict) -> ScoringPayload:
         """Build ScoringPayload from profile and scholarship dicts."""
-        eligible_levels = _parse_json_list(scholarship.get("eligible_levels"))
+        eligible_levels = parse_json(scholarship.get("eligible_levels"))
         legacy_level = scholarship.get("level")
         profile_level = profile.get("education_level") or profile.get("current_academic_stage")
         age = profile.get("age")
@@ -200,7 +186,7 @@ class MatchService:
         )
 
         profile_school_type = (profile.get("school_type") or "").strip().lower()
-        eligible_school_types = _parse_json_list(scholarship.get("eligible_school_types"))
+        eligible_school_types = parse_json(scholarship.get("eligible_school_types"))
         school_match = not eligible_school_types or not profile_school_type or any(
             (st or "").strip().lower() == profile_school_type for st in eligible_school_types
         )
@@ -213,28 +199,28 @@ class MatchService:
         field_match = _get_field_match_level(
             profile.get("field_of_study_broad"),
             profile.get("field_of_study_specific"),
-            _parse_json_list(profile.get("preferred_courses")),
-            _parse_json_list(profile.get("needs")),
-            _parse_json_list(scholarship.get("eligible_courses_psced")),
-            _parse_json_list(scholarship.get("eligible_courses_specific")),
-            _parse_json_list(scholarship.get("needs_tags")),
+            parse_json(profile.get("preferred_courses")),
+            parse_json(profile.get("needs")),
+            parse_json(scholarship.get("eligible_courses_psced")),
+            parse_json(scholarship.get("eligible_courses_specific")),
+            parse_json(scholarship.get("needs_tags")),
         )
 
         geo_match = _get_geographic_match_level(
             profile.get("region"),
             profile.get("city_municipality"),
-            _parse_json_list(scholarship.get("eligible_regions")),
-            _parse_json_list(scholarship.get("eligible_cities")),
-            _parse_json_list(scholarship.get("regions")),
+            parse_json(scholarship.get("eligible_regions")),
+            parse_json(scholarship.get("eligible_cities")),
+            parse_json(scholarship.get("regions")),
         )
 
         extrac_match = _count_matches(
-            _parse_json_list(profile.get("extracurriculars")),
-            _parse_json_list(scholarship.get("preferred_extracurriculars")),
+            parse_json(profile.get("extracurriculars")),
+            parse_json(scholarship.get("preferred_extracurriculars")),
         )
         award_match = _count_matches(
-            _parse_json_list(profile.get("awards")),
-            _parse_json_list(scholarship.get("preferred_awards")),
+            parse_json(profile.get("awards")),
+            parse_json(scholarship.get("preferred_awards")),
         )
 
         readiness = compute_readiness(
@@ -242,9 +228,9 @@ class MatchService:
             scholarship.get("required_documents"),
         )
 
-        eligible_regions = _parse_json_list(scholarship.get("eligible_regions"))
-        legacy_regions = _parse_json_list(scholarship.get("regions"))
-        eligible_cities = _parse_json_list(scholarship.get("eligible_cities"))
+        eligible_regions = parse_json(scholarship.get("eligible_regions"))
+        legacy_regions = parse_json(scholarship.get("regions"))
+        eligible_cities = parse_json(scholarship.get("eligible_cities"))
 
         return ScoringPayload(
             gwa_normalized=profile.get("gwa_normalized"),
@@ -260,7 +246,7 @@ class MatchService:
             scholarship_type=scholarship.get("scholarship_type") or "Merit-and-Need",
             min_gwa_required=scholarship.get("min_gwa_normalized"),
             max_income_threshold=scholarship.get("max_income_threshold"),
-            priority_groups=_parse_json_list(scholarship.get("priority_groups")),
+            priority_groups=parse_json(scholarship.get("priority_groups")),
             document_readiness_ratio=readiness.ratio,
             profile_region=profile.get("region"),
             profile_city=profile.get("city_municipality"),
@@ -276,7 +262,7 @@ class MatchService:
             "provider": scholarship.get("provider"),
             "link": scholarship.get("link"),
             "description": scholarship.get("description"),
-            "regions": _parse_json_list(scholarship.get("regions") or scholarship.get("eligible_regions")),
+            "regions": parse_json(scholarship.get("regions") or scholarship.get("eligible_regions")),
             "min_age": scholarship.get("min_age"),
             "max_age": scholarship.get("max_age"),
             "level": scholarship.get("level"),
@@ -303,5 +289,5 @@ class MatchService:
                 if hasattr(scholarship.get("application_open_date"), "isoformat")
                 else scholarship.get("application_open_date")
             ),
-            "required_documents": _parse_json_list(scholarship.get("required_documents")),
+            "required_documents": parse_json(scholarship.get("required_documents")),
         }

@@ -30,3 +30,14 @@ jobs:
 
       - name: Run tests
         run: python -m pytest app/tests/ -v --tb=short
+
+  # Optional: wire deploy hooks after enabling Render/Vercel secrets in the repo
+  # deploy:
+  #   needs: test
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Trigger Render deploy
+  #       run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+  #     - name: Trigger Vercel deploy
+  #       run: curl -fsS -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"

@@ -1,0 +1,1 @@
+"""Scholarship cycle prediction module."""

@@ -122,9 +122,31 @@ def require_profile_owner(
     user_id: int,
     db: Session,
 ) -> None:
-    """Raise 403 if profile does not belong to user."""
+    """Raise 403 if profile does not belong to user. Anonymous profiles (user_id NULL) allow any caller."""
     profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
-    if profile.user_id is not None and profile.user_id != user_id:
+    if profile.user_id is None:
+        return
+    if profile.user_id != user_id:
         raise HTTPException(status_code=403, detail="Access denied")
+
+
+def assert_can_read_profile(
+    profile_id: int,
+    db: Session,
+    user_id: int | None,
+) -> None:
+    """
+    Enforce read access for a profile.
+    - Anonymous profiles (no linked user): readable by anyone (match flow after anonymous submit).
+    - Claimed profiles: only the owning user (valid JWT) may read.
+    """
+    profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    if profile.user_id is not None:
+        if user_id is None:
+            raise HTTPException(status_code=403, detail="Access denied")
+        if profile.user_id != user_id:
+            raise HTTPException(status_code=403, detail="Access denied")

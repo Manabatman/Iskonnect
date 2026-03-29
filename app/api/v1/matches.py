@@ -4,12 +4,14 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 
-from app.auth import get_current_user_id, require_profile_owner
+from app.auth import assert_can_read_profile, get_current_user_id
 from app.db import get_db
 from app.limiter import limiter
 from app.api.v1.profiles import get_profile_dict
 from app.api.v1.scholarships import get_cached_scholarship_dicts
 from app.matching.match_service import MatchService
+from app.matching.profile_completeness import profile_completeness_payload
+from app.prediction.cycle_predictor import get_upcoming_scholarships
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -25,12 +27,11 @@ def get_matches(
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
     """Get ranked matches for a profile. Requires auth in production; must own profile."""
+    assert_can_read_profile(profile_id, db, user_id)
     profile = get_profile_dict(profile_id, db)
     if not profile:
         logger.warning("matches_profile_not_found profile_id=%s", profile_id)
         raise HTTPException(status_code=404, detail="Profile not found")
-    if user_id is not None:
-        require_profile_owner(profile_id, user_id, db)
 
     scholarship_dicts = get_cached_scholarship_dicts(db)
 
@@ -43,4 +44,13 @@ def get_matches(
         elif "score" in r and "final_score" not in r:
             r["final_score"] = r["score"]
 
-    return {"matches": results}
+    response = {
+        "matches": results,
+        "profile_completeness": profile_completeness_payload(profile),
+    }
+    if len(results) == 0:
+        upcoming = get_upcoming_scholarships(profile, scholarship_dicts)
+        if upcoming:
+            logger.info("matches_empty_upcoming_shown profile_id=%s count=%d", profile_id, len(upcoming))
+            response["upcoming_scholarships"] = upcoming
+    return response

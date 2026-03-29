@@ -269,7 +269,7 @@ export function ScholarshipSearchPage() {
             Search Scholarships
           </h1>
           <Link
-            to="/"
+            to="/profile-builder"
             className="w-fit rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             Build Profile for Matches

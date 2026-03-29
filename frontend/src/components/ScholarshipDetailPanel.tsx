@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { ScholarshipInfo } from "../types";
+import { formatDate } from "../utils/formatDate";
 import { BookmarkButton } from "./BookmarkButton";
 
 const DOCUMENT_LABELS: Record<string, string> = {
@@ -34,16 +35,6 @@ interface ScholarshipDetailPanelProps {
   };
   onClose: () => void;
   isOpen: boolean;
-}
-
-function formatDate(d: string | null | undefined): string {
-  if (!d) return "—";
-  try {
-    const date = new Date(d);
-    return date.toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" });
-  } catch {
-    return String(d);
-  }
 }
 
 export function ScholarshipDetailPanel({ scholarship, onClose, isOpen }: ScholarshipDetailPanelProps) {
