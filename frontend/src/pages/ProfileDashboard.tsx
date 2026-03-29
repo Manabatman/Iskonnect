@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchRunSummary, SavedScholarship, StudentProfileResponse } from "../types";
-import { apiFetch } from "../api/client";
+import { NetworkError, apiFetch } from "../api/client";
 
 export function ProfileDashboard() {
-  const { user, authHeaders, loading: authLoading } = useAuth();
+  const { user, authHeaders } = useAuth();
   const navigate = useNavigate();
   const [profiles, setProfiles] = useState<StudentProfileResponse[]>([]);
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
@@ -17,13 +17,6 @@ export function ProfileDashboard() {
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toggleSave } = useSavedScholarships();
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/login");
-      return;
-    }
-  }, [authLoading, user, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -46,7 +39,15 @@ export function ProfileDashboard() {
         const savedList = (savedData as { saved?: SavedScholarship[] }).saved;
         setSaved(Array.isArray(savedList) ? savedList : []);
       })
-      .catch(() => setError("Failed to load data"))
+      .catch((err) => {
+        if (err instanceof NetworkError) {
+          setError(
+            "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL matches your backend."
+          );
+        } else {
+          setError("Failed to load data");
+        }
+      })
       .finally(() => {
         setLoading(false);
         setSavedLoading(false);
@@ -115,17 +116,7 @@ export function ProfileDashboard() {
     }
   };
 
-  if (authLoading || !user) {
-    return (
-      <section className="py-12">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="animate-pulse rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12">
-            <div className="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700" />
-          </div>
-        </div>
-      </section>
-    );
-  }
+  if (!user) return null;
 
   return (
     <section className="py-12">
@@ -154,7 +145,7 @@ export function ProfileDashboard() {
             <p className="mt-4 text-slate-600 dark:text-slate-400">
               No profile yet.{" "}
               <Link
-                to="/"
+                to="/profile-builder"
                 className="font-medium text-primary-600 hover:text-primary-700"
               >
                 Create your profile
@@ -172,7 +163,7 @@ export function ProfileDashboard() {
                 </p>
               </div>
               <Link
-                to="/"
+                to="/profile-builder"
                 className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600"
               >
                 Edit Profile

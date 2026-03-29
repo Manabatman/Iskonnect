@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -8,10 +8,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
-from app.auth import get_current_user_id
+from app.auth import assert_can_read_profile, get_current_user_id
 from app.config import settings
 from app.db import get_db
 from app.utils.sanitize import strip_tags
+from app.utils.json_helpers import parse_json
 
 logger = logging.getLogger(__name__)
 from app.limiter import limiter
@@ -19,20 +20,6 @@ from app.taxonomy.income_brackets import get_income_bracket
 from app.taxonomy.gwa_normalizer import normalize_gwa
 
 router = APIRouter()
-
-
-def _parse_json(val, default=None):
-    if val is None:
-        return default if default is not None else []
-    if isinstance(val, list):
-        return val
-    if isinstance(val, str):
-        try:
-            p = json.loads(val)
-            return p if isinstance(p, list) else (default or [])
-        except (json.JSONDecodeError, TypeError):
-            return [x.strip() for x in val.split(",") if x.strip()] or (default or [])
-    return default or []
 
 
 def _profile_to_response(p):
@@ -43,7 +30,7 @@ def _profile_to_response(p):
         "age": p.age,
         "region": p.region,
         "school": p.school,
-        "needs": _parse_json(p.needs),
+        "needs": parse_json(p.needs),
         "education_level": p.education_level,
         "gender": getattr(p, "gender", None),
         "birthdate": p.birthdate.isoformat() if getattr(p, "birthdate", None) else None,
@@ -59,9 +46,10 @@ def _profile_to_response(p):
         "gwa_normalized": getattr(p, "gwa_normalized", None),
         "field_of_study_broad": getattr(p, "field_of_study_broad", None),
         "field_of_study_specific": getattr(p, "field_of_study_specific", None),
-        "preferred_courses": _parse_json(getattr(p, "preferred_courses", None), default=[]),
-        "extracurriculars": _parse_json(getattr(p, "extracurriculars", None)),
-        "awards": _parse_json(getattr(p, "awards", None)),
+        # Use shared parse_json (same as needs/documents); _parse_json was never defined in this module.
+        "preferred_courses": parse_json(getattr(p, "preferred_courses", None), default=[]),
+        "extracurriculars": parse_json(getattr(p, "extracurriculars", None)),
+        "awards": parse_json(getattr(p, "awards", None)),
         "household_income_annual": getattr(p, "household_income_annual", None),
         "income_bracket": getattr(p, "income_bracket", None),
         "is_underprivileged": getattr(p, "is_underprivileged", False) or False,
@@ -74,7 +62,9 @@ def _profile_to_response(p):
         "is_farmer_fisher_dependent": getattr(p, "is_farmer_fisher_dependent", False) or False,
         "is_4ps_listahanan": getattr(p, "is_4ps_listahanan", False) or False,
         "parent_occupation": getattr(p, "parent_occupation", None),
-        "documents": _parse_json(getattr(p, "documents", None), default=[]),
+        "documents": parse_json(getattr(p, "documents", None), default=[]),
+        "privacy_consent_at": p.privacy_consent_at.isoformat() if getattr(p, "privacy_consent_at", None) else None,
+        "privacy_consent_version": getattr(p, "privacy_consent_version", None),
     }
 
 
@@ -126,6 +116,8 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "is_4ps_listahanan": profile.is_4ps_listahanan or False,
         "parent_occupation": profile.parent_occupation,
         "documents": json.dumps(profile.documents or []),
+        "privacy_consent_at": datetime.now(timezone.utc) if profile.privacy_consent else None,
+        "privacy_consent_version": profile.privacy_consent_version if profile.privacy_consent else None,
     }
 
 
@@ -134,10 +126,10 @@ def list_profiles(
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
-    """List profiles. When auth enabled, only lists current user's profiles."""
-    query = db.query(models.Student)
-    if user_id is not None:
-        query = query.filter(models.Student.user_id == user_id)
+    """List profiles. Only returns the current user's profiles; unauthenticated requests get an empty list."""
+    if user_id is None:
+        return []
+    query = db.query(models.Student).filter(models.Student.user_id == user_id)
     profiles = query.all()
     return [_profile_to_response(p) for p in profiles]
 
@@ -160,8 +152,8 @@ def create_profile(
 
     logger.info("profile_create email=%s user_id=%s", profile.email, user_id)
 
-    # Try insert first. If a concurrent request already created this email,
-    # the unique constraint fires an IntegrityError and we fall back to update.
+    # Try insert first. On duplicate email, update only when the caller owns the row
+    # (or both sides are anonymous); never silently overwrite another user's profile.
     try:
         db_profile = models.Student(**data)
         db.add(db_profile)
@@ -170,12 +162,25 @@ def create_profile(
         return _profile_to_response(db_profile)
     except IntegrityError:
         db.rollback()
-        logger.warning("profile_create_integrity_fallback email=%s", profile.email)
+        logger.warning("profile_create_integrity_conflict email=%s", profile.email)
         existing = db.query(models.Student).filter(
             models.Student.email == profile.email
         ).first()
         if not existing:
             raise HTTPException(status_code=500, detail="Profile conflict")
+        if existing.user_id is not None:
+            if user_id is None:
+                raise HTTPException(
+                    status_code=409,
+                    detail="A profile with this email already exists. Sign in to update it.",
+                )
+            if existing.user_id != user_id:
+                raise HTTPException(
+                    status_code=409,
+                    detail="A profile with this email already exists under another account.",
+                )
+        if user_id is not None:
+            data["user_id"] = user_id
         for k, v in data.items():
             setattr(existing, k, v)
         db.commit()
@@ -189,13 +194,11 @@ def get_profile(
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
+    assert_can_read_profile(profile_id, db, user_id)
     profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
     if not profile:
         logger.warning("profile_get_not_found profile_id=%s", profile_id)
         raise HTTPException(status_code=404, detail="Profile not found")
-    if user_id is not None and profile.user_id is not None and profile.user_id != user_id:
-        logger.warning("profile_access_denied profile_id=%s user_id=%s", profile_id, user_id)
-        raise HTTPException(status_code=403, detail="Access denied")
     return _profile_to_response(profile)
 
 

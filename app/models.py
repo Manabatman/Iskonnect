@@ -70,6 +70,8 @@ class Student(Base):
     birthdate = Column(Date)
     profile_completeness = Column(Float)
     needs = Column(Text)  # JSON-encoded list (legacy)
+    privacy_consent_at = Column(DateTime, nullable=True)
+    privacy_consent_version = Column(String, nullable=True)
 
 
 class Scholarship(Base):
@@ -127,10 +129,31 @@ class Scholarship(Base):
     application_open_date = Column(Date)
     academic_year_target = Column(String)
 
+    # === CYCLE PREDICTION ===
+    last_open_date = Column(Date, nullable=True)
+    last_close_date = Column(Date, nullable=True)
+    cycle_type = Column(String, nullable=True)  # "annual" | "semester" | "rolling"
+
     # === METADATA ===
     is_active = Column(Boolean, default=True)
     level = Column(String)  # Legacy: High School, College, TVET, Graduate
     needs_tags = Column(Text)  # JSON-encoded list (legacy)
+
+
+class ScholarshipStaging(Base):
+    """Queued scholarship rows from CSV/import before admin approval."""
+
+    __tablename__ = "scholarships_staging"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    provider = Column(String)
+    source = Column(String)
+    payload_json = Column(Text, nullable=False)
+    status = Column(String, nullable=False, server_default="pending")  # pending | approved | rejected
+    dedupe_key = Column(String, index=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    reviewed_at = Column(DateTime, nullable=True)
 
 
 class MatchRun(Base):

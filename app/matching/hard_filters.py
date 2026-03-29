@@ -3,23 +3,8 @@ Hard filter service - deal-breakers that exclude scholarships before scoring.
 If any hard filter fails, the scholarship is not shown.
 """
 
-import json
 from app.taxonomy.regions import normalize_region
-
-
-def _parse_json_list(val: str | list | None) -> list:
-    """Parse JSON list from string or return list as-is."""
-    if val is None:
-        return []
-    if isinstance(val, list):
-        return [str(x).strip() for x in val if x]
-    if isinstance(val, str):
-        try:
-            parsed = json.loads(val)
-            return [str(x).strip() for x in parsed if x] if isinstance(parsed, list) else []
-        except (json.JSONDecodeError, TypeError):
-            return [x.strip() for x in val.split(",") if x.strip()]
-    return []
+from app.utils.json_helpers import parse_json_list
 
 
 def _level_matches(profile_level: str | None, eligible_levels: list, legacy_level: str | None) -> bool:
@@ -202,22 +187,22 @@ def filter_scholarships(profile: dict, scholarships: list) -> list:
             continue
         if not _level_matches(
             profile.get("education_level") or profile.get("current_academic_stage"),
-            _parse_json_list(sch.get("eligible_levels") or sch.get("level")),
+            parse_json_list(sch.get("eligible_levels") or sch.get("level")),
             sch.get("level"),
         ):
             continue
         if not _region_matches(
             profile.get("region"),
             profile.get("city_municipality"),
-            _parse_json_list(sch.get("eligible_regions")),
-            _parse_json_list(sch.get("eligible_cities")),
+            parse_json_list(sch.get("eligible_regions")),
+            parse_json_list(sch.get("eligible_cities")),
             sch.get("residency_required", False),
-            _parse_json_list(sch.get("regions")),
+            parse_json_list(sch.get("regions")),
         ):
             continue
         if not _school_type_matches(
             profile.get("school_type"),
-            _parse_json_list(sch.get("eligible_school_types")),
+            parse_json_list(sch.get("eligible_school_types")),
         ):
             continue
         if not _income_matches(
@@ -233,9 +218,9 @@ def filter_scholarships(profile: dict, scholarships: list) -> list:
             continue
         if not _field_matches(
             profile.get("field_of_study_broad"),
-            _parse_json_list(profile.get("preferred_courses")),
-            _parse_json_list(sch.get("eligible_courses_psced")),
-            _parse_json_list(sch.get("eligible_courses_specific")),
+            parse_json_list(profile.get("preferred_courses")),
+            parse_json_list(sch.get("eligible_courses_psced")),
+            parse_json_list(sch.get("eligible_courses_specific")),
         ):
             continue
         result.append(sch)

@@ -60,6 +60,9 @@ try:
                 "application_deadline": date(2026, 6, 30),
                 "application_open_date": date(2026, 3, 1),
                 "academic_year_target": "2026-2027",
+                "cycle_type": "annual",
+                "last_open_date": date(2025, 3, 1),
+                "last_close_date": date(2025, 6, 30),
             },
             {
                 "title": "DOST-SEI Undergraduate Scholarship",
@@ -95,6 +98,9 @@ try:
                 "application_deadline": date(2026, 4, 15),
                 "application_open_date": date(2026, 2, 1),
                 "academic_year_target": "2026-2027",
+                "cycle_type": "annual",
+                "last_open_date": date(2025, 2, 1),
+                "last_close_date": date(2025, 4, 15),
             },
             {
                 "title": "DOST-SEI Graduate Scholarship",
@@ -130,6 +136,9 @@ try:
                 "application_deadline": date(2026, 5, 31),
                 "application_open_date": date(2026, 3, 1),
                 "academic_year_target": "2026-2027",
+                "cycle_type": "semester",
+                "last_open_date": date(2025, 9, 1),
+                "last_close_date": date(2025, 11, 30),
             },
             {
                 "title": "TESDA Scholarship Program",
@@ -165,6 +174,9 @@ try:
                 "application_deadline": date(2026, 12, 31),
                 "application_open_date": date(2026, 1, 1),
                 "academic_year_target": "2026-2027",
+                "cycle_type": "annual",
+                "last_open_date": date(2025, 1, 1),
+                "last_close_date": date(2025, 12, 31),
             },
             {
                 "title": "CHED-Tulong Dulong Program",
@@ -200,6 +212,9 @@ try:
                 "application_deadline": date(2026, 7, 31),
                 "application_open_date": date(2026, 4, 1),
                 "academic_year_target": "2026-2027",
+                "cycle_type": "annual",
+                "last_open_date": date(2025, 4, 1),
+                "last_close_date": date(2025, 7, 31),
             },
             {
                 "title": "UniFAST Tertiary Education Subsidy",
@@ -909,6 +924,9 @@ try:
                 application_deadline=s.get("application_deadline"),
                 application_open_date=s.get("application_open_date"),
                 academic_year_target=s.get("academic_year_target"),
+                cycle_type=s.get("cycle_type"),
+                last_open_date=s.get("last_open_date"),
+                last_close_date=s.get("last_close_date"),
                 is_active=True,
             ))
         db.commit()

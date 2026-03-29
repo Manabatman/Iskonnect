@@ -1,8 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
 
   return (
@@ -16,9 +17,9 @@ export function Navbar() {
         </Link>
         <nav className="hidden items-center gap-6 sm:flex">
           <Link
-            to="/"
+            to={user ? "/profile-builder" : "/"}
             className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-              location.pathname === "/"
+              location.pathname === (user ? "/profile-builder" : "/")
                 ? "font-medium text-primary-600 dark:text-primary-400"
                 : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
             }`}
@@ -44,7 +45,10 @@ export function Navbar() {
               </span>
               <button
                 type="button"
-                onClick={logout}
+                onClick={() => {
+                  logout();
+                  navigate("/");
+                }}
                 className="text-sm text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
               >
                 Logout

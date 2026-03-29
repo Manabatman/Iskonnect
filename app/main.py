@@ -4,7 +4,17 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
-from app.api.v1 import auth_routes, match_history, matches, profiles, saved_scholarships, scholarship_search, scholarships, suggestions
+from app.api.v1 import (
+    auth_routes,
+    match_history,
+    matches,
+    profiles,
+    saved_scholarships,
+    scholarship_search,
+    scholarship_staging,
+    scholarships,
+    suggestions,
+)
 from app.config import settings
 from app.db import engine, Base
 from app.limiter import limiter
@@ -43,6 +53,7 @@ app.include_router(auth_routes.router, prefix="/api/v1")
 app.include_router(profiles.router, prefix="/api/v1")
 app.include_router(scholarship_search.router, prefix="/api/v1")
 app.include_router(scholarships.router, prefix="/api/v1")
+app.include_router(scholarship_staging.router, prefix="/api/v1")
 app.include_router(matches.router, prefix="/api/v1")
 app.include_router(match_history.router, prefix="/api/v1")
 app.include_router(saved_scholarships.router, prefix="/api/v1")
@@ -50,10 +61,16 @@ app.include_router(suggestions.router, prefix="/api/v1")
 
 @app.on_event("startup")
 def run_migrations():
-    """Ensure database schema is up to date. Run `alembic upgrade head` for migrations."""
+    """
+    Optional: run Alembic migrations on startup (local dev only).
+    Production: set RUN_MIGRATIONS_ON_STARTUP=false and use release command: alembic upgrade head
+    """
+    if not settings.run_migrations_on_startup:
+        return
     try:
         from alembic import command
         from alembic.config import Config
+
         alembic_cfg = Config("alembic.ini")
         command.upgrade(alembic_cfg, "head")
     except Exception:

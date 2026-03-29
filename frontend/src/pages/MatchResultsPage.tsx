@@ -1,9 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import type { MatchResult } from "../types";
+import type { MatchResult, ProfileCompleteness, UpcomingScholarship } from "../types";
 import { ScholarshipCard } from "../components/ScholarshipCard";
+import { UpcomingScholarshipCard } from "../components/UpcomingScholarshipCard";
 import { useAuth } from "../contexts/AuthContext";
-import { apiFetch } from "../api/client";
+import { NetworkError, apiFetch } from "../api/client";
+
+function fetchErrorMessage(err: unknown, fallback: string): string {
+  if (err instanceof NetworkError) {
+    return "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL is correct.";
+  }
+  if (err instanceof Error) {
+    if (err.message === "Failed to fetch" || err.name === "TypeError") {
+      return "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL is correct.";
+    }
+    return err.message;
+  }
+  return fallback;
+}
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 export function MatchResultsPage() {
   const { profileId } = useParams<{ profileId: string }>();
@@ -12,6 +27,8 @@ export function MatchResultsPage() {
   const { authHeaders } = useAuth();
   const navigate = useNavigate();
   const [matches, setMatches] = useState<MatchResult[]>([]);
+  const [upcomingScholarships, setUpcomingScholarships] = useState<UpcomingScholarship[]>([]);
+  const [profileCompleteness, setProfileCompleteness] = useState<ProfileCompleteness | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,14 +41,21 @@ export function MatchResultsPage() {
         headers: authHeaders(),
       })
         .then((res) => {
+          if (res.status === 401 || res.status === 403) {
+            throw new Error("Session expired or not authorized. Please sign in again.");
+          }
           if (!res.ok) throw new Error("Unable to fetch match run");
           return res.json();
         })
         .then((data) => {
-          if (!cancelled) setMatches(data.results ?? []);
+          if (!cancelled) {
+            setMatches(data.results ?? []);
+            setUpcomingScholarships([]);
+            setProfileCompleteness(null);
+          }
         })
         .catch((err) => {
-          if (!cancelled) setError(err instanceof Error ? err.message : "Something went wrong");
+          if (!cancelled) setError(fetchErrorMessage(err, "Something went wrong"));
         })
         .finally(() => {
           if (!cancelled) setLoading(false);
@@ -48,16 +72,25 @@ export function MatchResultsPage() {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    apiFetch(`/api/v1/matches/${profileId}`)
+    apiFetch(`/api/v1/matches/${profileId}`, {
+      headers: authHeaders(),
+    })
       .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          throw new Error("Session expired or not authorized. Please sign in again.");
+        }
         if (!res.ok) throw new Error("Unable to fetch matches");
         return res.json();
       })
-      .then((data) => {
-        if (!cancelled) setMatches(data.matches ?? []);
-      })
+        .then((data) => {
+          if (!cancelled) {
+            setMatches(data.matches ?? []);
+            setUpcomingScholarships(data.upcoming_scholarships ?? []);
+            setProfileCompleteness(data.profile_completeness ?? null);
+          }
+        })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Something went wrong");
+        if (!cancelled) setError(fetchErrorMessage(err, "Something went wrong"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -67,7 +100,7 @@ export function MatchResultsPage() {
     };
   }, [profileId, runId, authHeaders]);
 
-  const handleReset = () => navigate("/");
+  const handleReset = () => navigate("/profile-builder");
 
   if (loading) {
     return (
@@ -108,6 +141,20 @@ export function MatchResultsPage() {
   return (
     <section id="scholarships" className="py-12">
       <div className="mx-auto max-w-6xl px-4">
+        {profileCompleteness?.low_data_warning ? (
+          <div
+            className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100"
+            role="status"
+          >
+            <p className="font-medium">Limited profile data</p>
+            <p className="mt-1 text-amber-800 dark:text-amber-200">
+              Only {profileCompleteness.filled_fields} of {profileCompleteness.total_fields} key fields are filled.
+              Matches may be broad or less accurate — add income, GWA, field of study, and school type for better
+              results.
+            </p>
+          </div>
+        ) : null}
+
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
             Your Top Matches
@@ -126,40 +173,70 @@ export function MatchResultsPage() {
         </div>
 
         {matches.length === 0 ? (
-          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12 text-center shadow-md">
-            <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700">
-              <svg
-                className="h-12 w-12 text-slate-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+          upcomingScholarships.length > 0 ? (
+            <div className="space-y-6">
+              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-md">
+                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
+                  No scholarships match your profile right now.
+                </p>
+                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  However, these scholarships typically reopen on a cycle. Based on last year&apos;s dates, here&apos;s when they&apos;re expected to open:
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {upcomingScholarships.map((sch) => (
+                  <UpcomingScholarshipCard key={sch.id} scholarship={sch} />
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-label="Start a new profile"
+                >
+                  Start new profile
+                </button>
+              </div>
             </div>
-            <p className="text-lg font-medium text-slate-700 dark:text-slate-300">No matches found yet</p>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Try adjusting your age, region, or needs and run the matching again.
-            </p>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="mt-6 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-              aria-label="Start a new profile"
-            >
-              Start new profile
-            </button>
-          </div>
+          ) : (
+            <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12 text-center shadow-md">
+              <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700">
+                <svg
+                  className="h-12 w-12 text-slate-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <p className="text-lg font-medium text-slate-700 dark:text-slate-300">No matches found yet</p>
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                Try adjusting your age, region, or needs and run the matching again.
+              </p>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="mt-6 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                aria-label="Start a new profile"
+              >
+                Start new profile
+              </button>
+            </div>
+          )
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {matches.map((match) => (
-              <ScholarshipCard key={match.id} match={match} />
+              <ErrorBoundary key={match.id}>
+                <ScholarshipCard match={match} />
+              </ErrorBoundary>
             ))}
           </div>
         )}

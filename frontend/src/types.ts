@@ -36,6 +36,8 @@ export interface StudentProfile {
   is_4ps_listahanan?: boolean;
   parent_occupation?: string;
   documents?: Array<{ type: string; status: string }>;
+  privacy_consent?: boolean;
+  privacy_consent_version?: string;
 }
 
 export interface MatchFactorBreakdown {
@@ -52,6 +54,26 @@ export interface MatchBreakdown {
   geographic?: MatchFactorBreakdown;
   document_readiness?: MatchFactorBreakdown;
   priority_group?: MatchFactorBreakdown;
+}
+
+export interface ProfileCompleteness {
+  filled_fields: number;
+  total_fields: number;
+  low_data_warning: boolean;
+}
+
+export interface UpcomingScholarship {
+  id: number;
+  title: string;
+  provider?: string | null;
+  cycle_type?: string | null;
+  last_open_date?: string | null;
+  last_close_date?: string | null;
+  predicted_next_open?: string | null;
+  link?: string | null;
+  description?: string;
+  benefit_tuition?: boolean;
+  benefit_total_value?: number | null;
 }
 
 export interface MatchResult {
@@ -133,6 +155,7 @@ export interface ScholarshipInfo {
   benefit_books?: boolean;
   benefit_total_value?: number | null;
   application_deadline?: string | null;
+  application_open_date?: string | null;
   is_active?: boolean;
 }
 

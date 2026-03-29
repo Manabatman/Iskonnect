@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { apiFetch } from "../api/client";
+import { NetworkError, apiFetch } from "../api/client";
 import { useAuth } from "./AuthContext";
 
 interface SavedScholarshipsContextType {
@@ -14,6 +14,8 @@ interface SavedScholarshipsContextType {
   isSaved: (id: number) => boolean;
   toggleSave: (id: number) => Promise<boolean>;
   loading: boolean;
+  error: string | null;
+  clearError: () => void;
   refresh: () => Promise<void>;
 }
 
@@ -23,10 +25,14 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
   const { token: authToken } = useAuth();
   const [savedIds, setSavedIds] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const clearError = useCallback(() => setError(null), []);
 
   const fetchIds = useCallback(async () => {
     if (!authToken) {
       setSavedIds(new Set());
+      setError(null);
       return;
     }
     setLoading(true);
@@ -37,11 +43,18 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
       if (res.ok) {
         const data = (await res.json()) as { scholarship_ids?: number[] };
         setSavedIds(new Set(data.scholarship_ids ?? []));
+        setError(null);
       } else {
-        setSavedIds(new Set());
+        setError(`Could not load saved scholarships (${res.status}).`);
       }
-    } catch {
-      setSavedIds(new Set());
+    } catch (e) {
+      const msg =
+        e instanceof NetworkError
+          ? "Server unreachable — saved list may be out of date."
+          : e instanceof Error
+            ? e.message
+            : "Failed to load saved scholarships.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -105,7 +118,7 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
 
   return (
     <SavedScholarshipsContext.Provider
-      value={{ savedIds, isSaved, toggleSave, loading, refresh: fetchIds }}
+      value={{ savedIds, isSaved, toggleSave, loading, error, clearError, refresh: fetchIds }}
     >
       {children}
     </SavedScholarshipsContext.Provider>

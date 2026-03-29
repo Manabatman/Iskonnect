@@ -8,14 +8,8 @@ export function MatchComparisonPage() {
   const [searchParams] = useSearchParams();
   const runA = searchParams.get("run_a");
   const runB = searchParams.get("run_b");
-  const { user, authHeaders, loading: authLoading } = useAuth();
+  const { user, authHeaders } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/login");
-    }
-  }, [authLoading, user, navigate]);
   const [data, setData] = useState<MatchComparisonResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +58,7 @@ export function MatchComparisonPage() {
   const formatScore = (v: number | null | undefined) =>
     v != null ? v.toFixed(1) : "—";
 
-  if (authLoading || !user || loading) {
+  if (!user || loading) {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">

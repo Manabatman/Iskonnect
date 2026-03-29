@@ -36,14 +36,23 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 1440  # 24 hours
 
-    # Set AUTH_DISABLED=true for local dev (bypasses JWT on protected endpoints)
+    # Production default: false (JWT required). Set AUTH_DISABLED=true in .env for local dev only.
     auth_disabled: bool = Field(
-        default=True,
+        default=False,
         validation_alias="AUTH_DISABLED",
-    )  # Default True for backward compat during dev
+    )
 
     # Sentry DSN - when set, error tracking is enabled
     sentry_dsn: str | None = Field(default=None, validation_alias="SENTRY_DSN")
+
+    # Run Alembic on API startup (local dev convenience). Set false in production; use release command instead.
+    run_migrations_on_startup: bool = Field(
+        default=False,
+        validation_alias="RUN_MIGRATIONS_ON_STARTUP",
+    )
+
+    # Optional Redis URL for shared scholarship cache across workers (e.g. redis://localhost:6379/0)
+    redis_url: str | None = Field(default=None, validation_alias="REDIS_URL")
 
     @property
     def cors_origins_list(self) -> list[str]:
