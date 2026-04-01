@@ -54,6 +54,32 @@ class Settings(BaseSettings):
     # Optional Redis URL for shared scholarship cache across workers (e.g. redis://localhost:6379/0)
     redis_url: str | None = Field(default=None, validation_alias="REDIS_URL")
 
+    # Feature flags (safe defaults: off)
+    filter_expired_from_matches: bool = Field(
+        default=False,
+        validation_alias="FILTER_EXPIRED_FROM_MATCHES",
+    )
+    structured_logging: bool = Field(
+        default=False,
+        validation_alias="STRUCTURED_LOGGING",
+    )
+    enable_link_checker: bool = Field(
+        default=False,
+        validation_alias="ENABLE_LINK_CHECKER",
+    )
+    enable_notifications: bool = Field(
+        default=False,
+        validation_alias="ENABLE_NOTIFICATIONS",
+    )
+    db_driven_weights: bool = Field(
+        default=False,
+        validation_alias="DB_DRIVEN_WEIGHTS",
+    )
+    retention_inactive_days: int = Field(
+        default=365,
+        validation_alias="RETENTION_INACTIVE_DAYS",
+    )
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""

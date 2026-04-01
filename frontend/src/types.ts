@@ -79,7 +79,7 @@ export interface UpcomingScholarship {
 export interface MatchResult {
   id: number;
   title: string;
-  provider: string;
+  provider?: string | null;
   score: number;
   final_score?: number;
   eligibility_status?: boolean;
@@ -102,6 +102,11 @@ export interface MatchResult {
   application_deadline?: string | null;
   application_open_date?: string | null;
   required_documents?: string[];
+  /** Improvement tips from matching engine */
+  suggestions?: string[];
+  data_status?: string | null;
+  link_status?: string | null;
+  verification_source?: string | null;
 }
 
 export interface MatchRunSummary {
@@ -141,7 +146,7 @@ export interface StudentProfileResponse {
 export interface ScholarshipInfo {
   id: number;
   title: string;
-  provider: string;
+  provider?: string | null;
   link: string | null;
   description: string;
   regions: string[];
@@ -172,6 +177,8 @@ export interface ScholarshipSearchFilters {
   field?: string;
   education_level?: string;
   provider?: string;
+  /** University / institution keyword (matches title, provider, description, school types) */
+  school?: string;
   max_income?: number;
 }
 

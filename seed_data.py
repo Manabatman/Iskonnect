@@ -2,6 +2,12 @@
 Seed script to populate the database with sample scholarships and profiles.
 Run `alembic upgrade head` before this script to ensure schema is up to date.
 For fresh SQLite dev, Base.metadata.create_all is used as fallback.
+
+Seed audit (matching):
+- Most programs use nationwide empty eligible_regions (intentional).
+- Regional rows use names compatible with app.taxonomy.regions.normalize_region
+  (e.g. Metro Manila, Luzon, Region VI - Western Visayas).
+- eligible_courses_specific is set where course-level eligibility is demonstrated (see DOST UG).
 """
 import json
 from datetime import date
@@ -83,6 +89,13 @@ try:
                 "residency_required": False,
                 "eligible_school_types": ["Public", "Private"],
                 "eligible_courses_psced": ["STEM", "Engineering"],
+                "eligible_courses_specific": [
+                    "BS Computer Science",
+                    "BS Information Technology",
+                    "BS Mathematics",
+                    "BS Physics",
+                    "BS Chemistry",
+                ],
                 "max_income_threshold": 400000,
                 "min_gwa_normalized": 92.0,
                 "priority_groups": ["Underprivileged"],
@@ -908,6 +921,8 @@ try:
                 residency_required=s.get("residency_required", False),
                 eligible_school_types=json.dumps(s.get("eligible_school_types", ["Public", "Private"])),
                 eligible_courses_psced=json.dumps(s.get("eligible_courses_psced", [])),
+                eligible_courses_specific=json.dumps(s.get("eligible_courses_specific", [])),
+                preferred_awards=json.dumps(s.get("preferred_awards", [])),
                 max_income_threshold=s.get("max_income_threshold"),
                 min_gwa_normalized=s.get("min_gwa_normalized"),
                 priority_groups=json.dumps(s.get("priority_groups", [])),

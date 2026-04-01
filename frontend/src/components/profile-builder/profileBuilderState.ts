@@ -37,6 +37,8 @@ export interface ProfileBuilderState {
   is_ofw_dependent: string;
   is_farmer_fisher_dependent: string;
   is_4ps_listahanan: string;
+  /** "on" when user accepts RA 10173 consent (required to save). */
+  privacy_consent: string;
 }
 
 export const DRAFT_KEY = "iskonnect_profile_draft";
@@ -80,6 +82,7 @@ export const INITIAL_STATE: ProfileBuilderState = {
   is_ofw_dependent: "",
   is_farmer_fisher_dependent: "",
   is_4ps_listahanan: "",
+  privacy_consent: "",
 };
 
 export type ProfileBuilderStepDef = {
@@ -152,13 +155,14 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
       "is_ofw_dependent",
       "is_farmer_fisher_dependent",
       "is_4ps_listahanan",
+      "privacy_consent",
     ],
   },
 ];
 
 function isFieldFilled(key: keyof ProfileBuilderState, value: string): boolean {
   const v = (value ?? "").trim();
-  if (key.startsWith("is_")) {
+  if (key.startsWith("is_") || key === "privacy_consent") {
     return v === "on";
   }
   if (key === "needs") {

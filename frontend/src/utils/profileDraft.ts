@@ -38,5 +38,6 @@ export function profileToInitialValues(p: { id?: number; [key: string]: unknown 
     is_ofw_dependent: (p as { is_ofw_dependent?: boolean }).is_ofw_dependent ? "on" : "",
     is_farmer_fisher_dependent: (p as { is_farmer_fisher_dependent?: boolean }).is_farmer_fisher_dependent ? "on" : "",
     is_4ps_listahanan: (p as { is_4ps_listahanan?: boolean }).is_4ps_listahanan ? "on" : "",
+    privacy_consent: (p as { privacy_consent?: boolean }).privacy_consent ? "on" : "",
   };
 }

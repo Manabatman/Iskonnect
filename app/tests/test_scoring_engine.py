@@ -161,6 +161,7 @@ def test_engine_returns_scoring_result():
     assert result.eligibility_status is True
     assert isinstance(result.breakdown, dict)
     assert isinstance(result.explanation, list)
+    assert isinstance(result.suggestions, list)
     assert "academic" in result.breakdown
     assert "socioeconomic" in result.breakdown
 

@@ -273,6 +273,7 @@ class MatchService:
             "explanation": scoring_result.explanation,
             "breakdown": scoring_result.breakdown,
             "confidence": scoring_result.confidence,
+            "suggestions": getattr(scoring_result, "suggestions", None) or [],
             "provider_type": scholarship.get("provider_type"),
             "scholarship_type": scholarship.get("scholarship_type"),
             "benefit_tuition": scholarship.get("benefit_tuition"),

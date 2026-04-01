@@ -76,8 +76,14 @@ export function AdminPage() {
   return (
     <section className="py-12">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Admin – Scholarships</h2>
+          <Link
+            to="/admin/analytics"
+            className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700"
+          >
+            Analytics dashboard
+          </Link>
           <Link
             to="/dashboard"
             className="text-sm font-medium text-primary-600 hover:text-primary-700"

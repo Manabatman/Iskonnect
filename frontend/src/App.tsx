@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
 import { MatchResultsPage } from "./pages/MatchResultsPage";
 import { ScholarshipDetailPage } from "./pages/ScholarshipDetailPage";
 import { AboutPage } from "./pages/AboutPage";
@@ -9,6 +10,7 @@ import { PrivacyPage } from "./pages/PrivacyPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ChangelogPage } from "./pages/ChangelogPage";
 import { AdminPage } from "./pages/AdminPage";
+import { AdminAnalyticsPage } from "./pages/AdminAnalyticsPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ProfileDashboard } from "./pages/ProfileDashboard";
@@ -21,8 +23,12 @@ import { DocumentsPage } from "./pages/DocumentsPage";
 import { OpportunityBrowserPage } from "./pages/OpportunityBrowserPage";
 import { ProfileBuilderPage } from "./pages/ProfileBuilderPage";
 import { LandingPage } from "./pages/LandingPage";
+import { HowItWorksPage } from "./pages/HowItWorksPage";
+import { TransparencyPage } from "./pages/TransparencyPage";
+import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
 import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
+import { AdaptiveSearchLayout } from "./components/layout/AdaptiveSearchLayout";
 
 function AppRoutes() {
   return (
@@ -31,11 +37,23 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/transparency" element={<TransparencyPage />} />
+        <Route path="/success-stories" element={<SuccessStoriesPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/changelog" element={<ChangelogPage />} />
       </Route>
+
+      <Route
+        path="/scholarships/search"
+        element={
+          <AdaptiveSearchLayout>
+            <ScholarshipSearchPage />
+          </AdaptiveSearchLayout>
+        }
+      />
 
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<ProfileDashboard />} />
@@ -43,11 +61,11 @@ function AppRoutes() {
         <Route path="/match-compare" element={<MatchComparisonPage />} />
         <Route path="/scholarship/:id" element={<ScholarshipDetailPage />} />
         <Route path="/opportunities" element={<OpportunityBrowserPage />} />
-        <Route path="/scholarships/search" element={<ScholarshipSearchPage />} />
         <Route path="/scholarships" element={<ScholarshipList />} />
         <Route path="/profile-builder" element={<ProfileBuilderPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
         <Route path="/applications" element={<ApplicationsPage />} />
         <Route path="/documents" element={<DocumentsPage />} />
       </Route>
@@ -69,7 +87,9 @@ export default function App() {
     <ThemeProvider>
       <BrowserRouter>
         <AuthProvider>
-          <AppRoutes />
+          <SavedScholarshipsProvider>
+            <AppRoutes />
+          </SavedScholarshipsProvider>
         </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>

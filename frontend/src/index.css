@@ -3,5 +3,14 @@
 @tailwind utilities;
 
 body {
-  @apply bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100;
+  @apply bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100 font-sans;
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl bg-white/70 border border-white/20 shadow-lg dark:bg-slate-800/60 dark:border-white/10;
+  }
+  .glass-dark {
+    @apply backdrop-blur-xl bg-slate-900/50 border border-white/10 shadow-lg;
+  }
 }

@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.auth import assert_can_read_profile, get_current_user_id
+from app.utils.audit import log_action
 from app.config import settings
 from app.db import get_db
 from app.utils.sanitize import strip_tags
@@ -134,6 +135,59 @@ def list_profiles(
     return [_profile_to_response(p) for p in profiles]
 
 
+@router.delete("/profiles/me")
+def delete_my_data(
+    request: Request,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """RA 10173 — right to erasure: delete account and associated profile data."""
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    client = request.client.host if request.client else None
+    log_action(
+        db,
+        actor_id=user_id,
+        actor_type="user",
+        action="user.delete_self",
+        resource_type="user",
+        resource_id=user_id,
+        details={"erasure": True},
+        ip_address=client,
+    )
+
+    run_ids = [r[0] for r in db.query(models.MatchRun.id).filter(models.MatchRun.user_id == user_id).all()]
+    if run_ids:
+        db.query(models.MatchResult).filter(models.MatchResult.run_id.in_(run_ids)).delete(
+            synchronize_session=False
+        )
+    db.query(models.MatchRun).filter(models.MatchRun.user_id == user_id).delete(synchronize_session=False)
+    db.query(models.SavedScholarship).filter(models.SavedScholarship.user_id == user_id).delete(
+        synchronize_session=False
+    )
+    db.query(models.Notification).filter(models.Notification.user_id == user_id).delete(synchronize_session=False)
+    db.query(models.ScholarshipReport).filter(models.ScholarshipReport.user_id == user_id).delete(
+        synchronize_session=False
+    )
+    db.query(models.ScholarshipReport).filter(models.ScholarshipReport.reviewer_id == user_id).update(
+        {models.ScholarshipReport.reviewer_id: None},
+        synchronize_session=False,
+    )
+    db.query(models.ScoringWeight).filter(models.ScoringWeight.updated_by == user_id).update(
+        {models.ScoringWeight.updated_by: None},
+        synchronize_session=False,
+    )
+    db.query(models.ScholarshipVersion).filter(models.ScholarshipVersion.changed_by == user_id).update(
+        {models.ScholarshipVersion.changed_by: None},
+        synchronize_session=False,
+    )
+    db.query(models.Student).filter(models.Student.user_id == user_id).delete(synchronize_session=False)
+    db.query(models.User).filter(models.User.id == user_id).delete(synchronize_session=False)
+    db.commit()
+    return {"status": "deleted"}
+
+
 @router.post("/profiles", response_model=schemas.StudentProfileResponse)
 @limiter.limit("20/minute")
 def create_profile(
@@ -159,6 +213,16 @@ def create_profile(
         db.add(db_profile)
         db.commit()
         db.refresh(db_profile)
+        log_action(
+            db,
+            actor_id=user_id,
+            actor_type="user",
+            action="profile.create",
+            resource_type="student",
+            resource_id=db_profile.id,
+            details={"email": profile.email},
+            ip_address=request.client.host if request.client else None,
+        )
         return _profile_to_response(db_profile)
     except IntegrityError:
         db.rollback()
@@ -185,6 +249,16 @@ def create_profile(
             setattr(existing, k, v)
         db.commit()
         db.refresh(existing)
+        log_action(
+            db,
+            actor_id=user_id,
+            actor_type="user",
+            action="profile.update",
+            resource_type="student",
+            resource_id=existing.id,
+            details={"email": profile.email},
+            ip_address=request.client.host if request.client else None,
+        )
         return _profile_to_response(existing)
 
 

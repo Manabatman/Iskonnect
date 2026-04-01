@@ -1,25 +1,36 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from app.api.v1 import (
+    analytics,
+    audit_routes,
     auth_routes,
     match_history,
     matches,
+    notifications,
     profiles,
+    reports,
     saved_scholarships,
+    scoring_admin,
     scholarship_search,
     scholarship_staging,
     scholarships,
     suggestions,
 )
 from app.config import settings
-from app.db import engine, Base
+from app.db import engine, Base, get_db
 from app.limiter import limiter
 from app.middleware.request_logger import RequestLoggingMiddleware
 from app import models
+from app.utils.logging_config import setup_logging
+
+setup_logging(settings.structured_logging)
 
 if settings.sentry_dsn:
     import sentry_sdk
@@ -58,6 +69,11 @@ app.include_router(matches.router, prefix="/api/v1")
 app.include_router(match_history.router, prefix="/api/v1")
 app.include_router(saved_scholarships.router, prefix="/api/v1")
 app.include_router(suggestions.router, prefix="/api/v1")
+app.include_router(reports.router, prefix="/api/v1")
+app.include_router(scoring_admin.router, prefix="/api/v1")
+app.include_router(audit_routes.router, prefix="/api/v1")
+app.include_router(notifications.router, prefix="/api/v1")
+app.include_router(analytics.router, prefix="/api/v1")
 
 @app.on_event("startup")
 def run_migrations():
@@ -79,5 +95,31 @@ def run_migrations():
 
 
 @app.get("/health")
-def health():
-    return {"status": "ok"}
+def health(db: Session = Depends(get_db)):
+    checks = {"db": False, "cache": False}
+    try:
+        db.execute(text("SELECT 1"))
+        checks["db"] = True
+    except Exception:
+        pass
+    if settings.redis_url:
+        try:
+            import redis
+
+            redis.from_url(settings.redis_url).ping()
+            checks["cache"] = True
+        except Exception:
+            pass
+    else:
+        checks["cache"] = True
+    overall = "ok" if all(checks.values()) else "degraded"
+    return {"status": overall, "checks": checks}
+
+
+@app.get("/ready")
+def ready(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "ready"}
+    except Exception:
+        return JSONResponse(status_code=503, content={"status": "not_ready"})

@@ -10,12 +10,12 @@ from app import models, schemas
 from app.auth import get_current_user_id, require_profile_owner
 from app.db import get_db
 from app.limiter import limiter
+from app.api.v1.matches import _match_service_for_db
 from app.api.v1.profiles import get_profile_dict
 from app.api.v1.scholarships import get_cached_scholarship_dicts
-from app.matching.match_service import MatchService
+from app.utils.notification_helpers import create_notifications_for_match_results
 
 router = APIRouter()
-match_service = MatchService()
 logger = logging.getLogger(__name__)
 
 
@@ -81,7 +81,7 @@ def create_match_run(
         raise HTTPException(status_code=404, detail="Profile not found")
 
     scholarship_dicts = get_cached_scholarship_dicts(db)
-    results = match_service.get_matches(profile, scholarship_dicts)
+    results = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
 
     for r in results:
         if "final_score" in r and "score" not in r:
@@ -105,6 +105,8 @@ def create_match_run(
         )
         db.add(mr)
     db.commit()
+
+    create_notifications_for_match_results(db, uid, results)
 
     logger.info("match_run_created run_id=%s user_id=%s profile_id=%s results=%s", run.id, uid, body.profile_id, len(results))
 

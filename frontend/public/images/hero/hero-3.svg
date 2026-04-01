@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g3" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="40%" style="stop-color:#7c2d12"/>
+      <stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g3)"/>
+  <text x="400" y="300" text-anchor="middle" fill="white" fill-opacity="0.45" font-family="system-ui,sans-serif" font-size="22">Hero slide 3 - add hero-3.jpg in public/images/hero/</text>
+</svg>

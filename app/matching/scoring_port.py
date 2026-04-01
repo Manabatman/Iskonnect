@@ -4,7 +4,7 @@ Defines WHAT the scoring engine receives and returns - NOT the scoring formula.
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -55,6 +55,7 @@ class ScoringResult:
     explanation: list[str]
     readiness_score: float
     confidence: str  # "high" | "medium" | "low"
+    suggestions: list[str] = field(default_factory=list)
 
 
 class ScoringEnginePort(ABC):

@@ -117,6 +117,10 @@ export function ProfileBuilderPage() {
       navigate("/login", { state: { from: "/profile-builder" } });
       return;
     }
+    if (state.privacy_consent !== "on") {
+      setSaveError("Please confirm the privacy consent checkbox before saving your profile.");
+      return;
+    }
     setSaveLoading(true);
     try {
       const profile = buildStudentProfileFromBuilderState(state);
@@ -144,7 +148,7 @@ export function ProfileBuilderPage() {
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 id="profile-builder-title" className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-              Profile builder
+              Complete Your Profile
             </h1>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
               Guided steps — your progress saves automatically to this device
@@ -213,7 +217,7 @@ export function ProfileBuilderPage() {
                         disabled={saveLoading}
                         className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 dark:focus:ring-offset-slate-800"
                       >
-                        {saveLoading ? "Saving…" : "Save to server"}
+                        {saveLoading ? "Saving…" : "Save Profile"}
                       </button>
                       <p className="text-sm text-slate-600 dark:text-slate-400">
                         Or run matches from your{" "}

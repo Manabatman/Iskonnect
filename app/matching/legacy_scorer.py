@@ -119,4 +119,5 @@ class LegacyRuleScorer(ScoringEnginePort):
             explanation=explanation,
             readiness_score=round(readiness, 2),
             confidence=confidence,
+            suggestions=[],
         )

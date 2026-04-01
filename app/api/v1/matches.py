@@ -9,13 +9,23 @@ from app.db import get_db
 from app.limiter import limiter
 from app.api.v1.profiles import get_profile_dict
 from app.api.v1.scholarships import get_cached_scholarship_dicts
+from app.config import settings
 from app.matching.match_service import MatchService
 from app.matching.profile_completeness import profile_completeness_payload
 from app.prediction.cycle_predictor import get_upcoming_scholarships
+from app.scoring import WeightedDeterministicScorer
+from app.scoring.config import ScoringConfig
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 match_service = MatchService()
+
+
+def _match_service_for_db(db: Session) -> MatchService:
+    if settings.db_driven_weights:
+        config = ScoringConfig.from_db(db)
+        return MatchService(scoring_engine=WeightedDeterministicScorer(config=config))
+    return match_service
 
 
 @router.get("/matches/{profile_id}")
@@ -35,7 +45,7 @@ def get_matches(
 
     scholarship_dicts = get_cached_scholarship_dicts(db)
 
-    results = match_service.get_matches(profile, scholarship_dicts)
+    results = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
 
     # Ensure backward compatibility: score alias
     for r in results:

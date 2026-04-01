@@ -8,7 +8,7 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
-from sqlalchemy import or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -18,6 +18,51 @@ from app.limiter import limiter
 
 router = APIRouter(prefix="/scholarships", tags=["scholarship-search"])
 logger = logging.getLogger(__name__)
+
+
+def _column_empty_json_list(col):
+    """SQL expression: NULL, blank, or JSON empty list [] (stored as text)."""
+    trimmed = func.trim(func.coalesce(col, ""))
+    return or_(
+        col.is_(None),
+        trimmed == "",
+        trimmed == "[]",
+    )
+
+
+def _column_empty_legacy_regions(col):
+    """Legacy CSV `regions` column — empty means no region list."""
+    trimmed = func.trim(func.coalesce(col, ""))
+    return or_(
+        col.is_(None),
+        trimmed == "",
+    )
+
+
+def _nationwide_geo_sql():
+    """No geographic restriction stored — treat as open to all regions (matches hard_filters nationwide)."""
+    return and_(
+        _column_empty_json_list(models.Scholarship.eligible_regions),
+        _column_empty_legacy_regions(models.Scholarship.regions),
+        _column_empty_json_list(models.Scholarship.eligible_cities),
+    )
+
+
+def apply_region_browse_filter(query, region: str):
+    """Restrict query to rows that list the region or have no geo restriction (nationwide)."""
+    val = region.strip()
+    return query.filter(
+        or_(
+            models.Scholarship.eligible_regions.ilike(f'%"{val}"%'),
+            models.Scholarship.regions.ilike(f"%{val}%"),
+            _nationwide_geo_sql(),
+        )
+    )
+
+
+def apply_education_level_browse_filter(query, education_level: str):
+    val = education_level.strip()
+    return query.filter(models.Scholarship.eligible_levels.ilike(f'%"{val}"%'))
 
 
 def _parse_json(val, default=None):
@@ -81,6 +126,7 @@ def search_scholarships(
     field: str = "",
     education_level: str = "",
     provider: str = "",
+    school: str = "",
     max_income: int | None = None,
     page: int = 1,
     limit: int = 20,
@@ -89,6 +135,7 @@ def search_scholarships(
     """
     Search scholarships with optional filters and pagination.
     Does not run the matching algorithm - browse-only.
+    ``school`` matches title, provider, description, or eligible_school_types JSON (university / program context).
     """
     logger.info(
         "scholarship_search query=%s region=%s field=%s page=%s",
@@ -111,13 +158,7 @@ def search_scholarships(
         q = q.filter(models.Scholarship.title.ilike(pattern))
 
     if region and region.strip():
-        val = region.strip()
-        q = q.filter(
-            or_(
-                models.Scholarship.eligible_regions.ilike(f'%"{val}"%'),
-                models.Scholarship.regions.ilike(f"%{val}%"),
-            )
-        )
+        q = apply_region_browse_filter(q, region)
 
     if field and field.strip():
         val = field.strip()
@@ -129,12 +170,22 @@ def search_scholarships(
         )
 
     if education_level and education_level.strip():
-        val = education_level.strip()
-        q = q.filter(models.Scholarship.eligible_levels.ilike(f'%"{val}"%'))
+        q = apply_education_level_browse_filter(q, education_level)
 
     if provider and provider.strip():
         pattern = f"%{provider.strip()}%"
         q = q.filter(models.Scholarship.provider.ilike(pattern))
+
+    if school and school.strip():
+        pattern = f"%{school.strip()}%"
+        q = q.filter(
+            or_(
+                models.Scholarship.title.ilike(pattern),
+                models.Scholarship.provider.ilike(pattern),
+                models.Scholarship.description.ilike(pattern),
+                models.Scholarship.eligible_school_types.ilike(pattern),
+            )
+        )
 
     if max_income is not None and max_income >= 0:
         q = q.filter(

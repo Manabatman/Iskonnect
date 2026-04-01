@@ -13,6 +13,12 @@ from app.db import get_db
 from app.limiter import limiter
 from app.utils.sanitize import strip_tags
 from app.utils.json_helpers import parse_json
+from app.utils.audit import log_action
+from app.utils.scholarship_versioning import (
+    diff_snapshots,
+    record_scholarship_version,
+    snapshot_scholarship_row,
+)
 from app.scholarship_cache import get_cached_scholarship_dicts as _cache_fetch_dicts
 from app.scholarship_cache import invalidate_scholarship_cache
 
@@ -58,6 +64,9 @@ def _scholarship_to_response(s):
         "residency_required": getattr(s, "residency_required", False) or False,
         "eligible_school_types": parse_json(getattr(s, "eligible_school_types", None)),
         "eligible_courses_psced": parse_json(getattr(s, "eligible_courses_psced", None)),
+        "eligible_courses_specific": parse_json(getattr(s, "eligible_courses_specific", None)),
+        "preferred_extracurriculars": parse_json(getattr(s, "preferred_extracurriculars", None)),
+        "preferred_awards": parse_json(getattr(s, "preferred_awards", None)),
         "max_income_threshold": getattr(s, "max_income_threshold", None),
         "min_gwa_normalized": getattr(s, "min_gwa_normalized", None),
         "priority_groups": parse_json(getattr(s, "priority_groups", None)),
@@ -74,6 +83,13 @@ def _scholarship_to_response(s):
         "application_open_date": getattr(s, "application_open_date", None),
         "academic_year_target": getattr(s, "academic_year_target", None),
         "is_active": getattr(s, "is_active", True),
+        "last_verified_at": getattr(s, "last_verified_at", None),
+        "verification_source": getattr(s, "verification_source", None),
+        "confidence_score": getattr(s, "confidence_score", None),
+        "data_status": getattr(s, "data_status", None),
+        "link_status": getattr(s, "link_status", None),
+        "link_last_checked_at": getattr(s, "link_last_checked_at", None),
+        "link_failure_count": getattr(s, "link_failure_count", None),
     }
 
 
@@ -88,10 +104,19 @@ def _scholarship_to_dict(s):
     d["last_open_date"] = lod.isoformat() if lod and hasattr(lod, "isoformat") else lod
     d["last_close_date"] = lcd.isoformat() if lcd and hasattr(lcd, "isoformat") else lcd
     d["cycle_type"] = getattr(s, "cycle_type", None)
+    lva = getattr(s, "last_verified_at", None)
+    d["last_verified_at"] = lva.isoformat() if lva and hasattr(lva, "isoformat") else lva
+    llc = getattr(s, "link_last_checked_at", None)
+    d["link_last_checked_at"] = llc.isoformat() if llc and hasattr(llc, "isoformat") else llc
     return d
 
 
-def persist_scholarship_from_schema(db: Session, scholarship: schemas.Scholarship) -> models.Scholarship:
+def persist_scholarship_from_schema(
+    db: Session,
+    scholarship: schemas.Scholarship,
+    *,
+    version_changed_by: int | None = None,
+) -> models.Scholarship:
     """Insert a Scholarship row from a validated schema (used by POST and staging approval)."""
     db_scholarship = models.Scholarship(
         title=strip_tags(scholarship.title) or scholarship.title,
@@ -113,6 +138,9 @@ def persist_scholarship_from_schema(db: Session, scholarship: schemas.Scholarshi
         residency_required=scholarship.residency_required or False,
         eligible_school_types=json.dumps(scholarship.eligible_school_types or ["Public", "Private"]),
         eligible_courses_psced=json.dumps(scholarship.eligible_courses_psced or []),
+        eligible_courses_specific=json.dumps(scholarship.eligible_courses_specific or []),
+        preferred_extracurriculars=json.dumps(scholarship.preferred_extracurriculars or []),
+        preferred_awards=json.dumps(scholarship.preferred_awards or []),
         max_income_threshold=scholarship.max_income_threshold,
         min_gwa_normalized=scholarship.min_gwa_normalized,
         priority_groups=json.dumps(scholarship.priority_groups or []),
@@ -131,6 +159,14 @@ def persist_scholarship_from_schema(db: Session, scholarship: schemas.Scholarshi
         is_active=scholarship.is_active if scholarship.is_active is not None else True,
     )
     db.add(db_scholarship)
+    db.flush()
+    snap = snapshot_scholarship_row(db_scholarship)
+    record_scholarship_version(
+        db,
+        scholarship_id=db_scholarship.id,
+        changes={"action": "create", "snapshot": snap},
+        changed_by=version_changed_by,
+    )
     db.commit()
     db.refresh(db_scholarship)
     invalidate_scholarship_cache()
@@ -139,11 +175,26 @@ def persist_scholarship_from_schema(db: Session, scholarship: schemas.Scholarshi
 
 @router.post("/scholarships", response_model=schemas.ScholarshipResponse)
 def create_scholarship(
+    request: Request,
     scholarship: schemas.Scholarship,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
-    db_scholarship = persist_scholarship_from_schema(db, scholarship)
+    db_scholarship = persist_scholarship_from_schema(
+        db,
+        scholarship,
+        version_changed_by=_admin.id if _admin else None,
+    )
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="scholarship.create",
+        resource_type="scholarship",
+        resource_id=db_scholarship.id,
+        details={"title": db_scholarship.title},
+        ip_address=request.client.host if request.client else None,
+    )
     return _scholarship_to_response(db_scholarship)
 
 
@@ -179,6 +230,7 @@ def get_scholarship(
 
 @router.put("/scholarships/{scholarship_id}", response_model=schemas.ScholarshipResponse)
 def update_scholarship(
+    request: Request,
     scholarship_id: int,
     scholarship: schemas.Scholarship,
     db: Session = Depends(get_db),
@@ -188,6 +240,7 @@ def update_scholarship(
     if not s:
         logger.warning("scholarships_update_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
+    old_snap = snapshot_scholarship_row(s)
     s.title = strip_tags(scholarship.title) or scholarship.title
     s.provider = strip_tags(scholarship.provider) or scholarship.provider if scholarship.provider else None
     s.source = strip_tags(scholarship.source) or scholarship.source if scholarship.source else None
@@ -207,6 +260,9 @@ def update_scholarship(
     s.residency_required = scholarship.residency_required or False
     s.eligible_school_types = json.dumps(scholarship.eligible_school_types or ["Public", "Private"])
     s.eligible_courses_psced = json.dumps(scholarship.eligible_courses_psced or [])
+    s.eligible_courses_specific = json.dumps(scholarship.eligible_courses_specific or [])
+    s.preferred_extracurriculars = json.dumps(scholarship.preferred_extracurriculars or [])
+    s.preferred_awards = json.dumps(scholarship.preferred_awards or [])
     s.max_income_threshold = scholarship.max_income_threshold
     s.min_gwa_normalized = scholarship.min_gwa_normalized
     s.priority_groups = json.dumps(scholarship.priority_groups or [])
@@ -224,14 +280,34 @@ def update_scholarship(
     s.academic_year_target = scholarship.academic_year_target
     if scholarship.is_active is not None:
         s.is_active = scholarship.is_active
+    new_snap = snapshot_scholarship_row(s)
+    diff = diff_snapshots(old_snap, new_snap)
+    if diff:
+        record_scholarship_version(
+            db,
+            scholarship_id=s.id,
+            changes=diff,
+            changed_by=_admin.id if _admin else None,
+        )
     db.commit()
     db.refresh(s)
     invalidate_scholarship_cache()
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="scholarship.update",
+        resource_type="scholarship",
+        resource_id=s.id,
+        details={"title": s.title},
+        ip_address=request.client.host if request.client else None,
+    )
     return _scholarship_to_response(s)
 
 
 @router.delete("/scholarships/{scholarship_id}")
 def delete_scholarship(
+    request: Request,
     scholarship_id: int,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
@@ -243,4 +319,14 @@ def delete_scholarship(
     s.is_active = False
     db.commit()
     invalidate_scholarship_cache()
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="scholarship.deactivate",
+        resource_type="scholarship",
+        resource_id=scholarship_id,
+        details={},
+        ip_address=request.client.host if request.client else None,
+    )
     return {"status": "deactivated"}

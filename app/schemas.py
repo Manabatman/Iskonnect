@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import List, Optional, Any
 
 
@@ -190,6 +190,9 @@ class ScholarshipResponse(BaseModel):
     residency_required: Optional[bool] = False
     eligible_school_types: Optional[List[str]] = []
     eligible_courses_psced: Optional[List[str]] = []
+    eligible_courses_specific: Optional[List[str]] = []
+    preferred_extracurriculars: Optional[List[str]] = []
+    preferred_awards: Optional[List[str]] = []
     max_income_threshold: Optional[int] = None
     min_gwa_normalized: Optional[float] = None
     priority_groups: Optional[List[str]] = []
@@ -206,6 +209,80 @@ class ScholarshipResponse(BaseModel):
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
     is_active: Optional[bool] = True
+    # Data reliability & link integrity (optional; backward compatible)
+    last_verified_at: Optional[datetime] = None
+    verification_source: Optional[str] = None
+    confidence_score: Optional[float] = None
+    data_status: Optional[str] = None
+    link_status: Optional[str] = None
+    link_last_checked_at: Optional[datetime] = None
+    link_failure_count: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ScholarshipReportCreate(BaseModel):
+    scholarship_id: int
+    issue_type: str  # broken_link | wrong_deadline | outdated_info | other
+    description: Optional[str] = None
+
+
+class ScholarshipReportResponse(BaseModel):
+    id: int
+    scholarship_id: int
+    user_id: Optional[int] = None
+    issue_type: str
+    description: Optional[str] = None
+    status: str
+    created_at: datetime
+    reviewed_at: Optional[datetime] = None
+    reviewer_id: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ScoringWeightItem(BaseModel):
+    component: str
+    weight: float
+
+
+class ScoringWeightResponse(BaseModel):
+    weights: List[ScoringWeightItem] = []
+
+
+class ScoringWeightsUpdateRequest(BaseModel):
+    weights: List[ScoringWeightItem] = Field(
+        ...,
+        description="All five components; weights must sum to 1.0",
+    )
+
+
+class AuditLogResponse(BaseModel):
+    id: int
+    actor_id: Optional[int] = None
+    actor_type: Optional[str] = None
+    action: str
+    resource_type: Optional[str] = None
+    resource_id: Optional[int] = None
+    details: Optional[str] = None
+    ip_address: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class NotificationResponse(BaseModel):
+    id: int
+    user_id: int
+    type: str
+    title: str
+    body: Optional[str] = None
+    scholarship_id: Optional[int] = None
+    is_read: bool = False
+    created_at: datetime
 
     class Config:
         from_attributes = True
@@ -237,6 +314,7 @@ class MatchResponse(BaseModel):
     benefit_total_value: Optional[int] = None
     application_deadline: Optional[str] = None
     required_documents: Optional[List[str]] = []
+    suggestions: Optional[List[str]] = []
 
 
 # === Upcoming Scholarship (Cycle Prediction) ===

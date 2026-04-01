@@ -54,6 +54,14 @@ def _get_user_id_from_token(
     return user_id if user else None
 
 
+def get_optional_user_id(
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(security)],
+    db: Session = Depends(get_db),
+) -> int | None:
+    """Return user id from Bearer token if valid; otherwise None (never raises)."""
+    return _get_user_id_from_token(credentials, db)
+
+
 def get_current_user_id(
     credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(security)],
     db: Session = Depends(get_db),

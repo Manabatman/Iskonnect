@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { apiFetch } from "../api/client";
 import { SplitLayout } from "../components/layout/SplitLayout";
 import { OpportunityDetail } from "../components/OpportunityDetail";
 import { OpportunityList } from "../components/OpportunityList";
 import { scholarshipToOpportunity } from "../data/scholarshipToOpportunity";
 import { MOCK_OPPORTUNITIES, type Opportunity } from "../data/mockOpportunities";
-import type { ScholarshipSearchResponse } from "../types";
+import { useScholarshipSearch } from "../hooks/useScholarshipSearch";
 
 function ListSkeleton() {
   return (
@@ -31,43 +30,25 @@ function ListSkeleton() {
 
 export function OpportunityBrowserPage() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { results, loading, error } = useScholarshipSearch({
+    limit: 50,
+    enableSuggestions: false,
+    syncUrlQuery: false,
+  });
+
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [usingMock, setUsingMock] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
+    if (loading) return;
+    if (error) {
+      setOpportunities(MOCK_OPPORTUNITIES);
+      setUsingMock(true);
+      return;
+    }
     setUsingMock(false);
-
-    const params = new URLSearchParams();
-    params.set("page", "1");
-    params.set("limit", "50");
-
-    apiFetch(`/api/v1/scholarships/search?${params.toString()}`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`Search failed (${res.status})`);
-        const data = (await res.json()) as ScholarshipSearchResponse;
-        return data.results ?? [];
-      })
-      .then((results) => {
-        if (cancelled) return;
-        setOpportunities(results.map(scholarshipToOpportunity));
-        setUsingMock(false);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setOpportunities(MOCK_OPPORTUNITIES);
-        setUsingMock(true);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    setOpportunities(results.map(scholarshipToOpportunity));
+  }, [loading, error, results]);
 
   const selectedOpportunity = useMemo(
     () => (selectedId != null ? opportunities.find((o) => o.id === selectedId) ?? null : null),

@@ -16,6 +16,7 @@ from app.scoring.explanation import (
     assess_confidence,
     build_breakdown,
     build_explanation,
+    build_improvement_suggestions,
     compute_equity_multiplier,
 )
 
@@ -85,6 +86,8 @@ class WeightedDeterministicScorer(ScoringEnginePort):
         # 6. Confidence based on data completeness
         confidence = assess_confidence(payload)
 
+        suggestions = build_improvement_suggestions(components, payload)
+
         return ScoringResult(
             final_score=round(final_score, 2),
             eligibility_status=True,
@@ -92,4 +95,5 @@ class WeightedDeterministicScorer(ScoringEnginePort):
             explanation=explanation,
             readiness_score=0.0,  # No longer used in scoring; documents shown on detail page only
             confidence=confidence,
+            suggestions=suggestions,
         )

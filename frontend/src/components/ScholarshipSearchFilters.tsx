@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { apiFetch } from "../api/client";
 import { useDebounce } from "../hooks/useDebounce";
 import { PHILIPPINE_REGIONS } from "../constants/regions";
 import type { ScholarshipSearchFilters } from "../types";
 
-const EDUCATION_LEVELS = [
+/** Fallback when /search/filters fails or returns no levels */
+const FALLBACK_EDUCATION_LEVELS = [
   "Senior High School",
   "College",
   "Graduate",
@@ -47,6 +48,12 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
   const [providerOpen, setProviderOpen] = useState(false);
   const providerInputRef = useRef<HTMLInputElement>(null);
   const debouncedProvider = useDebounce(providerInput, 200);
+
+  const educationLevelOptions = useMemo(() => {
+    const fromApi = filterOptions.education_levels.filter(Boolean);
+    const merged = new Set<string>([...fromApi, ...FALLBACK_EDUCATION_LEVELS]);
+    return Array.from(merged).sort((a, b) => a.localeCompare(b));
+  }, [filterOptions.education_levels]);
 
   useEffect(() => {
     let cancelled = false;
@@ -98,6 +105,7 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
     filters.field ||
     filters.education_level ||
     filters.provider ||
+    filters.school ||
     (filters.max_income != null && filters.max_income >= 0);
 
   const selectClassName =
@@ -153,7 +161,7 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             className={selectClassName}
           >
             <option value="">All levels</option>
-            {EDUCATION_LEVELS.map((l) => (
+            {educationLevelOptions.map((l) => (
               <option key={l} value={l}>
                 {l}
               </option>
@@ -171,6 +179,20 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             value={filters.field ?? ""}
             onChange={(e) => updateFilter("field", e.target.value || undefined)}
             placeholder="e.g. Engineering, STEM"
+            className={inputClassName}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="filter-school" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            School / university
+          </label>
+          <input
+            id="filter-school"
+            type="text"
+            value={filters.school ?? ""}
+            onChange={(e) => updateFilter("school", e.target.value || undefined)}
+            placeholder="e.g. UP, Ateneo, state university"
             className={inputClassName}
           />
         </div>

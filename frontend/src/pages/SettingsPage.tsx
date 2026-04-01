@@ -7,7 +7,14 @@ export function SettingsPage() {
   return (
     <section className="py-12">
       <div className="mx-auto max-w-2xl px-4">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Settings</h1>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Account Settings</h1>
+        <p className="mt-2 text-slate-600 dark:text-slate-400">
+          Theme and legal preferences. To update your scholarship profile (education, region, income), use{" "}
+          <Link to="/profile-builder" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+            Profile
+          </Link>
+          .
+        </p>
 
         <div className="mt-8 space-y-8">
           <section>

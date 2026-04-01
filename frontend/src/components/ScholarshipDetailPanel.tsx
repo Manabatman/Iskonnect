@@ -180,9 +180,11 @@ export function ScholarshipDetailPanel({ scholarship, onClose, isOpen }: Scholar
               <div className="mt-3">
                 <h5 className="text-xs font-medium text-slate-600 dark:text-slate-400">Documents required</h5>
                 <ul className="mt-1 space-y-0.5 text-sm text-slate-700 dark:text-slate-300">
-                  {s.required_documents.map((doc) => (
-                    <li key={doc}>
-                      {DOCUMENT_LABELS[doc] || doc.replace(/_/g, " ")}
+                  {s.required_documents.map((doc, i) => (
+                    <li key={doc ?? `doc-${i}`}>
+                      {DOCUMENT_LABELS[String(doc ?? "")] ||
+                        String(doc ?? "").replace(/_/g, " ") ||
+                        "—"}
                     </li>
                   ))}
                 </ul>
@@ -198,14 +200,14 @@ export function ScholarshipDetailPanel({ scholarship, onClose, isOpen }: Scholar
               {s.application_open_date && (
                 <li>Opens: {formatDate(s.application_open_date)}</li>
               )}
-              {scholarship.application_deadline && (
-                <li>Deadline: {formatDate(scholarship.application_deadline)}</li>
+              {s.application_deadline && (
+                <li>Deadline: {formatDate(s.application_deadline)}</li>
               )}
               {s.academic_year_target && (
                 <li>Academic year: {s.academic_year_target}</li>
               )}
               {!s.application_open_date &&
-                !scholarship.application_deadline &&
+                !s.application_deadline &&
                 !s.academic_year_target && (
                   <li className="text-slate-500 dark:text-slate-400">Check official website for dates</li>
                 )}

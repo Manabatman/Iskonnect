@@ -91,11 +91,7 @@ function ScholarshipBrowseCard({ s }: { s: ScholarshipInfo }) {
   );
 }
 
-interface ScholarshipListProps {
-  onBuildProfile?: () => void;
-}
-
-export function ScholarshipList(_props?: ScholarshipListProps) {
+export function ScholarshipList() {
   const [scholarships, setScholarships] = useState<ScholarshipInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -147,7 +143,7 @@ export function ScholarshipList(_props?: ScholarshipListProps) {
               className="w-fit rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               aria-label="Build your profile to get personalized matches"
             >
-              Build Profile for Matches
+              Complete Your Profile
             </Link>
           </div>
         </div>
