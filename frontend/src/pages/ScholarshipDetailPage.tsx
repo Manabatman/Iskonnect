@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/client";
+import { useAuth } from "../contexts/AuthContext";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -44,6 +45,9 @@ interface ScholarshipDetail {
   application_deadline?: string | null;
   application_open_date?: string | null;
   academic_year_target?: string | null;
+  data_status?: string | null;
+  link_status?: string | null;
+  verification_source?: string | null;
 }
 
 function formatDate(d: string | null | undefined): string {
@@ -56,12 +60,29 @@ function formatDate(d: string | null | undefined): string {
   }
 }
 
+const ISSUE_TYPES = [
+  { value: "broken_link", label: "Broken link" },
+  { value: "wrong_deadline", label: "Incorrect deadline" },
+  { value: "outdated_info", label: "Outdated information" },
+  { value: "other", label: "Other" },
+];
+
 export function ScholarshipDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { authHeaders } = useAuth();
+  const requirementsRef = useRef<HTMLDivElement>(null);
+  const [requirementsHighlight, setRequirementsHighlight] = useState(false);
   const [scholarship, setScholarship] = useState<ScholarshipDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showReport, setShowReport] = useState(false);
+  const [issueType, setIssueType] = useState("broken_link");
+  const [reportDesc, setReportDesc] = useState("");
+  const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [reportMsg, setReportMsg] = useState<string | null>(null);
+  const [reportError, setReportError] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -90,6 +111,21 @@ export function ScholarshipDetailPage() {
       cancelled = true;
     };
   }, [id]);
+
+  useEffect(() => {
+    if (!scholarship || location.hash !== "#requirements") return;
+    const el = requirementsRef.current;
+    if (!el) return;
+    const scrollTimer = window.setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setRequirementsHighlight(true);
+    }, 100);
+    const unhighlightTimer = window.setTimeout(() => setRequirementsHighlight(false), 2900);
+    return () => {
+      window.clearTimeout(scrollTimer);
+      window.clearTimeout(unhighlightTimer);
+    };
+  }, [scholarship, location.hash, id]);
 
   if (loading) {
     return (
@@ -152,6 +188,21 @@ export function ScholarshipDetailPage() {
                   {scholarship.scholarship_type}
                 </span>
               )}
+              {scholarship.verification_source ? (
+                <span className="rounded bg-emerald-100 dark:bg-emerald-900/50 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
+                  Verified data
+                </span>
+              ) : null}
+              {scholarship.data_status === "expired" ? (
+                <span className="rounded bg-red-100 dark:bg-red-900/50 px-2 py-0.5 text-xs font-medium text-red-800 dark:text-red-300">
+                  Expired
+                </span>
+              ) : null}
+              {scholarship.link_status === "broken" ? (
+                <span className="rounded bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 text-xs font-medium text-amber-900 dark:text-amber-200">
+                  Broken link
+                </span>
+              ) : null}
             </div>
             <h1 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{scholarship.title}</h1>
             <p className="mt-1 text-slate-600 dark:text-slate-400">{scholarship.provider}</p>
@@ -221,7 +272,16 @@ export function ScholarshipDetailPage() {
             </ul>
           </div>
 
-          <div className="mb-8">
+          <div
+            ref={requirementsRef}
+            id="requirements"
+            className={[
+              "mb-8 scroll-mt-24 rounded-xl p-4 transition-[box-shadow,background-color] duration-500 md:scroll-mt-28",
+              requirementsHighlight
+                ? "bg-primary-50/90 shadow-[0_0_0_3px_rgba(59,130,246,0.45)] dark:bg-primary-950/50 dark:shadow-[0_0_0_3px_rgba(96,165,250,0.35)]"
+                : "",
+            ].join(" ")}
+          >
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Requirements</h2>
             <ul className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300">
               {scholarship.has_qualifying_exam && <li>Qualifying exam</li>}
@@ -233,9 +293,11 @@ export function ScholarshipDetailPage() {
               <div className="mt-3">
                 <h3 className="text-xs font-medium text-slate-600 dark:text-slate-400">Documents required</h3>
                 <ul className="mt-1 space-y-0.5 text-sm text-slate-700 dark:text-slate-300">
-                  {scholarship.required_documents.map((doc) => (
-                    <li key={doc}>
-                      {DOCUMENT_LABELS[doc] || doc.replace(/_/g, " ")}
+                  {scholarship.required_documents.map((doc, i) => (
+                    <li key={doc ?? `doc-${i}`}>
+                      {DOCUMENT_LABELS[String(doc ?? "")] ||
+                        String(doc ?? "").replace(/_/g, " ") ||
+                        "—"}
                     </li>
                   ))}
                 </ul>
@@ -264,6 +326,116 @@ export function ScholarshipDetailPage() {
           </div>
 
           <div className="border-t border-slate-200 dark:border-slate-700 pt-6">
+            <div className="mb-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setReportMsg(null);
+                  setShowReport(true);
+                }}
+                className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700"
+              >
+                Report an issue
+              </button>
+            </div>
+            {showReport ? (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="report-issue-title"
+              >
+                <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-600 dark:bg-slate-800">
+                  <h2 id="report-issue-title" className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    Report an issue
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                    Help us keep scholarship data accurate. Reports are reviewed by admins.
+                  </p>
+                  <label className="mt-4 block text-sm font-medium text-slate-700 dark:text-slate-300">Issue type</label>
+                  <select
+                    value={issueType}
+                    onChange={(e) => setIssueType(e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
+                  >
+                    {ISSUE_TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                    Details (optional)
+                  </label>
+                  <textarea
+                    value={reportDesc}
+                    onChange={(e) => setReportDesc(e.target.value)}
+                    rows={3}
+                    className="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
+                    placeholder="Describe the problem…"
+                  />
+                  {reportMsg ? (
+                    <p
+                      className={
+                        reportError
+                          ? "mt-2 text-sm text-red-600 dark:text-red-400"
+                          : "mt-2 text-sm text-green-700 dark:text-green-400"
+                      }
+                    >
+                      {reportMsg}
+                    </p>
+                  ) : null}
+                  <div className="mt-4 flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowReport(false)}
+                      className="rounded-lg px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      disabled={reportSubmitting}
+                      onClick={async () => {
+                        if (!id) return;
+                        setReportSubmitting(true);
+                        setReportMsg(null);
+                        setReportError(false);
+                        try {
+                          const res = await apiFetch("/api/v1/reports", {
+                            method: "POST",
+                            headers: {
+                              ...authHeaders(),
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              scholarship_id: Number(id),
+                              issue_type: issueType,
+                              description: reportDesc.trim() || undefined,
+                            }),
+                          });
+                          if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            throw new Error((err as { detail?: string }).detail || "Could not submit report");
+                          }
+                          setReportMsg("Thank you — your report was submitted.");
+                          setReportDesc("");
+                          setReportError(false);
+                        } catch (e) {
+                          setReportError(true);
+                          setReportMsg(e instanceof Error ? e.message : "Failed to submit");
+                        } finally {
+                          setReportSubmitting(false);
+                        }
+                      }}
+                      className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+                    >
+                      {reportSubmitting ? "Submitting…" : "Submit"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Apply</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
               Applications are submitted through the official scholarship provider website.

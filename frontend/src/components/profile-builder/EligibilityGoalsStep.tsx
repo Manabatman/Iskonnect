@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { EQUITY_GROUPS, NEEDS_CATEGORIES } from "../../constants/needsCategories";
 import { NeedsCategoryAccordion } from "../NeedsCategoryAccordion";
 import { SelectedChips } from "../SelectedChips";
@@ -88,6 +89,24 @@ export function EligibilityGoalsStep({ state, onChange }: EligibilityStepProps) 
         <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
           Select if you belong to any priority group for scholarship matching.
         </p>
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-800/50">
+        <label className="flex cursor-pointer gap-3 text-sm text-slate-800 dark:text-slate-100">
+          <input
+            type="checkbox"
+            checked={state.privacy_consent === "on"}
+            onChange={() => onChange("privacy_consent", state.privacy_consent === "on" ? "" : "on")}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+          />
+          <span>
+            I consent to the collection and processing of my personal data in accordance with the{" "}
+            <Link to="/privacy" className="font-medium text-primary-600 underline hover:no-underline dark:text-primary-400">
+              Privacy Policy
+            </Link>{" "}
+            and RA 10173 (Data Privacy Act of 2012). I understand I can request access or erasure as described there.
+          </span>
+        </label>
       </div>
     </div>
   );

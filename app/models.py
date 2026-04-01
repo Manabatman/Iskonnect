@@ -139,6 +139,15 @@ class Scholarship(Base):
     level = Column(String)  # Legacy: High School, College, TVET, Graduate
     needs_tags = Column(Text)  # JSON-encoded list (legacy)
 
+    # === DATA RELIABILITY & LINK INTEGRITY ===
+    last_verified_at = Column(DateTime, nullable=True)
+    verification_source = Column(String, nullable=True)  # manual | scraper | partner | csv_import
+    confidence_score = Column(Float, nullable=True)
+    data_status = Column(String, nullable=True)  # active | expiring_soon | expired | needs_review | broken_link
+    link_status = Column(String, nullable=True)  # ok | broken | timeout | unchecked
+    link_last_checked_at = Column(DateTime, nullable=True)
+    link_failure_count = Column(Integer, nullable=True)
+
 
 class ScholarshipStaging(Base):
     """Queued scholarship rows from CSV/import before admin approval."""
@@ -190,4 +199,76 @@ class SavedScholarship(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class ScholarshipReport(Base):
+    """User-reported issues on a scholarship (admin review queue)."""
+
+    __tablename__ = "scholarship_reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    issue_type = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    status = Column(String, nullable=False, server_default="pending")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    reviewed_at = Column(DateTime, nullable=True)
+    reviewer_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+
+
+class ScoringWeight(Base):
+    """Admin-configurable matching component weights."""
+
+    __tablename__ = "scoring_weights"
+
+    id = Column(Integer, primary_key=True, index=True)
+    component = Column(String, nullable=False, unique=True)
+    weight = Column(Float, nullable=False)
+    updated_at = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_by = Column(Integer, ForeignKey("users.id"), nullable=True)
+
+
+class ScholarshipVersion(Base):
+    """Historical snapshot / diff when a scholarship row changes."""
+
+    __tablename__ = "scholarship_versions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    version_number = Column(Integer, nullable=False)
+    changes = Column(Text, nullable=False)
+    changed_by = Column(Integer, ForeignKey("users.id"), nullable=True)
+    changed_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class AuditLog(Base):
+    """Append-only audit trail for compliance and debugging."""
+
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    actor_id = Column(Integer, nullable=True, index=True)
+    actor_type = Column(String, nullable=True)
+    action = Column(String, nullable=False, index=True)
+    resource_type = Column(String, nullable=True)
+    resource_id = Column(Integer, nullable=True)
+    details = Column(Text, nullable=True)
+    ip_address = Column(String, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class Notification(Base):
+    """In-app notification for a user."""
+
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    type = Column(String, nullable=False)
+    title = Column(String, nullable=False)
+    body = Column(Text, nullable=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=True)
+    is_read = Column(Boolean, nullable=True, default=False)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)

@@ -3,7 +3,11 @@ Scoring engine configuration.
 Weights and equity multipliers are adjustable without rewriting scoring logic.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
+
+from sqlalchemy.orm import Session
 
 
 def _default_weights() -> dict[str, float]:
@@ -50,3 +54,21 @@ class ScoringConfig:
     equity_multipliers: dict[str, float] = field(default_factory=_default_equity_multipliers)
     max_equity_multiplier: float = 1.15
     income_bracket_midpoints: dict[str, int] = field(default_factory=_default_income_bracket_midpoints)
+
+    @classmethod
+    def from_db(cls, db: Session) -> ScoringConfig:
+        """Load component weights from `scoring_weights` table; fall back to defaults on any error."""
+        cfg = cls()
+        try:
+            from app import models
+
+            rows = db.query(models.ScoringWeight).all()
+        except Exception:
+            return cls()
+        if not rows:
+            return cls()
+        wmap = {r.component: float(r.weight) for r in rows}
+        for key in list(cfg.weights.keys()):
+            if key in wmap:
+                cfg.weights[key] = wmap[key]
+        return cfg

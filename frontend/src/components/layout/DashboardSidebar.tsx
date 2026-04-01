@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 export interface DashboardSidebarProps {
   collapsed: boolean;
@@ -15,10 +16,16 @@ const navItems = [
     icon: IconLayoutDashboard,
   },
   {
+    to: "/scholarships/search",
+    label: "Search scholarships",
+    match: (path: string) => path.startsWith("/scholarships/search"),
+    icon: IconSearch,
+  },
+  {
     to: "/opportunities",
     label: "Opportunities",
     match: (path: string) => path.startsWith("/opportunities"),
-    icon: IconSearch,
+    icon: IconCompass,
   },
   {
     to: "/applications",
@@ -27,16 +34,16 @@ const navItems = [
     icon: IconFileText,
   },
   {
-    to: "/documents",
-    label: "Documents",
-    match: (path: string) => path.startsWith("/documents"),
-    icon: IconFolderOpen,
-  },
-  {
     to: "/profile-builder",
     label: "Profile",
     match: (path: string) => path.startsWith("/profile-builder"),
     icon: IconUser,
+  },
+  {
+    to: "/settings",
+    label: "Account Settings",
+    match: (path: string) => path.startsWith("/settings"),
+    icon: IconSettings,
   },
 ] as const;
 
@@ -62,6 +69,17 @@ function IconSearch({ className }: { className?: string }) {
   );
 }
 
+function IconCompass({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 function IconFileText({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -73,22 +91,22 @@ function IconFileText({ className }: { className?: string }) {
   );
 }
 
-function IconFolderOpen({ className }: { className?: string }) {
+function IconUser({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
-        d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"
+        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
         fill="currentColor"
       />
     </svg>
   );
 }
 
-function IconUser({ className }: { className?: string }) {
+function IconSettings({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
-        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+        d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.6-.22l-2.39.96c-.52-.4-1.08-.73-1.69-.98l-.36-2.54a.484.484 0 00-.49-.42h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.61.25-1.17.59-1.69.98l-2.39-.96c-.22-.08-.47 0-.6.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.52.4 1.08.73 1.69.98l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.61-.25 1.17-.59 1.69-.98l2.39.96c.22.08.47 0 .6-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
         fill="currentColor"
       />
     </svg>
@@ -111,6 +129,7 @@ export function DashboardSidebar({
 }: DashboardSidebarProps) {
   const location = useLocation();
   const path = location.pathname;
+  const { user } = useAuth();
 
   return (
     <>
@@ -193,25 +212,27 @@ export function DashboardSidebar({
           })}
         </nav>
 
-        <div className="mt-auto border-t border-slate-200 p-2 dark:border-slate-700">
-          <Link
-            to="/admin"
-            onClick={onMobileClose}
-            className={[
-              "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
-              path.startsWith("/admin")
-                ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
-                : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/80 dark:hover:text-slate-200",
-              collapsed ? "justify-center px-2" : "",
-            ].join(" ")}
-            title={collapsed ? "Admin" : undefined}
-          >
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs font-bold" aria-hidden>
-              A
-            </span>
-            {!collapsed ? <span>Admin</span> : null}
-          </Link>
-        </div>
+        {user?.role === "admin" ? (
+          <div className="mt-auto border-t border-slate-200 p-2 dark:border-slate-700">
+            <Link
+              to="/admin"
+              onClick={onMobileClose}
+              className={[
+                "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
+                path.startsWith("/admin")
+                  ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
+                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/80 dark:hover:text-slate-200",
+                collapsed ? "justify-center px-2" : "",
+              ].join(" ")}
+              title={collapsed ? "Admin" : undefined}
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs font-bold" aria-hidden>
+                A
+              </span>
+              {!collapsed ? <span>Admin</span> : null}
+            </Link>
+          </div>
+        ) : null}
       </aside>
     </>
   );

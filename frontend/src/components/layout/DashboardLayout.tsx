@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { SavedScholarshipsProvider, useSavedScholarships } from "../../contexts/SavedScholarshipsContext";
+import { useSavedScholarships } from "../../contexts/SavedScholarshipsContext";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
@@ -72,28 +72,26 @@ export function DashboardLayout() {
         </div>
       ) : null}
       <ErrorBoundary>
-        <SavedScholarshipsProvider>
-          <SavedScholarshipsErrorBanner />
-          <DashboardSidebar
-            collapsed={sidebarCollapsed}
-            onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
-            mobileOpen={mobileSidebarOpen}
-            onMobileClose={() => setMobileSidebarOpen(false)}
-          />
-          <div
-            className={[
-              "flex min-h-screen flex-col transition-[padding] duration-200",
-              sidebarCollapsed ? "lg:pl-16" : "lg:pl-64",
-            ].join(" ")}
-          >
-            <DashboardTopbar onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-            <div className="flex-1 overflow-auto">
-              <ErrorBoundary>
-                <Outlet />
-              </ErrorBoundary>
-            </div>
+        <SavedScholarshipsErrorBanner />
+        <DashboardSidebar
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
+          mobileOpen={mobileSidebarOpen}
+          onMobileClose={() => setMobileSidebarOpen(false)}
+        />
+        <div
+          className={[
+            "flex min-h-screen flex-col transition-[padding] duration-200",
+            sidebarCollapsed ? "lg:pl-16" : "lg:pl-64",
+          ].join(" ")}
+        >
+          <DashboardTopbar onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
+          <div className="flex-1 overflow-auto">
+            <ErrorBoundary>
+              <Outlet />
+            </ErrorBoundary>
           </div>
-        </SavedScholarshipsProvider>
+        </div>
       </ErrorBoundary>
     </div>
   );

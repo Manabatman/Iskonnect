@@ -1,46 +1,72 @@
+import { useCallback, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+
+const navLinkClass = (active: boolean) =>
+  [
+    "text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1",
+    active
+      ? "font-medium text-primary-600 dark:text-primary-400"
+      : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400",
+  ].join(" ");
 
 export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const path = location.pathname;
+  const [brandLogoSrc, setBrandLogoSrc] = useState("/images/logo.png");
+
+  const handleBrandLogoError = useCallback(() => {
+    setBrandLogoSrc("/images/logo.svg");
+  }, []);
+
+  const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
   return (
     <header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link to="/" className="block">
-          <h1 className="text-xl font-bold text-primary-700 dark:text-primary-400">ISKONNECT</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Connecting Filipino Students to Opportunity
-          </p>
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <Link to="/" className="flex shrink-0 items-center gap-3">
+          <img
+            src={brandLogoSrc}
+            alt=""
+            className="h-10 w-10"
+            width={40}
+            height={40}
+            onError={handleBrandLogoError}
+          />
+          <span>
+            <span className="block font-sans text-xl font-black uppercase tracking-[0.06em] text-primary-700 dark:text-primary-400 sm:text-2xl">
+              ISKONNECT
+            </span>
+            <span className="block text-xs font-medium text-slate-500 dark:text-slate-400">
+              Connecting Filipino Students to Opportunity
+            </span>
+          </span>
         </Link>
-        <nav className="hidden items-center gap-6 sm:flex">
-          <Link
-            to={user ? "/profile-builder" : "/"}
-            className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-              location.pathname === (user ? "/profile-builder" : "/")
-                ? "font-medium text-primary-600 dark:text-primary-400"
-                : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-            }`}
-            aria-label="Build Profile"
-          >
-            Build Profile
+
+        <nav className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-x-5" aria-label="Primary">
+          <Link to="/how-it-works" className={navLinkClass(isActive("/how-it-works"))}>
+            How It Works
           </Link>
+          <Link to="/scholarships/search" className={navLinkClass(path.startsWith("/scholarships"))}>
+            Scholarships
+          </Link>
+          <Link to="/about" className={navLinkClass(isActive("/about"))}>
+            About
+          </Link>
+        </nav>
+
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           {user ? (
             <>
               <Link
                 to="/dashboard"
-                className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-                  location.pathname === "/dashboard"
-                    ? "font-medium text-primary-600 dark:text-primary-400"
-                    : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-                }`}
-                aria-label="Dashboard"
+                className={navLinkClass(path.startsWith("/dashboard"))}
               >
                 Dashboard
               </Link>
-              <span className="text-sm text-slate-500 dark:text-slate-400">
+              <span className="hidden text-sm text-slate-500 dark:text-slate-400 sm:inline max-w-[10rem] truncate" title={user.email}>
                 {user.email}
               </span>
               <button
@@ -51,67 +77,26 @@ export function Navbar() {
                 }}
                 className="text-sm text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
               >
-                Logout
+                Log out
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-                location.pathname === "/login"
-                  ? "font-medium text-primary-600 dark:text-primary-400"
-                  : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-              }`}
-              aria-label="Login"
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                to="/login"
+                className="text-sm font-medium text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
+              >
+                Get Started
+              </Link>
+            </>
           )}
-          <Link
-            to="/scholarships/search"
-            className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-              location.pathname.startsWith("/scholarships")
-                ? "font-medium text-primary-600 dark:text-primary-400"
-                : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-            }`}
-            aria-label="Scholarships"
-          >
-            Scholarships
-          </Link>
-          <Link
-            to="/about"
-            className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-              location.pathname === "/about"
-                ? "font-medium text-primary-600 dark:text-primary-400"
-                : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-            }`}
-            aria-label="About"
-          >
-            About
-          </Link>
-          <Link
-            to="/settings"
-            className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-              location.pathname === "/settings"
-                ? "font-medium text-primary-600 dark:text-primary-400"
-                : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-            }`}
-            aria-label="Settings"
-          >
-            Settings
-          </Link>
-          <Link
-            to="/admin"
-            className={`text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded ${
-              location.pathname === "/admin"
-                ? "font-medium text-primary-600 dark:text-primary-400"
-                : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-            }`}
-            aria-label="Admin"
-          >
-            Admin
-          </Link>
-        </nav>
+        </div>
       </div>
     </header>
   );

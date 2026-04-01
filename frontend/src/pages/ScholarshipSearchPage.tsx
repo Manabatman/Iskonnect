@@ -1,29 +1,58 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { BookmarkButton } from "../components/BookmarkButton";
-import { useDebounce } from "../hooks/useDebounce";
+import { MatchScoreRing } from "../components/MatchScoreRing";
 import { ScholarshipSearchFilters } from "../components/ScholarshipSearchFilters";
 import { ScholarshipDetailPanel } from "../components/ScholarshipDetailPanel";
-import type {
-  ScholarshipInfo,
-  ScholarshipSearchResponse,
-  ScholarshipSearchFilters as ScholarshipSearchFiltersType,
-} from "../types";
+import {
+  getUrgencyBadgeClasses,
+  getUrgencyLevel,
+  WhyYouMatchedSection,
+} from "../components/scholarshipMatchDisplay";
+import { useAuth } from "../contexts/AuthContext";
+import { useScholarshipSearch } from "../hooks/useScholarshipSearch";
+import type { MatchResult, ScholarshipInfo } from "../types";
 
-const DEBOUNCE_MS = 300;
-const PAGE_SIZE = 20;
+function formatDeadlineLabel(deadline: string | null | undefined): string | null {
+  if (!deadline?.trim()) return null;
+  try {
+    const d = new Date(deadline);
+    if (Number.isNaN(d.getTime())) return null;
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  } catch {
+    return null;
+  }
+}
 
 function SearchCard({
   s,
+  matchInfo,
   onSelect,
 }: {
   s: ScholarshipInfo;
+  matchInfo?: MatchResult | null;
   onSelect: (s: ScholarshipInfo) => void;
 }) {
   const link = s.link && s.link.trim() ? s.link : "#";
   const hasLink = !!link && link.startsWith("http");
   const regions = (s.regions ?? []).map((r) => r.trim()).filter(Boolean);
+  const deadlineLabel = formatDeadlineLabel(s.application_deadline);
+
+  const urgency = matchInfo
+    ? getUrgencyLevel(matchInfo.application_deadline, matchInfo.application_open_date)
+    : getUrgencyLevel(s.application_deadline, s.application_open_date);
+  const urgencyBadgeClasses = getUrgencyBadgeClasses(urgency.level);
+
+  const score = matchInfo != null ? (matchInfo.final_score ?? matchInfo.score) : null;
+  const likelihood =
+    matchInfo?.confidence === "high"
+      ? "High likelihood"
+      : matchInfo?.confidence === "medium"
+        ? "Moderate likelihood"
+        : matchInfo?.confidence === "low"
+          ? "Lower likelihood"
+          : null;
 
   return (
     <article
@@ -48,9 +77,23 @@ function SearchCard({
             >
               {s.title}
             </h3>
-            <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{s.provider}</p>
+            <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{s.provider ?? "—"}</p>
+            {deadlineLabel ? (
+              <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">Deadline: {deadlineLabel}</p>
+            ) : null}
+            {likelihood ? (
+              <p className="mt-1 text-xs font-medium text-primary-700 dark:text-primary-300">{likelihood}</p>
+            ) : null}
           </div>
-          <BookmarkButton scholarshipId={s.id} />
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            <BookmarkButton scholarshipId={s.id} />
+            {matchInfo != null && score != null ? <MatchScoreRing score={score} size={56} /> : null}
+            {matchInfo != null ? (
+              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${urgencyBadgeClasses}`}>
+                {urgency.label}
+              </span>
+            ) : null}
+          </div>
         </div>
 
         {s.level && (
@@ -86,6 +129,8 @@ function SearchCard({
             {s.max_age != null ? `Max ${s.max_age}` : ""}
           </p>
         )}
+
+        {matchInfo ? <WhyYouMatchedSection match={matchInfo} /> : null}
       </div>
 
       <div className="mt-4 flex flex-wrap gap-3">
@@ -120,161 +165,121 @@ function SearchCard({
 }
 
 export function ScholarshipSearchPage() {
-  const [query, setQuery] = useState("");
-  const [filters, setFilters] = useState<ScholarshipSearchFiltersType>({});
-  const [page, setPage] = useState(1);
-  const [results, setResults] = useState<ScholarshipInfo[]>([]);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedScholarship, setSelectedScholarship] = useState<ScholarshipInfo | null>(null);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
-  const [highlightIndex, setHighlightIndex] = useState(-1);
+  const navigate = useNavigate();
+  const { user, authHeaders } = useAuth();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const suggestionsRef = useRef<HTMLUListElement>(null);
-  const justSelectedRef = useRef(false);
 
-  const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
+  const {
+    query,
+    setQuery,
+    filters,
+    page,
+    setPage,
+    results,
+    total,
+    totalPages,
+    loading,
+    error,
+    suggestions,
+    suggestionsOpen,
+    setSuggestionsOpen,
+    highlightIndex,
+    suggestionsRef,
+    handleSuggestionSelect,
+    handleSearchSubmit,
+    handleKeyDown,
+    handleFiltersChange,
+  } = useScholarshipSearch({
+    limit: 20,
+    enableSuggestions: true,
+    syncUrlQuery: true,
+  });
 
-  const fetchSearch = useCallback(
-    async (searchQuery: string, searchFilters: ScholarshipSearchFiltersType, pageNum: number) => {
-      const params = new URLSearchParams();
-      if (searchQuery.trim()) params.set("query", searchQuery.trim());
-      if (searchFilters.region) params.set("region", searchFilters.region);
-      if (searchFilters.field) params.set("field", searchFilters.field);
-      if (searchFilters.education_level) params.set("education_level", searchFilters.education_level);
-      if (searchFilters.provider) params.set("provider", searchFilters.provider);
-      if (searchFilters.max_income != null && searchFilters.max_income >= 0) {
-        params.set("max_income", String(searchFilters.max_income));
-      }
-      params.set("page", String(pageNum));
-      params.set("limit", String(PAGE_SIZE));
+  const [selectedScholarship, setSelectedScholarship] = useState<ScholarshipInfo | null>(null);
+  const [matchById, setMatchById] = useState<Map<number, MatchResult> | null>(null);
+  const [matchLoading, setMatchLoading] = useState(false);
+  const [matchError, setMatchError] = useState<string | null>(null);
 
-      const res = await apiFetch(`/api/v1/scholarships/search?${params.toString()}`);
-      if (!res.ok) throw new Error("Search failed");
-      const data = (await res.json()) as ScholarshipSearchResponse;
-      return data;
-    },
-    []
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    fetchSearch(query, filters, page)
-      .then((data) => {
-        if (!cancelled) {
-          setResults(data.results ?? []);
-          setTotal(data.total ?? 0);
-          setTotalPages(data.total_pages ?? 0);
-        }
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Search failed");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [query, filters, page, fetchSearch]);
-
-  useEffect(() => {
-    if (justSelectedRef.current) {
-      justSelectedRef.current = false;
+  const handleFindMyMatches = useCallback(async () => {
+    if (!user) {
+      navigate("/login", { state: { from: "/scholarships/search" } });
       return;
     }
-    if (!debouncedQuery.trim()) {
-      setSuggestions([]);
-      setSuggestionsOpen(false);
-      return;
-    }
-    const params = new URLSearchParams({ q: debouncedQuery.trim() });
-    apiFetch(`/api/v1/suggestions/scholarships?${params.toString()}`)
-      .then((res) => (res.ok ? res.json() : { suggestions: [] }))
-      .then((data: { suggestions?: string[] }) => {
-        setSuggestions(data.suggestions ?? []);
-        setHighlightIndex(-1);
-        setSuggestionsOpen(true);
-      })
-      .catch(() => setSuggestions([]));
-  }, [debouncedQuery]);
-
-  const handleSuggestionSelect = useCallback((suggestion: string) => {
-    justSelectedRef.current = true;
-    setQuery(suggestion);
-    setSuggestions([]);
-    setSuggestionsOpen(false);
-    setPage(1);
-  }, []);
-
-  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    setSuggestionsOpen(false);
-    setPage(1);
-  }, []);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (!suggestionsOpen || suggestions.length === 0) {
-        if (e.key === "Escape") setSuggestionsOpen(false);
+    setMatchLoading(true);
+    setMatchError(null);
+    try {
+      const res = await apiFetch("/api/v1/profiles", { headers: authHeaders() });
+      if (!res.ok) throw new Error("Could not load your profile.");
+      const profiles = (await res.json()) as Array<{ id: number }>;
+      if (!Array.isArray(profiles) || profiles.length === 0) {
+        setMatchError("Create a profile first to see personalized matches.");
         return;
       }
-      switch (e.key) {
-        case "ArrowDown":
-          e.preventDefault();
-          setHighlightIndex((i) => (i < suggestions.length - 1 ? i + 1 : 0));
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          setHighlightIndex((i) => (i > 0 ? i - 1 : suggestions.length - 1));
-          break;
-        case "Enter":
-          e.preventDefault();
-          if (highlightIndex >= 0 && highlightIndex < suggestions.length) {
-            handleSuggestionSelect(suggestions[highlightIndex]);
-          }
-          break;
-        case "Escape":
-          e.preventDefault();
-          setSuggestionsOpen(false);
-          setHighlightIndex(-1);
-          break;
+      const profileId = profiles[0].id;
+      const mRes = await apiFetch(`/api/v1/matches/${profileId}`, { headers: authHeaders() });
+      if (mRes.status === 401 || mRes.status === 403) {
+        throw new Error("Session expired. Please sign in again.");
       }
-    },
-    [suggestionsOpen, suggestions, highlightIndex, handleSuggestionSelect]
-  );
-
-  useEffect(() => {
-    if (highlightIndex >= 0 && suggestionsRef.current) {
-      const el = suggestionsRef.current.children[highlightIndex] as HTMLElement;
-      el?.scrollIntoView({ block: "nearest" });
+      if (!mRes.ok) throw new Error("Could not load matches.");
+      const data = (await mRes.json()) as { matches?: MatchResult[] };
+      const list = data.matches ?? [];
+      const next = new Map<number, MatchResult>();
+      for (const m of list) {
+        if (m && typeof m.id === "number") next.set(m.id, m);
+      }
+      setMatchById(next);
+    } catch (e) {
+      setMatchError(e instanceof Error ? e.message : "Failed to load matches.");
+    } finally {
+      setMatchLoading(false);
     }
-  }, [highlightIndex]);
+  }, [user, authHeaders, navigate]);
 
-  const handleFiltersChange = useCallback((newFilters: ScholarshipSearchFiltersType) => {
-    setFilters(newFilters);
-    setPage(1);
+  const clearMatchOverlay = useCallback(() => {
+    setMatchById(null);
+    setMatchError(null);
   }, []);
 
   return (
     <section id="scholarship-search" className="py-8">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-            Search Scholarships
-          </h1>
-          <Link
-            to="/profile-builder"
-            className="w-fit rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-          >
-            Build Profile for Matches
-          </Link>
+        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Search Scholarships</h1>
+          <div className="flex flex-wrap items-center gap-3">
+            {matchById != null && matchById.size > 0 ? (
+              <button
+                type="button"
+                onClick={clearMatchOverlay}
+                className="rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 transition hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              >
+                Clear match overlay
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={handleFindMyMatches}
+              disabled={matchLoading}
+              className="rounded-xl bg-accent-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 disabled:opacity-70 dark:focus:ring-offset-slate-900"
+            >
+              {matchLoading ? "Loading matches…" : "Find My Matches"}
+            </button>
+            <Link
+              to="/profile-builder"
+              className="w-fit rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            >
+              Complete Your Profile
+            </Link>
+          </div>
         </div>
+
+        {matchError ? (
+          <div
+            className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100"
+            role="alert"
+          >
+            {matchError}
+          </div>
+        ) : null}
 
         <form onSubmit={handleSearchSubmit} className="relative mb-6">
           <label htmlFor="search-input" className="sr-only">
@@ -352,6 +357,11 @@ export function ScholarshipSearchPage() {
               <>
                 <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
                   {total} scholarship{total !== 1 ? "s" : ""} found
+                  {matchById != null && matchById.size > 0 ? (
+                    <span className="ml-2 text-primary-600 dark:text-primary-400">
+                      · Match scores shown where available
+                    </span>
+                  ) : null}
                 </p>
 
                 {results.length === 0 ? (
@@ -365,7 +375,12 @@ export function ScholarshipSearchPage() {
                   <>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                       {results.map((s) => (
-                        <SearchCard key={s.id} s={s} onSelect={setSelectedScholarship} />
+                        <SearchCard
+                          key={s.id}
+                          s={s}
+                          matchInfo={matchById?.get(s.id) ?? null}
+                          onSelect={setSelectedScholarship}
+                        />
                       ))}
                     </div>
 

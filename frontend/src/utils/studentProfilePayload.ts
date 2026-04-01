@@ -57,7 +57,7 @@ export function buildStudentProfileFromBuilderState(state: ProfileBuilderState):
     is_farmer_fisher_dependent: getBool("is_farmer_fisher_dependent"),
     is_4ps_listahanan: getBool("is_4ps_listahanan"),
     parent_occupation: trim("parent_occupation"),
-    privacy_consent: true,
+    privacy_consent: getBool("privacy_consent"),
     privacy_consent_version: "ra10173-v1",
   };
 }

@@ -3,8 +3,20 @@ Hard filter service - deal-breakers that exclude scholarships before scoring.
 If any hard filter fails, the scholarship is not shown.
 """
 
+import logging
+
+from app.config import settings
+
+logger = logging.getLogger(__name__)
 from app.taxonomy.regions import normalize_region
 from app.utils.json_helpers import parse_json_list
+
+
+def _data_status_passes_for_matching(data_status: str | None) -> bool:
+    """Exclude expired / broken_link from matching when feature flag is on."""
+    if not data_status:
+        return True
+    return data_status not in ("expired", "broken_link")
 
 
 def _level_matches(profile_level: str | None, eligible_levels: list, legacy_level: str | None) -> bool:
@@ -45,11 +57,35 @@ def _region_matches(
     eligible_cities: list,
     residency_required: bool,
     legacy_regions: list,
+    scholarship_id: int | None = None,
 ) -> bool:
     """Check if profile location matches scholarship geographic eligibility."""
     regions = eligible_regions if eligible_regions else legacy_regions
     if not regions and not eligible_cities:
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "region_match scholarship_id=%s nationwide=True",
+                scholarship_id,
+            )
         return True  # Nationwide
+
+    # Residency-required programs with geographic lists: student must declare region or city
+    if residency_required:
+        geo_restricted = bool(regions or eligible_cities)
+        has_profile_location = bool(
+            (profile_region and str(profile_region).strip())
+            or (profile_city and str(profile_city).strip())
+        )
+        if geo_restricted and not has_profile_location:
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(
+                    "region_match scholarship_id=%s fail=residency_required_no_location "
+                    "eligible_regions=%s eligible_cities=%s",
+                    scholarship_id,
+                    regions,
+                    eligible_cities,
+                )
+            return False
 
     profile_region_norm = normalize_region(profile_region or "")
     profile_city_lower = (profile_city or "").strip().lower()
@@ -58,8 +94,22 @@ def _region_matches(
     if eligible_cities:
         for ec in eligible_cities:
             if ec and profile_city_lower and ec.strip().lower() in profile_city_lower:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(
+                        "region_match scholarship_id=%s pass=city_substring profile_city=%s ec=%s",
+                        scholarship_id,
+                        profile_city_lower,
+                        ec,
+                    )
                 return True
             if ec and profile_city_lower and profile_city_lower in ec.strip().lower():
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(
+                        "region_match scholarship_id=%s pass=city_reverse profile_city=%s ec=%s",
+                        scholarship_id,
+                        profile_city_lower,
+                        ec,
+                    )
                 return True
 
     # Region-level match: use exact equality after normalization to avoid false positives
@@ -69,11 +119,36 @@ def _region_matches(
             continue
         r_norm = normalize_region(r)
         if profile_region_norm and profile_region_norm == r_norm:
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(
+                    "region_match scholarship_id=%s pass=region_norm profile_norm=%s sch_region=%s",
+                    scholarship_id,
+                    profile_region_norm,
+                    r,
+                )
             return True
         # Direct match when both normalize to same island group (e.g. NCR and Metro Manila)
         if profile_region and r and profile_region.strip().lower() == r.strip().lower():
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(
+                    "region_match scholarship_id=%s pass=region_direct profile=%s sch=%s",
+                    scholarship_id,
+                    profile_region,
+                    r,
+                )
             return True
 
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "region_match scholarship_id=%s fail=no_match profile_region=%s profile_city=%s "
+            "eligible_regions=%s eligible_cities=%s residency_required=%s",
+            scholarship_id,
+            profile_region,
+            profile_city,
+            regions,
+            eligible_cities,
+            residency_required,
+        )
     return False
 
 
@@ -179,6 +254,18 @@ def filter_scholarships(profile: dict, scholarships: list) -> list:
     """
     result = []
     for sch in scholarships:
+        sid = sch.get("id")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "hard_filter scholarship_id=%s profile_region=%s profile_city=%s",
+                sid,
+                profile.get("region"),
+                profile.get("city_municipality"),
+            )
+        if settings.filter_expired_from_matches:
+            ds = sch.get("data_status")
+            if not _data_status_passes_for_matching(ds):
+                continue
         if not _age_matches(
             profile.get("age"),
             sch.get("min_age"),
@@ -198,6 +285,7 @@ def filter_scholarships(profile: dict, scholarships: list) -> list:
             parse_json_list(sch.get("eligible_cities")),
             sch.get("residency_required", False),
             parse_json_list(sch.get("regions")),
+            scholarship_id=sid,
         ):
             continue
         if not _school_type_matches(

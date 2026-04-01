@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -16,6 +16,7 @@ from app import models, schemas
 from app.api.v1.scholarships import _scholarship_to_response, persist_scholarship_from_schema
 from app.auth import require_admin
 from app.db import get_db
+from app.utils.audit import log_action
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +110,7 @@ def import_staging_rows(
 
 @router.post("/scholarships/staging/{staging_id}/approve", response_model=schemas.ScholarshipResponse)
 def approve_staging(
+    request: Request,
     staging_id: int,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
@@ -126,18 +128,33 @@ def approve_staging(
     except Exception as e:
         logger.error("staging_approve_invalid_payload id=%s err=%s", staging_id, e)
         raise HTTPException(status_code=400, detail="Invalid payload_json for scholarship schema")
-    db_sch = persist_scholarship_from_schema(db, sch)
+    db_sch = persist_scholarship_from_schema(
+        db,
+        sch,
+        version_changed_by=_admin.id if _admin else None,
+    )
     sid = row.id
     row = db.query(models.ScholarshipStaging).filter(models.ScholarshipStaging.id == sid).first()
     if row:
         row.status = "approved"
         row.reviewed_at = datetime.now(timezone.utc)
         db.commit()
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="staging.approve",
+        resource_type="scholarship_staging",
+        resource_id=staging_id,
+        details={"scholarship_id": db_sch.id},
+        ip_address=request.client.host if request.client else None,
+    )
     return _scholarship_to_response(db_sch)
 
 
 @router.post("/scholarships/staging/{staging_id}/reject")
 def reject_staging(
+    request: Request,
     staging_id: int,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
@@ -148,4 +165,14 @@ def reject_staging(
     row.status = "rejected"
     row.reviewed_at = datetime.now(timezone.utc)
     db.commit()
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="staging.reject",
+        resource_type="scholarship_staging",
+        resource_id=staging_id,
+        details={},
+        ip_address=request.client.host if request.client else None,
+    )
     return {"status": "rejected", "id": staging_id}

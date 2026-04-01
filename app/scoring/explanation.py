@@ -210,6 +210,24 @@ def build_explanation(
     return lines
 
 
+def build_improvement_suggestions(components: dict[str, float], payload: ScoringPayload) -> list[str]:
+    """
+    Actionable tips when match scores are low or profile data is sparse.
+    """
+    suggestions: list[str] = []
+    if payload.gwa_normalized is None:
+        suggestions.append("Add your GPA/GWA to improve academic matching.")
+    if payload.household_income_annual is None and payload.income_bracket is None:
+        suggestions.append("Add household income or income bracket for better need-based matching.")
+    if (payload.field_match_level or "").strip().lower() == "none":
+        suggestions.append("Select your preferred courses or field of study to improve field alignment.")
+    if (payload.geographic_match_level or "").strip().lower() == "none":
+        suggestions.append("Add your region and city for geographic matching.")
+    if components.get("academic", 1.0) < 0.6 and payload.gwa_normalized is not None:
+        suggestions.append("Your academic score is below this scholarship's typical range; consider programs with lower GWA floors.")
+    return suggestions
+
+
 def assess_confidence(payload: ScoringPayload) -> str:
     """
     Assess confidence based on data completeness.
