@@ -26,7 +26,7 @@ export function Footer() {
             </Link>
           </div>
           <p className="text-sm text-slate-400">
-            &copy; {currentYear} ISKONNECT. All rights reserved.
+            By Mark Justin S. Manabat.
           </p>
         </div>
       </div>

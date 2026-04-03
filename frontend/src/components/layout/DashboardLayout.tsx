@@ -5,6 +5,7 @@ import { useSavedScholarships } from "../../contexts/SavedScholarshipsContext";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
+import { FeedbackButton } from "../FeedbackButton";
 
 function SavedScholarshipsErrorBanner() {
   const { error, clearError } = useSavedScholarships();
@@ -92,6 +93,7 @@ export function DashboardLayout() {
             </ErrorBoundary>
           </div>
         </div>
+        <FeedbackButton />
       </ErrorBoundary>
     </div>
   );

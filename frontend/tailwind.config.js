@@ -11,10 +11,31 @@ export default {
         marquee: {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" }
+        },
+        overlayFade: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        },
+        overlayFadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" }
+        },
+        /** Match analysis dialog: scale + opacity only (no translate) so sm centering stays stable */
+        matchDialogIn: {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" }
+        },
+        matchDialogOut: {
+          "0%": { opacity: "1", transform: "scale(1)" },
+          "100%": { opacity: "0", transform: "scale(0.95)" }
         }
       },
       animation: {
-        marquee: "marquee 40s linear infinite"
+        marquee: "marquee 40s linear infinite",
+        overlayFade: "overlayFade 200ms ease-out both",
+        overlayFadeOut: "overlayFadeOut 180ms ease-in forwards",
+        matchDialogIn: "matchDialogIn 200ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        matchDialogOut: "matchDialogOut 180ms ease-in forwards"
       },
       colors: {
         accent: {

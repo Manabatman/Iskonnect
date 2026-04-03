@@ -47,13 +47,13 @@ export function Navbar() {
 
         <nav className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-x-5" aria-label="Primary">
           <Link to="/how-it-works" className={navLinkClass(isActive("/how-it-works"))}>
-            How It Works
+            How it works
           </Link>
           <Link to="/scholarships/search" className={navLinkClass(path.startsWith("/scholarships"))}>
             Scholarships
           </Link>
-          <Link to="/about" className={navLinkClass(isActive("/about"))}>
-            About
+          <Link to="/transparency" className={navLinkClass(isActive("/transparency"))}>
+            Transparency
           </Link>
         </nav>
 

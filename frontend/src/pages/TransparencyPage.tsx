@@ -1,4 +1,78 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
+const factors = [
+  {
+    name: "Academic Performance",
+    weight: 30,
+    description: "How your grades compare to the scholarship's minimum GWA requirement.",
+    tip: "Keep your GWA updated — even a decimal point can change your score.",
+  },
+  {
+    name: "Financial Need",
+    weight: 25,
+    description: "How well your household income fits the program's financial eligibility range.",
+    tip: "Make sure your household income in your profile is accurate and current.",
+  },
+  {
+    name: "Field of Study",
+    weight: 20,
+    description: "Whether your intended course matches what the scholarship is designed to fund.",
+    tip: "Add all your possible course interests — not just your first choice.",
+  },
+  {
+    name: "Location Match",
+    weight: 10,
+    description: "Whether your region, city, or province fits the scholarship's geographic rules.",
+    tip: "Be as specific as possible — city-level data scores higher than region-level.",
+  },
+  {
+    name: "Priority Group",
+    weight: 10,
+    description: "Whether you belong to groups the scholarship actively supports, like PWD, 4Ps, or IP.",
+    tip: "Declare any applicable groups in your profile. These are small boosts, not overrides.",
+  },
+  {
+    name: "Document Readiness",
+    weight: 5,
+    description: "How prepared you are to apply, based on documents you've already uploaded.",
+    tip: "Upload requirements early in the Documents section — even drafts count.",
+  },
+] as const;
+
+const scoreRanges = [
+  { range: "0–49", label: "Poor fit", desc: "Your profile doesn't closely match this program's criteria", pill: "bg-danger-50 text-danger-700 dark:bg-danger-950/40 dark:text-danger-200" },
+  { range: "50–74", label: "Moderate fit", desc: "You meet some criteria but not all", pill: "bg-highlight-50 text-highlight-800 dark:bg-highlight-950/40 dark:text-highlight-200" },
+  { range: "75–89", label: "Strong fit", desc: "Your profile closely matches this program", pill: "bg-success-50 text-success-800 dark:bg-success-950/40 dark:text-success-200" },
+  { range: "90–100", label: "Excellent fit", desc: "Your profile is an exceptionally strong match", pill: "bg-primary-50 text-primary-800 dark:bg-primary-950/40 dark:text-primary-200" },
+] as const;
+
+function WeightBar({ widthPercent }: { widthPercent: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
+      <div
+        className="h-full rounded-full bg-primary-500 transition-[width] duration-700 ease-out dark:bg-primary-400"
+        style={{ width: visible ? `${widthPercent}%` : "0%" }}
+      />
+    </div>
+  );
+}
 
 export function TransparencyPage() {
   return (
@@ -7,76 +81,97 @@ export function TransparencyPage() {
         <p className="text-sm font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">Transparency</p>
         <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">How your match score is built</h1>
         <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
-          See exactly why you qualify. ISKONNECT uses a deterministic pipeline: hard eligibility filters first, then weighted
-          scoring.
+          Your score measures fit — not your chances of winning. Here&apos;s exactly what goes into it.
         </p>
 
-        <div className="mt-10 space-y-8 text-slate-700 dark:text-slate-300">
-          <section>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">1. Hard filters (must pass)</h2>
-            <p className="mt-2">
-              Scholarships that fail any required rule—such as region, education level, income ceiling, minimum GPA, or
-              course alignment—are not shown. Scoring only runs on programs you can actually qualify for.
-            </p>
-          </section>
+        <div className="mt-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 dark:border-primary-900/40 dark:bg-primary-950/30">
+          <p className="text-sm leading-relaxed text-primary-950 dark:text-primary-100">
+            <strong className="font-semibold">Your match score is a measure of eligibility fit, not a prediction of acceptance.</strong>{" "}
+            A score of 85 means your profile strongly matches this program&apos;s criteria. It does{" "}
+            <strong className="font-semibold">not</strong> mean you have an 85% chance of receiving the scholarship.
+          </p>
+        </div>
 
-          <section>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">2. What goes into the score</h2>
-            <ul className="mt-3 list-inside list-disc space-y-1">
-              <li>Academic performance (GWA / GPA where applicable)</li>
-              <li>Household income and need indicators</li>
-              <li>Field of study alignment with the program</li>
-              <li>Geographic fit (region / city vs program rules)</li>
-              <li>Equity and priority groups (e.g. 4Ps, IP, PWD) when declared</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Example breakdown (illustrative)</h2>
-            <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-600">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-100 dark:bg-slate-800">
-                  <tr>
-                    <th className="px-3 py-2 text-left font-medium">Factor</th>
-                    <th className="px-3 py-2 text-left font-medium">Sample weight</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                  <tr>
-                    <td className="px-3 py-2">Academic</td>
-                    <td className="px-3 py-2">30%</td>
-                  </tr>
-                  <tr>
-                    <td className="px-3 py-2">Income / need</td>
-                    <td className="px-3 py-2">28%</td>
-                  </tr>
-                  <tr>
-                    <td className="px-3 py-2">Field alignment</td>
-                    <td className="px-3 py-2">22%</td>
-                  </tr>
-                  <tr>
-                    <td className="px-3 py-2">Geographic</td>
-                    <td className="px-3 py-2">10%</td>
-                  </tr>
-                  <tr>
-                    <td className="px-3 py-2">Equity priority</td>
-                    <td className="px-3 py-2">10%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Actual weights may be tuned by administrators; always check the explanation on your match results page.
-            </p>
-          </section>
+        <div className="mt-10">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            What the numbers mean
+          </h2>
+          <div className="mt-3 flex gap-3 overflow-x-auto pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {scoreRanges.map((s) => (
+              <div
+                key={s.range}
+                className={`min-w-[200px] shrink-0 rounded-2xl border border-slate-200/80 p-4 dark:border-slate-600 ${s.pill}`}
+              >
+                <p className="text-xs font-bold uppercase tracking-wide opacity-80">{s.range}</p>
+                <p className="mt-1 font-semibold">{s.label}</p>
+                <p className="mt-2 text-xs leading-snug opacity-90">{s.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="mt-12">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">What goes into your score</h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            Each part below has a weight. Together they form your match score after you pass eligibility checks.
+          </p>
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {factors.map((f) => (
+              <div
+                key={f.name}
+                className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800/50"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-semibold text-slate-900 dark:text-slate-100">{f.name}</h3>
+                  <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
+                    {f.weight}%
+                  </span>
+                </div>
+                <WeightBar widthPercent={f.weight} />
+                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{f.description}</p>
+                <p className="mt-2 text-sm text-primary-600 dark:text-primary-400">
+                  <span aria-hidden>→ </span>
+                  {f.tip}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 space-y-4 text-slate-700 dark:text-slate-300">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How the final number is calculated</h2>
+          <p className="text-sm leading-relaxed">
+            Each factor is scored between 0 and 1 based on your profile data. The six scores are weighted and combined into a
+            number from 0 to 100.
+          </p>
+          <p className="text-sm leading-relaxed">
+            If you belong to a recognized priority group — such as PWD, 4Ps, or Indigenous Peoples — a small multiplier is
+            applied after the base score (up to a maximum of +15%). This is in line with Philippine law and CHED equity
+            guidelines. It elevates your ranking slightly; it doesn&apos;t override hard eligibility rules.
+          </p>
+        </div>
+
+        <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/40">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Why your score might change</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Scores are recalculated every time you update your profile, when an administrator adjusts program weights for a new
+            cycle, or when new scholarship data is published. This is intentional — it keeps results accurate as your situation
+            and available programs evolve.
+          </p>
+        </div>
+
+        <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <Link
-            to="/register"
-            className="inline-flex rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white hover:bg-primary-700"
+            to="/profile-builder"
+            className="inline-flex justify-center rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white hover:bg-primary-700"
           >
-            Get Started
+            Improve Your Profile
+          </Link>
+          <Link
+            to="/dashboard"
+            className="inline-flex justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+          >
+            View My Matches
           </Link>
         </div>
       </div>

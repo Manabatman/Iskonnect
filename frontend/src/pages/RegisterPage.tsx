@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
 
-const AUTH_PANEL_IMAGE = "/images/hero/hero-2.svg";
+const AUTH_PANEL_PRIMARY = "/images/auth/register-illustration.jpg";
+const AUTH_PANEL_FALLBACK = "/images/hero/hero-2.svg";
 
 export function RegisterPage() {
   const { register, user, loading: authLoading } = useAuth();
@@ -18,6 +19,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [authPanelSrc, setAuthPanelSrc] = useState(AUTH_PANEL_PRIMARY);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,7 +42,14 @@ export function RegisterPage() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col md:flex-row">
       <div className="relative hidden min-h-[280px] flex-1 md:block md:min-h-0">
-        <img src={AUTH_PANEL_IMAGE} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img
+          src={authPanelSrc}
+          alt=""
+          decoding="async"
+          loading="lazy"
+          onError={() => setAuthPanelSrc((s) => (s === AUTH_PANEL_PRIMARY ? AUTH_PANEL_FALLBACK : s))}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         <AuthDirectionalOverlay />
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end p-8 lg:p-12">
           <img src="/images/logo.svg" alt="ISKONNECT" className="absolute left-8 top-8 h-10 w-10 lg:left-12 lg:top-12" width={40} height={40} />

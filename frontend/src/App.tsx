@@ -29,6 +29,7 @@ import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
 import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { AdaptiveSearchLayout } from "./components/layout/AdaptiveSearchLayout";
+import { FeedbackProvider } from "./components/FeedbackModal";
 
 function AppRoutes() {
   return (
@@ -88,7 +89,9 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <SavedScholarshipsProvider>
-            <AppRoutes />
+            <FeedbackProvider>
+              <AppRoutes />
+            </FeedbackProvider>
           </SavedScholarshipsProvider>
         </AuthProvider>
       </BrowserRouter>
