@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
+import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -160,7 +161,7 @@ export function ScholarshipDetailPage() {
     );
   }
 
-  const regions = scholarship.eligible_regions ?? [];
+  const regions = normalizeScholarshipRegions(scholarship.eligible_regions ?? [], scholarship.provider);
   const isNationwide = regions.length === 0 && !(scholarship.eligible_cities?.length);
   const hasLink = scholarship.link && scholarship.link.trim().startsWith("http");
 

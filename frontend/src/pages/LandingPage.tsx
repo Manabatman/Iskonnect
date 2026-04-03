@@ -130,7 +130,7 @@ export function LandingPage() {
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col justify-center px-4 py-16 sm:py-20 lg:py-24">
           <div className="max-w-2xl">
             <h1 className="flex flex-col gap-0 text-4xl font-extrabold tracking-tight leading-none sm:text-5xl lg:text-[3.25rem]">
-              <span className="leading-none text-white">Find opportunities</span>
+              <span className="leading-none text-white">Find Scholarships</span>
               <span className="leading-none bg-gradient-to-r from-primary-300 to-accent-300 bg-clip-text text-transparent">
                 Matched to your profile
               </span>
@@ -154,13 +154,6 @@ export function LandingPage() {
                 </Link>
               </p>
             </div>
-            <p className="mt-6 text-xs text-slate-500">
-              Free to start. Built for students across the Philippines.
-            </p>
-            <p className="mt-4 max-w-lg text-xs text-slate-400">
-              After you sign up: ranked matches with scores and clear &ldquo;why you matched&rdquo; reasons — same rules-based engine
-              in the app.
-            </p>
           </div>
         </div>
       </section>

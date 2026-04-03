@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { ScholarshipInfo } from "../types";
 import { formatDate } from "../utils/formatDate";
+import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
 import { BookmarkButton } from "./BookmarkButton";
 
 const DOCUMENT_LABELS: Record<string, string> = {
@@ -38,7 +39,9 @@ interface ScholarshipDetailPanelProps {
 }
 
 export function ScholarshipDetailPanel({ scholarship, onClose, isOpen }: ScholarshipDetailPanelProps) {
-  const regions = (scholarship as { eligible_regions?: string[] }).eligible_regions ?? scholarship.regions ?? [];
+  const rawRegions =
+    (scholarship as { eligible_regions?: string[] }).eligible_regions ?? scholarship.regions ?? [];
+  const regions = normalizeScholarshipRegions(rawRegions, scholarship.provider);
   const eligibleCities = (scholarship as { eligible_cities?: string[] }).eligible_cities ?? [];
   const isNationwide = regions.length === 0 && eligibleCities.length === 0;
   const hasLink = scholarship.link && scholarship.link.trim().startsWith("http");

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import type { MatchResult, ProfileCompleteness, UpcomingScholarship } from "../types";
-import { ScholarshipCard } from "../components/ScholarshipCard";
+import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
+import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { UpcomingScholarshipCard } from "../components/UpcomingScholarshipCard";
 import { useAuth } from "../contexts/AuthContext";
 import { NetworkError, apiFetch } from "../api/client";
@@ -31,6 +32,7 @@ export function MatchResultsPage() {
   const [profileCompleteness, setProfileCompleteness] = useState<ProfileCompleteness | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [analysisMatch, setAnalysisMatch] = useState<MatchResult | null>(null);
 
   useEffect(() => {
     if (runId) {
@@ -101,6 +103,10 @@ export function MatchResultsPage() {
   }, [profileId, runId, authHeaders]);
 
   const handleReset = () => navigate("/profile-builder");
+
+  const handleAnalysisOpenChange = useCallback((open: boolean) => {
+    if (!open) setAnalysisMatch(null);
+  }, []);
 
   if (loading) {
     return (
@@ -232,15 +238,17 @@ export function MatchResultsPage() {
             </div>
           )
         ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
             {matches.map((match) => (
               <ErrorBoundary key={match.id}>
-                <ScholarshipCard match={match} />
+                <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
               </ErrorBoundary>
             ))}
           </div>
         )}
       </div>
+
+      <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />
     </section>
   );
 }

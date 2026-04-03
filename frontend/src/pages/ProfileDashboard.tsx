@@ -20,6 +20,25 @@ function IconGraduationCap({ className }: { className?: string }) {
   );
 }
 
+function IconTrash({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      />
+    </svg>
+  );
+}
+
+function insertRunSorted(prev: MatchRunSummary[], run: MatchRunSummary): MatchRunSummary[] {
+  const merged = [...prev, run];
+  merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  return merged;
+}
+
 function formatDeadlineShort(iso: string | null | undefined): string | null {
   if (!iso) return null;
   try {
@@ -173,6 +192,43 @@ export function ProfileDashboard() {
       return;
     }
     navigate(`/match-compare?run_a=${arr[0]}&run_b=${arr[1]}`);
+  };
+
+  const handleDeleteMatchRun = async (run: MatchRunSummary) => {
+    setRuns((prev) => prev.filter((r) => r.id !== run.id));
+    setSelectedRuns((prev) => {
+      const next = new Set(prev);
+      next.delete(run.id);
+      return next;
+    });
+    try {
+      const res = await apiFetch(`/api/v1/match-runs/${run.id}`, {
+        method: "DELETE",
+        headers: authHeaders(),
+      });
+      if (!res.ok) throw new Error("Delete failed");
+    } catch {
+      setRuns((prev) => (prev.some((r) => r.id === run.id) ? prev : insertRunSorted(prev, run)));
+    }
+  };
+
+  const handleClearAllMatchRuns = async () => {
+    if (!window.confirm("Remove all runs from your match history?")) return;
+    const snapshot = [...runs];
+    setRuns([]);
+    setSelectedRuns(new Set());
+    await Promise.all(
+      snapshot.map((run) =>
+        apiFetch(`/api/v1/match-runs/${run.id}`, { method: "DELETE", headers: authHeaders() }).catch(() => null)
+      )
+    );
+    const res = await apiFetch("/api/v1/match-runs", { headers: authHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      setRuns(Array.isArray(data) ? data : []);
+    } else {
+      setRuns(snapshot);
+    }
   };
 
   const formatDate = (s: string) => {
@@ -420,7 +476,7 @@ export function ProfileDashboard() {
             <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Your Match History</h3>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={handleRunMatches}
@@ -437,6 +493,14 @@ export function ProfileDashboard() {
                   >
                     Compare Selected
                   </button>
+                  <button
+                    type="button"
+                    onClick={handleClearAllMatchRuns}
+                    disabled={loading || runs.length === 0}
+                    className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:text-red-600 disabled:opacity-50 dark:text-slate-400 dark:hover:text-red-400"
+                  >
+                    Clear All
+                  </button>
                 </div>
               </div>
 
@@ -447,34 +511,60 @@ export function ProfileDashboard() {
                   No match runs yet. Complete your profile and run matches to see your history.
                 </p>
               ) : (
-                <div className="mt-4 space-y-2">
-                  {runs.map((run) => (
-                    <div
-                      key={run.id}
-                      className="flex items-center gap-4 rounded-lg border border-slate-200 p-3 dark:border-slate-700"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedRuns.has(run.id)}
-                        onChange={() => toggleRunSelection(run.id)}
-                        className="rounded border-slate-300 text-primary-600"
+                <div className="relative mt-4">
+                  {runs.length > 5 ? (
+                    <>
+                      <div
+                        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 rounded-t-lg bg-gradient-to-b from-white to-transparent dark:from-slate-800"
+                        aria-hidden
                       />
-                      <div className="flex-1">
-                        <span className="font-medium text-slate-900 dark:text-slate-100">
-                          {formatDate(run.created_at)}
-                        </span>
-                        <span className="ml-2 text-sm text-slate-500 dark:text-slate-400">
-                          {run.result_count} matches
-                        </span>
-                      </div>
-                      <Link
-                        to={`/match/${run.profile_id}?run=${run.id}`}
-                        className="text-sm font-medium text-primary-600 hover:text-primary-700"
+                      <div
+                        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 rounded-b-lg bg-gradient-to-t from-white to-transparent dark:from-slate-800"
+                        aria-hidden
+                      />
+                    </>
+                  ) : null}
+                  <div
+                    className="max-h-[320px] space-y-2 overflow-y-auto scroll-smooth pr-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600"
+                  >
+                    {runs.map((run) => (
+                      <div
+                        key={run.id}
+                        className="flex items-center gap-4 rounded-lg border border-slate-200 p-3 transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-700/50"
                       >
-                        View Results
-                      </Link>
-                    </div>
-                  ))}
+                        <input
+                          type="checkbox"
+                          checked={selectedRuns.has(run.id)}
+                          onChange={() => toggleRunSelection(run.id)}
+                          className="rounded border-slate-300 text-primary-600"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <span className="font-medium text-slate-900 dark:text-slate-100">
+                            {formatDate(run.created_at)}
+                          </span>
+                          <span className="ml-2 text-sm text-slate-500 dark:text-slate-400">
+                            {run.result_count} matches
+                          </span>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <Link
+                            to={`/match/${run.profile_id}?run=${run.id}`}
+                            className="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                          >
+                            View Results
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => void handleDeleteMatchRun(run)}
+                            className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-200 hover:text-red-600 dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-red-400"
+                            aria-label={`Delete match run from ${formatDate(run.created_at)}`}
+                          >
+                            <IconTrash className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
