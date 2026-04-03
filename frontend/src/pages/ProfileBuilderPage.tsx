@@ -50,11 +50,14 @@ export function ProfileBuilderPage() {
     if (authLoading || !user) return;
     let cancelled = false;
     setServerLoading(true);
-    apiFetch("/api/v1/profiles", { headers: authHeaders() })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((arr: unknown) => {
-        if (cancelled || !Array.isArray(arr) || arr.length === 0) return;
-        const flat = profileToInitialValues(arr[0] as { id?: number; [key: string]: unknown });
+    apiFetch("/api/v1/profiles/me", { headers: authHeaders() })
+      .then((r) => {
+        if (r.status === 404) return null;
+        return r.ok ? r.json() : null;
+      })
+      .then((row: unknown) => {
+        if (cancelled || !row || typeof row !== "object") return;
+        const flat = profileToInitialValues(row as { id?: number; [key: string]: unknown });
         dispatch({ type: "LOAD_DRAFT", draft: flat });
       })
       .catch(() => {

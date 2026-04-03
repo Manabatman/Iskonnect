@@ -4,11 +4,13 @@ Endpoints: schools, courses, regions, provinces, scholarships.
 """
 
 import logging
-from typing import Annotated
+from typing import Annotated, Optional
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
+from app import models
+from app.auth import get_current_user_id
 from app.db import get_db
 from app.limiter import limiter
 from app.models import Scholarship
@@ -86,3 +88,50 @@ def get_scholarship_suggestions(
     )
     suggestions = [r[0] for r in rows if r[0]]
     return {"suggestions": suggestions}
+
+
+@router.get("/readiness")
+@limiter.limit("30/minute")
+def readiness_suggestions(
+    request: Request,
+    profile_id: Optional[int] = None,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """
+    Deterministic, inspectable tips to improve application readiness (profile gaps).
+    Not AI-ranked — rules-based only.
+    """
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    tips: list[str] = []
+    if profile_id is None:
+        tips.append("Open your profile and confirm region, education level, and field of study.")
+        tips.append("Run a fresh match after updating your profile for up-to-date suggestions.")
+        return {"suggestions": tips}
+
+    prof = (
+        db.query(models.Student)
+        .filter(models.Student.id == profile_id, models.Student.user_id == user_id)
+        .first()
+    )
+    if not prof:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    if not (prof.full_name or "").strip():
+        tips.append("Add your full legal name — many forms require an exact match.")
+    if not (prof.region or "").strip():
+        tips.append("Set your region to unlock geo-filtered scholarships.")
+    if not (prof.education_level or prof.current_academic_stage or "").strip():
+        tips.append("Specify your education level or current stage.")
+    if not (prof.field_of_study_broad or "").strip():
+        tips.append("Add a field of study so course-based scholarships can match.")
+    if prof.gwa_normalized is None and not (prof.gwa_raw or "").strip():
+        tips.append("Enter your GWA so academic criteria can be evaluated.")
+    if prof.household_income_annual is None and not (prof.income_bracket or "").strip():
+        tips.append("Add household income or income bracket for need-based programs.")
+
+    if not tips:
+        tips.append("Profile looks complete for matching — track applications and document checklists next.")
+
+    return {"suggestions": tips}

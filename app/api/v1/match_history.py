@@ -19,6 +19,29 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
+def _json_list_from_db(raw: str | None) -> list:
+    """Parse JSON list from DB text; return [] on empty or invalid."""
+    if not raw:
+        return []
+    try:
+        out = json.loads(raw)
+        return out if isinstance(out, list) else []
+    except (json.JSONDecodeError, TypeError):
+        return []
+
+
+def _json_dict_from_db(raw: str | None) -> dict | None:
+    """Parse JSON object from DB text; return None on empty or invalid."""
+    if not raw:
+        return None
+    try:
+        out = json.loads(raw)
+        return out if isinstance(out, dict) else None
+    except (json.JSONDecodeError, TypeError):
+        logger.warning("match_history_invalid_json_dict")
+        return None
+
+
 def _require_user_id(user_id: int | None) -> int:
     """Raise 401 if not authenticated. Match history requires auth."""
     if user_id is None:
@@ -44,8 +67,8 @@ def _result_to_match_response(r: models.MatchResult, scholarship: models.Scholar
         "provider": scholarship.provider,
         "score": score,
         "final_score": score,
-        "explanation": json.loads(r.explanation) if r.explanation else [],
-        "breakdown": json.loads(r.breakdown) if r.breakdown else None,
+        "explanation": _json_list_from_db(r.explanation),
+        "breakdown": _json_dict_from_db(r.breakdown),
         "link": scholarship.link,
         "description": scholarship.description,
         "regions": regions,
@@ -59,7 +82,11 @@ def _result_to_match_response(r: models.MatchResult, scholarship: models.Scholar
         "benefit_books": scholarship.benefit_books,
         "benefit_total_value": scholarship.benefit_total_value,
         "application_deadline": scholarship.application_deadline.isoformat() if scholarship.application_deadline else None,
-        "required_documents": json.loads(scholarship.required_documents) if scholarship.required_documents else [],
+        "required_documents": _json_list_from_db(scholarship.required_documents),
+        "suggestions": _json_list_from_db(r.suggestions),
+        "confidence": r.confidence,
+        "why_not_higher": _json_list_from_db(r.why_not_higher),
+        "scoring_policy_version": r.scoring_policy_version,
     }
 
 
@@ -81,7 +108,7 @@ def create_match_run(
         raise HTTPException(status_code=404, detail="Profile not found")
 
     scholarship_dicts = get_cached_scholarship_dicts(db)
-    results = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
+    results, diagnostics = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
 
     for r in results:
         if "final_score" in r and "score" not in r:
@@ -91,8 +118,7 @@ def create_match_run(
 
     run = models.MatchRun(user_id=uid, profile_id=body.profile_id)
     db.add(run)
-    db.commit()
-    db.refresh(run)
+    db.flush()  # assign run.id without committing (atomic with results below)
 
     for r in results:
         mr = models.MatchResult(
@@ -102,11 +128,24 @@ def create_match_run(
             final_score=r.get("final_score", r.get("score")),
             explanation=json.dumps(r.get("explanation") or []),
             breakdown=json.dumps(r.get("breakdown")) if r.get("breakdown") else None,
+            suggestions=json.dumps(r.get("suggestions") or []),
+            confidence=r.get("confidence"),
+            why_not_higher=json.dumps(r.get("why_not_higher") or []),
+            scoring_policy_version=r.get("scoring_policy_version"),
         )
         db.add(mr)
     db.commit()
+    db.refresh(run)
 
-    create_notifications_for_match_results(db, uid, results)
+    try:
+        create_notifications_for_match_results(db, uid, results)
+    except Exception as notify_err:
+        logger.warning(
+            "match_run_notifications_failed run_id=%s user_id=%s err=%s",
+            run.id,
+            uid,
+            notify_err,
+        )
 
     logger.info("match_run_created run_id=%s user_id=%s profile_id=%s results=%s", run.id, uid, body.profile_id, len(results))
 
@@ -115,6 +154,7 @@ def create_match_run(
         "profile_id": body.profile_id,
         "created_at": run.created_at.isoformat(),
         "matches": results,
+        "diagnostics": diagnostics,
     }
 
 

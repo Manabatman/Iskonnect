@@ -42,6 +42,8 @@ function titleForPath(pathname: string): string {
   if (pathname.startsWith("/match/")) return "Match results";
   if (pathname.startsWith("/admin/analytics")) return "Admin analytics";
   if (pathname.startsWith("/admin")) return "Admin";
+  if (pathname.startsWith("/sponsor")) return "Sponsor portal";
+  if (pathname.startsWith("/school")) return "School verification";
   return "Dashboard";
 }
 

@@ -42,8 +42,13 @@ export function OpportunityBrowserPage() {
   useEffect(() => {
     if (loading) return;
     if (error) {
-      setOpportunities(MOCK_OPPORTUNITIES);
-      setUsingMock(true);
+      if (import.meta.env.DEV) {
+        setOpportunities(MOCK_OPPORTUNITIES);
+        setUsingMock(true);
+      } else {
+        setOpportunities([]);
+        setUsingMock(false);
+      }
       return;
     }
     setUsingMock(false);
@@ -101,6 +106,14 @@ export function OpportunityBrowserPage() {
               </div>
             </div>
           </div>
+        ) : !loading && error && !import.meta.env.DEV ? (
+          <p className="rounded-xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200">
+            Could not load opportunities. {error} Try again later or use{" "}
+            <Link to="/scholarships/search" className="font-medium text-primary-600 dark:text-primary-400">
+              advanced search
+            </Link>
+            .
+          </p>
         ) : opportunities.length === 0 ? (
           <p className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
             No opportunities matched. Try{" "}

@@ -1,6 +1,10 @@
-const API_BASE_URL =
-  (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env
-    ?.VITE_API_BASE_URL ?? "http://localhost:8000";
+const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env;
+const API_BASE_URL = _env?.VITE_API_BASE_URL ?? "http://localhost:8000";
+if (!_env?.VITE_API_BASE_URL && typeof console !== "undefined") {
+  console.warn(
+    "[API] VITE_API_BASE_URL is not set; using http://localhost:8000. Set it in production builds.",
+  );
+}
 
 const FETCH_TIMEOUT_MS = 10_000;
 const NETWORK_RETRY_DELAY_MS = 1_000;
@@ -20,6 +24,12 @@ function isAbortOrNetworkFailure(err: unknown): boolean {
   if (err instanceof TypeError) return true;
   if (err instanceof DOMException && err.name === "AbortError") return true;
   return false;
+}
+
+/** Only GET/HEAD are safe to auto-retry (writes may have succeeded on the server). */
+function isIdempotentMethod(options?: RequestInit): boolean {
+  const m = (options?.method ?? "GET").toUpperCase();
+  return m === "GET" || m === "HEAD";
 }
 
 async function fetchOnce(url: string, options?: RequestInit): Promise<Response> {
@@ -57,6 +67,7 @@ export async function apiFetch(path: string, options?: RequestInit): Promise<Res
     return await attempt();
   } catch (first) {
     if (!(first instanceof NetworkError)) throw first;
+    if (!isIdempotentMethod(options)) throw first;
     await new Promise((r) => setTimeout(r, NETWORK_RETRY_DELAY_MS));
     return await attempt();
   }

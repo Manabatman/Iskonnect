@@ -1,7 +1,6 @@
 """
 Seed script to populate the database with sample scholarships and profiles.
 Run `alembic upgrade head` before this script to ensure schema is up to date.
-For fresh SQLite dev, Base.metadata.create_all is used as fallback.
 
 Seed audit (matching):
 - Most programs use nationwide empty eligible_regions (intentional).
@@ -11,17 +10,15 @@ Seed audit (matching):
 """
 import json
 from datetime import date
-from app.db import SessionLocal, engine, Base
+from app.db import SessionLocal
 from app import models
 
-# Ensure schema exists: use Alembic if available, else create_all for dev
-try:
-    from alembic import command
-    from alembic.config import Config
-    alembic_cfg = Config("alembic.ini")
-    command.upgrade(alembic_cfg, "head")
-except Exception:
-    Base.metadata.create_all(bind=engine)
+# Ensure schema exists: run `alembic upgrade head` before this script (no create_all fallback).
+from alembic import command
+from alembic.config import Config
+
+alembic_cfg = Config("alembic.ini")
+command.upgrade(alembic_cfg, "head")
 
 db = SessionLocal()
 

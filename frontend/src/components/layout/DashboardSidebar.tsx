@@ -1,5 +1,7 @@
+import type { ReactElement } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { ENABLE_OPPORTUNITIES } from "../../config/featureFlags";
 
 export interface DashboardSidebarProps {
   collapsed: boolean;
@@ -8,7 +10,14 @@ export interface DashboardSidebarProps {
   onMobileClose: () => void;
 }
 
-const navItems = [
+type NavItem = {
+  to: string;
+  label: string;
+  match: (path: string) => boolean;
+  icon: (props: { className?: string }) => ReactElement;
+};
+
+const navItems: NavItem[] = [
   {
     to: "/dashboard",
     label: "Dashboard",
@@ -21,17 +30,27 @@ const navItems = [
     match: (path: string) => path.startsWith("/scholarships/search"),
     icon: IconSearch,
   },
-  {
-    to: "/opportunities",
-    label: "Opportunities",
-    match: (path: string) => path.startsWith("/opportunities"),
-    icon: IconCompass,
-  },
+  ...(ENABLE_OPPORTUNITIES
+    ? [
+        {
+          to: "/opportunities",
+          label: "Opportunities",
+          match: (path: string) => path.startsWith("/opportunities"),
+          icon: IconCompass,
+        },
+      ]
+    : []),
   {
     to: "/applications",
     label: "Applications",
     match: (path: string) => path.startsWith("/applications"),
     icon: IconFileText,
+  },
+  {
+    to: "/documents",
+    label: "Documents",
+    match: (path: string) => path.startsWith("/documents"),
+    icon: IconClipboard,
   },
   {
     to: "/profile-builder",
@@ -45,7 +64,7 @@ const navItems = [
     match: (path: string) => path.startsWith("/settings"),
     icon: IconSettings,
   },
-] as const;
+];
 
 function IconLayoutDashboard({ className }: { className?: string }) {
   return (
@@ -75,6 +94,20 @@ function IconCompass({ className }: { className?: string }) {
       <path
         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
         fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function IconClipboard({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9h6m-6 4h6"
+        stroke="currentColor"
+        strokeWidth={1.75}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -212,25 +245,65 @@ export function DashboardSidebar({
           })}
         </nav>
 
-        {user?.role === "admin" ? (
-          <div className="mt-auto border-t border-slate-200 p-2 dark:border-slate-700">
-            <Link
-              to="/admin"
-              onClick={onMobileClose}
-              className={[
-                "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
-                path.startsWith("/admin")
-                  ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
-                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/80 dark:hover:text-slate-200",
-                collapsed ? "justify-center px-2" : "",
-              ].join(" ")}
-              title={collapsed ? "Admin" : undefined}
-            >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs font-bold" aria-hidden>
-                A
-              </span>
-              {!collapsed ? <span>Admin</span> : null}
-            </Link>
+        {user?.role === "admin" || user?.role === "sponsor" || user?.role === "school_verifier" ? (
+          <div className="mt-auto space-y-1 border-t border-slate-200 p-2 dark:border-slate-700">
+            {user?.role === "sponsor" ? (
+              <Link
+                to="/sponsor"
+                onClick={onMobileClose}
+                className={[
+                  "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
+                  path.startsWith("/sponsor")
+                    ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
+                    : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/80 dark:hover:text-slate-200",
+                  collapsed ? "justify-center px-2" : "",
+                ].join(" ")}
+                title={collapsed ? "Sponsor" : undefined}
+              >
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs font-bold" aria-hidden>
+                  S
+                </span>
+                {!collapsed ? <span>Sponsor</span> : null}
+              </Link>
+            ) : null}
+            {user?.role === "school_verifier" ? (
+              <Link
+                to="/school"
+                onClick={onMobileClose}
+                className={[
+                  "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
+                  path.startsWith("/school")
+                    ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
+                    : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/80 dark:hover:text-slate-200",
+                  collapsed ? "justify-center px-2" : "",
+                ].join(" ")}
+                title={collapsed ? "School" : undefined}
+              >
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs font-bold" aria-hidden>
+                  V
+                </span>
+                {!collapsed ? <span>School verify</span> : null}
+              </Link>
+            ) : null}
+            {user?.role === "admin" ? (
+              <Link
+                to="/admin"
+                onClick={onMobileClose}
+                className={[
+                  "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
+                  path.startsWith("/admin")
+                    ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
+                    : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/80 dark:hover:text-slate-200",
+                  collapsed ? "justify-center px-2" : "",
+                ].join(" ")}
+                title={collapsed ? "Admin" : undefined}
+              >
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs font-bold" aria-hidden>
+                  A
+                </span>
+                {!collapsed ? <span>Admin</span> : null}
+              </Link>
+            ) : null}
           </div>
         ) : null}
       </aside>

@@ -6,6 +6,9 @@ Uses pydantic-settings for validation and .env file support.
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Must match the default Field value for secret_key (used for production guard)
+DEFAULT_SECRET_KEY_VALUE = "change-me-in-production-use-openssl-rand-hex-32"
+
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
@@ -14,6 +17,12 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
+    )
+
+    # development | staging | production — set ENVIRONMENT=production when deployed
+    environment: str = Field(
+        default="development",
+        validation_alias="ENVIRONMENT",
     )
 
     # Database - set DATABASE_URL in env
@@ -30,11 +39,15 @@ class Settings(BaseSettings):
 
     # JWT
     secret_key: str = Field(
-        default="change-me-in-production-use-openssl-rand-hex-32",
+        default=DEFAULT_SECRET_KEY_VALUE,
         validation_alias="SECRET_KEY",
     )
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = 1440  # 24 hours
+    access_token_expire_minutes: int = 30  # short-lived access token; use refresh token for renewal
+    refresh_token_expire_days: int = Field(
+        default=14,
+        validation_alias="REFRESH_TOKEN_EXPIRE_DAYS",
+    )
 
     # Production default: false (JWT required). Set AUTH_DISABLED=true in .env for local dev only.
     auth_disabled: bool = Field(
@@ -56,7 +69,7 @@ class Settings(BaseSettings):
 
     # Feature flags (safe defaults: off)
     filter_expired_from_matches: bool = Field(
-        default=False,
+        default=True,
         validation_alias="FILTER_EXPIRED_FROM_MATCHES",
     )
     structured_logging: bool = Field(
@@ -84,6 +97,36 @@ class Settings(BaseSettings):
     def cors_origins_list(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    def cors_has_non_localhost_origin(self) -> bool:
+        """True if at least one CORS origin is not localhost / 127.0.0.1."""
+        for origin in self.cors_origins_list:
+            lo = origin.lower()
+            if "localhost" not in lo and "127.0.0.1" not in lo:
+                return True
+        return False
+
+    def validate_for_production(self) -> None:
+        """
+        Refuse unsafe configuration when ENVIRONMENT is production-like.
+        Call from app startup (main.py), not at import of this module (keeps tests flexible).
+        """
+        env = (self.environment or "").strip().lower()
+        if env not in ("production", "staging", "prod"):
+            return
+        errors: list[str] = []
+        if self.secret_key == DEFAULT_SECRET_KEY_VALUE:
+            errors.append("SECRET_KEY must not use the default placeholder in production")
+        if self.auth_disabled:
+            errors.append("AUTH_DISABLED must be false in production")
+        if self.database_url.strip().lower().startswith("sqlite"):
+            errors.append("DATABASE_URL must not be SQLite in production")
+        if not self.cors_has_non_localhost_origin():
+            errors.append(
+                "CORS_ORIGINS must include at least one non-localhost origin in production"
+            )
+        if errors:
+            raise RuntimeError("Invalid production configuration: " + "; ".join(errors))
 
 
 settings = Settings()

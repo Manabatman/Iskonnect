@@ -247,69 +247,163 @@ def _field_matches(
     return False
 
 
-def filter_scholarships(profile: dict, scholarships: list) -> list:
-    """
-    Return only scholarships that pass all hard filters.
-    profile and scholarships are dicts (from API/DB layer).
-    """
-    result = []
-    for sch in scholarships:
-        sid = sch.get("id")
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(
-                "hard_filter scholarship_id=%s profile_region=%s profile_city=%s",
-                sid,
-                profile.get("region"),
-                profile.get("city_municipality"),
-            )
-        if settings.filter_expired_from_matches:
-            ds = sch.get("data_status")
-            if not _data_status_passes_for_matching(ds):
-                continue
-        if not _age_matches(
-            profile.get("age"),
-            sch.get("min_age"),
-            sch.get("max_age"),
-        ):
+def _missing_profile_fields(profile: dict) -> list[str]:
+    """Fields commonly needed for accurate hard filtering (informational for API clients)."""
+    missing: list[str] = []
+    if profile.get("age") is None:
+        missing.append("age")
+    pl = profile.get("education_level") or profile.get("current_academic_stage")
+    if not pl or not str(pl).strip():
+        missing.append("education_level")
+    has_region = profile.get("region") and str(profile.get("region")).strip()
+    has_city = profile.get("city_municipality") and str(profile.get("city_municipality")).strip()
+    if not has_region and not has_city:
+        missing.append("region_or_city")
+    st = profile.get("school_type")
+    if not st or not str(st).strip():
+        missing.append("school_type")
+    if profile.get("household_income_annual") is None and not profile.get("income_bracket"):
+        missing.append("income")
+    if profile.get("gwa_normalized") is None and not (
+        profile.get("gwa_raw") and str(profile.get("gwa_raw")).strip()
+    ):
+        missing.append("gwa")
+    broad = profile.get("field_of_study_broad")
+    prefs = parse_json_list(profile.get("preferred_courses"))
+    if not (broad and str(broad).strip()) and not any(prefs):
+        missing.append("field_of_study")
+    return missing
+
+
+def _top_blockers(eliminated: dict[str, int], missing: list[str]) -> list[str]:
+    """Short human-readable hints when matches are empty or sparse."""
+    blockers: list[str] = []
+    if "gwa" in missing:
+        blockers.append(
+            "Your profile is missing GWA; merit thresholds could not be evaluated strictly."
+        )
+    if "income" in missing:
+        blockers.append(
+            "Household income or bracket is missing; income ceilings may not filter accurately."
+        )
+    if "field_of_study" in missing:
+        blockers.append(
+            "Add your field of study or preferred courses to match course-specific scholarships."
+        )
+    if "region_or_city" in missing:
+        blockers.append(
+            "Region or city helps LGU and location-restricted scholarships match accurately."
+        )
+    labels = {
+        "data_status": "expired or broken-link data status",
+        "age": "age requirements",
+        "education_level": "education level",
+        "region": "region or city location",
+        "school_type": "school type (public/private)",
+        "income": "household income limits",
+        "gwa": "GWA / academic minimums",
+        "field": "field of study or course alignment",
+    }
+    for key, count in sorted(eliminated.items(), key=lambda x: -x[1]):
+        if count <= 0:
             continue
-        if not _level_matches(
-            profile.get("education_level") or profile.get("current_academic_stage"),
-            parse_json_list(sch.get("eligible_levels") or sch.get("level")),
-            sch.get("level"),
-        ):
-            continue
-        if not _region_matches(
+        blockers.append(f"{count} scholarship(s) excluded by {labels.get(key, key)}.")
+        if len(blockers) >= 6:
+            break
+    return blockers[:6]
+
+
+def _hard_filter_failure_stage(profile: dict, sch: dict) -> str | None:
+    """Return the first failed filter name, or None if the scholarship passes all hard filters."""
+    sid = sch.get("id")
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "hard_filter scholarship_id=%s profile_region=%s profile_city=%s",
+            sid,
             profile.get("region"),
             profile.get("city_municipality"),
-            parse_json_list(sch.get("eligible_regions")),
-            parse_json_list(sch.get("eligible_cities")),
-            sch.get("residency_required", False),
-            parse_json_list(sch.get("regions")),
-            scholarship_id=sid,
-        ):
-            continue
-        if not _school_type_matches(
-            profile.get("school_type"),
-            parse_json_list(sch.get("eligible_school_types")),
-        ):
-            continue
-        if not _income_matches(
-            profile.get("household_income_annual"),
-            profile.get("income_bracket"),
-            sch.get("max_income_threshold"),
-        ):
-            continue
-        if not _gwa_matches(
-            profile.get("gwa_normalized"),
-            sch.get("min_gwa_normalized"),
-        ):
-            continue
-        if not _field_matches(
-            profile.get("field_of_study_broad"),
-            parse_json_list(profile.get("preferred_courses")),
-            parse_json_list(sch.get("eligible_courses_psced")),
-            parse_json_list(sch.get("eligible_courses_specific")),
-        ):
+        )
+    if settings.filter_expired_from_matches:
+        ds = sch.get("data_status")
+        if not _data_status_passes_for_matching(ds):
+            return "data_status"
+    if not _age_matches(
+        profile.get("age"),
+        sch.get("min_age"),
+        sch.get("max_age"),
+    ):
+        return "age"
+    if not _level_matches(
+        profile.get("education_level") or profile.get("current_academic_stage"),
+        parse_json_list(sch.get("eligible_levels") or sch.get("level")),
+        sch.get("level"),
+    ):
+        return "education_level"
+    if not _region_matches(
+        profile.get("region"),
+        profile.get("city_municipality"),
+        parse_json_list(sch.get("eligible_regions")),
+        parse_json_list(sch.get("eligible_cities")),
+        sch.get("residency_required", False),
+        parse_json_list(sch.get("regions")),
+        scholarship_id=sid,
+    ):
+        return "region"
+    if not _school_type_matches(
+        profile.get("school_type"),
+        parse_json_list(sch.get("eligible_school_types")),
+    ):
+        return "school_type"
+    if not _income_matches(
+        profile.get("household_income_annual"),
+        profile.get("income_bracket"),
+        sch.get("max_income_threshold"),
+    ):
+        return "income"
+    if not _gwa_matches(
+        profile.get("gwa_normalized"),
+        sch.get("min_gwa_normalized"),
+    ):
+        return "gwa"
+    if not _field_matches(
+        profile.get("field_of_study_broad"),
+        parse_json_list(profile.get("preferred_courses")),
+        parse_json_list(sch.get("eligible_courses_psced")),
+        parse_json_list(sch.get("eligible_courses_specific")),
+    ):
+        return "field"
+    return None
+
+
+def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
+    """
+    Return scholarships that pass all hard filters and a diagnostics dict.
+    profile and scholarships are dicts (from API/DB layer).
+    """
+    result: list = []
+    eliminated: dict[str, int] = {
+        "data_status": 0,
+        "age": 0,
+        "education_level": 0,
+        "region": 0,
+        "school_type": 0,
+        "income": 0,
+        "gwa": 0,
+        "field": 0,
+    }
+    for sch in scholarships:
+        stage = _hard_filter_failure_stage(profile, sch)
+        if stage:
+            eliminated[stage] = eliminated.get(stage, 0) + 1
             continue
         result.append(sch)
-    return result
+
+    missing = _missing_profile_fields(profile)
+    diagnostics = {
+        "total_checked": len(scholarships),
+        "passed_hard_filters": len(result),
+        "eliminated_by_filter": {k: v for k, v in eliminated.items() if v},
+        "missing_profile_fields": missing,
+        "top_blockers": _top_blockers(eliminated, missing),
+    }
+    return result, diagnostics

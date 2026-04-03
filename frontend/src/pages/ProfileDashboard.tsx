@@ -65,7 +65,7 @@ function profileCompleteness(p: StudentProfileResponse | undefined): number {
 export function ProfileDashboard() {
   const { user, authHeaders } = useAuth();
   const navigate = useNavigate();
-  const [profiles, setProfiles] = useState<StudentProfileResponse[]>([]);
+  const [profile, setProfile] = useState<StudentProfileResponse | null>(null);
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
   const [latestMatches, setLatestMatches] = useState<MatchResult[]>([]);
   const [latestMatchesLoading, setLatestMatchesLoading] = useState(false);
@@ -75,24 +75,37 @@ export function ProfileDashboard() {
   const [loading, setLoading] = useState(true);
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [studentSummary, setStudentSummary] = useState<{
+    applications_by_status: Record<string, number>;
+    saved_scholarships_count: number;
+    has_profile: boolean;
+    match_runs_count: number;
+  } | null>(null);
+  const [readinessTips, setReadinessTips] = useState<string[]>([]);
   const { toggleSave } = useSavedScholarships();
 
-  const profile = profiles[0];
-  const completeness = useMemo(() => profileCompleteness(profile), [profile]);
+  const completeness = useMemo(() => profileCompleteness(profile ?? undefined), [profile]);
 
   useEffect(() => {
     if (!user) return;
     const headers = authHeaders();
     setSavedLoading(true);
     Promise.all([
-      apiFetch("/api/v1/profiles", { headers }).then((r) => (r.ok ? r.json() : [])),
+      apiFetch("/api/v1/profiles/me", { headers }).then((r) => {
+        if (r.status === 404) return null;
+        return r.ok ? r.json() : null;
+      }),
       apiFetch("/api/v1/match-runs", { headers }).then((r) => (r.ok ? r.json() : [])),
       apiFetch("/api/v1/saved-scholarships", { headers }).then((r) =>
         r.ok ? r.json() : { saved: [] }
       ),
     ])
       .then(([profData, runsData, savedData]) => {
-        setProfiles(Array.isArray(profData) ? profData : []);
+        setProfile(
+          profData && typeof profData === "object" && "id" in profData
+            ? (profData as StudentProfileResponse)
+            : null
+        );
         setRuns(Array.isArray(runsData) ? runsData : []);
         const savedList = (savedData as { saved?: SavedScholarship[] }).saved;
         setSaved(Array.isArray(savedList) ? savedList : []);
@@ -111,6 +124,29 @@ export function ProfileDashboard() {
         setSavedLoading(false);
       });
   }, [user, authHeaders]);
+
+  useEffect(() => {
+    if (!user) {
+      setStudentSummary(null);
+      return;
+    }
+    const headers = authHeaders();
+    apiFetch("/api/v1/analytics/student-summary", { headers })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setStudentSummary(d))
+      .catch(() => setStudentSummary(null));
+  }, [user, authHeaders]);
+
+  useEffect(() => {
+    if (!user || !profile?.id) {
+      setReadinessTips([]);
+      return;
+    }
+    apiFetch(`/api/v1/suggestions/readiness?profile_id=${profile.id}`, { headers: authHeaders() })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setReadinessTips(Array.isArray(d?.suggestions) ? d.suggestions : []))
+      .catch(() => setReadinessTips([]));
+  }, [user, profile?.id, authHeaders]);
 
   useEffect(() => {
     if (!user || runs.length === 0) {
@@ -138,7 +174,7 @@ export function ProfileDashboard() {
   }, [user, authHeaders, runs]);
 
   const handleRunMatches = async () => {
-    const p = profiles[0];
+    const p = profile;
     if (!p) {
       setError("Complete your profile first");
       return;
@@ -306,7 +342,7 @@ export function ProfileDashboard() {
                   </p>
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:items-stretch sm:text-right">
-                  {profiles.length === 0 ? (
+                  {!profile ? (
                     <Link
                       to="/profile-builder"
                       className="inline-flex items-center justify-center rounded-2xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-600/25 transition hover:bg-primary-700"
@@ -354,12 +390,61 @@ export function ProfileDashboard() {
                 <span className="text-xs font-semibold uppercase tracking-wide text-accent-600 dark:text-accent-400">
                   Applications
                 </span>
-                <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Track saved programs</span>
+                <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Track applications</span>
                 <span className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                  Status and deadlines for scholarships you bookmark.
+                  Server-backed status, timelines, and document checklists.
                 </span>
               </Link>
             </div>
+
+            {(studentSummary || readinessTips.length > 0) && (
+              <div className="glass rounded-2xl p-5 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Your progress</h3>
+                {studentSummary ? (
+                  <ul className="mt-3 grid gap-2 text-sm text-slate-600 dark:text-slate-400 sm:grid-cols-2">
+                    <li>
+                      Saved scholarships:{" "}
+                      <strong className="text-slate-900 dark:text-slate-100">
+                        {studentSummary.saved_scholarships_count}
+                      </strong>
+                    </li>
+                    <li>
+                      Match runs:{" "}
+                      <strong className="text-slate-900 dark:text-slate-100">
+                        {studentSummary.match_runs_count}
+                      </strong>
+                    </li>
+                    <li className="sm:col-span-2">
+                      Tracked applications:{" "}
+                      <strong className="text-slate-900 dark:text-slate-100">
+                        {Object.values(studentSummary.applications_by_status).reduce((a, b) => a + b, 0)}
+                      </strong>
+                      {Object.keys(studentSummary.applications_by_status).length > 0 ? (
+                        <span className="ml-1 text-xs opacity-80">
+                          (
+                          {Object.entries(studentSummary.applications_by_status)
+                            .map(([k, v]) => `${k.replace(/_/g, " ")}: ${v}`)
+                            .join(" · ")}
+                          )
+                        </span>
+                      ) : null}
+                    </li>
+                  </ul>
+                ) : null}
+                {readinessTips.length > 0 ? (
+                  <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-600">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">
+                      Readiness suggestions
+                    </p>
+                    <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-slate-600 dark:text-slate-400">
+                      {readinessTips.slice(0, 4).map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            )}
 
             {/* Recommended matches */}
             <div className="glass rounded-2xl p-6 shadow-md">
@@ -447,7 +532,7 @@ export function ProfileDashboard() {
               <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Your profile</h3>
               {loading ? (
                 <div className="mt-4 h-20 animate-pulse rounded bg-slate-100 dark:bg-slate-700" />
-              ) : profiles.length === 0 ? (
+              ) : !profile ? (
                 <p className="mt-4 text-slate-600 dark:text-slate-400">
                   No profile yet.{" "}
                   <Link to="/profile-builder" className="font-medium text-primary-600 hover:text-primary-700">
@@ -457,9 +542,9 @@ export function ProfileDashboard() {
               ) : (
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-100">{profiles[0].full_name}</p>
+                    <p className="font-medium text-slate-900 dark:text-slate-100">{profile.full_name}</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {profiles[0].email} • {profiles[0].region ?? "—"} • {profiles[0].education_level ?? "—"}
+                      {profile.email} • {profile.region ?? "—"} • {profile.education_level ?? "—"}
                     </p>
                   </div>
                   <Link
@@ -480,7 +565,7 @@ export function ProfileDashboard() {
                   <button
                     type="button"
                     onClick={handleRunMatches}
-                    disabled={loading || runLoading || profiles.length === 0}
+                    disabled={loading || runLoading || !profile}
                     className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
                   >
                     {runLoading ? "Running..." : "Find My Matches"}

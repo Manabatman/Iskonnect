@@ -116,7 +116,9 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "is_farmer_fisher_dependent": profile.is_farmer_fisher_dependent or False,
         "is_4ps_listahanan": profile.is_4ps_listahanan or False,
         "parent_occupation": profile.parent_occupation,
-        "documents": json.dumps(profile.documents or []),
+        "documents": json.dumps(
+            [d.model_dump() for d in (profile.documents or [])],
+        ),
         "privacy_consent_at": datetime.now(timezone.utc) if profile.privacy_consent else None,
         "privacy_consent_version": profile.privacy_consent_version if profile.privacy_consent else None,
     }
@@ -133,6 +135,63 @@ def list_profiles(
     query = db.query(models.Student).filter(models.Student.user_id == user_id)
     profiles = query.all()
     return [_profile_to_response(p) for p in profiles]
+
+
+@router.get("/profiles/me", response_model=schemas.StudentProfileResponse)
+def get_my_profile(
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """Return the single profile for the authenticated user."""
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    p = db.query(models.Student).filter(models.Student.user_id == user_id).first()
+    if not p:
+        raise HTTPException(
+            status_code=404,
+            detail="No profile yet. Complete the profile builder.",
+        )
+    return _profile_to_response(p)
+
+
+@router.put("/profiles/me", response_model=schemas.StudentProfileResponse)
+@limiter.limit("20/minute")
+def put_my_profile(
+    request: Request,
+    profile: schemas.StudentProfile,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """Update the authenticated user's profile (email is taken from the account, not the body)."""
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    u = db.query(models.User).filter(models.User.id == user_id).first()
+    if not u:
+        raise HTTPException(status_code=404, detail="User not found")
+    existing = db.query(models.Student).filter(models.Student.user_id == user_id).first()
+    if not existing:
+        raise HTTPException(
+            status_code=404,
+            detail="No profile yet. Use POST /profiles to create one.",
+        )
+    data = _profile_to_db_dict(profile)
+    data["user_id"] = user_id
+    data["email"] = u.email
+    for k, v in data.items():
+        setattr(existing, k, v)
+    db.commit()
+    db.refresh(existing)
+    log_action(
+        db,
+        actor_id=user_id,
+        actor_type="user",
+        action="profile.update",
+        resource_type="student",
+        resource_id=existing.id,
+        details={"email": u.email},
+        ip_address=request.client.host if request.client else None,
+    )
+    return _profile_to_response(existing)
 
 
 @router.delete("/profiles/me")
@@ -200,11 +259,35 @@ def create_profile(
     if not settings.auth_disabled and user_id is None:
         logger.warning("profile_create_denied email=%s reason=not_authenticated", profile.email)
         raise HTTPException(status_code=401, detail="Not authenticated")
+
     data = _profile_to_db_dict(profile)
     if user_id is not None:
+        u = db.query(models.User).filter(models.User.id == user_id).first()
+        if not u:
+            raise HTTPException(status_code=404, detail="User not found")
         data["user_id"] = user_id
+        data["email"] = u.email
+        existing_user_profile = (
+            db.query(models.Student).filter(models.Student.user_id == user_id).first()
+        )
+        if existing_user_profile:
+            for k, v in data.items():
+                setattr(existing_user_profile, k, v)
+            db.commit()
+            db.refresh(existing_user_profile)
+            log_action(
+                db,
+                actor_id=user_id,
+                actor_type="user",
+                action="profile.update",
+                resource_type="student",
+                resource_id=existing_user_profile.id,
+                details={"email": u.email},
+                ip_address=request.client.host if request.client else None,
+            )
+            return _profile_to_response(existing_user_profile)
 
-    logger.info("profile_create email=%s user_id=%s", profile.email, user_id)
+    logger.info("profile_create email=%s user_id=%s", data.get("email"), user_id)
 
     # Try insert first. On duplicate email, update only when the caller owns the row
     # (or both sides are anonymous); never silently overwrite another user's profile.

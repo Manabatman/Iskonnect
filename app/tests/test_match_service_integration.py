@@ -41,9 +41,11 @@ def test_match_service_returns_ranked_results():
         },
     ]
 
-    results = service.get_matches(profile, scholarships)
+    results, diagnostics = service.get_matches(profile, scholarships)
     assert len(results) == 1
     assert "final_score" in results[0]
     assert "breakdown" in results[0]
     assert "explanation" in results[0]
     assert 0 <= results[0]["final_score"] <= 100
+    assert diagnostics.get("passed_hard_filters") == 1
+    assert diagnostics.get("scored_match_count") == 1

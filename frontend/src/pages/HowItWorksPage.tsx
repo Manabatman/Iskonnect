@@ -20,12 +20,12 @@ const steps = [
   {
     n: 4,
     title: "Qualifying scholarships are scored and ranked",
-    body: "The ones that remain are scored across six factors: grades, financial need, field of study, location, priority group, and document readiness. Higher fit = higher position.",
+    body: "The ones that remain are scored across five factors: grades, financial need, field of study, location, and priority group (when the program names one). Higher fit = higher position.",
   },
   {
     n: 5,
     title: "You see, save, and apply",
-    body: "Your ranked list updates whenever you update your profile. Save opportunities you're interested in and track your applications in one place.",
+    body: "Your ranked list updates whenever you update your profile. Save scholarships you're interested in and track your applications in one place.",
   },
 ] as const;
 

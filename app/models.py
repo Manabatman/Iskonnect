@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Float, Boolean, Date, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Float, Boolean, Date, DateTime, ForeignKey, UniqueConstraint, Index
 from sqlalchemy.sql import func
 from app.db import Base
 
@@ -11,13 +11,84 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
-    role = Column(String, nullable=False, server_default="student")  # "student" | "admin"
+    role = Column(String, nullable=False, server_default="student")  # student | admin | sponsor | school_verifier
+    email_verified = Column(Boolean, nullable=False, server_default="0")
+    email_verified_at = Column(DateTime, nullable=True)
+    password_reset_token_hash = Column(String(128), nullable=True)
+    password_reset_expires_at = Column(DateTime, nullable=True)
+
+
+class RefreshToken(Base):
+    """Rotating refresh token (hashed at rest)."""
+
+    __tablename__ = "refresh_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    token_hash = Column(String(128), nullable=False, unique=True)
+    expires_at = Column(DateTime, nullable=False)
+    revoked_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class Sponsor(Base):
+    """Scholarship provider organization (B2B)."""
+
+    __tablename__ = "sponsors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    org_type = Column(String(64), nullable=True)
+    contact_email = Column(String(255), nullable=True)
+    logo_url = Column(String(512), nullable=True)
+    website = Column(String(512), nullable=True)
+    is_active = Column(Boolean, nullable=False, server_default="1")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class SponsorUser(Base):
+    """Links users to sponsor orgs for reviewer workflows."""
+
+    __tablename__ = "sponsor_users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    sponsor_id = Column(Integer, ForeignKey("sponsors.id", ondelete="CASCADE"), nullable=False, index=True)
+    role = Column(String(64), nullable=False, server_default="reviewer")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class School(Base):
+    """Educational institution for verification workflows."""
+
+    __tablename__ = "schools"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    region = Column(String(128), nullable=True)
+    province = Column(String(128), nullable=True)
+    school_type = Column(String(64), nullable=True)
+    is_active = Column(Boolean, nullable=False, server_default="1")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class SchoolUser(Base):
+    """Links users to schools for verification."""
+
+    __tablename__ = "school_users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    school_id = Column(Integer, ForeignKey("schools.id", ondelete="CASCADE"), nullable=False, index=True)
+    role = Column(String(64), nullable=False, server_default="verifier")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
 class Student(Base):
     """Student profile with policy-aligned eligibility fields."""
 
     __tablename__ = "students"
+    __table_args__ = (UniqueConstraint("user_id", name="uq_students_user_id"),)
 
     # === CORE IDENTITY ===
     id = Column(Integer, primary_key=True, index=True)
@@ -138,6 +209,7 @@ class Scholarship(Base):
     is_active = Column(Boolean, default=True)
     level = Column(String)  # Legacy: High School, College, TVET, Graduate
     needs_tags = Column(Text)  # JSON-encoded list (legacy)
+    sponsor_id = Column(Integer, ForeignKey("sponsors.id", ondelete="SET NULL"), nullable=True, index=True)
 
     # === DATA RELIABILITY & LINK INTEGRITY ===
     last_verified_at = Column(DateTime, nullable=True)
@@ -188,6 +260,10 @@ class MatchResult(Base):
     final_score = Column(Float, nullable=True)
     explanation = Column(Text, nullable=True)  # JSON-encoded list
     breakdown = Column(Text, nullable=True)  # JSON-encoded dict
+    suggestions = Column(Text, nullable=True)  # JSON-encoded list
+    confidence = Column(String, nullable=True)
+    why_not_higher = Column(Text, nullable=True)  # JSON-encoded list
+    scoring_policy_version = Column(String, nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
@@ -271,4 +347,79 @@ class Notification(Base):
     body = Column(Text, nullable=True)
     scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=True)
     is_read = Column(Boolean, nullable=True, default=False)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class Application(Base):
+    """Student application to a scholarship program."""
+
+    __tablename__ = "applications"
+    __table_args__ = (
+        UniqueConstraint("user_id", "scholarship_id", name="uq_applications_user_scholarship"),
+        Index("ix_applications_user_status", "user_id", "status"),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
+    status = Column(String(64), nullable=False, server_default="preparing")
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+class ApplicationStatusEvent(Base):
+    """Append-only status history for an application."""
+
+    __tablename__ = "application_status_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    application_id = Column(Integer, ForeignKey("applications.id", ondelete="CASCADE"), nullable=False, index=True)
+    from_status = Column(String(64), nullable=True)
+    to_status = Column(String(64), nullable=False)
+    actor_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    note = Column(Text, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class DocumentChecklist(Base):
+    """Per-application document readiness tracking."""
+
+    __tablename__ = "document_checklists"
+
+    id = Column(Integer, primary_key=True, index=True)
+    application_id = Column(Integer, ForeignKey("applications.id", ondelete="CASCADE"), nullable=False, index=True)
+    document_type = Column(String(128), nullable=False)
+    status = Column(String(64), nullable=False, server_default="not_started")
+    notes = Column(Text, nullable=True)
+    file_url = Column(String(512), nullable=True)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+class VerificationRequest(Base):
+    """School-side enrollment or eligibility verification."""
+
+    __tablename__ = "verification_requests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    application_id = Column(Integer, ForeignKey("applications.id", ondelete="CASCADE"), nullable=False, index=True)
+    school_id = Column(Integer, ForeignKey("schools.id", ondelete="CASCADE"), nullable=False, index=True)
+    verification_type = Column(String(64), nullable=False, server_default="enrollment")
+    status = Column(String(64), nullable=False, server_default="pending")
+    requested_at = Column(DateTime, server_default=func.now(), nullable=False)
+    verified_at = Column(DateTime, nullable=True)
+    verifier_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    notes = Column(Text, nullable=True)
+
+
+class ProductFeedback(Base):
+    """In-app product feedback (separate from scholarship issue reports)."""
+
+    __tablename__ = "product_feedback"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    category = Column(String(64), nullable=False)
+    message = Column(Text, nullable=False)
+    contact_email = Column(String(255), nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)

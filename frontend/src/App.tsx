@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
@@ -30,6 +30,12 @@ import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { AdaptiveSearchLayout } from "./components/layout/AdaptiveSearchLayout";
 import { FeedbackProvider } from "./components/FeedbackModal";
+import { ENABLE_OPPORTUNITIES } from "./config/featureFlags";
+import { AdminGuard } from "./components/AdminGuard";
+import { SponsorGuard } from "./components/SponsorGuard";
+import { SchoolGuard } from "./components/SchoolGuard";
+import { SponsorPortalPage } from "./pages/SponsorPortalPage";
+import { SchoolPortalPage } from "./pages/SchoolPortalPage";
 
 function AppRoutes() {
   return (
@@ -61,14 +67,53 @@ function AppRoutes() {
         <Route path="/match/:profileId" element={<MatchResultsPage />} />
         <Route path="/match-compare" element={<MatchComparisonPage />} />
         <Route path="/scholarship/:id" element={<ScholarshipDetailPage />} />
-        <Route path="/opportunities" element={<OpportunityBrowserPage />} />
+        <Route
+          path="/opportunities"
+          element={
+            ENABLE_OPPORTUNITIES ? (
+              <OpportunityBrowserPage />
+            ) : (
+              <Navigate to="/dashboard" replace />
+            )
+          }
+        />
         <Route path="/scholarships" element={<ScholarshipList />} />
         <Route path="/profile-builder" element={<ProfileBuilderPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminGuard>
+              <AdminPage />
+            </AdminGuard>
+          }
+        />
+        <Route
+          path="/admin/analytics"
+          element={
+            <AdminGuard>
+              <AdminAnalyticsPage />
+            </AdminGuard>
+          }
+        />
         <Route path="/applications" element={<ApplicationsPage />} />
         <Route path="/documents" element={<DocumentsPage />} />
+        <Route
+          path="/sponsor"
+          element={
+            <SponsorGuard>
+              <SponsorPortalPage />
+            </SponsorGuard>
+          }
+        />
+        <Route
+          path="/school"
+          element={
+            <SchoolGuard>
+              <SchoolPortalPage />
+            </SchoolGuard>
+          }
+        />
       </Route>
 
       <Route

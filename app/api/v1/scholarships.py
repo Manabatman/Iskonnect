@@ -116,8 +116,12 @@ def persist_scholarship_from_schema(
     scholarship: schemas.Scholarship,
     *,
     version_changed_by: int | None = None,
+    auto_commit: bool = True,
 ) -> models.Scholarship:
-    """Insert a Scholarship row from a validated schema (used by POST and staging approval)."""
+    """Insert a Scholarship row from a validated schema (used by POST and staging approval).
+
+    When auto_commit is False, caller must commit (e.g. single transaction with staging row update).
+    """
     db_scholarship = models.Scholarship(
         title=strip_tags(scholarship.title) or scholarship.title,
         provider=strip_tags(scholarship.provider) or scholarship.provider if scholarship.provider else None,
@@ -167,9 +171,13 @@ def persist_scholarship_from_schema(
         changes={"action": "create", "snapshot": snap},
         changed_by=version_changed_by,
     )
-    db.commit()
-    db.refresh(db_scholarship)
-    invalidate_scholarship_cache()
+    if auto_commit:
+        db.commit()
+        db.refresh(db_scholarship)
+        invalidate_scholarship_cache()
+    else:
+        db.flush()
+        db.refresh(db_scholarship)
     return db_scholarship
 
 

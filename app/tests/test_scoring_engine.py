@@ -34,6 +34,8 @@ def _make_payload(**overrides) -> ScoringPayload:
         "max_income_threshold": 250_000,
         "priority_groups": [],
         "document_readiness_ratio": 0.8,
+        "has_geographic_restriction": True,
+        "has_field_restriction": True,
     }
     defaults.update(overrides)
     return ScoringPayload(**defaults)
@@ -51,7 +53,7 @@ def test_score_academic_meets_minimum():
 
 
 def test_score_academic_missing_gwa():
-    assert score_academic(None, 75.0) == 0.5
+    assert score_academic(None, 75.0) == 0.3
 
 
 def test_score_academic_no_minimum_requirement():
@@ -67,7 +69,11 @@ def test_score_income_need_based_low_income():
 
 
 def test_score_income_need_based_at_ceiling():
-    assert score_income(250_000, None, 250_000, "Need-based", None) == 0.0
+    assert score_income(250_000, None, 250_000, "Need-based", None) == 0.3
+
+
+def test_score_income_need_based_half_ceiling():
+    assert score_income(125_000, None, 250_000, "Need-based", None) == pytest.approx(0.65)
 
 
 def test_score_income_merit_based():
@@ -76,11 +82,11 @@ def test_score_income_merit_based():
 
 def test_score_income_missing_uses_bracket():
     midpoints = {"below_250k": 125_000}
-    assert score_income(None, "below_250k", 250_000, "Need-based", midpoints) > 0.4
+    assert score_income(None, "below_250k", 250_000, "Need-based", midpoints) > 0.3
 
 
 def test_score_income_missing_no_bracket():
-    assert score_income(None, None, 250_000, "Need-based", None) == 0.4
+    assert score_income(None, None, 250_000, "Need-based", None) == 0.3
 
 
 def test_score_field_exact():
@@ -162,6 +168,8 @@ def test_engine_returns_scoring_result():
     assert isinstance(result.breakdown, dict)
     assert isinstance(result.explanation, list)
     assert isinstance(result.suggestions, list)
+    assert isinstance(result.why_not_higher, list)
+    assert result.scoring_policy_version == "v1.1"
     assert "academic" in result.breakdown
     assert "socioeconomic" in result.breakdown
 
@@ -182,7 +190,6 @@ def test_engine_high_score_strong_match():
         document_readiness_ratio=1.0,
     )
     result = WeightedDeterministicScorer().score(payload)
-    # After M4: readiness removed from scoring; threshold adjusted
     assert result.final_score >= 70
 
 
@@ -195,6 +202,29 @@ def test_engine_low_score_weak_match():
     )
     result = WeightedDeterministicScorer().score(payload)
     assert result.final_score < 60
+
+
+def test_nationwide_scholarship_geographic_not_applicable():
+    payload = _make_payload(
+        geographic_match_level="none",
+        has_geographic_restriction=False,
+        field_match_level="exact",
+    )
+    result = WeightedDeterministicScorer().score(payload)
+    assert result.breakdown["geographic"]["status"] == "not_applicable"
+    assert result.breakdown["geographic"]["weighted"] == 0
+    assert result.breakdown["geographic"]["score"] is None
+
+
+def test_open_field_scholarship_field_not_applicable():
+    payload = _make_payload(
+        field_match_level="none",
+        has_field_restriction=False,
+        geographic_match_level="region",
+    )
+    result = WeightedDeterministicScorer().score(payload)
+    assert result.breakdown["field_relevance"]["status"] == "not_applicable"
+    assert result.breakdown["field_relevance"]["weighted"] == 0
 
 
 # --- Edge cases ---
@@ -232,7 +262,7 @@ def test_equity_multiplier_capped():
     assert mult <= 1.15
 
 
-def test_equity_boost_applied():
+def test_equity_priority_in_explanation():
     payload = _make_payload(equity_flags={"is_pwd": True}, priority_groups=["PWD"])
     result = WeightedDeterministicScorer().score(payload)
     assert "PWD" in str(result.explanation) or "RA 7277" in str(result.explanation) or result.final_score > 0
@@ -254,7 +284,6 @@ def test_assess_confidence_low():
         income_bracket=None,
         max_income_threshold=250_000,
     )
-    # Both GWA and income missing when required
     assert assess_confidence(payload) in ("low", "medium")
 
 
@@ -269,8 +298,18 @@ def test_config_custom_weights():
 
 def test_breakdown_has_required_keys():
     result = WeightedDeterministicScorer().score(_make_payload())
+    allowed_status = {
+        "met",
+        "exceeded",
+        "partial",
+        "not_met",
+        "not_provided",
+        "not_applicable",
+        "matched",
+    }
     for key in ("academic", "socioeconomic", "field_relevance", "geographic", "priority_group"):
         assert key in result.breakdown
         assert "status" in result.breakdown[key]
+        assert result.breakdown[key]["status"] in allowed_status
         assert "user_value" in result.breakdown[key]
         assert "requirement_value" in result.breakdown[key]

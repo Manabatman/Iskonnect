@@ -221,10 +221,12 @@ export function SettingsPage() {
             </p>
             <button
               type="button"
-              className="mt-3 rounded-lg border border-danger-300 bg-white px-3 py-2 text-sm font-semibold text-danger-600 hover:bg-danger-50 dark:border-danger-700 dark:bg-slate-900 dark:text-danger-400 dark:hover:bg-danger-950/30"
+              disabled
+              className="mt-3 cursor-not-allowed rounded-lg border border-danger-200 bg-white px-3 py-2 text-sm font-semibold text-danger-400 opacity-70 dark:border-danger-800 dark:bg-slate-900 dark:text-danger-500"
             >
               Request deletion
             </button>
+            <span className="ml-2 text-xs font-medium text-slate-500 dark:text-slate-400">Coming soon</span>
           </div>
         </Card>
 

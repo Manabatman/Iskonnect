@@ -120,4 +120,6 @@ class LegacyRuleScorer(ScoringEnginePort):
             readiness_score=round(readiness, 2),
             confidence=confidence,
             suggestions=[],
+            why_not_higher=[],
+            scoring_policy_version="legacy",
         )

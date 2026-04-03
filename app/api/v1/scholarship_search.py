@@ -207,3 +207,94 @@ def search_scholarships(
         limit=limit,
         total_pages=total_pages,
     )
+
+
+@router.get("/search/semantic", response_model=schemas.ScholarshipSearchResponse)
+@limiter.limit("60/minute")
+def search_scholarships_semantic(
+    request: Request,
+    query: str = "",
+    region: str = "",
+    field: str = "",
+    education_level: str = "",
+    provider: str = "",
+    school: str = "",
+    max_income: int | None = None,
+    page: int = 1,
+    limit: int = 20,
+    db: Annotated[Session, Depends(get_db)] = None,
+):
+    """
+    Same filters as ``/search``, but the text ``query`` matches title, description, or provider (OR).
+    Deterministic ILIKE — not an embedding model; useful for broader keyword discovery.
+    """
+    logger.info("scholarship_search_semantic query=%s page=%s", query[:50] if query else "", page)
+    limit = min(max(1, limit), 50)
+    page = max(1, page)
+    offset = (page - 1) * limit
+
+    q = (
+        db.query(models.Scholarship)
+        .filter(models.Scholarship.is_active != False)  # noqa: E712
+    )
+
+    if query and query.strip():
+        pattern = f"%{query.strip()}%"
+        q = q.filter(
+            or_(
+                models.Scholarship.title.ilike(pattern),
+                models.Scholarship.description.ilike(pattern),
+                models.Scholarship.provider.ilike(pattern),
+            )
+        )
+
+    if region and region.strip():
+        q = apply_region_browse_filter(q, region)
+
+    if field and field.strip():
+        val = field.strip()
+        q = q.filter(
+            or_(
+                models.Scholarship.eligible_courses_psced.ilike(f'%"{val}"%'),
+                models.Scholarship.eligible_courses_psced.ilike(f"%{val}%"),
+            )
+        )
+
+    if education_level and education_level.strip():
+        q = apply_education_level_browse_filter(q, education_level)
+
+    if provider and provider.strip():
+        pattern = f"%{provider.strip()}%"
+        q = q.filter(models.Scholarship.provider.ilike(pattern))
+
+    if school and school.strip():
+        pattern = f"%{school.strip()}%"
+        q = q.filter(
+            or_(
+                models.Scholarship.title.ilike(pattern),
+                models.Scholarship.provider.ilike(pattern),
+                models.Scholarship.description.ilike(pattern),
+                models.Scholarship.eligible_school_types.ilike(pattern),
+            )
+        )
+
+    if max_income is not None and max_income >= 0:
+        q = q.filter(
+            or_(
+                models.Scholarship.max_income_threshold.is_(None),
+                models.Scholarship.max_income_threshold >= max_income,
+            )
+        )
+
+    total = q.count()
+    scholarships = q.offset(offset).limit(limit).all()
+    results = [_scholarship_to_response(s) for s in scholarships]
+    total_pages = (total + limit - 1) // limit if total > 0 else 0
+
+    return schemas.ScholarshipSearchResponse(
+        results=results,
+        total=total,
+        page=page,
+        limit=limit,
+        total_pages=total_pages,
+    )

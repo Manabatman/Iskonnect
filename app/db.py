@@ -3,14 +3,19 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 from app.config import settings
 
-# SQLite requires check_same_thread=False; PostgreSQL does not
+# SQLite requires check_same_thread=False; PostgreSQL benefits from pool health checks
 connect_args = {}
+engine_kwargs: dict = {}
 if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
+else:
+    engine_kwargs["pool_pre_ping"] = True
+    engine_kwargs["pool_recycle"] = 300
 
 engine = create_engine(
     settings.database_url,
     connect_args=connect_args,
+    **engine_kwargs,
 )
 
 SessionLocal = sessionmaker(

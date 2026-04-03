@@ -40,6 +40,8 @@ class ScoringPayload:
     profile_city: str | None = None
     eligible_regions: list | None = None
     eligible_cities: list | None = None
+    has_geographic_restriction: bool = True
+    has_field_restriction: bool = True
 
 
 @dataclass
@@ -56,6 +58,8 @@ class ScoringResult:
     readiness_score: float
     confidence: str  # "high" | "medium" | "low"
     suggestions: list[str] = field(default_factory=list)
+    why_not_higher: list[str] = field(default_factory=list)
+    scoring_policy_version: str = ""
 
 
 class ScoringEnginePort(ABC):

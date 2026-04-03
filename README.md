@@ -63,9 +63,10 @@ Match Explanation
 
 Each scholarship match includes a breakdown explaining why the student matched, such as:
 Academic requirement satisfied
-Income eligibility met
-Location match
-Document readiness
+Income eligibility met (for need-sensitive programs)
+Location and field alignment
+Priority group alignment when applicable
+Document readiness is tracked separately for applications and is not part of the eligibility fit score.
 This transparency helps students understand how to improve their eligibility.
 Document Readiness Tracking
 The system compares required scholarship documents with documents already available to the student.

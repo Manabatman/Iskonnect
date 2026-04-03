@@ -8,12 +8,13 @@ from app.taxonomy.equity_groups import EQUITY_GROUPS
 
 
 def _get_equity_match_reason(equity_flags: dict[str, bool], priority_groups: list[str]) -> str | None:
-    """Return the first matching equity group's RA reference for explanation."""
+    """Return the first matching equity group's RA reference for explanation (uses profile_flag like scoring)."""
     for group in priority_groups or []:
         if not group:
             continue
         flag_key = group.lower().replace(" ", "_").replace("/", "_")
-        if equity_flags.get(flag_key) or equity_flags.get(group):
+        profile_flag = EQUITY_GROUPS.get(group, {}).get("profile_flag") or f"is_{flag_key}"
+        if equity_flags.get(flag_key) or equity_flags.get(profile_flag) or equity_flags.get(group):
             info = EQUITY_GROUPS.get(group, {})
             ra = info.get("ra_reference", group)
             return f"{group} ({ra})"
@@ -27,9 +28,8 @@ def _compute_equity_multiplier(
     max_cap: float,
 ) -> tuple[float, str | None]:
     """
-    Compute equity multiplier and reason.
+    Compute equity multiplier and reason (deprecated for scoring; kept for tests / compatibility).
     Returns (multiplier, reason_string).
-    Uses EQUITY_GROUPS profile_flag to map priority group to config key.
     """
     multiplier = 1.0
     reason = None
@@ -51,43 +51,81 @@ def _compute_equity_multiplier(
 def build_breakdown(
     components: dict[str, float],
     payload: ScoringPayload,
-    weights: dict[str, float],
+    normalized_weights: dict[str, float],
 ) -> dict:
     """
     Build structured breakdown compatible with MatchBreakdownSchema.
-    Each component includes status, user_value, requirement_value for legacy compatibility.
+    normalized_weights: per-component weights after excluding not-applicable factors (sum to 1.0).
     """
+    def _row(comp_key: str, status: str, user_val: str, req_val: str) -> dict:
+        nw = normalized_weights.get(comp_key, 0.0)
+        if status == "not_applicable" or nw <= 0:
+            return {
+                "status": status,
+                "user_value": user_val,
+                "requirement_value": req_val,
+                "score": None,
+                "weighted": 0.0,
+                "max_possible": 0.0,
+            }
+        sc = components.get(comp_key, 0.0)
+        return {
+            "status": status,
+            "user_value": user_val,
+            "requirement_value": req_val,
+            "score": sc,
+            "weighted": round(sc * nw * 100, 1),
+            "max_possible": round(nw * 100, 1),
+        }
+
     def _academic_detail() -> tuple[str, str, str]:
         gwa = payload.gwa_normalized
         min_gwa = payload.min_gwa_required
         if gwa is None:
-            return ("partial", "Not provided", "N/A" if min_gwa is None else f"Min: {min_gwa:.0f}%")
+            return ("not_provided", "Not provided", "N/A" if min_gwa is None else f"Min: {min_gwa:.0f}%")
         if min_gwa is None:
             return ("met", f"GWA: {gwa:.1f}%", "No minimum")
         if gwa >= min_gwa + 10:
             return ("exceeded", f"GWA: {gwa:.1f}%", f"Min: {min_gwa:.0f}% (exceeds by {gwa - min_gwa:.0f})")
         if gwa >= min_gwa:
             return ("met", f"GWA: {gwa:.1f}%", f"Min: {min_gwa:.0f}%")
-        return ("missing", f"GWA: {gwa:.1f}%", f"Min: {min_gwa:.0f}%")
+        return ("not_met", f"GWA: {gwa:.1f}%", f"Min: {min_gwa:.0f}%")
 
     def _socioeconomic_detail() -> tuple[str, str, str]:
         income = payload.household_income_annual
         threshold = payload.max_income_threshold
+        st = (payload.scholarship_type or "").lower().strip()
+        merit_types = ("merit", "merit-based", "academic")
+        if st in merit_types:
+            return ("met", "N/A", "Merit-based — income not used in ranking")
         if threshold is None:
             return ("met", "N/A", "No income limit")
         if income is not None:
-            status = "met" if income <= threshold else "missing"
-            return (status, f"PHP {income:,}", f"Max: PHP {threshold:,}")
-        return ("partial", "Not provided", f"Max: PHP {threshold:,}")
+            if income <= threshold:
+                return ("met", f"PHP {income:,}", f"Max: PHP {threshold:,}")
+            return ("not_met", f"PHP {income:,}", f"Max: PHP {threshold:,}")
+        return ("not_provided", "Not provided", f"Max: PHP {threshold:,}")
 
     def _field_detail() -> tuple[str, str, str]:
-        level = payload.field_match_level or "none"
+        level = (payload.field_match_level or "none").strip().lower()
+        labels = {
+            "exact": "Exact match",
+            "broad": "Broad match",
+            "partial": "Partial match",
+            "none": "No match",
+        }
+        user = labels.get(level, level)
+        if not payload.has_field_restriction:
+            disp = user if level != "none" else "—"
+            return ("not_applicable", disp, "Open to all fields")
         if level == "none":
-            return ("missing", level, "Course match")
-        return (level, level, "Course match")
+            return ("not_met", "No course match", "Course eligibility")
+        if level == "partial":
+            return ("partial", user, "Course eligibility")
+        return ("met", user, "Course eligibility")
 
     def _geographic_detail() -> tuple[str, str, str]:
-        level = payload.geographic_match_level or "none"
+        level = (payload.geographic_match_level or "none").strip().lower()
         profile_region = getattr(payload, "profile_region", None) or ""
         profile_city = getattr(payload, "profile_city", None) or ""
         eligible_regions = getattr(payload, "eligible_regions", None) or []
@@ -110,21 +148,24 @@ def build_breakdown(
             if len(eligible_regions) > 3:
                 req_display += f" (+{len(eligible_regions) - 3} more)"
 
+        if not payload.has_geographic_restriction:
+            return ("not_applicable", user_display, "Nationwide (no location restriction)")
         if level == "none":
-            return ("missing", user_display, req_display)
+            return ("not_met", user_display, req_display)
         return ("met", user_display, req_display)
 
     def _equity_detail() -> tuple[str, str, str]:
         match_count = 0
         for group in payload.priority_groups or []:
             flag_key = group.lower().replace(" ", "_").replace("/", "_")
-            if payload.equity_flags.get(flag_key) or payload.equity_flags.get(group):
+            profile_flag = EQUITY_GROUPS.get(group, {}).get("profile_flag") or f"is_{flag_key}"
+            if payload.equity_flags.get(flag_key) or payload.equity_flags.get(profile_flag) or payload.equity_flags.get(group):
                 match_count += 1
         if not payload.priority_groups:
             return ("met", "N/A", "No priority groups")
         if match_count > 0:
             return ("matched", f"{match_count} group(s) matched", "Priority groups")
-        return ("missing", "No match", "Priority groups")
+        return ("not_met", "No match", "Priority groups")
 
     ac_status, ac_user, ac_req = _academic_detail()
     soc_status, soc_user, soc_req = _socioeconomic_detail()
@@ -132,56 +173,67 @@ def build_breakdown(
     geo_status, geo_user, geo_req = _geographic_detail()
     eq_status, eq_user, eq_req = _equity_detail()
 
-    result = {
-        "academic": {
-            "status": ac_status,
-            "user_value": ac_user,
-            "requirement_value": ac_req,
-            "score": components.get("academic", 0),
-            "weighted": round((components.get("academic", 0) * weights.get("academic", 0.3)) * 100, 1),
-            "max_possible": round(weights.get("academic", 0.3) * 100, 1),
-        },
-        "socioeconomic": {
-            "status": soc_status,
-            "user_value": soc_user,
-            "requirement_value": soc_req,
-            "score": components.get("income", 0),
-            "weighted": round((components.get("income", 0) * weights.get("income", 0.25)) * 100, 1),
-            "max_possible": round(weights.get("income", 0.25) * 100, 1),
-        },
-        "field_relevance": {
-            "status": field_status,
-            "user_value": field_user,
-            "requirement_value": field_req,
-            "score": components.get("field_alignment", 0),
-            "weighted": round((components.get("field_alignment", 0) * weights.get("field_alignment", 0.2)) * 100, 1),
-            "max_possible": round(weights.get("field_alignment", 0.2) * 100, 1),
-        },
-        "geographic": {
-            "status": geo_status,
-            "user_value": geo_user,
-            "requirement_value": geo_req,
-            "score": components.get("geographic", 0),
-            "weighted": round((components.get("geographic", 0) * weights.get("geographic", 0.1)) * 100, 1),
-            "max_possible": round(weights.get("geographic", 0.1) * 100, 1),
-        },
-        "priority_group": {
-            "status": eq_status,
-            "user_value": eq_user,
-            "requirement_value": eq_req,
-            "score": components.get("equity_priority", 0),
-            "weighted": round((components.get("equity_priority", 0) * weights.get("equity_priority", 0.1)) * 100, 1),
-            "max_possible": round(weights.get("equity_priority", 0.1) * 100, 1),
-        },
+    return {
+        "academic": _row("academic", ac_status, ac_user, ac_req),
+        "socioeconomic": _row("income", soc_status, soc_user, soc_req),
+        "field_relevance": _row("field_alignment", field_status, field_user, field_req),
+        "geographic": _row("geographic", geo_status, geo_user, geo_req),
+        "priority_group": _row("equity_priority", eq_status, eq_user, eq_req),
     }
-    return result
+
+
+def build_why_not_higher(
+    components: dict[str, float],
+    payload: ScoringPayload,
+    normalized_weights: dict[str, float],
+) -> list[str]:
+    """Top gaps between max possible and actual weighted contribution (plain language)."""
+    labels = {
+        "academic": "Academic (GWA)",
+        "income": "Income / financial fit",
+        "field_alignment": "Field of study",
+        "geographic": "Location match",
+        "equity_priority": "Priority groups",
+    }
+    rows: list[tuple[float, str]] = []
+    st_all = (payload.scholarship_type or "").lower().strip()
+    merit = st_all in ("merit", "merit-based", "academic")
+    for comp_key, label in labels.items():
+        w = normalized_weights.get(comp_key, 0.0)
+        if w <= 0:
+            continue
+        if comp_key == "income" and merit:
+            continue
+        max_pts = w * 100.0
+        actual = components[comp_key] * w * 100.0
+        gap = max_pts - actual
+        if gap < 1.0:
+            continue
+        if comp_key == "academic" and payload.gwa_normalized is None and payload.min_gwa_required is not None:
+            rows.append((gap, f"{label}: add your GWA — academic part is provisional (~{gap:.0f} pts below the max for this factor)."))
+        elif comp_key == "income":
+            if not payload.max_income_threshold:
+                continue
+            if payload.household_income_annual is None and payload.income_bracket is None:
+                rows.append((gap, f"{label}: add income or bracket — this part is provisional (~{gap:.0f} pts below the max)."))
+            else:
+                rows.append((gap, f"{label}: about {gap:.0f} pts below the max — lower income vs the ceiling scores higher for need-based programs."))
+        elif comp_key == "field_alignment":
+            rows.append((gap, f"{label}: about {gap:.0f} pts below the max — a stronger course match would help."))
+        elif comp_key == "geographic":
+            rows.append((gap, f"{label}: about {gap:.0f} pts below the max — a stronger city/region match would help."))
+        elif comp_key == "equity_priority":
+            rows.append((gap, f"{label}: about {gap:.0f} pts below the max — more overlapping priority groups would add points."))
+        else:
+            rows.append((gap, f"{label}: about {gap:.0f} pts below the maximum for this factor."))
+
+    rows.sort(key=lambda x: x[0], reverse=True)
+    return [msg for _, msg in rows[:2]]
 
 
 def build_explanation(
     components: dict[str, float],
     payload: ScoringPayload,
-    equity_multiplier: float,
-    equity_reason: str | None,
 ) -> list[str]:
     """Build plain-language explanation strings for the student."""
     lines: list[str] = []
@@ -193,20 +245,24 @@ def build_explanation(
     elif payload.gwa_normalized is None:
         lines.append("GWA not provided — score may change when added")
     if payload.household_income_annual is not None and payload.max_income_threshold is not None:
-        if payload.household_income_annual <= payload.max_income_threshold:
+        st = (payload.scholarship_type or "").lower().strip()
+        if st not in ("merit", "merit-based", "academic") and payload.household_income_annual <= payload.max_income_threshold:
             lines.append(f"Income PHP {payload.household_income_annual:,} within ceiling PHP {payload.max_income_threshold:,}")
-    if payload.field_match_level in ("exact", "broad"):
-        lines.append("Course/field alignment")
-    elif payload.field_match_level == "partial":
-        lines.append("Partial course alignment")
-    if payload.geographic_match_level == "city":
-        lines.append("Exact LGU/city match")
-    elif payload.geographic_match_level == "region":
-        lines.append("Region match")
-    elif payload.geographic_match_level == "island_group":
-        lines.append("Island group match")
-    if equity_reason and equity_multiplier > 1.0:
-        lines.append(f"Equity priority: {equity_reason}")
+    if payload.has_field_restriction:
+        if payload.field_match_level in ("exact", "broad"):
+            lines.append("Course/field alignment")
+        elif payload.field_match_level == "partial":
+            lines.append("Partial course alignment")
+    if payload.has_geographic_restriction:
+        if payload.geographic_match_level == "city":
+            lines.append("Exact LGU/city match")
+        elif payload.geographic_match_level == "region":
+            lines.append("Region match")
+        elif payload.geographic_match_level == "island_group":
+            lines.append("Island group match")
+    equity_line = _get_equity_match_reason(payload.equity_flags, payload.priority_groups or [])
+    if equity_line:
+        lines.append(f"Equity priority: {equity_line}")
     return lines
 
 
@@ -219,27 +275,39 @@ def build_improvement_suggestions(components: dict[str, float], payload: Scoring
         suggestions.append("Add your GPA/GWA to improve academic matching.")
     if payload.household_income_annual is None and payload.income_bracket is None:
         suggestions.append("Add household income or income bracket for better need-based matching.")
-    if (payload.field_match_level or "").strip().lower() == "none":
+    if (
+        payload.has_field_restriction
+        and (payload.field_match_level or "").strip().lower() == "none"
+    ):
         suggestions.append("Select your preferred courses or field of study to improve field alignment.")
-    if (payload.geographic_match_level or "").strip().lower() == "none":
+    if (
+        payload.has_geographic_restriction
+        and (payload.geographic_match_level or "").strip().lower() == "none"
+    ):
         suggestions.append("Add your region and city for geographic matching.")
     if components.get("academic", 1.0) < 0.6 and payload.gwa_normalized is not None:
-        suggestions.append("Your academic score is below this scholarship's typical range; consider programs with lower GWA floors.")
+        suggestions.append(
+            "Your academic score is below this scholarship's typical range; consider programs with lower GWA floors."
+        )
     return suggestions
 
 
 def assess_confidence(payload: ScoringPayload) -> str:
     """
-    Assess confidence based on data completeness.
-    Missing GWA or income -> lower confidence.
+    Assess confidence based on data completeness for applicable scholarship requirements.
     """
     missing = 0
     if payload.gwa_normalized is None and payload.min_gwa_required is not None:
         missing += 1
-    if payload.household_income_annual is None and payload.income_bracket is None and payload.max_income_threshold is not None:
+    st = (payload.scholarship_type or "").lower().strip()
+    merit = st in ("merit", "merit-based", "academic")
+    if (
+        not merit
+        and payload.household_income_annual is None
+        and payload.income_bracket is None
+        and payload.max_income_threshold is not None
+    ):
         missing += 1
-    if payload.field_match_level == "none" and payload.min_gwa_required is not None:
-        missing += 0.5  # Partial penalty
     if missing >= 2:
         return "low"
     if missing >= 1:
@@ -254,8 +322,7 @@ def compute_equity_multiplier(
     max_cap: float,
 ) -> tuple[float, str | None]:
     """
-    Compute equity multiplier from matching priority groups.
-    Returns (multiplier, reason_string).
+    Deprecated: scoring no longer applies this multiplier; kept for compatibility and tests.
     """
     return _compute_equity_multiplier(
         equity_flags, priority_groups, equity_multipliers, max_cap

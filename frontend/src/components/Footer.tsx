@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
     <footer id="about" className="bg-slate-900 py-8 dark:bg-slate-950">
       <div className="mx-auto max-w-6xl px-4">

@@ -3,7 +3,7 @@
 import logging
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app import models
@@ -11,6 +11,7 @@ from app.schemas import NotificationResponse
 from app.auth import get_current_user_id
 from app.config import settings
 from app.db import get_db
+from app.limiter import limiter
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,9 @@ def _require_notifications_enabled():
 
 
 @router.get("/notifications", response_model=list[NotificationResponse])
+@limiter.limit("60/minute")
 def list_notifications(
+    request: Request,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
     limit: int = 50,
@@ -44,7 +47,9 @@ def list_notifications(
 
 
 @router.get("/notifications/unread-count")
+@limiter.limit("60/minute")
 def unread_count(
+    request: Request,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
@@ -60,7 +65,9 @@ def unread_count(
 
 
 @router.post("/notifications/{notification_id}/read")
+@limiter.limit("120/minute")
 def mark_read(
+    request: Request,
     notification_id: int,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,

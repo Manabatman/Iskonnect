@@ -1,6 +1,6 @@
 """
 Weighted deterministic scoring engine.
-Implements ScoringEnginePort with configurable weights and equity multipliers.
+Implements ScoringEnginePort with configurable weights.
 """
 
 from app.matching.scoring_port import ScoringEnginePort, ScoringPayload, ScoringResult
@@ -17,7 +17,7 @@ from app.scoring.explanation import (
     build_breakdown,
     build_explanation,
     build_improvement_suggestions,
-    compute_equity_multiplier,
+    build_why_not_higher,
 )
 
 
@@ -29,6 +29,20 @@ class WeightedDeterministicScorer(ScoringEnginePort):
 
     def __init__(self, config: ScoringConfig | None = None):
         self.config = config or ScoringConfig()
+
+    @staticmethod
+    def _normalized_weights(payload: ScoringPayload, weights: dict[str, float]) -> dict[str, float]:
+        """Zero out non-applicable factors and renormalize so applicable weights sum to 1.0."""
+        w = {k: float(v) for k, v in weights.items()}
+        if not payload.has_geographic_restriction:
+            w["geographic"] = 0.0
+        if not payload.has_field_restriction:
+            w["field_alignment"] = 0.0
+        total = sum(w.values())
+        if total <= 0:
+            n = max(len(w), 1)
+            return {k: 1.0 / n for k in w}
+        return {k: v / total for k, v in w.items()}
 
     def score(self, payload: ScoringPayload) -> ScoringResult:
         # 1. Compute each component (0.0 - 1.0)
@@ -52,41 +66,19 @@ class WeightedDeterministicScorer(ScoringEnginePort):
             ),
         }
 
+        norm = self._normalized_weights(payload, self.config.weights)
+
         # 2. Weighted sum -> base score (0-100)
-        base_score = sum(
-            components[key] * self.config.weights.get(key, 0)
-            for key in components
-        ) * 100
+        base_score = sum(components[key] * norm[key] for key in components) * 100
 
-        # 3. Apply equity multipliers
-        equity_multiplier, equity_reason = compute_equity_multiplier(
-            payload.equity_flags,
-            payload.priority_groups,
-            self.config.equity_multipliers,
-            self.config.max_equity_multiplier,
-        )
-        adjusted_score = base_score * equity_multiplier
+        # 3. Clamp to 0-100 (equity is only in equity_priority component, no post-hoc multiplier)
+        final_score = max(0.0, min(100.0, base_score))
 
-        # 4. Clamp to 0-100
-        final_score = max(0.0, min(100.0, adjusted_score))
-
-        # 5. Generate explanation
-        breakdown = build_breakdown(
-            components,
-            payload,
-            self.config.weights,
-        )
-        explanation = build_explanation(
-            components,
-            payload,
-            equity_multiplier,
-            equity_reason,
-        )
-
-        # 6. Confidence based on data completeness
+        breakdown = build_breakdown(components, payload, norm)
+        explanation = build_explanation(components, payload)
         confidence = assess_confidence(payload)
-
         suggestions = build_improvement_suggestions(components, payload)
+        why_not_higher = build_why_not_higher(components, payload, norm)
 
         return ScoringResult(
             final_score=round(final_score, 2),
@@ -96,4 +88,6 @@ class WeightedDeterministicScorer(ScoringEnginePort):
             readiness_score=0.0,  # No longer used in scoring; documents shown on detail page only
             confidence=confidence,
             suggestions=suggestions,
+            why_not_higher=why_not_higher,
+            scoring_policy_version=self.config.policy_version,
         )

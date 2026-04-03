@@ -27,21 +27,38 @@ def upgrade() -> None:
     op.create_index(op.f("ix_users_id"), "users", ["id"], unique=False)
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
 
-    op.add_column("students", sa.Column("user_id", sa.Integer(), nullable=True))
-    op.create_foreign_key(
-        "fk_students_user_id",
-        "students",
-        "users",
-        ["user_id"],
-        ["id"],
-    )
+    conn = op.get_bind()
+    if conn.dialect.name == "sqlite":
+        with op.batch_alter_table("students") as batch_op:
+            batch_op.add_column(sa.Column("user_id", sa.Integer(), nullable=True))
+            batch_op.create_foreign_key(
+                "fk_students_user_id",
+                "users",
+                ["user_id"],
+                ["id"],
+            )
+    else:
+        op.add_column("students", sa.Column("user_id", sa.Integer(), nullable=True))
+        op.create_foreign_key(
+            "fk_students_user_id",
+            "students",
+            "users",
+            ["user_id"],
+            ["id"],
+        )
     op.create_index(op.f("ix_students_user_id"), "students", ["user_id"], unique=False)
 
 
 def downgrade() -> None:
+    conn = op.get_bind()
     op.drop_index(op.f("ix_students_user_id"), table_name="students")
-    op.drop_constraint("fk_students_user_id", "students", type_="foreignkey")
-    op.drop_column("students", "user_id")
+    if conn.dialect.name == "sqlite":
+        with op.batch_alter_table("students") as batch_op:
+            batch_op.drop_constraint("fk_students_user_id", type_="foreignkey")
+            batch_op.drop_column("user_id")
+    else:
+        op.drop_constraint("fk_students_user_id", "students", type_="foreignkey")
+        op.drop_column("students", "user_id")
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_index(op.f("ix_users_id"), table_name="users")
     op.drop_table("users")

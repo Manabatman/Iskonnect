@@ -26,7 +26,8 @@ function canOpenMatchAnalysis(match: MatchResult): boolean {
   return !!(
     match.breakdown ||
     (match.explanation && match.explanation.length > 0) ||
-    (match.suggestions && match.suggestions.length > 0)
+    (match.suggestions && match.suggestions.length > 0) ||
+    (match.why_not_higher && match.why_not_higher.length > 0)
   );
 }
 
