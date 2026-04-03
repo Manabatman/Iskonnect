@@ -1,0 +1,37 @@
+# Local stack: API + Postgres + Redis (optional cache)
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: iskonnect
+      POSTGRES_PASSWORD: iskonnect
+      POSTGRES_DB: iskonnect
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://iskonnect:iskonnect@db:5432/iskonnect
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: development
+      SECRET_KEY: dev-docker-secret-change-me
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    depends_on:
+      - db
+      - redis
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+volumes:
+  pgdata:

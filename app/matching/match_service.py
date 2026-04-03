@@ -145,15 +145,15 @@ class MatchService:
     def __init__(self, scoring_engine: ScoringEnginePort | None = None):
         self.scoring_engine = scoring_engine or WeightedDeterministicScorer()
 
-    def get_matches(self, profile: dict, scholarships: list) -> list[dict]:
+    def get_matches(self, profile: dict, scholarships: list) -> tuple[list[dict], dict]:
         """
-        Return ranked match results with breakdown and explanation.
+        Return ranked match results with breakdown and explanation, plus filter/scoring diagnostics.
         profile and scholarships are dicts (from API/DB).
         """
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("match_service: filter input scholarships=%d", len(scholarships))
 
-        candidates = filter_scholarships(profile, scholarships)
+        candidates, filter_diagnostics = filter_scholarships(profile, scholarships)
 
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("match_service: after hard filters candidates=%d", len(candidates))
@@ -171,7 +171,11 @@ class MatchService:
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("match_service: scored results=%d", len(results))
 
-        return results
+        diagnostics = {
+            **filter_diagnostics,
+            "scored_match_count": len(results),
+        }
+        return results, diagnostics
 
     def _build_scoring_payload(self, profile: dict, scholarship: dict) -> ScoringPayload:
         """Build ScoringPayload from profile and scholarship dicts."""
@@ -196,22 +200,30 @@ class MatchService:
             pass  # Keep income as None, bracket is separate
         income_bracket = profile.get("income_bracket") or (get_income_bracket(income) if income is not None else None)
 
+        eligible_psced = parse_json(scholarship.get("eligible_courses_psced"))
+        eligible_specific = parse_json(scholarship.get("eligible_courses_specific"))
+        eligible_regions = parse_json(scholarship.get("eligible_regions"))
+        legacy_regions = parse_json(scholarship.get("regions"))
+        eligible_cities = parse_json(scholarship.get("eligible_cities"))
+        has_field_restriction = bool(eligible_psced or eligible_specific)
+        has_geographic_restriction = bool(eligible_regions or eligible_cities or legacy_regions)
+
         field_match = _get_field_match_level(
             profile.get("field_of_study_broad"),
             profile.get("field_of_study_specific"),
             parse_json(profile.get("preferred_courses")),
             parse_json(profile.get("needs")),
-            parse_json(scholarship.get("eligible_courses_psced")),
-            parse_json(scholarship.get("eligible_courses_specific")),
+            eligible_psced,
+            eligible_specific,
             parse_json(scholarship.get("needs_tags")),
         )
 
         geo_match = _get_geographic_match_level(
             profile.get("region"),
             profile.get("city_municipality"),
-            parse_json(scholarship.get("eligible_regions")),
-            parse_json(scholarship.get("eligible_cities")),
-            parse_json(scholarship.get("regions")),
+            eligible_regions,
+            eligible_cities,
+            legacy_regions,
         )
 
         extrac_match = _count_matches(
@@ -227,10 +239,6 @@ class MatchService:
             profile.get("documents"),
             scholarship.get("required_documents"),
         )
-
-        eligible_regions = parse_json(scholarship.get("eligible_regions"))
-        legacy_regions = parse_json(scholarship.get("regions"))
-        eligible_cities = parse_json(scholarship.get("eligible_cities"))
 
         return ScoringPayload(
             gwa_normalized=profile.get("gwa_normalized"),
@@ -252,6 +260,8 @@ class MatchService:
             profile_city=profile.get("city_municipality"),
             eligible_regions=eligible_regions or legacy_regions,
             eligible_cities=eligible_cities,
+            has_geographic_restriction=has_geographic_restriction,
+            has_field_restriction=has_field_restriction,
         )
 
     def _build_match_result(self, scholarship: dict, scoring_result: ScoringResult) -> dict:
@@ -274,6 +284,8 @@ class MatchService:
             "breakdown": scoring_result.breakdown,
             "confidence": scoring_result.confidence,
             "suggestions": getattr(scoring_result, "suggestions", None) or [],
+            "why_not_higher": getattr(scoring_result, "why_not_higher", None) or [],
+            "scoring_policy_version": getattr(scoring_result, "scoring_policy_version", None) or "",
             "provider_type": scholarship.get("provider_type"),
             "scholarship_type": scholarship.get("scholarship_type"),
             "benefit_tuition": scholarship.get("benefit_tuition"),

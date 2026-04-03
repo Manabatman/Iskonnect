@@ -52,14 +52,14 @@ def _sch_base(**overrides):
 def test_region_filter_excludes_mismatch():
     profile = _profile(region="National Capital Region")
     sch = _sch_base()
-    out = filter_scholarships(profile, [sch])
+    out, _diag = filter_scholarships(profile, [sch])
     assert out == []
 
 
 def test_nationwide_scholarship_passes():
     profile = _profile(region="National Capital Region")
     sch = _sch_base(eligible_regions=[], regions=[])
-    out = filter_scholarships(profile, [sch])
+    out, _diag = filter_scholarships(profile, [sch])
     assert len(out) == 1
 
 

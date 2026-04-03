@@ -1,19 +1,28 @@
 """
 JWT authentication for protected endpoints.
 Set AUTH_DISABLED=true for local development to bypass auth.
+Uses PyJWT for access tokens; refresh tokens are stored hashed in the database.
 """
-from datetime import datetime, timedelta
+from __future__ import annotations
+
+import hashlib
+import logging
+import secrets
+from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import bcrypt
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import JWTError, jwt
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.db import get_db
 from app import models
+
+logger = logging.getLogger(__name__)
 
 security = HTTPBearer(auto_error=False)
 
@@ -26,18 +35,115 @@ def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
+def _token_expiry_epoch(minutes: int) -> int:
+    return int((datetime.now(timezone.utc) + timedelta(minutes=minutes)).timestamp())
+
+
 def create_access_token(user_id: int, role: str = "student") -> str:
-    expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
-    payload = {"sub": str(user_id), "role": role, "exp": expire}
+    now = int(datetime.now(timezone.utc).timestamp())
+    exp = _token_expiry_epoch(settings.access_token_expire_minutes)
+    payload = {
+        "sub": str(user_id),
+        "role": role,
+        "iat": now,
+        "exp": exp,
+        "typ": "access",
+    }
     return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+
+
+def create_email_verification_token(user_id: int) -> str:
+    exp = _token_expiry_epoch(60 * 24 * 7)  # 7 days
+    now = int(datetime.now(timezone.utc).timestamp())
+    payload = {
+        "sub": str(user_id),
+        "iat": now,
+        "exp": exp,
+        "typ": "email_verify",
+    }
+    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+
+
+def decode_email_verification_token(token: str) -> int | None:
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        if payload.get("typ") != "email_verify":
+            return None
+        sub = payload.get("sub")
+        return int(sub) if sub else None
+    except (ExpiredSignatureError, InvalidTokenError, ValueError, TypeError):
+        return None
+
+
+def hash_refresh_token(raw: str) -> str:
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def new_refresh_token_plain() -> str:
+    return secrets.token_urlsafe(48)
+
+
+def issue_refresh_token(db: Session, user_id: int) -> str:
+    """Create refresh token row and return plaintext (show once to client)."""
+    raw = new_refresh_token_plain()
+    exp = datetime.utcnow() + timedelta(days=settings.refresh_token_expire_days)
+    row = models.RefreshToken(
+        user_id=user_id,
+        token_hash=hash_refresh_token(raw),
+        expires_at=exp,
+    )
+    db.add(row)
+    db.flush()
+    return raw
+
+
+def revoke_refresh_token_plain(db: Session, raw: str) -> bool:
+    h = hash_refresh_token(raw)
+    row = db.query(models.RefreshToken).filter(models.RefreshToken.token_hash == h).first()
+    if not row or row.revoked_at is not None:
+        return False
+    row.revoked_at = datetime.utcnow()
+    return True
+
+
+def consume_refresh_token_rotation(db: Session, raw: str) -> tuple[models.User, str] | None:
+    """
+    Validate refresh token, revoke it, issue a new refresh token (rotation).
+    Returns (user, new_refresh_plain) or None.
+    """
+    h = hash_refresh_token(raw)
+    row = (
+        db.query(models.RefreshToken)
+        .filter(
+            models.RefreshToken.token_hash == h,
+            models.RefreshToken.revoked_at.is_(None),
+        )
+        .first()
+    )
+    if not row:
+        return None
+    # DB stores naive UTC datetimes for expires_at
+    if row.expires_at < datetime.utcnow():
+        return None
+
+    user = db.query(models.User).filter(models.User.id == row.user_id).first()
+    if not user:
+        return None
+
+    row.revoked_at = datetime.utcnow()
+    new_plain = issue_refresh_token(db, user.id)
+    db.commit()
+    return user, new_plain
 
 
 def decode_token(token: str) -> int | None:
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        if payload.get("typ") not in (None, "access"):
+            return None
         sub = payload.get("sub")
         return int(sub) if sub else None
-    except (JWTError, ValueError):
+    except (ExpiredSignatureError, InvalidTokenError, ValueError, TypeError):
         return None
 
 

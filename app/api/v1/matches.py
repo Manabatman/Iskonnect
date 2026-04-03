@@ -45,7 +45,7 @@ def get_matches(
 
     scholarship_dicts = get_cached_scholarship_dicts(db)
 
-    results = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
+    results, diagnostics = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
 
     # Ensure backward compatibility: score alias
     for r in results:
@@ -57,6 +57,7 @@ def get_matches(
     response = {
         "matches": results,
         "profile_completeness": profile_completeness_payload(profile),
+        "diagnostics": diagnostics,
     }
     if len(results) == 0:
         upcoming = get_upcoming_scholarships(profile, scholarship_dicts)

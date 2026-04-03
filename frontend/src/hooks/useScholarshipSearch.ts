@@ -76,7 +76,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     let cancelled = false;
     setLoading(true);
     setError(null);
-    fetchSearch(query, filters, page)
+    fetchSearch(debouncedQuery, filters, page)
       .then((data) => {
         if (!cancelled) {
           setResults(data.results ?? []);
@@ -93,7 +93,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     return () => {
       cancelled = true;
     };
-  }, [query, filters, page, fetchSearch]);
+  }, [debouncedQuery, filters, page, fetchSearch]);
 
   useEffect(() => {
     if (!enableSuggestions) return;

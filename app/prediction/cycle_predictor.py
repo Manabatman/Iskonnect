@@ -65,7 +65,7 @@ def get_upcoming_scholarships(
     if not candidates:
         return []
 
-    filtered = filter_scholarships(profile, candidates)
+    filtered, _diag = filter_scholarships(profile, candidates)
     results = []
     for sch in filtered:
         last_open = _parse_date(sch.get("last_open_date"))

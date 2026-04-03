@@ -10,10 +10,12 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.api.v1.scholarships import _scholarship_to_response, persist_scholarship_from_schema
+from app.scholarship_cache import invalidate_scholarship_cache
 from app.auth import require_admin
 from app.db import get_db
 from app.utils.audit import log_action
@@ -21,6 +23,23 @@ from app.utils.audit import log_action
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["scholarship-staging"])
+
+
+def _find_live_duplicate(db: Session, sch: schemas.Scholarship) -> models.Scholarship | None:
+    """Return an existing live scholarship with same normalized title + provider."""
+    want_t = (sch.title or "").strip().lower()
+    want_p = (sch.provider or "").strip().lower()
+    if not want_t:
+        return None
+    candidates = (
+        db.query(models.Scholarship)
+        .filter(func.lower(func.trim(models.Scholarship.title)) == want_t)
+        .all()
+    )
+    for row in candidates:
+        if (row.provider or "").strip().lower() == want_p:
+            return row
+    return None
 
 
 def _dedupe_key(title: str, provider: str | None) -> str:
@@ -128,17 +147,27 @@ def approve_staging(
     except Exception as e:
         logger.error("staging_approve_invalid_payload id=%s err=%s", staging_id, e)
         raise HTTPException(status_code=400, detail="Invalid payload_json for scholarship schema")
-    db_sch = persist_scholarship_from_schema(
-        db,
-        sch,
-        version_changed_by=_admin.id if _admin else None,
-    )
-    sid = row.id
-    row = db.query(models.ScholarshipStaging).filter(models.ScholarshipStaging.id == sid).first()
-    if row:
+    dup = _find_live_duplicate(db, sch)
+    if dup:
+        raise HTTPException(
+            status_code=409,
+            detail=f"A scholarship with this title and provider already exists (id={dup.id}).",
+        )
+    try:
+        db_sch = persist_scholarship_from_schema(
+            db,
+            sch,
+            version_changed_by=_admin.id if _admin else None,
+            auto_commit=False,
+        )
         row.status = "approved"
         row.reviewed_at = datetime.now(timezone.utc)
         db.commit()
+        db.refresh(db_sch)
+        invalidate_scholarship_cache()
+    except Exception:
+        db.rollback()
+        raise
     log_action(
         db,
         actor_id=_admin.id if _admin else None,

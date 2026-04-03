@@ -5,8 +5,9 @@ export function providerInitials(provider: string | null | undefined): string {
 
 export function statusToFactorPercent(status: string | undefined): number {
   const s = (status ?? "").toLowerCase();
-  if (s === "met" || s === "exceeded" || s === "ready") return 100;
+  if (s === "met" || s === "exceeded" || s === "ready" || s === "matched") return 100;
   if (s === "partial") return 50;
+  if (s === "not_applicable") return 0;
   return 0;
 }
 
@@ -71,6 +72,7 @@ export function MatchStatusIcon({ status }: { status: string }) {
     case "met":
     case "exceeded":
     case "ready":
+    case "matched":
       return (
         <span className="text-green-600" aria-label="Met">
           ✓
@@ -82,10 +84,18 @@ export function MatchStatusIcon({ status }: { status: string }) {
           ◐
         </span>
       );
+    case "not_applicable":
+      return (
+        <span className="text-slate-400" aria-label="Not applicable">
+          ○
+        </span>
+      );
+    case "not_met":
+    case "not_provided":
     case "missing":
     case "disqualified":
       return (
-        <span className="text-red-600" aria-label="Missing">
+        <span className="text-red-600" aria-label="Not met or incomplete">
           ✗
         </span>
       );

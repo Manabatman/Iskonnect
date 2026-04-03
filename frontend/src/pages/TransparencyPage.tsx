@@ -10,33 +10,27 @@ const factors = [
   },
   {
     name: "Financial Need",
-    weight: 25,
-    description: "How well your household income fits the program's financial eligibility range.",
+    weight: 28,
+    description: "How well your household income fits the program's financial eligibility range (for need-sensitive programs).",
     tip: "Make sure your household income in your profile is accurate and current.",
   },
   {
     name: "Field of Study",
-    weight: 20,
+    weight: 22,
     description: "Whether your intended course matches what the scholarship is designed to fund.",
     tip: "Add all your possible course interests — not just your first choice.",
   },
   {
     name: "Location Match",
     weight: 10,
-    description: "Whether your region, city, or province fits the scholarship's geographic rules.",
+    description: "Whether your region, city, or province fits the scholarship's geographic rules (when the program has location limits).",
     tip: "Be as specific as possible — city-level data scores higher than region-level.",
   },
   {
     name: "Priority Group",
     weight: 10,
     description: "Whether you belong to groups the scholarship actively supports, like PWD, 4Ps, or IP.",
-    tip: "Declare any applicable groups in your profile. These are small boosts, not overrides.",
-  },
-  {
-    name: "Document Readiness",
-    weight: 5,
-    description: "How prepared you are to apply, based on documents you've already uploaded.",
-    tip: "Upload requirements early in the Documents section — even drafts count.",
+    tip: "Declare any applicable groups in your profile. This is part of the weighted score, not a separate override.",
   },
 ] as const;
 
@@ -141,13 +135,14 @@ export function TransparencyPage() {
         <div className="mt-12 space-y-4 text-slate-700 dark:text-slate-300">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How the final number is calculated</h2>
           <p className="text-sm leading-relaxed">
-            Each factor is scored between 0 and 1 based on your profile data. The six scores are weighted and combined into a
-            number from 0 to 100.
+            Each factor is scored between 0 and 1 based on your profile data. The five scores are weighted and combined into a
+            number from 0 to 100. If a scholarship has no field or location restriction, that part is left out and the other
+            weights are scaled so the total still makes sense.
           </p>
           <p className="text-sm leading-relaxed">
-            If you belong to a recognized priority group — such as PWD, 4Ps, or Indigenous Peoples — a small multiplier is
-            applied after the base score (up to a maximum of +15%). This is in line with Philippine law and CHED equity
-            guidelines. It elevates your ranking slightly; it doesn&apos;t override hard eligibility rules.
+            Document readiness (uploaded vs. required documents) is shown on your scholarship and documents pages — it is{" "}
+            <strong className="font-semibold">not</strong> part of this match score, so your fit rank reflects program rules,
+            not how many files you have uploaded yet.
           </p>
         </div>
 

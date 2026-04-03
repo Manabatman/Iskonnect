@@ -16,7 +16,6 @@ const FACTOR_LABELS: Record<string, string> = {
   socioeconomic: "Financial eligibility",
   field_relevance: "Course alignment",
   geographic: "Region match",
-  document_readiness: "Document readiness",
   priority_group: "Priority group",
 };
 
@@ -31,10 +30,20 @@ function BreakdownList({ breakdown }: { breakdown: MatchBreakdown }) {
     <ul className="space-y-3">
       {Object.entries(breakdown).map(([key, factor]) => {
         if (!factor || typeof factor !== "object") return null;
-        const f = factor as { status?: string; user_value?: string; requirement_value?: string };
+        const f = factor as {
+          status?: string;
+          user_value?: string;
+          requirement_value?: string;
+          weighted?: number;
+          max_possible?: number;
+        };
         const label = FACTOR_LABELS[key] ?? formatBreakdownKey(key);
         const status = (f.status ?? "").toLowerCase();
         const width = statusToFactorPercent(f.status);
+        const isNA = status === "not_applicable";
+        const barClass = isNA
+          ? "bg-slate-300 dark:bg-slate-600"
+          : "bg-primary-500 dark:bg-primary-400";
         return (
           <li
             key={key}
@@ -47,10 +56,7 @@ function BreakdownList({ breakdown }: { breakdown: MatchBreakdown }) {
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{label}</p>
                 <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-600">
-                  <div
-                    className="h-full rounded-full bg-primary-500 transition-all dark:bg-primary-400"
-                    style={{ width: `${width}%` }}
-                  />
+                  <div className={`h-full rounded-full transition-all ${barClass}`} style={{ width: `${width}%` }} />
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
                   <span className="font-medium text-slate-700 dark:text-slate-300">Your profile:</span>{" "}
@@ -59,6 +65,16 @@ function BreakdownList({ breakdown }: { breakdown: MatchBreakdown }) {
                   <span className="font-medium text-slate-700 dark:text-slate-300">Required:</span>{" "}
                   {f.requirement_value ?? "—"}
                 </p>
+                {typeof f.weighted === "number" && typeof f.max_possible === "number" && f.max_possible > 0 ? (
+                  <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                    Contribution: {f.weighted.toFixed(1)} / {f.max_possible.toFixed(1)} pts (this factor)
+                  </p>
+                ) : null}
+                {isNA ? (
+                  <p className="mt-1 text-[11px] italic text-slate-500 dark:text-slate-400">
+                    Not part of this score — program has no restriction here.
+                  </p>
+                ) : null}
               </div>
             </div>
           </li>
@@ -75,7 +91,8 @@ export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisM
     Boolean(
       match.breakdown ||
         (match.explanation && match.explanation.length > 0) ||
-        (match.suggestions && match.suggestions.length > 0)
+        (match.suggestions && match.suggestions.length > 0) ||
+        (match.why_not_higher && match.why_not_higher.length > 0)
     );
 
   return (
@@ -122,6 +139,11 @@ export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisM
                   <p className="mt-4 text-center text-xs font-bold uppercase tracking-widest text-primary-700 dark:text-primary-300">
                     {Math.round(score)}% overall match
                   </p>
+                  {match.scoring_policy_version ? (
+                    <p className="mt-2 text-center text-[10px] text-slate-500 dark:text-slate-400">
+                      Scoring policy: {match.scoring_policy_version}
+                    </p>
+                  ) : null}
                 </div>
 
                 {!hasContent ? (
@@ -148,6 +170,22 @@ export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisM
                           {match.explanation.map((line, i) => (
                             <li key={i} className="flex gap-2">
                               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500" aria-hidden />
+                              <span>{line}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+
+                    {match.why_not_higher && match.why_not_higher.length > 0 ? (
+                      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-800/40">
+                        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                          Why not higher
+                        </h3>
+                        <ul className="space-y-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                          {match.why_not_higher.map((line, i) => (
+                            <li key={i} className="flex gap-2">
+                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" aria-hidden />
                               <span>{line}</span>
                             </li>
                           ))}

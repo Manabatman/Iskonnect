@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -9,28 +11,36 @@ from sqlalchemy.orm import Session
 
 from app.api.v1 import (
     analytics,
+    applications,
     audit_routes,
     auth_routes,
+    feedback_routes,
     match_history,
     matches,
     notifications,
     profiles,
     reports,
     saved_scholarships,
+    school_portal,
     scoring_admin,
     scholarship_search,
     scholarship_staging,
     scholarships,
+    sponsor_portal,
     suggestions,
 )
 from app.config import settings
-from app.db import engine, Base, get_db
+from app.db import engine, get_db
 from app.limiter import limiter
 from app.middleware.request_logger import RequestLoggingMiddleware
-from app import models
+from app.middleware.security_headers import SecurityHeadersMiddleware
 from app.utils.logging_config import setup_logging
 
+logger = logging.getLogger(__name__)
+
 setup_logging(settings.structured_logging)
+
+settings.validate_for_production()
 
 if settings.sentry_dsn:
     import sentry_sdk
@@ -40,7 +50,7 @@ if settings.sentry_dsn:
         dsn=settings.sentry_dsn,
         integrations=[FastApiIntegration()],
         traces_sample_rate=0.1,
-        environment="production" if not settings.auth_disabled else "development",
+        environment=(settings.environment or "development").lower(),
     )
 
 app = FastAPI(title="Scholarship Matcher (Phase 1.5)")
@@ -53,14 +63,19 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID", "Accept"],
 )
 
 # Request logging for audit trail
 app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 
 app.include_router(auth_routes.router, prefix="/api/v1")
+app.include_router(feedback_routes.router, prefix="/api/v1")
+app.include_router(applications.router, prefix="/api/v1")
+app.include_router(sponsor_portal.router, prefix="/api/v1")
+app.include_router(school_portal.router, prefix="/api/v1")
 app.include_router(profiles.router, prefix="/api/v1")
 app.include_router(scholarship_search.router, prefix="/api/v1")
 app.include_router(scholarships.router, prefix="/api/v1")
@@ -89,8 +104,9 @@ def run_migrations():
 
         alembic_cfg = Config("alembic.ini")
         command.upgrade(alembic_cfg, "head")
-    except Exception:
-        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        logger.exception("alembic_upgrade_on_startup_failed: %s", e)
+        raise
 
 
 
@@ -100,16 +116,16 @@ def health(db: Session = Depends(get_db)):
     try:
         db.execute(text("SELECT 1"))
         checks["db"] = True
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("health_db_check_failed: %s", e)
     if settings.redis_url:
         try:
             import redis
 
             redis.from_url(settings.redis_url).ping()
             checks["cache"] = True
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("health_redis_check_failed: %s", e)
     else:
         checks["cache"] = True
     overall = "ok" if all(checks.values()) else "degraded"

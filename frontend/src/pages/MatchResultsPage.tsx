@@ -7,6 +7,14 @@ import { UpcomingScholarshipCard } from "../components/UpcomingScholarshipCard";
 import { useAuth } from "../contexts/AuthContext";
 import { NetworkError, apiFetch } from "../api/client";
 
+type MatchDiagnostics = {
+  total_checked?: number;
+  passed_hard_filters?: number;
+  eliminated_by_filter?: Record<string, number>;
+  missing_profile_fields?: string[];
+  top_blockers?: string[];
+};
+
 function fetchErrorMessage(err: unknown, fallback: string): string {
   if (err instanceof NetworkError) {
     return "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL is correct.";
@@ -33,6 +41,7 @@ export function MatchResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [analysisMatch, setAnalysisMatch] = useState<MatchResult | null>(null);
+  const [diagnostics, setDiagnostics] = useState<MatchDiagnostics | null>(null);
 
   useEffect(() => {
     if (runId) {
@@ -54,6 +63,7 @@ export function MatchResultsPage() {
             setMatches(data.results ?? []);
             setUpcomingScholarships([]);
             setProfileCompleteness(null);
+            setDiagnostics(null);
           }
         })
         .catch((err) => {
@@ -89,6 +99,7 @@ export function MatchResultsPage() {
             setMatches(data.matches ?? []);
             setUpcomingScholarships(data.upcoming_scholarships ?? []);
             setProfileCompleteness(data.profile_completeness ?? null);
+            setDiagnostics((data as { diagnostics?: MatchDiagnostics }).diagnostics ?? null);
           }
         })
       .catch((err) => {
@@ -188,6 +199,13 @@ export function MatchResultsPage() {
                 <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                   However, these scholarships typically reopen on a cycle. Based on last year&apos;s dates, here&apos;s when they&apos;re expected to open:
                 </p>
+                {diagnostics?.top_blockers && diagnostics.top_blockers.length > 0 ? (
+                  <ul className="mt-4 list-inside list-disc text-left text-sm text-slate-600 dark:text-slate-300">
+                    {diagnostics.top_blockers.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {upcomingScholarships.map((sch) => (
@@ -227,6 +245,19 @@ export function MatchResultsPage() {
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                 Try adjusting your age, region, or needs and run the matching again.
               </p>
+              {diagnostics?.total_checked != null ? (
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  Checked {diagnostics.total_checked} scholarship(s); {diagnostics.passed_hard_filters ?? 0} passed hard
+                  filters before scoring.
+                </p>
+              ) : null}
+              {diagnostics?.top_blockers && diagnostics.top_blockers.length > 0 ? (
+                <ul className="mx-auto mt-4 max-w-lg list-inside list-disc text-left text-sm text-slate-600 dark:text-slate-300">
+                  {diagnostics.top_blockers.map((b) => (
+                    <li key={b}>{b}</li>
+                  ))}
+                </ul>
+              ) : null}
               <button
                 type="button"
                 onClick={handleReset}

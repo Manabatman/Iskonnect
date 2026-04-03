@@ -5,3 +5,5 @@ __pycache__
 .env
 *.db
 server_debug.log
+data/raw/*.json
+!data/raw/.gitkeep

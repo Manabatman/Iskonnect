@@ -32,8 +32,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     if (theme === "system") {
       apply(media.matches);
-      media.addEventListener("change", (e) => apply(e.matches));
-      return () => media.removeEventListener("change", (e) => apply(e.matches));
+      const listener = (e: MediaQueryListEvent) => apply(e.matches);
+      media.addEventListener("change", listener);
+      return () => media.removeEventListener("change", listener);
     }
     apply(theme === "dark");
   }, [theme]);

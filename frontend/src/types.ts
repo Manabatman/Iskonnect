@@ -45,6 +45,9 @@ export interface MatchFactorBreakdown {
   user_value: string;
   requirement_value: string;
   detail?: string;
+  score?: number | null;
+  weighted?: number;
+  max_possible?: number;
 }
 
 export interface MatchBreakdown {
@@ -104,6 +107,10 @@ export interface MatchResult {
   required_documents?: string[];
   /** Improvement tips from matching engine */
   suggestions?: string[];
+  /** Top reasons the match score is not higher (gaps vs max contribution per factor) */
+  why_not_higher?: string[];
+  /** Policy rubric version used to compute this score */
+  scoring_policy_version?: string | null;
   data_status?: string | null;
   link_status?: string | null;
   verification_source?: string | null;

@@ -7,13 +7,13 @@ Each returns a 0.0-1.0 score. Pure functions with no side effects.
 def score_academic(gwa_normalized: float | None, min_gwa_required: float | None) -> float:
     """
     Academic strength: how well student GWA meets/exceeds scholarship minimum.
-    - No GWA data -> 0.5 (neutral)
+    - No GWA data -> 0.3 (provisional; confidence lowered)
     - Meets minimum exactly -> 0.75
     - Exceeds by 10+ points -> 1.0
     - Below minimum (defensive) -> 0.25
     """
     if gwa_normalized is None:
-        return 0.5
+        return 0.3
     if min_gwa_required is None:
         # No minimum requirement -> neutral with slight boost for high GWA
         return min(1.0, 0.5 + (gwa_normalized / 200))  # 100% GWA -> 1.0
@@ -36,8 +36,8 @@ def score_income(
     """
     Income alignment: need-based scholarships favor lower income.
     - Merit-based: income not relevant -> 0.5 (neutral)
-    - No income data -> 0.4 (slight penalty)
-    - Need-based: lower income -> higher score (inverted distance from ceiling)
+    - No income data -> 0.3 (provisional)
+    - Need-based: 0.3 + 0.7 * (1 - income/ceiling) clamped [0,1]; at ceiling -> 0.3
     """
     merit_types = ("merit", "merit-based", "academic")
     if scholarship_type and scholarship_type.lower().strip() in merit_types:
@@ -48,9 +48,10 @@ def score_income(
     if income is None and income_bracket and bracket_midpoints:
         income = bracket_midpoints.get(income_bracket)
     if income is None:
-        return 0.4
+        return 0.3
     ratio = income / max_income_threshold
-    return max(0.0, min(1.0, 1.0 - ratio))
+    raw = 0.3 + 0.7 * (1.0 - ratio)
+    return max(0.0, min(1.0, raw))
 
 
 def score_field(field_match_level: str) -> float:

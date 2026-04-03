@@ -30,10 +30,11 @@ def normalize_gwa(
     Convert GWA to 0-100 normalized percentage.
     Returns None if input is invalid.
 
-    Scale mapping:
-    - 5.0_scale: 1.00 = 100%, 3.00 = 75%, 5.00 = 0%
-    - 4.0_scale: 4.00 = 100%, 1.00 = 75%, 0.00 = 0%
-    - percentage: pass-through (already 0-100)
+    Scale mapping (linear; used consistently for matching vs min_gwa_normalized):
+    - 5.0_scale: 1.00 = 100%, 2.00 = 75%, 3.00 = 50%, 4.00 = 25%, 5.00 = 0%
+      (values below 1.0 map to 100%; above 5.0 to 0%)
+    - 4.0_scale: 0.00 = 0%, 1.00 = 25%, 2.00 = 50%, 3.00 = 75%, 4.00 = 100%
+    - percentage: pass-through clamped to [0, 100]
     """
     val = _parse_numeric(gwa_raw)
     if val is None:
@@ -46,8 +47,7 @@ def normalize_gwa(
         return max(0.0, min(100.0, val))
 
     if scale_key in ("5.0_scale", "5.0", "1.0_scale"):
-        # 1.00 = 100%, 3.00 = 75%, 5.00 = 0%
-        # Linear: pct = 100 - (val - 1) * 50  for val in [1, 5]
+        # Linear from 1 (best) to 5 (worst): pct = 100 - (val - 1) * 25
         if val < 1.0:
             return 100.0
         if val > 5.0:
@@ -55,7 +55,7 @@ def normalize_gwa(
         return 100.0 - (val - 1.0) * 25.0  # 1->100, 2->75, 3->50, 4->25, 5->0
 
     if scale_key in ("4.0_scale", "4.0"):
-        # 4.00 = 100%, 1.00 = 75%, 0.00 = 0%
+        # Linear from 0 to 4: pct = (val / 4) * 100
         if val >= 4.0:
             return 100.0
         if val <= 0.0:

@@ -13,7 +13,9 @@
 - CHED/LGU partners demand documented, reproducible ranking criteria
 - ML introduces algorithmic bias risk unacceptable in public-benefit infrastructure
 
-**Equity handling philosophy:** Equity groups (PWD, IP, Solo Parent, 4Ps) receive small multiplicative boosts (1.05–1.10) applied AFTER the base score. They never override hard eligibility gates and elevate ranking without dominating it.
+**Equity handling philosophy:** Equity groups (PWD, IP, Solo Parent, 4Ps) are reflected in the **Equity Priority** weighted component (10% of the base score) when a scholarship names priority groups. They never override hard eligibility gates.
+
+**Document readiness:** Application document completeness is **not** part of the eligibility fitness score. It is shown separately on scholarship detail and document pages so students can prepare to apply without conflating “fit” with “paperwork done.”
 
 ---
 
@@ -22,11 +24,12 @@
 | Component | Weight | Purpose |
 |-----------|--------|---------|
 | Academic Strength | 30% | How well GWA meets/exceeds scholarship minimum |
-| Income Alignment | 25% | Need-based fit (lower income = higher score for need scholarships) |
-| Field Alignment | 20% | PSCED-aligned course/discipline match quality |
+| Income Alignment | 28% | Need-based fit (lower income = higher score for need scholarships) |
+| Field Alignment | 22% | PSCED-aligned course/discipline match quality |
 | Geographic Relevance | 10% | Location proximity for LGU and regional scholarships |
 | Equity Priority | 10% | Alignment with scholarship priority groups (PWD, IP, etc.) |
-| Readiness Score | 5% | Document preparation completeness |
+
+Weights sum to 100%. Factors that do not apply to a scholarship (e.g. nationwide with no region list, open to all fields) are excluded and remaining weights are renormalized.
 
 ---
 
@@ -35,64 +38,45 @@
 ### Base Score
 
 ```
-base_score = sum(component_i × weight_i) × 100
+base_score = sum(component_i × normalized_weight_i) × 100
 ```
 
-Each component returns a value from 0.0 to 1.0. The weighted sum is scaled to 0–100.
+Each component returns a value from 0.0 to 1.0 (or is omitted when not applicable). Applicable weights are renormalized to sum to 1.0 before the weighted sum. The result is scaled to 0–100.
 
-### Equity Multiplier
+### Final Score
 
 ```
-final_score = min(100, base_score × equity_multiplier)
+final_score = clamp(0, 100, base_score)
 ```
 
-The equity multiplier is the product of matching priority-group boosts, capped at 1.15. Example: PWD (1.08) × 4Ps (1.07) = 1.156 → capped to 1.15.
+(Equity is included only via the **Equity Priority** component, not a separate post-hoc multiplier.)
 
 ### Component Formulas
 
 **Academic (0.0–1.0):**
-- No GWA data → 0.5 (neutral)
+- No GWA data → 0.3 (provisional; confidence lowered)
 - Meets minimum exactly → 0.75
 - Exceeds by 10+ points → 1.0
-- Below minimum → 0.25
+- Below minimum → 0.25 (defensive; normally filtered before scoring)
 
 **Income (0.0–1.0):**
 - Merit-based scholarship → 0.5 (neutral)
-- Need-based: `1.0 - (income / max_threshold)` (lower income = higher score)
-- No income data → 0.4 (slight penalty)
+- Need-based: `0.3 + 0.7 × (1.0 - income/max_threshold)` clamped to [0,1] (eligible at ceiling retains non-zero contribution)
+- No income data → 0.3 (provisional)
 
 **Field (0.0–1.0):**
 - exact → 1.0, broad → 0.75, partial → 0.4, none → 0.0
+- Not scored when scholarship has no field restrictions (factor excluded; weights renormalized)
 
 **Geographic (0.0–1.0):**
 - city → 1.0, region → 0.75, island_group → 0.4, none → 0.0
+- Not scored when scholarship has no geographic restrictions (factor excluded; weights renormalized)
 
 **Equity (0.0–1.0):**
 - 2+ priority group matches → 1.0
 - 1 match → 0.75
 - 0 matches, no priority groups → 0.5
 - 0 matches, scholarship has priority groups → 0.0
-
-**Readiness (0.0–1.0):**
-- Direct pass-through of document readiness ratio
-
----
-
-## Equity Logic
-
-Equity multipliers are applied multiplicatively when the student matches a scholarship's priority groups:
-
-| Group | Multiplier | RA Reference |
-|-------|------------|--------------|
-| PWD | 1.08 | RA 7277 |
-| Indigenous Peoples | 1.10 | RA 8371 (IPRA) |
-| Solo Parent Dependent | 1.05 | RA 11861 |
-| 4Ps/Listahanan | 1.07 | Pantawid Pamilyang Pilipino Program |
-| Underprivileged | 1.06 | RA 7279 |
-| OFW Dependent | 1.03 | OWWA |
-| Farmer/Fisher Dependent | 1.04 | Landbank/Agrarian |
-
-**Cap:** Total equity multiplier is capped at 1.15 to prevent over-boosting.
 
 ---
 
@@ -104,22 +88,12 @@ from app.scoring import WeightedDeterministicScorer, ScoringConfig
 config = ScoringConfig(
     weights={
         "academic": 0.30,
-        "income": 0.25,
-        "field_alignment": 0.20,
+        "income": 0.28,
+        "field_alignment": 0.22,
         "geographic": 0.10,
         "equity_priority": 0.10,
-        "readiness": 0.05,
     },
-    equity_multipliers={
-        "is_pwd": 1.08,
-        "is_indigenous_people": 1.10,
-        "is_solo_parent_dependent": 1.05,
-        "is_4ps_listahanan": 1.07,
-        "is_underprivileged": 1.06,
-        "is_ofw_dependent": 1.03,
-        "is_farmer_fisher_dependent": 1.04,
-    },
-    max_equity_multiplier=1.15,
+    # equity_multipliers / max_equity_multiplier: deprecated, unused in scoring (kept for compatibility)
     income_bracket_midpoints={
         "below_250k": 125_000,
         "250k_400k": 325_000,
@@ -143,7 +117,6 @@ scorer = WeightedDeterministicScorer(config=config)
 - Field: Engineering
 - Region: NCR
 - PWD: Yes
-- Documents: 3 of 5 uploaded (60%)
 
 **Scholarship:**
 - Min GWA: 75%
@@ -153,19 +126,16 @@ scorer = WeightedDeterministicScorer(config=config)
 - Priority groups: PWD
 
 **Component scores:**
-- Academic: 0.88 (exceeds min by 13 points)
-- Income: 0.28 (180k/250k = 0.72, so 1 - 0.72 = 0.28)
+- Academic: 1.0 (exceeds min by 13 points)
+- Income: 0.796 (0.3 + 0.7 × (1 − 180k/250k))
 - Field: 1.0 (exact match)
 - Geographic: 0.75 (region match)
 - Equity: 0.75 (1 priority group match)
-- Readiness: 0.6 (60%)
 
 **Base score:**
-(0.88×0.30 + 0.28×0.25 + 1.0×0.20 + 0.75×0.10 + 0.75×0.10 + 0.6×0.05) × 100 = 72.15
+(1.0×0.30 + 0.796×0.28 + 1.0×0.22 + 0.75×0.10 + 0.75×0.10) × 100 ≈ 86.99
 
-**Equity multiplier:** 1.08 (PWD)
-
-**Final score:** min(100, 72.15 × 1.08) = 77.92
+**Final score:** clamped to 0–100 ≈ **87.0**
 
 ---
 
@@ -175,13 +145,12 @@ scorer = WeightedDeterministicScorer(config=config)
 - At the top of each module: purpose and scope
 - For each scoring component function: input/output semantics and edge cases
 - For config fields: meaning and valid ranges
-- For equity multiplier logic: policy reference (RA numbers)
 
 **What must be documented:**
 - How missing data is handled (GWA, income)
 - How scholarship type affects income scoring (merit vs need)
 - How equity flags map to priority groups
-- The equity multiplier cap and why it exists
+- When geographic/field factors are excluded (not applicable)
 
 **How to modify weights safely:**
 1. Edit `ScoringConfig` or pass a custom config to `WeightedDeterministicScorer`

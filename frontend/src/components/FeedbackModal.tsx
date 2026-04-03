@@ -7,6 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { apiFetch } from "../api/client";
+import { useAuth } from "../contexts/AuthContext";
 
 export type FeedbackCategory = "bug" | "suggestion" | "experience";
 
@@ -111,17 +113,20 @@ interface FeedbackModalProps {
 }
 
 export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackModalProps) {
+  const { authHeaders } = useAuth();
   const [step, setStep] = useState<1 | 2>(1);
   const [category, setCategory] = useState<FeedbackCategory | null>(null);
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
     setSubmitted(false);
     setSubmitting(false);
+    setSubmitError(null);
     setMessage("");
     setEmail("");
     if (initialCategory) {
@@ -133,14 +138,31 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
     }
   }, [open, initialCategory]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!category || !message.trim()) return;
     setSubmitting(true);
-    // General product feedback has no dedicated API yet; acknowledge in UI.
-    window.setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError(null);
+    try {
+      const res = await apiFetch("/api/v1/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders() },
+        body: JSON.stringify({
+          category,
+          message: message.trim(),
+          contact_email: email.trim() || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(err?.detail ?? "Could not send feedback");
+      }
       setSubmitted(true);
-    }, 400);
+    } catch (e) {
+      setSubmitted(false);
+      setSubmitError(e instanceof Error ? e.message : "Could not send feedback");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const copy =
@@ -221,6 +243,11 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
                 </div>
               ) : (
                 <div className="space-y-4">
+                  {submitError ? (
+                    <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-800 dark:bg-red-900/30 dark:text-red-200">
+                      {submitError}
+                    </p>
+                  ) : null}
                   {category ? (
                     <>
                       <div>

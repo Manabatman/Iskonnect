@@ -62,14 +62,18 @@ export function ScholarshipSearchPage() {
     }
     setFindMatchesNavLoading(true);
     try {
-      const res = await apiFetch("/api/v1/profiles", { headers: authHeaders() });
-      if (!res.ok) throw new Error("Could not load your profile.");
-      const profiles = (await res.json()) as Array<{ id: number }>;
-      if (!Array.isArray(profiles) || profiles.length === 0) {
+      const res = await apiFetch("/api/v1/profiles/me", { headers: authHeaders() });
+      if (res.status === 404) {
         navigate("/profile-builder");
         return;
       }
-      navigate(`/match/${profiles[0].id}`);
+      if (!res.ok) throw new Error("Could not load your profile.");
+      const profile = (await res.json()) as { id: number };
+      if (!profile?.id) {
+        navigate("/profile-builder");
+        return;
+      }
+      navigate(`/match/${profile.id}`);
     } catch (e) {
       setCheckMatchError(e instanceof Error ? e.message : "Could not open matches.");
     } finally {
@@ -81,14 +85,18 @@ export function ScholarshipSearchPage() {
     if (matchCache) return matchCache;
     if (!inflightMatchMap.current) {
       inflightMatchMap.current = (async () => {
-        const res = await apiFetch("/api/v1/profiles", { headers: authHeaders() });
-        if (!res.ok) throw new Error("Could not load your profile.");
-        const profiles = (await res.json()) as Array<{ id: number }>;
-        if (!Array.isArray(profiles) || profiles.length === 0) {
+        const res = await apiFetch("/api/v1/profiles/me", { headers: authHeaders() });
+        if (res.status === 404) {
           navigate("/profile-builder");
           throw new Error("PROFILE_REQUIRED");
         }
-        const profileId = profiles[0].id;
+        if (!res.ok) throw new Error("Could not load your profile.");
+        const prof = (await res.json()) as { id: number };
+        if (!prof?.id) {
+          navigate("/profile-builder");
+          throw new Error("PROFILE_REQUIRED");
+        }
+        const profileId = prof.id;
         const mRes = await apiFetch(`/api/v1/matches/${profileId}`, { headers: authHeaders() });
         if (mRes.status === 401 || mRes.status === 403) {
           throw new Error("Session expired. Please sign in again.");

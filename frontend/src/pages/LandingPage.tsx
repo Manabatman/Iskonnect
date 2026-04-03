@@ -78,7 +78,7 @@ const featureHighlights = [
   },
   {
     title: "One profile, many programs",
-    body: "Build your profile once, then browse, match, and save opportunities without re-entering the same details.",
+    body: "Build your profile once, then browse, match, and save scholarships without re-entering the same details.",
     Icon: IconClipboard,
   },
   {
