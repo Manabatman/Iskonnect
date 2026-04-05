@@ -28,6 +28,18 @@ def _project_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def _validate_entry(row: dict) -> bool:
+    title = (row.get("title") or "").strip()
+    link = (row.get("link") or "").strip()
+    if not title or len(title) < 3:
+        return False
+    if not link.startswith("https://") and not link.startswith("http://"):
+        return False
+    if len(link) > 2048:
+        return False
+    return True
+
+
 def _parse_listing(html: str) -> list[dict]:
     soup = BeautifulSoup(html, "lxml")
     out: list[dict] = []
@@ -70,16 +82,32 @@ def run_scrape() -> Path:
 
     from datetime import datetime, timezone
 
+    from app.scrapers.run_logging import log_scraper_run
+
+    valid_rows = [r for r in rows if _validate_entry(r)]
+    if len(valid_rows) < len(rows):
+        logger.info("scrape_philscholar_filtered invalid=%s valid=%s", len(rows) - len(valid_rows), len(valid_rows))
+
     payload = [
         {
             **r,
             "scraped_at": datetime.now(timezone.utc).isoformat(),
             "scraper_version": "1.0",
         }
-        for r in rows
+        for r in valid_rows
     ]
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     logger.info("scrape_philscholar_wrote path=%s count=%s", out_path, len(payload))
+
+    status = "success" if payload else ("partial" if html else "failed")
+    err = None if html else "no_html_response"
+    log_scraper_run(
+        "philscholar",
+        status,
+        records_found=len(payload),
+        output_path=str(out_path),
+        error_detail=err,
+    )
     return out_path
 
 

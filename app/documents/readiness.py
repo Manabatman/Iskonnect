@@ -110,13 +110,14 @@ def compute_readiness(
     if not required:
         return ReadinessResult(state=ReadinessState.READY, ratio=1.0, missing=[])
 
-    # Build set of user uploaded doc types
+    # Count docs as satisfied when uploaded, ready, or submitted (checklist sync uses ready/submitted)
+    _SATISFIED_STATUSES = frozenset({"uploaded", "ready", "submitted"})
     uploaded_types = set()
     for doc in user_docs:
         if isinstance(doc, dict):
             doc_type = doc.get("type") or doc.get("doc_type")
             status = doc.get("status", "").lower()
-            if status == "uploaded" and doc_type:
+            if status in _SATISFIED_STATUSES and doc_type:
                 uploaded_types.add(_normalize_doc_type(str(doc_type)))
         elif isinstance(doc, str):
             uploaded_types.add(_normalize_doc_type(doc))

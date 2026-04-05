@@ -116,6 +116,24 @@ class StudentProfile(BaseModel):
         return v
 
 
+class GoogleDriveVaultUpdate(BaseModel):
+    """Update only the user's linked Google Drive folder (document vault)."""
+
+    google_drive_folder_url: Optional[str] = Field(default=None, max_length=2048)
+
+    @field_validator("google_drive_folder_url")
+    @classmethod
+    def validate_drive_url(cls, v: Optional[str]) -> Optional[str]:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return None
+        s = v.strip()
+        if not s.startswith("https://"):
+            raise ValueError("URL must use https://")
+        if "drive.google.com" not in s and "docs.google.com" not in s:
+            raise ValueError("URL must be a Google Drive or Docs link")
+        return s
+
+
 class StudentProfileResponse(BaseModel):
     id: int
     full_name: str
@@ -157,6 +175,7 @@ class StudentProfileResponse(BaseModel):
     documents: Optional[List[dict]] = []
     privacy_consent_at: Optional[datetime] = None
     privacy_consent_version: Optional[str] = None
+    google_drive_folder_url: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -409,6 +428,7 @@ class MatchRunSummary(BaseModel):
     profile_id: int
     created_at: datetime
     result_count: int
+    ph_created_at: Optional[str] = None  # Asia/Manila ISO for display
 
 
 class MatchRunDetail(BaseModel):
@@ -416,6 +436,7 @@ class MatchRunDetail(BaseModel):
     profile_id: int
     created_at: datetime
     results: List[MatchResponse]
+    ph_created_at: Optional[str] = None  # Asia/Manila ISO for display
 
 
 class MatchComparisonItem(BaseModel):

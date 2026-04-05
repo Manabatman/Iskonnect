@@ -120,6 +120,8 @@ export interface MatchRunSummary {
   id: number;
   profile_id: number;
   created_at: string;
+  /** Asia/Manila ISO from API (optional). */
+  ph_created_at?: string | null;
   result_count: number;
 }
 
@@ -147,6 +149,7 @@ export interface StudentProfileResponse {
   school?: string | null;
   needs?: string[];
   education_level?: string | null;
+  google_drive_folder_url?: string | null;
   [key: string]: unknown;
 }
 
@@ -169,6 +172,7 @@ export interface ScholarshipInfo {
   application_deadline?: string | null;
   application_open_date?: string | null;
   is_active?: boolean;
+  required_documents?: string[];
 }
 
 export interface ScholarshipSearchResponse {

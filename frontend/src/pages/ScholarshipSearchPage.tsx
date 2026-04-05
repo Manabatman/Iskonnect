@@ -73,7 +73,17 @@ export function ScholarshipSearchPage() {
         navigate("/profile-builder");
         return;
       }
-      navigate(`/match/${profile.id}`);
+      const runRes = await apiFetch("/api/v1/match-runs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders() },
+        body: JSON.stringify({ profile_id: profile.id }),
+      });
+      if (!runRes.ok) {
+        const data = await runRes.json().catch(() => null);
+        throw new Error((data as { detail?: string })?.detail ?? "Could not run matches.");
+      }
+      const data = (await runRes.json()) as { run_id: number };
+      navigate(`/match/${profile.id}?run=${data.run_id}`);
     } catch (e) {
       setCheckMatchError(e instanceof Error ? e.message : "Could not open matches.");
     } finally {
@@ -189,6 +199,11 @@ export function ScholarshipSearchPage() {
             {checkMatchError}
           </div>
         ) : null}
+
+        <p className="mb-4 text-xs text-slate-500 dark:text-slate-400">
+          <strong>Find My Matches</strong> runs a full match and saves it to your dashboard history.{" "}
+          <strong>Check my match</strong> on a card previews your score without creating a new saved run.
+        </p>
 
         <form onSubmit={handleSearchSubmit} className="relative mb-6">
           <label htmlFor="search-input" className="sr-only">

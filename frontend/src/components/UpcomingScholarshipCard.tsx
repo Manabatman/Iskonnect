@@ -1,24 +1,5 @@
 import type { UpcomingScholarship } from "../types";
-
-function formatDate(iso: string | null | undefined): string {
-  if (!iso) return "—";
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return iso;
-  }
-}
-
-function formatMonthYear(iso: string | null | undefined): string {
-  if (!iso) return "—";
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-  } catch {
-    return iso;
-  }
-}
+import { formatDateShort, formatMonthYear } from "../utils/formatDate";
 
 interface UpcomingScholarshipCardProps {
   scholarship: UpcomingScholarship;
@@ -61,7 +42,7 @@ export function UpcomingScholarshipCard({ scholarship }: UpcomingScholarshipCard
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span>Last opened: {formatDate(scholarship.last_open_date)}</span>
+              <span>Last opened: {formatDateShort(scholarship.last_open_date)}</span>
             </div>
           )}
           {scholarship.predicted_next_open && (

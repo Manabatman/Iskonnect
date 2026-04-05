@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { apiFetch, NetworkError } from "../api/client";
+import { formatDateMedium, formatDateTimeLong } from "../utils/formatDate";
 import type { SavedScholarship } from "../types";
 
 const APPLICATION_STATUSES = [
@@ -45,6 +46,7 @@ function statusLabel(s: string): string {
 
 function StatusChip({ status }: { status: string }) {
   const palette: Record<string, string> = {
+    removed: "bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-100",
     preparing: "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-100",
     submitted: "bg-blue-100 text-blue-900 dark:bg-blue-900/40 dark:text-blue-100",
     under_review: "bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-100",
@@ -72,6 +74,7 @@ export function ApplicationsPage() {
   const [eventsLoading, setEventsLoading] = useState<number | null>(null);
   const [creatingId, setCreatingId] = useState<number | null>(null);
   const [patchingId, setPatchingId] = useState<number | null>(null);
+  const [removingId, setRemovingId] = useState<number | null>(null);
 
   const loadAll = useCallback(async () => {
     if (!user) return;
@@ -157,6 +160,39 @@ export function ApplicationsPage() {
       setError(e instanceof Error ? e.message : "Could not create application");
     } finally {
       setCreatingId(null);
+    }
+  };
+
+  const removeEntry = async (applicationId: number) => {
+    if (
+      !window.confirm(
+        "Remove this entry? It will disappear from your list but your history stays on record (not deleted)."
+      )
+    ) {
+      return;
+    }
+    setRemovingId(applicationId);
+    setError(null);
+    try {
+      const res = await apiFetch(`/api/v1/applications/${applicationId}/remove`, {
+        method: "POST",
+        headers: authHeaders(),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(err?.detail ?? "Remove failed");
+      }
+      setApplications((prev) => prev.filter((a) => a.id !== applicationId));
+      setEventsByApp((prev) => {
+        const next = { ...prev };
+        delete next[applicationId];
+        return next;
+      });
+      if (expandedId === applicationId) setExpandedId(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Remove failed");
+    } finally {
+      setRemovingId(null);
     }
   };
 
@@ -267,9 +303,7 @@ export function ApplicationsPage() {
                         <p className="text-xs text-slate-500 dark:text-slate-400">{sch?.provider ?? "—"}</p>
                         <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
                           Deadline:{" "}
-                          {deadline
-                            ? new Date(deadline).toLocaleDateString(undefined, { dateStyle: "medium" })
-                            : "—"}
+                          {deadline ? formatDateMedium(deadline) : "—"}
                         </p>
                       </div>
                       <div className="flex flex-col gap-2 sm:items-end">
@@ -302,6 +336,14 @@ export function ApplicationsPage() {
                           >
                             Documents
                           </Link>
+                          <button
+                            type="button"
+                            disabled={removingId === app.id}
+                            onClick={() => void removeEntry(app.id)}
+                            className="rounded-lg border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950/40"
+                          >
+                            {removingId === app.id ? "Removing…" : "Remove"}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -321,7 +363,7 @@ export function ApplicationsPage() {
                                   {statusLabel(ev.to_status)}
                                 </span>
                                 <span className="ml-2 text-xs text-slate-500">
-                                  {new Date(ev.created_at).toLocaleString()}
+                                  {formatDateTimeLong(ev.created_at)}
                                 </span>
                                 {ev.note ? (
                                   <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{ev.note}</p>

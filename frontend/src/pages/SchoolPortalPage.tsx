@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { apiFetch, NetworkError } from "../api/client";
+import { formatDateTimeLong } from "../utils/formatDate";
 
 type VerificationRow = {
   id: number;
@@ -100,8 +101,8 @@ export function SchoolPortalPage() {
                     Application #{r.application_id} · {r.verification_type.replace(/_/g, " ")}
                   </p>
                   <p className="text-xs text-slate-500">
-                    Requested {new Date(r.requested_at).toLocaleString()}
-                    {r.verified_at ? ` · Resolved ${new Date(r.verified_at).toLocaleString()}` : ""}
+                    Requested {formatDateTimeLong(r.requested_at)}
+                    {r.verified_at ? ` · Resolved ${formatDateTimeLong(r.verified_at)}` : ""}
                   </p>
                   {r.notes ? <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{r.notes}</p> : null}
                 </div>

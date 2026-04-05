@@ -9,6 +9,8 @@ import hashlib
 import logging
 import secrets
 from datetime import datetime, timedelta, timezone
+
+from app.utils.timezone import utc_now_naive
 from typing import Annotated
 
 import bcrypt
@@ -86,7 +88,7 @@ def new_refresh_token_plain() -> str:
 def issue_refresh_token(db: Session, user_id: int) -> str:
     """Create refresh token row and return plaintext (show once to client)."""
     raw = new_refresh_token_plain()
-    exp = datetime.utcnow() + timedelta(days=settings.refresh_token_expire_days)
+    exp = utc_now_naive() + timedelta(days=settings.refresh_token_expire_days)
     row = models.RefreshToken(
         user_id=user_id,
         token_hash=hash_refresh_token(raw),
@@ -102,7 +104,7 @@ def revoke_refresh_token_plain(db: Session, raw: str) -> bool:
     row = db.query(models.RefreshToken).filter(models.RefreshToken.token_hash == h).first()
     if not row or row.revoked_at is not None:
         return False
-    row.revoked_at = datetime.utcnow()
+    row.revoked_at = utc_now_naive()
     return True
 
 
@@ -123,14 +125,14 @@ def consume_refresh_token_rotation(db: Session, raw: str) -> tuple[models.User, 
     if not row:
         return None
     # DB stores naive UTC datetimes for expires_at
-    if row.expires_at < datetime.utcnow():
+    if row.expires_at < utc_now_naive():
         return None
 
     user = db.query(models.User).filter(models.User.id == row.user_id).first()
     if not user:
         return None
 
-    row.revoked_at = datetime.utcnow()
+    row.revoked_at = utc_now_naive()
     new_plain = issue_refresh_token(db, user.id)
     db.commit()
     return user, new_plain

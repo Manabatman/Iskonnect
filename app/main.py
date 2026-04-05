@@ -10,6 +10,8 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.api.v1 import (
+    admin_extended,
+    ai_tools,
     analytics,
     applications,
     audit_routes,
@@ -74,6 +76,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.include_router(auth_routes.router, prefix="/api/v1")
 app.include_router(feedback_routes.router, prefix="/api/v1")
 app.include_router(applications.router, prefix="/api/v1")
+app.include_router(ai_tools.router, prefix="/api/v1")
 app.include_router(sponsor_portal.router, prefix="/api/v1")
 app.include_router(school_portal.router, prefix="/api/v1")
 app.include_router(profiles.router, prefix="/api/v1")
@@ -89,6 +92,7 @@ app.include_router(scoring_admin.router, prefix="/api/v1")
 app.include_router(audit_routes.router, prefix="/api/v1")
 app.include_router(notifications.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
+app.include_router(admin_extended.router, prefix="/api/v1")
 
 @app.on_event("startup")
 def run_migrations():
@@ -112,7 +116,7 @@ def run_migrations():
 
 @app.get("/health")
 def health(db: Session = Depends(get_db)):
-    checks = {"db": False, "cache": False}
+    checks: dict = {"db": False, "cache": False}
     try:
         db.execute(text("SELECT 1"))
         checks["db"] = True
@@ -128,7 +132,25 @@ def health(db: Session = Depends(get_db)):
             logger.warning("health_redis_check_failed: %s", e)
     else:
         checks["cache"] = True
-    overall = "ok" if all(checks.values()) else "degraded"
+
+    scraper_last = None
+    try:
+        from app import models
+
+        row = db.query(models.ScraperRun).order_by(models.ScraperRun.started_at.desc()).first()
+        if row:
+            scraper_last = {
+                "source": row.source,
+                "status": row.status,
+                "started_at": row.started_at.isoformat() if row.started_at else None,
+                "records_found": row.records_found,
+            }
+    except Exception:
+        pass
+    checks["scraper_last"] = scraper_last
+
+    core_ok = checks.get("db") and checks.get("cache")
+    overall = "ok" if core_ok else "degraded"
     return {"status": overall, "checks": checks}
 
 

@@ -1,5 +1,5 @@
 const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env;
-const API_BASE_URL = _env?.VITE_API_BASE_URL ?? "http://localhost:8000";
+export const API_BASE_URL = _env?.VITE_API_BASE_URL ?? "http://localhost:8000";
 if (!_env?.VITE_API_BASE_URL && typeof console !== "undefined") {
   console.warn(
     "[API] VITE_API_BASE_URL is not set; using http://localhost:8000. Set it in production builds.",

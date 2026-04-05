@@ -116,6 +116,18 @@ def main() -> None:
             f"Ingest complete: created={created}, skipped_duplicate={skipped_dup}, "
             f"skipped_invalid={skipped_inv}, skipped_already_live={skipped_live}"
         )
+        try:
+            from app.scrapers.run_logging import log_scraper_run
+
+            log_scraper_run(
+                "philscholar_ingest",
+                "success",
+                records_found=len(data),
+                records_ingested=created,
+                output_path=str(path),
+            )
+        except Exception as log_err:
+            logger.warning("ingest_scraper_log_failed err=%s", log_err)
     finally:
         db.close()
 

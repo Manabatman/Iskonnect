@@ -241,7 +241,11 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
 
   const formatNotifTime = (iso: string) => {
     try {
-      return new Date(iso).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" });
+      return new Date(iso).toLocaleString("en-PH", {
+        timeZone: "Asia/Manila",
+        dateStyle: "short",
+        timeStyle: "short",
+      });
     } catch {
       return iso;
     }

@@ -17,7 +17,7 @@ export function NeedsCategoryAccordion({
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     categories.forEach((c) => {
-      init[c.label] = false;
+      init[c.label] = true;
     });
     return init;
   });

@@ -66,6 +66,7 @@ def _profile_to_response(p):
         "documents": parse_json(getattr(p, "documents", None), default=[]),
         "privacy_consent_at": p.privacy_consent_at.isoformat() if getattr(p, "privacy_consent_at", None) else None,
         "privacy_consent_version": getattr(p, "privacy_consent_version", None),
+        "google_drive_folder_url": getattr(p, "google_drive_folder_url", None),
     }
 
 
@@ -189,6 +190,36 @@ def put_my_profile(
         resource_type="student",
         resource_id=existing.id,
         details={"email": u.email},
+        ip_address=request.client.host if request.client else None,
+    )
+    return _profile_to_response(existing)
+
+
+@router.patch("/profiles/me/vault", response_model=schemas.StudentProfileResponse)
+@limiter.limit("30/minute")
+def patch_drive_vault(
+    request: Request,
+    body: schemas.GoogleDriveVaultUpdate,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """Set or clear the Google Drive folder URL used for the document vault."""
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    existing = db.query(models.Student).filter(models.Student.user_id == user_id).first()
+    if not existing:
+        raise HTTPException(status_code=404, detail="No profile yet. Complete the profile builder.")
+    existing.google_drive_folder_url = body.google_drive_folder_url
+    db.commit()
+    db.refresh(existing)
+    log_action(
+        db,
+        actor_id=user_id,
+        actor_type="user",
+        action="profile.vault_update",
+        resource_type="student",
+        resource_id=existing.id,
+        details={"has_url": bool(body.google_drive_folder_url)},
         ip_address=request.client.host if request.client else None,
     )
     return _profile_to_response(existing)
