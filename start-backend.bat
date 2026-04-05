@@ -28,5 +28,5 @@ python free_port.py 8000
 
 REM Start backend server
 echo Starting backend server on http://localhost:8000
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 pause

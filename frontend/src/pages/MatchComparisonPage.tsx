@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import type { MatchComparisonResponse } from "../types";
 import { apiFetch } from "../api/client";
+import { formatDateTime } from "../utils/formatDate";
 
 export function MatchComparisonPage() {
   const [searchParams] = useSearchParams();
@@ -47,13 +48,8 @@ export function MatchComparisonPage() {
     };
   }, [runA, runB, user, authHeaders]);
 
-  const formatDate = (s: string) => {
-    try {
-      return new Date(s).toLocaleString();
-    } catch {
-      return s;
-    }
-  };
+  const formatRunTime = (run: { created_at: string; ph_created_at?: string | null }) =>
+    formatDateTime(run.ph_created_at ?? run.created_at);
 
   const formatScore = (v: number | null | undefined) =>
     v != null ? v.toFixed(1) : "—";
@@ -113,7 +109,7 @@ export function MatchComparisonPage() {
               Run A
             </h3>
             <p className="mt-1 text-slate-900 dark:text-slate-100">
-              {formatDate(data.run_a.created_at)}
+              {formatRunTime(data.run_a)}
             </p>
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {data.run_a.result_count} matches
@@ -124,7 +120,7 @@ export function MatchComparisonPage() {
               Run B
             </h3>
             <p className="mt-1 text-slate-900 dark:text-slate-100">
-              {formatDate(data.run_b.created_at)}
+              {formatRunTime(data.run_b)}
             </p>
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {data.run_b.result_count} matches

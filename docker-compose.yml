@@ -18,6 +18,7 @@ services:
 
   api:
     build: .
+    user: "0:0"
     ports:
       - "8000:8000"
     environment:
@@ -26,6 +27,7 @@ services:
       ENVIRONMENT: development
       SECRET_KEY: dev-docker-secret-change-me
       CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+      PORT: "8000"
     depends_on:
       - db
       - redis

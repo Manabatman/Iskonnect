@@ -1,0 +1,26 @@
+# Daily scrape → raw JSON → staging (requires DATABASE_URL secret: Supabase pooler URI).
+name: Daily scholarship scrape
+
+on:
+  schedule:
+    - cron: "0 19 * * *" # ~3:00 PHT (adjust for DST if needed)
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run PhilScholar scraper
+        run: python -m app.scrapers.scrape_philscholar
+      - name: Ingest into staging
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          python -m app.scripts.ingest_scraped --source "data/raw/philscholar_$(date +%Y-%m-%d).json"

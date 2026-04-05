@@ -40,6 +40,8 @@ export function AutocompleteInput({
   const extraParamsRef = useRef(extraParams);
   extraParamsRef.current = extraParams;
   const justSelectedRef = useRef(false);
+  /** True only after the user types in this field — avoids dropdown on mount/focus with pre-filled value */
+  const userInteractedRef = useRef(false);
 
   const debouncedQuery = useDebounce(value, DEBOUNCE_MS);
 
@@ -77,13 +79,16 @@ export function AutocompleteInput({
       justSelectedRef.current = false;
       return;
     }
-    if (debouncedQuery) {
-      fetchSuggestions(debouncedQuery);
-      setIsOpen(true);
-    } else {
+    if (!debouncedQuery.trim()) {
       setSuggestions([]);
       setIsOpen(false);
+      return;
     }
+    if (!userInteractedRef.current) {
+      return;
+    }
+    fetchSuggestions(debouncedQuery);
+    setIsOpen(true);
   }, [debouncedQuery, fetchSuggestions]);
 
   const handleBlur = () => {
@@ -92,6 +97,7 @@ export function AutocompleteInput({
 
   const handleSelect = (item: string) => {
     justSelectedRef.current = true;
+    userInteractedRef.current = false;
     onChange(name, item);
     setIsOpen(false);
     setSuggestions([]);
@@ -148,8 +154,15 @@ export function AutocompleteInput({
           name={name}
           type="text"
           value={value}
-          onChange={(e) => onChange(name, e.target.value)}
-          onFocus={() => value.trim() && setIsOpen(true)}
+          onChange={(e) => {
+            userInteractedRef.current = true;
+            onChange(name, e.target.value);
+          }}
+          onFocus={() => {
+            if (userInteractedRef.current && value.trim()) {
+              setIsOpen(true);
+            }
+          }}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}

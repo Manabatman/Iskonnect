@@ -5,6 +5,12 @@ Provides in-memory SQLite engine/session and optional FastAPI TestClient
 for integration tests that need a database.
 """
 
+import os
+
+# Avoid Alembic upgrading the developer's DATABASE_URL during TestClient lifespan
+# (schema for tests comes from Base.metadata.create_all on the in-memory engine).
+os.environ.setdefault("RUN_MIGRATIONS_ON_STARTUP", "false")
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine

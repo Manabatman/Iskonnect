@@ -14,6 +14,7 @@ from app.api.v1.matches import _match_service_for_db
 from app.api.v1.profiles import get_profile_dict
 from app.api.v1.scholarships import get_cached_scholarship_dicts
 from app.utils.notification_helpers import create_notifications_for_match_results
+from app.utils.timezone import to_philippine_iso
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -153,6 +154,7 @@ def create_match_run(
         "run_id": run.id,
         "profile_id": body.profile_id,
         "created_at": run.created_at.isoformat(),
+        "ph_created_at": to_philippine_iso(run.created_at),
         "matches": results,
         "diagnostics": diagnostics,
     }
@@ -206,8 +208,20 @@ def compare_match_runs(
     count_a = len(res_a)
     count_b = len(res_b)
     return schemas.MatchComparisonResponse(
-        run_a=schemas.MatchRunSummary(id=run_a_obj.id, profile_id=run_a_obj.profile_id, created_at=run_a_obj.created_at, result_count=count_a),
-        run_b=schemas.MatchRunSummary(id=run_b_obj.id, profile_id=run_b_obj.profile_id, created_at=run_b_obj.created_at, result_count=count_b),
+        run_a=schemas.MatchRunSummary(
+            id=run_a_obj.id,
+            profile_id=run_a_obj.profile_id,
+            created_at=run_a_obj.created_at,
+            result_count=count_a,
+            ph_created_at=to_philippine_iso(run_a_obj.created_at),
+        ),
+        run_b=schemas.MatchRunSummary(
+            id=run_b_obj.id,
+            profile_id=run_b_obj.profile_id,
+            created_at=run_b_obj.created_at,
+            result_count=count_b,
+            ph_created_at=to_philippine_iso(run_b_obj.created_at),
+        ),
         items=items,
     )
 
@@ -224,7 +238,15 @@ def list_match_runs(
     out = []
     for r in runs:
         count = db.query(models.MatchResult).filter(models.MatchResult.run_id == r.id).count()
-        out.append(schemas.MatchRunSummary(id=r.id, profile_id=r.profile_id, created_at=r.created_at, result_count=count))
+        out.append(
+            schemas.MatchRunSummary(
+                id=r.id,
+                profile_id=r.profile_id,
+                created_at=r.created_at,
+                result_count=count,
+                ph_created_at=to_philippine_iso(r.created_at),
+            )
+        )
     return out
 
 
@@ -252,4 +274,10 @@ def get_match_run(
         if s:
             match_responses.append(_result_to_match_response(r, s))
 
-    return schemas.MatchRunDetail(id=run.id, profile_id=run.profile_id, created_at=run.created_at, results=match_responses)
+    return schemas.MatchRunDetail(
+        id=run.id,
+        profile_id=run.profile_id,
+        created_at=run.created_at,
+        results=match_responses,
+        ph_created_at=to_philippine_iso(run.created_at),
+    )

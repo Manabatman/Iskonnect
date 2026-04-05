@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
+import { formatDate } from "../utils/formatDate";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -49,16 +50,6 @@ interface ScholarshipDetail {
   data_status?: string | null;
   link_status?: string | null;
   verification_source?: string | null;
-}
-
-function formatDate(d: string | null | undefined): string {
-  if (!d) return "—";
-  try {
-    const date = new Date(d);
-    return date.toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" });
-  } catch {
-    return String(d);
-  }
 }
 
 const ISSUE_TYPES = [

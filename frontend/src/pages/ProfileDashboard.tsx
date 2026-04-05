@@ -4,7 +4,16 @@ import { useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchResult, MatchRunSummary, SavedScholarship, StudentProfileResponse } from "../types";
 import { NetworkError, apiFetch } from "../api/client";
+import {
+  formatDateMedium,
+  formatDateTime,
+  formatRelativeManila,
+  startOfTodayManila,
+} from "../utils/formatDate";
 import { MatchScoreRing } from "../components/MatchScoreRing";
+import { CareerRoadmapCard } from "../components/dashboard/CareerRoadmapCard";
+import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
+import { ReviewCenterFinderCard } from "../components/dashboard/ReviewCenterFinderCard";
 
 function IconGraduationCap({ className }: { className?: string }) {
   return (
@@ -42,7 +51,22 @@ function insertRunSorted(prev: MatchRunSummary[], run: MatchRunSummary): MatchRu
 function formatDeadlineShort(iso: string | null | undefined): string | null {
   if (!iso) return null;
   try {
-    return new Date(iso).toLocaleDateString(undefined, { dateStyle: "medium" });
+    return formatDateMedium(iso);
+  } catch {
+    return null;
+  }
+}
+
+function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upcoming" | "later" | null {
+  if (!deadlineIso) return null;
+  try {
+    const d = new Date(deadlineIso);
+    const today = startOfTodayManila();
+    const diffDays = Math.ceil((d.getTime() - today.getTime()) / 86400000);
+    if (diffDays < 0) return null;
+    if (diffDays <= 7) return "soon";
+    if (diffDays <= 30) return "upcoming";
+    return "later";
   } catch {
     return null;
   }
@@ -75,13 +99,6 @@ export function ProfileDashboard() {
   const [loading, setLoading] = useState(true);
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [studentSummary, setStudentSummary] = useState<{
-    applications_by_status: Record<string, number>;
-    saved_scholarships_count: number;
-    has_profile: boolean;
-    match_runs_count: number;
-  } | null>(null);
-  const [readinessTips, setReadinessTips] = useState<string[]>([]);
   const { toggleSave } = useSavedScholarships();
 
   const completeness = useMemo(() => profileCompleteness(profile ?? undefined), [profile]);
@@ -124,29 +141,6 @@ export function ProfileDashboard() {
         setSavedLoading(false);
       });
   }, [user, authHeaders]);
-
-  useEffect(() => {
-    if (!user) {
-      setStudentSummary(null);
-      return;
-    }
-    const headers = authHeaders();
-    apiFetch("/api/v1/analytics/student-summary", { headers })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => setStudentSummary(d))
-      .catch(() => setStudentSummary(null));
-  }, [user, authHeaders]);
-
-  useEffect(() => {
-    if (!user || !profile?.id) {
-      setReadinessTips([]);
-      return;
-    }
-    apiFetch(`/api/v1/suggestions/readiness?profile_id=${profile.id}`, { headers: authHeaders() })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => setReadinessTips(Array.isArray(d?.suggestions) ? d.suggestions : []))
-      .catch(() => setReadinessTips([]));
-  }, [user, profile?.id, authHeaders]);
 
   useEffect(() => {
     if (!user || runs.length === 0) {
@@ -197,6 +191,7 @@ export function ProfileDashboard() {
           id: data.run_id,
           profile_id: data.profile_id,
           created_at: data.created_at,
+          ph_created_at: data.ph_created_at ?? null,
           result_count: data.matches?.length ?? 0,
         },
         ...prev,
@@ -267,16 +262,13 @@ export function ProfileDashboard() {
     }
   };
 
-  const formatDate = (s: string) => {
-    try {
-      return new Date(s).toLocaleString();
-    } catch {
-      return s;
-    }
+  const formatRunDate = (run: MatchRunSummary) => {
+    const s = run.ph_created_at ?? run.created_at;
+    return formatDateTime(s);
   };
 
   const upcomingDeadlines = useMemo(() => {
-    const today = new Date();
+    const today = startOfTodayManila();
     today.setHours(0, 0, 0, 0);
     return saved
       .map((item) => ({
@@ -291,7 +283,7 @@ export function ProfileDashboard() {
   }, [saved]);
 
   const reminders = useMemo(() => {
-    const today = new Date();
+    const today = startOfTodayManila();
     const in14 = new Date(today);
     in14.setDate(in14.getDate() + 14);
     return upcomingDeadlines.filter((x) => x.deadline && x.deadline <= in14);
@@ -369,8 +361,14 @@ export function ProfileDashboard() {
               </div>
             </div>
 
-            {/* Next steps */}
-            <div className="grid gap-4 sm:grid-cols-2">
+            {/* Next steps: applications + documents — 2-col when Profile card hidden to avoid empty third column */}
+            <div
+              className={
+                completeness < 100
+                  ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                  : "grid gap-4 sm:grid-cols-2"
+              }
+            >
               {completeness < 100 ? (
                 <Link
                   to="/profile-builder"
@@ -392,59 +390,29 @@ export function ProfileDashboard() {
                 </span>
                 <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Track applications</span>
                 <span className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                  Server-backed status, timelines, and document checklists.
+                  Status, timelines, and per-scholarship document checklists.
+                </span>
+              </Link>
+              <Link
+                to="/documents"
+                className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <span className="text-xs font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+                  Documents
+                </span>
+                <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Document checklist</span>
+                <span className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  Per-application checklist, Drive folder links, and upload shortcuts (files stay in your Drive).
                 </span>
               </Link>
             </div>
 
-            {(studentSummary || readinessTips.length > 0) && (
-              <div className="glass rounded-2xl p-5 shadow-sm">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Your progress</h3>
-                {studentSummary ? (
-                  <ul className="mt-3 grid gap-2 text-sm text-slate-600 dark:text-slate-400 sm:grid-cols-2">
-                    <li>
-                      Saved scholarships:{" "}
-                      <strong className="text-slate-900 dark:text-slate-100">
-                        {studentSummary.saved_scholarships_count}
-                      </strong>
-                    </li>
-                    <li>
-                      Match runs:{" "}
-                      <strong className="text-slate-900 dark:text-slate-100">
-                        {studentSummary.match_runs_count}
-                      </strong>
-                    </li>
-                    <li className="sm:col-span-2">
-                      Tracked applications:{" "}
-                      <strong className="text-slate-900 dark:text-slate-100">
-                        {Object.values(studentSummary.applications_by_status).reduce((a, b) => a + b, 0)}
-                      </strong>
-                      {Object.keys(studentSummary.applications_by_status).length > 0 ? (
-                        <span className="ml-1 text-xs opacity-80">
-                          (
-                          {Object.entries(studentSummary.applications_by_status)
-                            .map(([k, v]) => `${k.replace(/_/g, " ")}: ${v}`)
-                            .join(" · ")}
-                          )
-                        </span>
-                      ) : null}
-                    </li>
-                  </ul>
-                ) : null}
-                {readinessTips.length > 0 ? (
-                  <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-600">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">
-                      Readiness suggestions
-                    </p>
-                    <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-slate-600 dark:text-slate-400">
-                      {readinessTips.slice(0, 4).map((t) => (
-                        <li key={t}>{t}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </div>
-            )}
+            <div className="grid gap-6 lg:grid-cols-2">
+              <FinancialPlannerCard saved={saved} />
+              <ReviewCenterFinderCard defaultLocation={profile?.region ?? ""} />
+            </div>
+
+            <CareerRoadmapCard profileEducationLevel={profile?.education_level ?? undefined} />
 
             {/* Recommended matches */}
             <div className="glass rounded-2xl p-6 shadow-md">
@@ -527,32 +495,87 @@ export function ProfileDashboard() {
               )}
             </div>
 
-            {/* Profile summary */}
+            {/* Saved scholarships (above match history, most recent saved first) */}
             <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Your profile</h3>
-              {loading ? (
-                <div className="mt-4 h-20 animate-pulse rounded bg-slate-100 dark:bg-slate-700" />
-              ) : !profile ? (
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Saved Scholarships</h3>
+              {savedLoading ? (
+                <div className="mt-4 h-24 animate-pulse rounded bg-slate-100 dark:bg-slate-700" />
+              ) : saved.length === 0 ? (
                 <p className="mt-4 text-slate-600 dark:text-slate-400">
-                  No profile yet.{" "}
-                  <Link to="/profile-builder" className="font-medium text-primary-600 hover:text-primary-700">
-                    Complete your profile
-                  </Link>
+                  No saved scholarships yet.{" "}
+                  <Link to="/scholarships/search" className="font-medium text-primary-600 hover:text-primary-700">
+                    Browse scholarships
+                  </Link>{" "}
+                  to save some.
                 </p>
               ) : (
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
-                  <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-100">{profile.full_name}</p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {profile.email} • {profile.region ?? "—"} • {profile.education_level ?? "—"}
-                    </p>
-                  </div>
-                  <Link
-                    to="/profile-builder"
-                    className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600"
-                  >
-                    Edit Profile
-                  </Link>
+                <div className="mt-5 space-y-4">
+                  {[...saved]
+                    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                    .map((item) => {
+                      const sch = item.scholarship;
+                      const urgency = deadlineUrgency(sch?.application_deadline ?? null);
+                      const typeLabel = sch?.scholarship_type?.trim() || "Scholarship";
+                      return (
+                        <div
+                          key={item.id}
+                          className="group relative rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition hover:border-primary-300 hover:bg-white hover:shadow-md dark:border-slate-600 dark:bg-slate-900/30 dark:hover:border-primary-600/50 dark:hover:bg-slate-900/60"
+                        >
+                          <div className="flex flex-wrap items-start justify-between gap-3">
+                            <div className="min-w-0 flex-1 space-y-2">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="inline-flex rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
+                                  {typeLabel}
+                                </span>
+                                {urgency === "soon" ? (
+                                  <span className="inline-flex rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-semibold text-red-800 dark:bg-red-900/40 dark:text-red-200">
+                                    Deadline soon
+                                  </span>
+                                ) : urgency === "upcoming" ? (
+                                  <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-900 dark:bg-amber-900/40 dark:text-amber-100">
+                                    Deadline within 30 days
+                                  </span>
+                                ) : urgency === "later" ? (
+                                  <span className="inline-flex rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
+                                    Deadline clear
+                                  </span>
+                                ) : null}
+                              </div>
+                              <Link
+                                to={`/scholarship/${item.scholarship_id}`}
+                                className="block font-semibold text-slate-900 hover:text-primary-600 dark:text-slate-100 dark:hover:text-primary-400"
+                              >
+                                {sch?.title ?? `Scholarship #${item.scholarship_id}`}
+                              </Link>
+                              <p className="text-sm text-slate-600 dark:text-slate-400">{sch?.provider ?? "—"}</p>
+                              {sch?.application_deadline ? (
+                                <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                  Deadline: {formatDateMedium(sch.application_deadline)}
+                                </p>
+                              ) : null}
+                            </div>
+                            <div className="flex shrink-0 gap-2 opacity-100 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
+                              <Link
+                                to={`/scholarship/${item.scholarship_id}`}
+                                className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                              >
+                                View
+                              </Link>
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  await toggleSave(item.scholarship_id);
+                                  setSaved((prev) => prev.filter((x) => x.scholarship_id !== item.scholarship_id));
+                                }}
+                                className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:bg-slate-800 dark:text-red-300 dark:hover:bg-red-950/30"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                 </div>
               )}
             </div>
@@ -560,7 +583,7 @@ export function ProfileDashboard() {
             {/* Match history */}
             <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Your Match History</h3>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Your Match History</h3>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -610,108 +633,59 @@ export function ProfileDashboard() {
                     </>
                   ) : null}
                   <div
-                    className="max-h-[320px] space-y-2 overflow-y-auto scroll-smooth pr-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600"
+                    className="max-h-[360px] space-y-3 overflow-y-auto scroll-smooth pr-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600"
                   >
-                    {runs.map((run) => (
-                      <div
-                        key={run.id}
-                        className="flex items-center gap-4 rounded-lg border border-slate-200 p-3 transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-700/50"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedRuns.has(run.id)}
-                          onChange={() => toggleRunSelection(run.id)}
-                          className="rounded border-slate-300 text-primary-600"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <span className="font-medium text-slate-900 dark:text-slate-100">
-                            {formatDate(run.created_at)}
-                          </span>
-                          <span className="ml-2 text-sm text-slate-500 dark:text-slate-400">
-                            {run.result_count} matches
-                          </span>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-2">
-                          <Link
-                            to={`/match/${run.profile_id}?run=${run.id}`}
-                            className="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-                          >
-                            View Results
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => void handleDeleteMatchRun(run)}
-                            className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-200 hover:text-red-600 dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-red-400"
-                            aria-label={`Delete match run from ${formatDate(run.created_at)}`}
-                          >
-                            <IconTrash className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Saved */}
-            <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Saved Scholarships</h3>
-              {savedLoading ? (
-                <div className="mt-4 h-24 animate-pulse rounded bg-slate-100 dark:bg-slate-700" />
-              ) : saved.length === 0 ? (
-                <p className="mt-4 text-slate-600 dark:text-slate-400">
-                  No saved scholarships yet.{" "}
-                  <Link to="/scholarships/search" className="font-medium text-primary-600 hover:text-primary-700">
-                    Browse scholarships
-                  </Link>{" "}
-                  to save some.
-                </p>
-              ) : (
-                <div className="mt-4 space-y-3">
-                  {saved.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 p-3 dark:border-slate-700"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <Link
-                          to={`/scholarship/${item.scholarship_id}`}
-                          className="font-medium text-slate-900 hover:text-primary-600 dark:text-slate-100 dark:hover:text-primary-400"
+                    {runs.map((run) => {
+                      const runTs = run.ph_created_at ?? run.created_at;
+                      return (
+                        <div
+                          key={run.id}
+                          className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 shadow-sm transition hover:border-primary-200 hover:bg-white dark:border-slate-600 dark:bg-slate-900/40 dark:hover:border-primary-800"
                         >
-                          {item.scholarship?.title ?? `Scholarship #${item.scholarship_id}`}
-                        </Link>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          {item.scholarship?.provider ?? "—"}
-                          {item.scholarship?.application_deadline && (
-                            <>
-                              {" "}
-                              • Deadline: {new Date(item.scholarship.application_deadline).toLocaleDateString()}
-                            </>
-                          )}
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          await toggleSave(item.scholarship_id);
-                          setSaved((prev) => prev.filter((x) => x.scholarship_id !== item.scholarship_id));
-                        }}
-                        className="shrink-0 rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
-                        title="Remove from saved"
-                        aria-label="Remove from saved"
-                      >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
+                          <div className="flex flex-wrap items-start gap-3">
+                            <input
+                              type="checkbox"
+                              checked={selectedRuns.has(run.id)}
+                              onChange={() => toggleRunSelection(run.id)}
+                              className="mt-1 rounded border-slate-300 text-primary-600"
+                              aria-label="Select for compare"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                {formatRelativeManila(runTs)}
+                              </p>
+                              <p className="mt-0.5 text-base font-semibold text-slate-900 dark:text-slate-100">
+                                {formatRunDate(run)}
+                              </p>
+                              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                                <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-0.5 text-xs font-bold text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
+                                  {run.result_count} matches
+                                </span>
+                              </p>
+                            </div>
+                            <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:items-end">
+                              <Link
+                                to={`/match/${run.profile_id}?run=${run.id}`}
+                                className="inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-center text-sm font-bold text-white shadow hover:bg-primary-700"
+                              >
+                                View results
+                              </Link>
+                              <button
+                                type="button"
+                                onClick={() => void handleDeleteMatchRun(run)}
+                                className="text-xs font-medium text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
+                                aria-label={`Delete match run from ${formatRunDate(run)}`}
+                              >
+                                <span className="inline-flex items-center gap-1">
+                                  <IconTrash className="h-3.5 w-3.5" /> Remove run
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
@@ -719,52 +693,6 @@ export function ProfileDashboard() {
 
           {/* Right column */}
           <aside className="mt-8 space-y-6 lg:mt-0">
-            <div className="glass rounded-2xl p-5 shadow-md">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                At a glance
-              </h3>
-              <dl className="mt-3 space-y-3 text-sm">
-                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-3 dark:border-slate-700">
-                  <dt className="text-slate-600 dark:text-slate-400">Profile strength</dt>
-                  <dd className="font-semibold text-slate-900 dark:text-slate-100">{completeness}%</dd>
-                </div>
-                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-3 dark:border-slate-700">
-                  <dt className="text-slate-600 dark:text-slate-400">Saved programs</dt>
-                  <dd className="font-semibold text-slate-900 dark:text-slate-100">{saved.length}</dd>
-                </div>
-                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-3 dark:border-slate-700">
-                  <dt className="text-slate-600 dark:text-slate-400">Match runs</dt>
-                  <dd className="font-semibold text-slate-900 dark:text-slate-100">{runs.length}</dd>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <dt className="text-slate-600 dark:text-slate-400">Latest run results</dt>
-                  <dd className="font-semibold text-slate-900 dark:text-slate-100">
-                    {runs[0]?.result_count ?? "—"}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-md dark:border-slate-700 dark:bg-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-xl font-bold text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
-                  {(profile?.full_name?.[0] || user.email?.[0] || "?").toUpperCase()}
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate font-semibold text-slate-900 dark:text-slate-100">
-                    {profile?.full_name || "Your profile"}
-                  </p>
-                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
-                </div>
-              </div>
-              <Link
-                to="/profile-builder"
-                className="mt-4 block w-full rounded-lg border border-slate-300 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
-              >
-                Edit Profile
-              </Link>
-            </div>
-
             <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-md dark:border-slate-700 dark:bg-slate-800">
               <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 Upcoming deadlines
@@ -784,7 +712,9 @@ export function ProfileDashboard() {
                         {item.scholarship?.title ?? `#${item.scholarship_id}`}
                       </Link>
                       <p className="text-xs text-slate-500">
-                        {item.deadline?.toLocaleDateString(undefined, { dateStyle: "medium" })}
+                        {item.scholarship?.application_deadline
+                          ? formatDateMedium(item.scholarship.application_deadline)
+                          : ""}
                       </p>
                     </li>
                   ))}
@@ -803,7 +733,10 @@ export function ProfileDashboard() {
                       <Link to={`/scholarship/${item.scholarship_id}`} className="underline">
                         {item.scholarship?.title}
                       </Link>{" "}
-                      — {item.deadline?.toLocaleDateString()}
+                      —{" "}
+                      {item.scholarship?.application_deadline
+                        ? formatDateMedium(item.scholarship.application_deadline)
+                        : ""}
                     </li>
                   ))}
                 </ul>

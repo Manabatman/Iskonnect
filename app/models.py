@@ -143,6 +143,7 @@ class Student(Base):
     needs = Column(Text)  # JSON-encoded list (legacy)
     privacy_consent_at = Column(DateTime, nullable=True)
     privacy_consent_version = Column(String, nullable=True)
+    google_drive_folder_url = Column(String(2048), nullable=True)
 
 
 class Scholarship(Base):
@@ -364,6 +365,8 @@ class Application(Base):
     scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
     status = Column(String(64), nullable=False, server_default="preparing")
     notes = Column(Text, nullable=True)
+    drive_folder_url = Column(String(2048), nullable=True)
+    removed_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
@@ -423,3 +426,19 @@ class ProductFeedback(Base):
     message = Column(Text, nullable=False)
     contact_email = Column(String(255), nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class ScraperRun(Base):
+    """One execution of a catalog scraper (observability)."""
+
+    __tablename__ = "scraper_runs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    source = Column(String(64), nullable=False, index=True)
+    started_at = Column(DateTime, server_default=func.now(), nullable=False)
+    completed_at = Column(DateTime, nullable=True)
+    status = Column(String(32), nullable=False, server_default="running")
+    records_found = Column(Integer, nullable=True)
+    records_ingested = Column(Integer, nullable=True)
+    output_path = Column(String(1024), nullable=True)
+    error_detail = Column(Text, nullable=True)

@@ -87,7 +87,7 @@ export function EligibilityGoalsStep({ state, onChange }: EligibilityStepProps) 
           })}
         </div>
         <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-          Select if you belong to any priority group for scholarship matching.
+          Select any that apply for better matching. These are optional for your profile completion percentage.
         </p>
       </div>
 

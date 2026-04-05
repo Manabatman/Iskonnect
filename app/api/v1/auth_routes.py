@@ -1,7 +1,7 @@
 """Auth endpoints: register, login, refresh, logout, password reset, email verification."""
 
 import logging
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
@@ -25,6 +25,7 @@ from app.config import settings
 from app.db import get_db
 from app.limiter import limiter
 from app import models
+from app.utils.timezone import utc_now_naive
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -223,7 +224,7 @@ def forgot_password(
     if user:
         raw = new_refresh_token_plain()
         user.password_reset_token_hash = hash_refresh_token(raw)
-        user.password_reset_expires_at = datetime.utcnow() + timedelta(hours=1)
+        user.password_reset_expires_at = utc_now_naive() + timedelta(hours=1)
         db.commit()
         logger.info(
             "password_reset_token_issued user_id=%s token_prefix=%s... (email link in production)",
@@ -245,7 +246,7 @@ def reset_password(
     user = db.query(models.User).filter(models.User.password_reset_token_hash == h).first()
     if not user or not user.password_reset_expires_at:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
-    if user.password_reset_expires_at < datetime.utcnow():
+    if user.password_reset_expires_at < utc_now_naive():
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
     user.password_hash = hash_password(body.new_password)
     user.password_reset_token_hash = None
@@ -269,7 +270,7 @@ def verify_email(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     user.email_verified = True
-    user.email_verified_at = datetime.utcnow()
+    user.email_verified_at = utc_now_naive()
     db.commit()
     return {"detail": "Email verified."}
 

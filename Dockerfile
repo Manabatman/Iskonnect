@@ -1,4 +1,5 @@
-# ISKONNECT API — production-style image (adjust DATABASE_URL at runtime)
+# ISKONNECT API — Docker image (Vercel + Render + Hugging Face Spaces).
+# HF Spaces sets PORT=7860; local/docker-compose typically uses 8000.
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -12,7 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV PYTHONUNBUFFERED=1
-EXPOSE 8000
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8000 7860
+
+# shell form so PORT from the platform is honored (HF Spaces uses 7860)
+CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"

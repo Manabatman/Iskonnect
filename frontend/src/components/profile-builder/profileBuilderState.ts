@@ -43,6 +43,27 @@ export interface ProfileBuilderState {
 
 export const DRAFT_KEY = "iskonnect_profile_draft";
 
+/** Not counted toward profile-builder completion % (optional UX fields). */
+export const OPTIONAL_PROFILE_FIELDS = new Set<keyof ProfileBuilderState>([
+  "barangay",
+  "target_school",
+  "preferred_course_2",
+  "preferred_course_3",
+  "extracurriculars",
+  "awards",
+]);
+
+/** RA priority flags — any number can apply; not required for 100% completion. */
+export const PRIORITY_GROUP_FIELDS: (keyof ProfileBuilderState)[] = [
+  "is_underprivileged",
+  "is_pwd",
+  "is_indigenous_people",
+  "is_solo_parent_dependent",
+  "is_ofw_dependent",
+  "is_farmer_fisher_dependent",
+  "is_4ps_listahanan",
+];
+
 export const INITIAL_STATE: ProfileBuilderState = {
   full_name: "",
   email: "",
@@ -112,7 +133,7 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
       "target_school",
       "gwa_raw",
       "gwa_scale",
-    ],
+    ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
     id: 3,
@@ -126,7 +147,7 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
       "household_income_annual",
       "income_bracket",
       "parent_occupation",
-    ],
+    ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
     id: 4,
@@ -140,23 +161,14 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
       "preferred_course_3",
       "extracurriculars",
       "awards",
-    ],
+    ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
     id: 5,
     label: "Eligibility and Goals",
     shortLabel: "Goals",
-    fields: [
-      "needs",
-      "is_underprivileged",
-      "is_pwd",
-      "is_indigenous_people",
-      "is_solo_parent_dependent",
-      "is_ofw_dependent",
-      "is_farmer_fisher_dependent",
-      "is_4ps_listahanan",
-      "privacy_consent",
-    ],
+    // Priority RA flags are optional for %; only needs + consent gate completion.
+    fields: ["needs", "privacy_consent"],
   },
 ];
 
