@@ -37,8 +37,11 @@ export function EducationStep({ state, onChange }: StepProps) {
         </div>
         <div>
           <label htmlFor="pb-education_level" className={labelClass}>
-            Education level
+            Target education level for scholarship
           </label>
+          <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">
+            The level you want scholarships for — can differ from your current academic stage above.
+          </p>
           <select
             id="pb-education_level"
             value={state.education_level}

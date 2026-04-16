@@ -34,11 +34,32 @@ const factors = [
   },
 ] as const;
 
+/** Accent = colored top border; body uses neutral surfaces for readable light + dark contrast. */
 const scoreRanges = [
-  { range: "0–49", label: "Poor fit", desc: "Your profile doesn't closely match this program's criteria", pill: "bg-danger-50 text-danger-700 dark:bg-danger-950/40 dark:text-danger-200" },
-  { range: "50–74", label: "Moderate fit", desc: "You meet some criteria but not all", pill: "bg-highlight-50 text-highlight-800 dark:bg-highlight-950/40 dark:text-highlight-200" },
-  { range: "75–89", label: "Strong fit", desc: "Your profile closely matches this program", pill: "bg-success-50 text-success-800 dark:bg-success-950/40 dark:text-success-200" },
-  { range: "90–100", label: "Excellent fit", desc: "Your profile is an exceptionally strong match", pill: "bg-primary-50 text-primary-800 dark:bg-primary-950/40 dark:text-primary-200" },
+  {
+    range: "0–49",
+    label: "Poor fit",
+    desc: "Your profile doesn't closely match this program's criteria",
+    accent: "border-t-4 border-t-red-600 dark:border-t-red-400",
+  },
+  {
+    range: "50–74",
+    label: "Moderate fit",
+    desc: "You meet some criteria but not all",
+    accent: "border-t-4 border-t-amber-600 dark:border-t-amber-400",
+  },
+  {
+    range: "75–89",
+    label: "Strong fit",
+    desc: "Your profile closely matches this program",
+    accent: "border-t-4 border-t-emerald-600 dark:border-t-emerald-400",
+  },
+  {
+    range: "90–100",
+    label: "Excellent fit",
+    desc: "Your profile is an exceptionally strong match",
+    accent: "border-t-4 border-t-primary-600 dark:border-t-primary-400",
+  },
 ] as const;
 
 function WeightBar({ widthPercent }: { widthPercent: number }) {
@@ -78,9 +99,9 @@ export function TransparencyPage() {
           Your score measures fit — not your chances of winning. Here&apos;s exactly what goes into it.
         </p>
 
-        <div className="mt-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 dark:border-primary-900/40 dark:bg-primary-950/30">
-          <p className="text-sm leading-relaxed text-primary-950 dark:text-primary-100">
-            <strong className="font-semibold">Your match score is a measure of eligibility fit, not a prediction of acceptance.</strong>{" "}
+        <div className="mt-8 rounded-2xl border border-primary-200 bg-primary-50 p-6 shadow-sm dark:border-primary-800 dark:bg-slate-900 dark:shadow-none">
+          <p className="text-sm leading-relaxed text-slate-900 dark:text-slate-100">
+            <strong className="font-semibold text-primary-900 dark:text-primary-200">Your match score is a measure of eligibility fit, not a prediction of acceptance.</strong>{" "}
             A score of 85 means your profile strongly matches this program&apos;s criteria. It does{" "}
             <strong className="font-semibold">not</strong> mean you have an 85% chance of receiving the scholarship.
           </p>
@@ -94,11 +115,11 @@ export function TransparencyPage() {
             {scoreRanges.map((s) => (
               <div
                 key={s.range}
-                className={`min-w-[200px] shrink-0 rounded-2xl border border-slate-200/80 p-4 dark:border-slate-600 ${s.pill}`}
+                className={`min-w-[200px] shrink-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900 ${s.accent}`}
               >
-                <p className="text-xs font-bold uppercase tracking-wide opacity-80">{s.range}</p>
-                <p className="mt-1 font-semibold">{s.label}</p>
-                <p className="mt-2 text-xs leading-snug opacity-90">{s.desc}</p>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{s.range}</p>
+                <p className="mt-1 font-semibold text-slate-900 dark:text-slate-50">{s.label}</p>
+                <p className="mt-2 text-xs leading-snug text-slate-600 dark:text-slate-300">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -113,7 +134,7 @@ export function TransparencyPage() {
             {factors.map((f) => (
               <div
                 key={f.name}
-                className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800/50"
+                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800/80"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="font-semibold text-slate-900 dark:text-slate-100">{f.name}</h3>
@@ -146,9 +167,9 @@ export function TransparencyPage() {
           </p>
         </div>
 
-        <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/40">
+        <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Why your score might change</h2>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             Scores are recalculated every time you update your profile, when an administrator adjusts program weights for a new
             cycle, or when new scholarship data is published. This is intentional — it keeps results accurate as your situation
             and available programs evolve.

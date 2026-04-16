@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 
 from app.api.v1 import (
     admin_extended,
-    ai_tools,
     analytics,
     applications,
     audit_routes,
@@ -43,6 +42,11 @@ logger = logging.getLogger(__name__)
 setup_logging(settings.structured_logging)
 
 settings.validate_for_production()
+
+if settings.auth_disabled:
+    logger.warning(
+        "AUTH_DISABLED=true — JWT checks are bypassed on many routes; do not use in production."
+    )
 
 if settings.sentry_dsn:
     import sentry_sdk
@@ -76,7 +80,6 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.include_router(auth_routes.router, prefix="/api/v1")
 app.include_router(feedback_routes.router, prefix="/api/v1")
 app.include_router(applications.router, prefix="/api/v1")
-app.include_router(ai_tools.router, prefix="/api/v1")
 app.include_router(sponsor_portal.router, prefix="/api/v1")
 app.include_router(school_portal.router, prefix="/api/v1")
 app.include_router(profiles.router, prefix="/api/v1")
@@ -151,7 +154,10 @@ def health(db: Session = Depends(get_db)):
 
     core_ok = checks.get("db") and checks.get("cache")
     overall = "ok" if core_ok else "degraded"
-    return {"status": overall, "checks": checks}
+    payload = {"status": overall, "checks": checks}
+    if not core_ok:
+        return JSONResponse(status_code=503, content=payload)
+    return payload
 
 
 @app.get("/ready")

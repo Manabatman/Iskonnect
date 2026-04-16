@@ -145,3 +145,37 @@ def test_readiness_suggestions_authenticated(api_with_db):
     tips = r.json()["suggestions"]
     assert isinstance(tips, list)
     assert any("region" in t.lower() for t in tips)
+
+
+def test_two_users_see_only_own_profile_via_profiles_me(api_with_db):
+    """Each authenticated user gets only their student row from GET /profiles/me."""
+    client, _Session = api_with_db
+
+    def register_and_profile(email: str, full_name: str):
+        reg = client.post(
+            "/api/v1/auth/register",
+            json={"email": email, "password": "password1"},
+        )
+        assert reg.status_code == 200
+        token = reg.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+        body = {
+            "full_name": full_name,
+            "email": email,
+            "region": "NCR",
+            "privacy_consent": True,
+            "privacy_consent_version": "ra10173-v1",
+        }
+        pr = client.post("/api/v1/profiles", json=body, headers=headers)
+        assert pr.status_code == 200, pr.text
+        return token
+
+    t1 = register_and_profile("user_iso_a@example.com", "User A")
+    t2 = register_and_profile("user_iso_b@example.com", "User B")
+
+    me1 = client.get("/api/v1/profiles/me", headers={"Authorization": f"Bearer {t1}"})
+    me2 = client.get("/api/v1/profiles/me", headers={"Authorization": f"Bearer {t2}"})
+    assert me1.status_code == 200 and me2.status_code == 200
+    assert me1.json()["full_name"] == "User A"
+    assert me2.json()["full_name"] == "User B"
+    assert me1.json()["email"] != me2.json()["email"]

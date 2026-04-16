@@ -10,6 +10,18 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <!-- Apply theme class before React paints (avoids flash). Default = light when no key. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          var root = document.documentElement;
+          root.classList.remove("dark");
+          if (t === "dark") root.classList.add("dark");
+          else if (t === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) root.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

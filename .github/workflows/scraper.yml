@@ -1,9 +1,11 @@
-# Daily scrape → raw JSON → staging (requires DATABASE_URL secret: Supabase pooler URI).
-name: Daily scholarship scrape
+# Scrape → raw JSON → staging (requires DATABASE_URL: Supabase pooler URI with +psycopg2).
+# Listing change detection skips ingest when HTML hash matches last successful run.
+name: Scholarship scrape and ingest
 
 on:
-  schedule:
-    - cron: "0 19 * * *" # ~3:00 PHT (adjust for DST if needed)
+  # Scraping temporarily disabled — uncomment schedule to re-enable automated runs.
+  # schedule:
+  #   - cron: "0 19 * * 1,4" # Mon & Thu ~03:00 PHT
   workflow_dispatch:
 
 jobs:
@@ -18,9 +20,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run PhilScholar scraper
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python -m app.scrapers.scrape_philscholar
       - name: Ingest into staging
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          python -m app.scripts.ingest_scraped --source "data/raw/philscholar_$(date +%Y-%m-%d).json"
+          set -e
+          if [ -z "${DATABASE_URL}" ]; then
+            echo "DATABASE_URL is empty. Add the repository secret in GitHub Settings → Secrets → Actions."
+            exit 1
+          fi
+          TODAY=$(date +%Y-%m-%d)
+          if [ -f "data/raw/philscholar_${TODAY}.skip" ]; then
+            echo "Listing unchanged (see .skip file); skipping ingest."
+            exit 0
+          fi
+          if [ ! -f "data/raw/philscholar_${TODAY}.json" ]; then
+            echo "Missing data/raw/philscholar_${TODAY}.json after scraper step."
+            exit 1
+          fi
+          python -m app.scripts.ingest_scraped --source "data/raw/philscholar_${TODAY}.json"

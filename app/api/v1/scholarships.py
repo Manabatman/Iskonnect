@@ -21,8 +21,19 @@ from app.utils.scholarship_versioning import (
 )
 from app.scholarship_cache import get_cached_scholarship_dicts as _cache_fetch_dicts
 from app.scholarship_cache import invalidate_scholarship_cache
+from app.utils.timezone import utc_now_naive
 
 logger = logging.getLogger(__name__)
+
+
+def _derive_verification_source(scholarship: schemas.Scholarship) -> str:
+    """Map schema source string to a small set of provenance labels."""
+    src = (scholarship.source or "").strip().lower()
+    if src in ("philscholar", "scraper") or "phil" in src:
+        return "scraper"
+    if "csv" in src or src in ("import", "csv_import"):
+        return "csv_import"
+    return "manual"
 
 router = APIRouter()
 
@@ -117,6 +128,7 @@ def persist_scholarship_from_schema(
     *,
     version_changed_by: int | None = None,
     auto_commit: bool = True,
+    verification_source: str | None = None,
 ) -> models.Scholarship:
     """Insert a Scholarship row from a validated schema (used by POST and staging approval).
 
@@ -161,6 +173,9 @@ def persist_scholarship_from_schema(
         application_open_date=scholarship.application_open_date,
         academic_year_target=scholarship.academic_year_target,
         is_active=scholarship.is_active if scholarship.is_active is not None else True,
+        last_verified_at=utc_now_naive(),
+        verification_source=vs,
+        data_status="active",
     )
     db.add(db_scholarship)
     db.flush()

@@ -1,7 +1,7 @@
 /** Shared select options for profile builder and related UI. */
 
 export const EDUCATION_LEVELS = [
-  { value: "", label: "Select education level" },
+  { value: "", label: "Select target education level" },
   { value: "Grade 11", label: "Grade 11" },
   { value: "Grade 12", label: "Grade 12" },
   { value: "High School", label: "High School" },

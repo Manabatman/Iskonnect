@@ -6,6 +6,8 @@ The system evaluates student profiles against scholarship requirements using eli
 
 This project is currently being developed as an early prototype.
 
+**Deploy (Vercel + Render + Supabase):** see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The repo includes `.python-version` (3.11.x) so Render does not default to Python 3.14.
+
 Overview
 
 Many Filipino students struggle to find scholarships because information is fragmented across different websites and institutions.

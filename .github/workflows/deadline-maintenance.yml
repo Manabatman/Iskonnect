@@ -1,0 +1,23 @@
+# Daily: unified catalog maintenance (past deadlines -> inactive + expired; stale verification -> needs_review; cache invalidation).
+name: Scholarship deadline maintenance
+
+on:
+  schedule:
+    - cron: "0 20 * * *" # ~04:00 PHT (UTC+8); adjust if needed
+  workflow_dispatch:
+
+jobs:
+  expire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Expire past deadlines
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python -m app.scripts.expire_scholarship_deadlines

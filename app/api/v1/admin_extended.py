@@ -87,6 +87,30 @@ def admin_list_feedback(
     ]
 
 
+@router.get("/admin/staging/stats")
+@limiter.limit("60/minute")
+def admin_staging_stats(
+    request: Request,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Counts of staging rows by status for admin dashboard / monitoring."""
+    from sqlalchemy import func
+
+    rows = (
+        db.query(models.ScholarshipStaging.status, func.count(models.ScholarshipStaging.id))
+        .group_by(models.ScholarshipStaging.status)
+        .all()
+    )
+    counts = {status: int(n) for status, n in rows}
+    return {
+        "pending": counts.get("pending", 0),
+        "approved": counts.get("approved", 0),
+        "rejected": counts.get("rejected", 0),
+        "total": sum(counts.values()),
+    }
+
+
 @router.get("/admin/scraper-runs/latest")
 @limiter.limit("60/minute")
 def admin_latest_scraper_runs(
@@ -111,6 +135,7 @@ def admin_latest_scraper_runs(
             "records_found": r.records_found,
             "records_ingested": r.records_ingested,
             "output_path": r.output_path,
+            "listing_content_sha256": getattr(r, "listing_content_sha256", None),
             "error_detail": (r.error_detail[:500] + "…") if r.error_detail and len(r.error_detail) > 500 else r.error_detail,
         }
         for r in rows

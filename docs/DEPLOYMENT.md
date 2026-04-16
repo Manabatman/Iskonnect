@@ -1,35 +1,34 @@
-# ISKONNECT deployment notes
+# Deployment checklist (free stack)
 
-## Migrations
+Use **Vercel** (frontend), **Render** (FastAPI), **Supabase** (Postgres), and **GitHub Actions** (CI + scrapers).
 
-- **Production:** Do **not** rely on `RUN_MIGRATIONS_ON_STARTUP` (leave `false` or unset). Run migrations once per deploy:
+Beginner-oriented architecture and debugging: **[HANDBOOK.md](HANDBOOK.md)**.
 
-  ```bash
-  alembic upgrade head
-  ```
+## Order
 
-- **Render:** Set `releaseCommand: alembic upgrade head` in `render.yaml` so migrations run before the web process starts.
+1. Deploy **Vercel** first (root directory `frontend`) to obtain `https://….vercel.app`.
+2. Create **Render** Web Service (Python **3.11** — repo includes `.python-version`). Set `CORS_ORIGINS` to your Vercel URL.
+3. Set **Vercel** `VITE_API_BASE_URL` to your Render URL and redeploy.
 
-- **Local:** Set `RUN_MIGRATIONS_ON_STARTUP=true` in `.env` for convenience, or run `alembic upgrade head` manually after pulling.
+## Render (backend)
 
-## Scholarship cache (multi-worker)
+- **Runtime:** Python (not Docker unless you prefer).
+- **Build:** `pip install -r requirements.txt`
+- **Start:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Release / Pre-deploy:** `alembic upgrade head`
+- **Env:** `DATABASE_URL` (Supabase pooler, `postgresql+psycopg2://…?sslmode=require`), `SECRET_KEY` (random hex), `ENVIRONMENT=production`, `AUTH_DISABLED=false`, `CORS_ORIGINS`, `RUN_MIGRATIONS_ON_STARTUP=false`
 
-- **In-process cache** is per worker process. With multiple Gunicorn/Uvicorn workers, each worker has its own cache; mutations only invalidate the worker that handled the request.
+## Vercel (frontend)
 
-- **Mitigation:** Set `REDIS_URL` (e.g. `redis://localhost:6379/0` or Upstash) so the scholarship list is cached in Redis and shared across workers. Invalidation deletes the Redis key on create/update/delete.
+- **Root directory:** `frontend`
+- **Env:** `VITE_API_BASE_URL` = Render URL (no trailing slash). Do **not** put `DATABASE_URL` or `SECRET_KEY` here.
 
-- **MVP:** Run a **single worker** in production if Redis is not available, and accept up to TTL (5 minutes) staleness in edge cases.
+## Supabase
 
-## Environment
+- Run migrations locally: `python -m alembic upgrade head` with `DATABASE_URL` pointing at Supabase.
+- GitHub secret `DATABASE_URL`: same URI as Render (for scraper + deadline workflows).
 
-| Variable | Production | Local dev |
-|----------|------------|-----------|
-| `AUTH_DISABLED` | `false` | `true` (optional) |
-| `SECRET_KEY` | Strong random (`openssl rand -hex 32`) | Any |
-| `RUN_MIGRATIONS_ON_STARTUP` | `false` | `true` (optional) |
-| `REDIS_URL` | Recommended for multi-worker | Optional |
+## GitHub Actions
 
-## CI/CD
-
-- GitHub Actions runs `pytest` on push/PR.
-- Deploy hooks (Render/Vercel) should be configured via repository secrets; see `.github/workflows/ci.yml` for optional deploy job placeholders.
+- **DATABASE_URL** repository secret required for `scraper.yml` and `deadline-maintenance.yml`.
+- Workflows use Python **3.11**; CI frontend uses Node **22** (see `.github/workflows/ci.yml`).
