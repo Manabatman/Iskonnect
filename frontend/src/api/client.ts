@@ -6,8 +6,26 @@ if (!_env?.VITE_API_BASE_URL && typeof console !== "undefined") {
   );
 }
 
-const FETCH_TIMEOUT_MS = 10_000;
+/** Long enough for Render cold starts (often 15–30s on free tier). */
+const FETCH_TIMEOUT_MS = 30_000;
 const NETWORK_RETRY_DELAY_MS = 1_000;
+
+const API_BUSY = "iskonnect-api-busy";
+const API_IDLE = "iskonnect-api-idle";
+
+let apiInFlight = 0;
+
+function bumpApiInFlight(delta: number) {
+  const prev = apiInFlight;
+  apiInFlight += delta;
+  if (typeof window === "undefined") return;
+  if (prev === 0 && apiInFlight > 0) {
+    window.dispatchEvent(new CustomEvent(API_BUSY));
+  }
+  if (prev > 0 && apiInFlight === 0) {
+    window.dispatchEvent(new CustomEvent(API_IDLE));
+  }
+}
 
 /** Thrown when fetch fails (offline, DNS, CORS, timeout, etc.). */
 export class NetworkError extends Error {
@@ -63,12 +81,17 @@ export async function apiFetch(path: string, options?: RequestInit): Promise<Res
     }
   };
 
+  bumpApiInFlight(1);
   try {
-    return await attempt();
-  } catch (first) {
-    if (!(first instanceof NetworkError)) throw first;
-    if (!isIdempotentMethod(options)) throw first;
-    await new Promise((r) => setTimeout(r, NETWORK_RETRY_DELAY_MS));
-    return await attempt();
+    try {
+      return await attempt();
+    } catch (first) {
+      if (!(first instanceof NetworkError)) throw first;
+      if (!isIdempotentMethod(options)) throw first;
+      await new Promise((r) => setTimeout(r, NETWORK_RETRY_DELAY_MS));
+      return await attempt();
+    }
+  } finally {
+    bumpApiInFlight(-1);
   }
 }

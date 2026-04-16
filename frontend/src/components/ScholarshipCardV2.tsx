@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
 import { MatchScoreRing } from "./MatchScoreRing";
 import { getCardVisualClasses } from "../utils/cardImages";
+import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
 import { formatScholarshipLocation } from "../utils/normalizeLocation";
 import { getUrgencyBadgeClasses, getUrgencyLevel } from "./scholarshipMatchDisplay";
 
@@ -81,6 +83,7 @@ export function ScholarshipCardV2({
   onCardBodyClick,
   className = "",
 }: ScholarshipCardV2Props) {
+  const [heroImageFailed, setHeroImageFailed] = useState(false);
   const base = scholarship;
   const match = getEffectiveMatch(scholarship, matchOverlay);
   const info = asScholarshipInfo(scholarship);
@@ -90,6 +93,7 @@ export function ScholarshipCardV2({
 
   const score = match != null ? (match.final_score ?? match.score) : null;
   const visualClass = getCardVisualClasses(base.provider_type, base.scholarship_type, base.provider);
+  const heroUrl = getScholarshipHeroImageUrl(base.provider, base.provider_type);
   const locationLabel = formatScholarshipLocation(base.regions, base.provider);
 
   const urgency = match
@@ -141,7 +145,18 @@ export function ScholarshipCardV2({
     >
       {/* Visual header */}
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-t-2xl">
-        <div className={`absolute inset-0 bg-gradient-to-br ${visualClass}`} aria-hidden />
+        {heroUrl && !heroImageFailed ? (
+          <img
+            src={heroUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            onError={() => setHeroImageFailed(true)}
+          />
+        ) : null}
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${visualClass} ${heroUrl && !heroImageFailed ? "opacity-75" : ""}`}
+          aria-hidden
+        />
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.15]"
           style={{

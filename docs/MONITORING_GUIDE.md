@@ -4,8 +4,8 @@ Use a **hybrid** approach: Supabase + platform logs + the in-app **Admin** UI (`
 
 ## Daily (about 2 minutes)
 
-1. **UptimeRobot** (or similar): confirm the monitor for `https://YOUR-API/health` is **Up**.
-2. **Supabase → Table Editor → `scholarships_staging`**: sort by `created_at` descending. After the daily GitHub Action, you should see new pending rows (or unchanged count if the scraper returned nothing).
+1. **UptimeRobot** (or similar): confirm the monitor for `https://YOUR-API/health` is **Up** (HTTP **200**). A **503** means the API is degraded or the DB check failed.
+2. **Supabase → Table Editor → `scholarships_staging`**: sort by `created_at` descending. After the scheduled GitHub Action (**Scholarship scrape and ingest**), you should see new pending rows (or unchanged count if the scraper returned nothing).
 
 ## Weekly
 
@@ -15,7 +15,7 @@ Use a **hybrid** approach: Supabase + platform logs + the in-app **Admin** UI (`
 | Match activity | Supabase → `match_runs` or Admin → **Matches** tab |
 | Product feedback | Admin → **Feedback** or Supabase → `product_feedback` |
 | Scholarship issue reports | Admin → **Reports** or Supabase → `scholarship_reports` |
-| Errors | Hugging Face (or host) **Logs**; optional **Sentry** |
+| Errors | **Render** service **Logs** (or your host); optional **Sentry** |
 | Scraper runs | Admin → **System** → Recent scraper runs, or Supabase → `scraper_runs` |
 
 ## Admin UI
@@ -31,7 +31,7 @@ Log in as a user with `role = admin`. Open **`/admin`**.
 
 ## Logging
 
-- Set **`STRUCTURED_LOGGING=true`** on the API for JSON logs (easier to search in HF/Render logs).
+- Set **`STRUCTURED_LOGGING=true`** on the API for JSON logs (easier to search in Render logs).
 - Set **`SENTRY_DSN`** on API and **`VITE_SENTRY_DSN`** on the frontend if you use Sentry.
 
 ## Validate matches are saved
@@ -42,7 +42,7 @@ Log in as a user with `role = admin`. Open **`/admin`**.
 
 ## Validate scrapers
 
-1. GitHub → **Actions** → **Daily scholarship scrape** → latest run: must be green.
+1. GitHub → **Actions** → **Scholarship scrape and ingest** → latest run: must be green.
 2. Check **`scraper_runs`** in Supabase for `philscholar` / `philscholar_ingest` rows.
 3. Admin → **System** tab for a quick view.
 

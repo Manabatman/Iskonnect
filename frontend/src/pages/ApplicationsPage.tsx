@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import { apiFetch, NetworkError } from "../api/client";
 import { formatDateMedium, formatDateTimeLong } from "../utils/formatDate";
-import type { SavedScholarship } from "../types";
 
 const APPLICATION_STATUSES = [
   "preparing",
@@ -65,8 +65,8 @@ function StatusChip({ status }: { status: string }) {
 
 export function ApplicationsPage() {
   const { user, authHeaders } = useAuth();
+  const { savedScholarships: saved } = useSavedScholarships();
   const [applications, setApplications] = useState<ApiApplication[]>([]);
-  const [saved, setSaved] = useState<SavedScholarship[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -81,16 +81,10 @@ export function ApplicationsPage() {
     setLoading(true);
     setError(null);
     try {
-      const [appRes, savedRes] = await Promise.all([
-        apiFetch("/api/v1/applications", { headers: authHeaders() }),
-        apiFetch("/api/v1/saved-scholarships", { headers: authHeaders() }),
-      ]);
+      const appRes = await apiFetch("/api/v1/applications", { headers: authHeaders() });
       if (!appRes.ok) throw new Error("Failed to load applications");
       const appData = await appRes.json();
       setApplications(Array.isArray(appData) ? appData : []);
-      const savedData = savedRes.ok ? await savedRes.json() : { saved: [] };
-      const list = (savedData as { saved?: SavedScholarship[] }).saved;
-      setSaved(Array.isArray(list) ? list : []);
     } catch (e) {
       if (e instanceof NetworkError) setError("Could not reach the server.");
       else setError(e instanceof Error ? e.message : "Something went wrong.");

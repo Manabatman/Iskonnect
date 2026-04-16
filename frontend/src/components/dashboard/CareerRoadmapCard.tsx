@@ -1,150 +1,137 @@
-import { useCallback, useMemo, useState } from "react";
-import { COURSE_CATEGORIES } from "../../data/courseCategories";
-import { apiFetch } from "../../api/client";
-import { useAuth } from "../../contexts/AuthContext";
+import { useEffect, useMemo, useState } from "react";
+import { EDUCATION_LEVELS } from "../../constants/profileOptions";
+import { buildGoogleAiModeSearchUrl } from "../../utils/googleAiModeSearch";
 
-function buildCareerQuery(course: string): string {
-  return [
-    `${course} Philippines curriculum subjects first year to fourth year`,
-    "career paths job titles entry level Philippines salary range",
-    "typical day at work responsibilities",
-    "skills needed in industry not taught in university Philippines",
-    "internship portfolio certifications employers want",
-    "self assessment questions if unsure about career path",
-    "alternative careers related degree downsides honest",
-  ].join(" ");
+function CompassIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </svg>
+  );
 }
 
-type Props = {
-  profileEducationLevel?: string;
+function SparklesIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+    </svg>
+  );
+}
+
+type CareerRoadmapCardProps = {
+  /** Pre-fill from profile: education_level (same DB field as "target level" in UI). */
+  defaultEducationLevel?: string;
+  className?: string;
 };
 
-export function CareerRoadmapCard({ profileEducationLevel }: Props) {
-  const { authHeaders, user } = useAuth();
-  const [openCat, setOpenCat] = useState<string | null>(COURSE_CATEGORIES[0]?.id ?? null);
-  const [course, setCourse] = useState(COURSE_CATEGORIES[0]?.courses[0] ?? "BS Computer Science");
-  const [aiText, setAiText] = useState<string | null>(null);
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiError, setAiError] = useState<string | null>(null);
+const ROADMAP_TIPS = [
+  "Try both a job title (e.g. “civil engineer”) and a field (e.g. “renewable energy”) to compare AI summaries.",
+  "Salary figures in AI answers are estimates — verify with Payscale, JobStreet, or industry reports.",
+  "Use your target education level so the roadmap matches scholarships you’re aiming for.",
+  "Bookmark useful links from the AI answer into your Applications or notes.",
+];
 
-  const googleHref = useMemo(() => {
-    return `https://www.google.com/search?q=${encodeURIComponent(buildCareerQuery(course))}`;
-  }, [course]);
+/**
+ * Long-form query so Google AI Mode returns a rich career overview (PH context).
+ */
+export function buildCareerRoadmapQuery(career: string, educationLevel: string): string {
+  const job = career.trim() || "undecided career path";
+  const level = educationLevel.trim() || "a Filipino student";
+  return (
+    `career roadmap for ${job} in the Philippines for ${level} including realistic job roles, ` +
+    `day-to-day tasks, required technical and soft skills, entry-level requirements, ` +
+    `salary range in PHP, career progression from entry to senior, common struggles in the field, ` +
+    `and recommended courses or certifications`
+  );
+}
 
-  const runAi = useCallback(async () => {
-    if (!user) return;
-    setAiLoading(true);
-    setAiError(null);
-    setAiText(null);
-    try {
-      const res = await apiFetch("/api/v1/ai/career-roadmap", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeaders() },
-        body: JSON.stringify({
-          course: course.trim(),
-          education_level: profileEducationLevel ?? null,
-        }),
-      });
-      const data = await res.json().catch(() => null);
-      if (!res.ok) {
-        throw new Error((data as { detail?: string })?.detail ?? "AI request failed");
-      }
-      setAiText((data as { text?: string }).text ?? "");
-    } catch (e) {
-      setAiError(e instanceof Error ? e.message : "Could not load AI roadmap.");
-    } finally {
-      setAiLoading(false);
-    }
-  }, [user, authHeaders, course, profileEducationLevel]);
+export function CareerRoadmapCard({ defaultEducationLevel, className }: CareerRoadmapCardProps) {
+  const [careerInterest, setCareerInterest] = useState("");
+  const [educationLevel, setEducationLevel] = useState(defaultEducationLevel ?? "");
+
+  useEffect(() => {
+    if (defaultEducationLevel) setEducationLevel(defaultEducationLevel);
+  }, [defaultEducationLevel]);
+
+  const aiModeHref = useMemo(() => {
+    const q = buildCareerRoadmapQuery(careerInterest, educationLevel);
+    return buildGoogleAiModeSearchUrl(q);
+  }, [careerInterest, educationLevel]);
 
   return (
-    <div className="rounded-2xl border border-violet-200/90 bg-gradient-to-br from-violet-50/90 to-white p-5 shadow-sm dark:border-violet-900/50 dark:from-violet-950/30 dark:to-slate-900/40">
-      <div className="flex items-start gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white">
-          <span className="text-lg" aria-hidden>
-            🎓
-          </span>
+    <div
+      className={[
+        "flex h-full min-h-0 flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <div className="mb-4 flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-800 dark:bg-violet-950/50 dark:text-violet-200">
+          <CompassIcon className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Career Roadmap Overview</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Explore courses, roles, and expectations</p>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Career Roadmap</h3>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            Explore careers in Google&apos;s AI Mode — one synthesized answer with roles, skills, salaries
+            (Philippines), and next steps. Opens in a new tab.
+          </p>
         </div>
       </div>
-      <p className="mt-3 text-sm text-slate-700 dark:text-slate-300">
-        Pick a course, then generate an AI roadmap (honest, Philippines-focused) or open a targeted Google search.
-      </p>
-      <div className="mt-4 space-y-2">
-        {COURSE_CATEGORIES.map((cat) => {
-          const open = openCat === cat.id;
-          return (
-            <div key={cat.id} className="rounded-xl border border-slate-200 dark:border-slate-600">
-              <button
-                type="button"
-                onClick={() => setOpenCat(open ? null : cat.id)}
-                className="flex w-full items-center justify-between px-3 py-2 text-left text-sm font-semibold text-slate-800 dark:text-slate-100"
-              >
-                {cat.label}
-                <span className="text-slate-400">{open ? "▾" : "▸"}</span>
-              </button>
-              {open ? (
-                <div className="border-t border-slate-100 px-2 py-2 dark:border-slate-700">
-                  <div className="flex flex-wrap gap-1">
-                    {cat.courses.map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => setCourse(c)}
-                        className={[
-                          "rounded-lg px-2 py-1 text-xs font-medium transition",
-                          c === course
-                            ? "bg-violet-600 text-white"
-                            : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200",
-                        ].join(" ")}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
-      <p className="mt-3 text-xs text-slate-600 dark:text-slate-400">
-        Selected: <strong>{course}</strong>
-      </p>
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-        <button
-          type="button"
-          disabled={aiLoading || !user}
-          onClick={() => void runAi()}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white shadow hover:bg-violet-700 disabled:opacity-50"
+
+      <div className="space-y-3">
+        <label htmlFor="crm-career" className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          Career or field you&apos;re curious about
+        </label>
+        <input
+          id="crm-career"
+          type="text"
+          value={careerInterest}
+          onChange={(e) => setCareerInterest(e.target.value)}
+          placeholder="e.g. software engineer, nurse, teacher, undecided"
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-inner focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-violet-500 dark:focus:ring-violet-800"
+        />
+
+        <label htmlFor="crm-edu" className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          Your target education level (for scholarship context)
+        </label>
+        <select
+          id="crm-edu"
+          value={educationLevel}
+          onChange={(e) => setEducationLevel(e.target.value)}
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-inner focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-violet-500 dark:focus:ring-violet-800"
         >
-          {aiLoading ? "Generating…" : "Generate roadmap (AI)"}
-        </button>
+          {EDUCATION_LEVELS.map((opt) => (
+            <option key={opt.value || "empty"} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+
         <a
-          href={googleHref}
+          href={aiModeHref}
           target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-violet-400 bg-white px-4 py-3 text-sm font-bold text-violet-900 hover:bg-violet-50 dark:border-violet-700 dark:bg-slate-800 dark:text-violet-100 dark:hover:bg-slate-700"
+          rel="noreferrer"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
         >
-          Search with Google
+          <SparklesIcon className="h-4 w-4" />
+          Explore with AI
         </a>
-      </div>
-      {!user ? <p className="mt-2 text-xs text-slate-500">Sign in for AI roadmap (or use Google).</p> : null}
-
-      {aiError ? (
-        <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200">
-          {aiError} Try Google search or configure <code className="rounded bg-red-100 px-1 dark:bg-red-950">OPENAI_API_KEY</code> on the API.
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Opens Google AI Mode in a new tab. We don&apos;t track your searches.
         </p>
-      ) : null}
+      </div>
 
-      {aiText ? (
-        <div className="mt-4 max-h-96 overflow-y-auto rounded-xl border border-violet-100 bg-white/90 p-3 text-sm text-slate-800 dark:border-violet-900/50 dark:bg-slate-900/60 dark:text-slate-200">
-          <p className="whitespace-pre-wrap">{aiText}</p>
-        </div>
-      ) : null}
+      <div className="mt-auto rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-900/80">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">Quick tips</p>
+        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-800 dark:text-slate-200">
+          {ROADMAP_TIPS.map((tip) => (
+            <li key={tip}>{tip}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

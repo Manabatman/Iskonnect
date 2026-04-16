@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 const navLinkClass = (active: boolean) =>
   [
@@ -14,12 +14,9 @@ export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { resolvedTheme } = useTheme();
   const path = location.pathname;
-  const [brandLogoSrc, setBrandLogoSrc] = useState("/images/logo.png");
-
-  const handleBrandLogoError = useCallback(() => {
-    setBrandLogoSrc("/images/logo.svg");
-  }, []);
+  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.svg";
 
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
@@ -33,7 +30,9 @@ export function Navbar() {
             className="h-10 w-10"
             width={40}
             height={40}
-            onError={handleBrandLogoError}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/logo.svg";
+            }}
           />
           <span>
             <span className="block font-sans text-xl font-black uppercase tracking-[0.06em] text-primary-700 dark:text-primary-400 sm:text-2xl">

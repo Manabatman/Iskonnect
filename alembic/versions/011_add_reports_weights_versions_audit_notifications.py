@@ -100,7 +100,7 @@ def upgrade() -> None:
         sa.Column("title", sa.String(), nullable=False),
         sa.Column("body", sa.Text(), nullable=True),
         sa.Column("scholarship_id", sa.Integer(), nullable=True),
-        sa.Column("is_read", sa.Boolean(), nullable=True, server_default=sa.text("0")),
+        sa.Column("is_read", sa.Boolean(), nullable=True, server_default=sa.text("false")),
         sa.Column("created_at", sa.DateTime(), server_default=sa.text("(CURRENT_TIMESTAMP)"), nullable=False),
         sa.ForeignKeyConstraint(["scholarship_id"], ["scholarships.id"]),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"]),

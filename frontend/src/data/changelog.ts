@@ -20,6 +20,112 @@ export interface ChangelogVersion {
 
 export const CHANGELOG_VERSIONS: ChangelogVersion[] = [
   {
+    version: "1.6.0",
+    date: "April 2026",
+    title: "Career Roadmap, AI Mode search, and UX polish",
+    summary:
+      "Career Roadmap returns on the dashboard with Google AI Mode links; Review Center Finder opens the same AI-style Google view with richer queries. Scraping cron is paused (manual runs still available). Lighter default theme, dark-mode logo swap, clearer profile labels, fewer redundant API calls, and CI on Node.js 24.",
+    improvements: [
+      {
+        title: "Career Roadmap card",
+        description:
+          "Dashboard card builds a Philippines-focused career query and opens Google AI Mode in a new tab.",
+      },
+      {
+        title: "Review Center Finder + Google AI Mode",
+        description:
+          "Links use udm=50 with queries that mention fees, schedules, passing rates, and reviews for better synthesized answers.",
+      },
+      {
+        title: "Saved scholarships in one place",
+        description:
+          "SavedScholarshipsContext loads the full saved list once; dashboard and applications reuse it instead of duplicating GET /saved-scholarships.",
+      },
+      {
+        title: "Notification badge polling",
+        description:
+          "Unread count refreshes every 60 seconds instead of on every route change.",
+      },
+    ],
+    fixes: [
+      {
+        title: "Target education level wording",
+        description:
+          "Profile builder clarifies “Target education level for scholarship” vs current academic stage.",
+      },
+      {
+        title: "Match score ring in dark mode",
+        description:
+          "Arc and track colors are slightly brighter on dark backgrounds for readability.",
+      },
+    ],
+    behindTheScenes: [
+      {
+        title: "Scraping schedule",
+        description:
+          "Automated PhilScholar cron commented out in scraper.yml; re-enable by uncommenting schedule. Manual workflow_dispatch still runs scrape + ingest.",
+      },
+      {
+        title: "CI Node version",
+        description:
+          "GitHub Actions frontend job uses Node.js 24.",
+      },
+    ],
+  },
+  {
+    version: "1.5.0",
+    date: "April 2026",
+    title: "Stability, security, and deployment readiness",
+    summary:
+      "Auth isolation fixes, UI polish, smarter scraping, deadline maintenance, production deployment helpers, and removal of the experimental AI roadmap card.",
+    fixes: [
+      {
+        title: "Review Center Finder dark mode",
+        description:
+          "The finder card now respects dark theme so it matches the rest of the dashboard.",
+      },
+      {
+        title: "Financial Planner tuition coverage",
+        description:
+          "Catalog total benefit is no longer multiplied by term count; coverage is capped to your estimated annual tuition with clearer notes.",
+      },
+      {
+        title: "Account / profile isolation",
+        description:
+          "Local auth defaults to JWT required; dashboard state resets when the signed-in user changes to avoid stale profile data.",
+      },
+    ],
+    improvements: [
+      {
+        title: "Scraper change detection",
+        description:
+          "PhilScholar listing HTML is hashed; unchanged listings skip ingest. GitHub Actions validates DATABASE_URL and scrape output before ingest.",
+      },
+      {
+        title: "Deadline maintenance",
+        description:
+          "Daily workflow deactivates scholarships whose application deadline is in the past (no re-scrape required).",
+      },
+      {
+        title: "Scholarship card images",
+        description:
+          "Static hero images under /public/images/scholarships with provider-type fallback and graceful image error handling.",
+      },
+    ],
+    behindTheScenes: [
+      {
+        title: "CI and tooling",
+        description:
+          "GitHub Actions frontend job uses Node.js 22. Render: add .python-version (3.11.x) to avoid Python 3.14 build failures. See docs/DEPLOYMENT.md.",
+      },
+      {
+        title: "Admin monitoring",
+        description:
+          "GET /api/v1/admin/staging/stats for staging queue counts (admin). Existing scraper run list endpoint unchanged.",
+      },
+    ],
+  },
+  {
     version: "1.4.0",
     date: "March 2026",
     title: "Reliability and clearer errors",

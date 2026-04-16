@@ -11,6 +11,15 @@ import { NetworkError, apiFetch } from "../api/client";
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
 
+/** Fired when login/register/logout changes the authenticated user so dashboards reset cached state. */
+export const AUTH_USER_CHANGED_EVENT = "scholarship-match-auth-user-changed";
+
+function dispatchAuthUserChanged(userId: number | null) {
+  window.dispatchEvent(
+    new CustomEvent(AUTH_USER_CHANGED_EVENT, { detail: { userId } })
+  );
+}
+
 export interface AuthUser {
   id: number;
   email: string;
@@ -144,6 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.refresh_token) setRefreshToken(data.refresh_token);
       setUser({ id: data.user_id, email, role: data.role ?? "student" });
       setAuthError(null);
+      dispatchAuthUserChanged(data.user_id);
     },
     [setToken, setRefreshToken]
   );
@@ -160,10 +170,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(data?.detail ?? "Registration failed");
       }
       const data = await res.json();
+      setUser(null);
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);
       setUser({ id: data.user_id, email, role: data.role ?? "student" });
       setAuthError(null);
+      dispatchAuthUserChanged(data.user_id);
     },
     [setToken, setRefreshToken]
   );
@@ -185,6 +197,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     setUser(null);
     setAuthError(null);
+    dispatchAuthUserChanged(null);
   }, [setToken, setRefreshToken]);
 
   const authHeaders = useCallback(

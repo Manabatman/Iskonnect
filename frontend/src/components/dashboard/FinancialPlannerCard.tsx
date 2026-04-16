@@ -3,6 +3,8 @@ import type { SavedScholarship } from "../../types";
 
 type Props = {
   saved: SavedScholarship[];
+  /** Merged onto the root card (e.g. h-full for grid stretch). */
+  className?: string;
 };
 
 type TermStructure = "semester" | "trimester" | "custom";
@@ -24,7 +26,16 @@ function numTermsFor(structure: TermStructure, custom: string): number {
   return Math.min(Math.floor(n), 12);
 }
 
-export function FinancialPlannerCard({ saved }: Props) {
+function cardRootClass(extra?: string) {
+  return [
+    "flex h-full min-h-0 flex-col rounded-2xl border border-emerald-200/80 bg-white p-6 shadow-sm dark:border-emerald-900/50 dark:bg-slate-800/80",
+    extra,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+export function FinancialPlannerCard({ saved, className }: Props) {
   const [scholarshipId, setScholarshipId] = useState<string>(() => String(saved[0]?.scholarship_id ?? ""));
   const [tuitionPerTerm, setTuitionPerTerm] = useState("");
   const [termStructure, setTermStructure] = useState<TermStructure>("semester");
@@ -98,11 +109,11 @@ export function FinancialPlannerCard({ saved }: Props) {
     let covered = 0;
 
     if (sch?.benefit_tuition) {
-      if (terms > 0 && sch.benefit_total_value != null && sch.benefit_total_value > 0) {
-        const tuitionCov = sch.benefit_total_value * terms;
+      if (terms > 0 && sch.benefit_total_value != null && sch.benefit_total_value > 0 && tuitionAnnual > 0) {
+        const tuitionCov = Math.min(sch.benefit_total_value, tuitionAnnual);
         covered += tuitionCov;
         notes.push(
-          `Catalog tuition benefit: ₱${sch.benefit_total_value.toLocaleString("en-PH")} per term × ${terms} term(s) ≈ ₱${tuitionCov.toLocaleString("en-PH")} / year.`
+          `Catalog benefit value capped to your estimated annual tuition: up to ₱${tuitionCov.toLocaleString("en-PH")} / year (catalog total ₱${sch.benefit_total_value.toLocaleString("en-PH")}; multi-year programs may cover more than one year — confirm on the official page).`
         );
       } else if (tuitionAnnual > 0) {
         covered += tuitionAnnual;
@@ -177,7 +188,7 @@ export function FinancialPlannerCard({ saved }: Props) {
 
   if (saved.length === 0) {
     return (
-      <div className="rounded-2xl border border-emerald-200/80 bg-white p-5 shadow-sm dark:border-emerald-900/50 dark:bg-slate-800/80">
+      <div className={cardRootClass(className)}>
         <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Financial Planner</h3>
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           Save scholarships to compare expected costs against catalog benefits.
@@ -187,7 +198,7 @@ export function FinancialPlannerCard({ saved }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-emerald-200/80 bg-white p-5 shadow-sm dark:border-emerald-900/50 dark:bg-slate-800/80">
+    <div className={cardRootClass(className)}>
       <div className="flex items-start gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
           <span className="text-lg" aria-hidden>
@@ -231,8 +242,8 @@ export function FinancialPlannerCard({ saved }: Props) {
                 className={[
                   "rounded-lg border px-3 py-1.5 text-xs font-medium",
                   termStructure === v
-                    ? "border-emerald-600 bg-emerald-50 text-emerald-900 dark:border-emerald-500 dark:bg-emerald-950/40 dark:text-emerald-100"
-                    : "border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300",
+                    ? "border-emerald-600 bg-emerald-50 text-emerald-900 dark:border-emerald-500 dark:bg-emerald-950 dark:text-emerald-50"
+                    : "border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-200",
                 ].join(" ")}
               >
                 {lab}
@@ -332,7 +343,7 @@ export function FinancialPlannerCard({ saved }: Props) {
         </div>
       </div>
 
-      <div className="mt-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-900/50">
+      <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-slate-800 dark:border-slate-600 dark:bg-slate-900/90 dark:text-slate-200">
         {analysis.kind === "empty" || analysis.kind === "invalid" ? (
           <p className="text-sm text-slate-700 dark:text-slate-300">{analysis.message}</p>
         ) : (

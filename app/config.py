@@ -93,10 +93,6 @@ class Settings(BaseSettings):
         validation_alias="RETENTION_INACTIVE_DAYS",
     )
 
-    # Optional OpenAI for Review Center / Career Roadmap (dashboard tools)
-    openai_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
-    openai_model: str = Field(default="gpt-4o-mini", validation_alias="OPENAI_MODEL")
-
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""

@@ -1,7 +1,8 @@
-import { FormEvent, useEffect, useState, useCallback } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
@@ -14,6 +15,7 @@ function safeReturnPath(from: unknown): string | null {
 
 export function LoginPage() {
   const { login, user, loading: authLoading } = useAuth();
+  const { resolvedTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const returnTo = safeReturnPath((location.state as { from?: string } | null)?.from);
@@ -28,11 +30,7 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [authPanelSrc, setAuthPanelSrc] = useState(AUTH_PANEL_PRIMARY);
-  const [brandLogoSrc, setBrandLogoSrc] = useState("/images/logo.png");
-
-  const handleBrandLogoError = useCallback(() => {
-    setBrandLogoSrc("/images/logo.svg");
-  }, []);
+  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.svg";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -67,7 +65,9 @@ export function LoginPage() {
             alt="ISKONNECT"
             width={40}
             height={40}
-            onError={handleBrandLogoError}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/logo.svg";
+            }}
             className="absolute left-8 top-8 h-10 w-10 lg:left-12 lg:top-12"
           />
           <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">

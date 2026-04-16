@@ -16,6 +16,7 @@ def log_scraper_run(
     records_ingested: int | None = None,
     output_path: str | None = None,
     error_detail: str | None = None,
+    listing_content_sha256: str | None = None,
 ) -> None:
     try:
         from app.db import SessionLocal
@@ -31,6 +32,7 @@ def log_scraper_run(
                 records_ingested=records_ingested,
                 output_path=output_path,
                 error_detail=error_detail,
+                listing_content_sha256=listing_content_sha256,
                 completed_at=utc_now_naive(),
             )
             db.add(row)

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
-import type { MatchResult, MatchRunSummary, SavedScholarship, StudentProfileResponse } from "../types";
+import type { MatchResult, MatchRunSummary, StudentProfileResponse } from "../types";
 import { NetworkError, apiFetch } from "../api/client";
 import {
   formatDateMedium,
@@ -11,9 +11,9 @@ import {
   startOfTodayManila,
 } from "../utils/formatDate";
 import { MatchScoreRing } from "../components/MatchScoreRing";
-import { CareerRoadmapCard } from "../components/dashboard/CareerRoadmapCard";
 import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
 import { ReviewCenterFinderCard } from "../components/dashboard/ReviewCenterFinderCard";
+import { CareerRoadmapCard } from "../components/dashboard/CareerRoadmapCard";
 
 function IconGraduationCap({ className }: { className?: string }) {
   return (
@@ -93,39 +93,37 @@ export function ProfileDashboard() {
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
   const [latestMatches, setLatestMatches] = useState<MatchResult[]>([]);
   const [latestMatchesLoading, setLatestMatchesLoading] = useState(false);
-  const [saved, setSaved] = useState<SavedScholarship[]>([]);
-  const [savedLoading, setSavedLoading] = useState(true);
   const [selectedRuns, setSelectedRuns] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { toggleSave } = useSavedScholarships();
+  const { toggleSave, savedScholarships, savedListLoading: savedLoading } = useSavedScholarships();
 
   const completeness = useMemo(() => profileCompleteness(profile ?? undefined), [profile]);
 
   useEffect(() => {
     if (!user) return;
+    setProfile(null);
+    setRuns([]);
+    setLatestMatches([]);
+    setSelectedRuns(new Set());
+    setError(null);
+    setLoading(true);
     const headers = authHeaders();
-    setSavedLoading(true);
     Promise.all([
       apiFetch("/api/v1/profiles/me", { headers }).then((r) => {
         if (r.status === 404) return null;
         return r.ok ? r.json() : null;
       }),
       apiFetch("/api/v1/match-runs", { headers }).then((r) => (r.ok ? r.json() : [])),
-      apiFetch("/api/v1/saved-scholarships", { headers }).then((r) =>
-        r.ok ? r.json() : { saved: [] }
-      ),
     ])
-      .then(([profData, runsData, savedData]) => {
+      .then(([profData, runsData]) => {
         setProfile(
           profData && typeof profData === "object" && "id" in profData
             ? (profData as StudentProfileResponse)
             : null
         );
         setRuns(Array.isArray(runsData) ? runsData : []);
-        const savedList = (savedData as { saved?: SavedScholarship[] }).saved;
-        setSaved(Array.isArray(savedList) ? savedList : []);
       })
       .catch((err) => {
         if (err instanceof NetworkError) {
@@ -138,9 +136,20 @@ export function ProfileDashboard() {
       })
       .finally(() => {
         setLoading(false);
-        setSavedLoading(false);
       });
-  }, [user, authHeaders]);
+  }, [user?.id, authHeaders]);
+
+  useEffect(() => {
+    const onAuthChange = () => {
+      setProfile(null);
+      setRuns([]);
+      setLatestMatches([]);
+      setSelectedRuns(new Set());
+      setError(null);
+    };
+    window.addEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
+    return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
+  }, []);
 
   useEffect(() => {
     if (!user || runs.length === 0) {
@@ -270,7 +279,7 @@ export function ProfileDashboard() {
   const upcomingDeadlines = useMemo(() => {
     const today = startOfTodayManila();
     today.setHours(0, 0, 0, 0);
-    return saved
+    return savedScholarships
       .map((item) => ({
         ...item,
         deadline: item.scholarship?.application_deadline
@@ -280,7 +289,7 @@ export function ProfileDashboard() {
       .filter((x) => x.deadline && x.deadline >= today)
       .sort((a, b) => (a.deadline!.getTime() - b.deadline!.getTime()))
       .slice(0, 5);
-  }, [saved]);
+  }, [savedScholarships]);
 
   const reminders = useMemo(() => {
     const today = startOfTodayManila();
@@ -407,12 +416,18 @@ export function ProfileDashboard() {
               </Link>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <FinancialPlannerCard saved={saved} />
-              <ReviewCenterFinderCard defaultLocation={profile?.region ?? ""} />
+            {/* Row 1: planner full width; row 2: two columns (md+). Mobile: single column stack. */}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-stretch">
+              <div className="min-w-0 md:col-span-2">
+                <FinancialPlannerCard saved={savedScholarships} />
+              </div>
+              <div className="min-w-0 flex">
+                <ReviewCenterFinderCard className="h-full w-full" defaultLocation={profile?.region ?? ""} />
+              </div>
+              <div className="min-w-0 flex">
+                <CareerRoadmapCard className="h-full w-full" defaultEducationLevel={profile?.education_level ?? ""} />
+              </div>
             </div>
-
-            <CareerRoadmapCard profileEducationLevel={profile?.education_level ?? undefined} />
 
             {/* Recommended matches */}
             <div className="glass rounded-2xl p-6 shadow-md">
@@ -500,7 +515,7 @@ export function ProfileDashboard() {
               <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Saved Scholarships</h3>
               {savedLoading ? (
                 <div className="mt-4 h-24 animate-pulse rounded bg-slate-100 dark:bg-slate-700" />
-              ) : saved.length === 0 ? (
+              ) : savedScholarships.length === 0 ? (
                 <p className="mt-4 text-slate-600 dark:text-slate-400">
                   No saved scholarships yet.{" "}
                   <Link to="/scholarships/search" className="font-medium text-primary-600 hover:text-primary-700">
@@ -510,7 +525,7 @@ export function ProfileDashboard() {
                 </p>
               ) : (
                 <div className="mt-5 space-y-4">
-                  {[...saved]
+                  {[...savedScholarships]
                     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                     .map((item) => {
                       const sch = item.scholarship;
@@ -565,7 +580,6 @@ export function ProfileDashboard() {
                                 type="button"
                                 onClick={async () => {
                                   await toggleSave(item.scholarship_id);
-                                  setSaved((prev) => prev.filter((x) => x.scholarship_id !== item.scholarship_id));
                                 }}
                                 className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:bg-slate-800 dark:text-red-300 dark:hover:bg-red-950/30"
                               >

@@ -251,7 +251,7 @@ export function SettingsPage() {
 
         <Card>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">About</h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">ISKONNECT v1.1</p>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">ISKONNECT v1.5.0</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm">
             <li>
               <Link to="/changelog" className="font-medium text-primary-600 hover:underline dark:text-primary-400">

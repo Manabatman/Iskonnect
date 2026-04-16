@@ -442,3 +442,5 @@ class ScraperRun(Base):
     records_ingested = Column(Integer, nullable=True)
     output_path = Column(String(1024), nullable=True)
     error_detail = Column(Text, nullable=True)
+    # SHA-256 hex (64 chars) of raw listing HTML for change detection; null for legacy rows
+    listing_content_sha256 = Column(String(64), nullable=True)

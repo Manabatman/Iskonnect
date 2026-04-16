@@ -97,11 +97,13 @@ python -m app.scripts.create_admin
 
 ## 2. Vercel + Render deployment
 
+**Production source of truth:** For the current stack (**Vercel + Render API + Supabase Postgres + GitHub Actions**), follow **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** first. The steps below describe an alternate path using **Render-managed Postgres**; use them only if you intentionally host the database on Render instead of Supabase.
+
 ### Render (backend)
 
 1. Create a **Web Service** from your Git repository; set the **root directory** to `scholarship-match/` (or the folder that contains `requirements.txt` and `app/`).
 
-2. Create a **PostgreSQL** database on Render and link it to the service.
+2. Create a **PostgreSQL** database on Render and link it to the service (skip if you use **Supabase** per `docs/DEPLOYMENT.md`).
 
 3. **Environment variables** (minimum):
 

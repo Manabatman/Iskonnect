@@ -29,11 +29,16 @@ export function MatchScoreRing({
   const c = 2 * Math.PI * r;
   const dash = (pct / 100) * c;
 
+  // Slightly brighter arcs on dark UI so low scores stay readable (default variant).
   const strokeColor =
-    pct >= 80 ? "stroke-success-500" : pct >= 50 ? "stroke-accent-500" : "stroke-slate-400";
+    pct >= 80
+      ? "stroke-success-500 dark:stroke-success-400"
+      : pct >= 50
+        ? "stroke-accent-500 dark:stroke-accent-400"
+        : "stroke-slate-500 dark:stroke-slate-300";
 
   const onDark = variant === "onDark";
-  const trackClass = onDark ? "stroke-white/30" : "stroke-slate-200 dark:stroke-slate-600";
+  const trackClass = onDark ? "stroke-white/30" : "stroke-slate-200 dark:stroke-slate-500";
   const labelClass = onDark
     ? "text-white drop-shadow-sm"
     : "text-slate-900 dark:text-slate-100";

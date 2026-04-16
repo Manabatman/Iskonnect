@@ -111,26 +111,14 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
       .catch(() => setNotifUnread(null));
   }, [authHeaders]);
 
+  // Poll unread count on an interval — avoids refetch on every route change (reduces API noise).
   useEffect(() => {
-    let cancelled = false;
-    apiFetch("/api/v1/notifications/unread-count", { headers: authHeaders() })
-      .then((res) => {
-        if (res.status === 404 || res.status === 401) return null;
-        if (!res.ok) return null;
-        return res.json() as Promise<{ unread?: number }>;
-      })
-      .then((data) => {
-        if (!cancelled && data && typeof data.unread === "number") {
-          setNotifUnread(data.unread);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setNotifUnread(null);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [authHeaders, location.pathname]);
+    void refreshUnreadCount();
+    const id = window.setInterval(() => {
+      void refreshUnreadCount();
+    }, 60_000);
+    return () => clearInterval(id);
+  }, [refreshUnreadCount]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

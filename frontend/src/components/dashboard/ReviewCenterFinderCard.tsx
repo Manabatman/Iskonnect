@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { buildGoogleAiModeSearchUrl } from "../../utils/googleAiModeSearch";
 
 function MapPinIcon({ className }: { className?: string }) {
   return (
@@ -20,6 +21,7 @@ function SearchIcon({ className }: { className?: string }) {
 
 type ReviewCenterFinderCardProps = {
   defaultLocation?: string;
+  className?: string;
 };
 
 const EXAM_TYPES = [
@@ -41,42 +43,55 @@ const QUICK_TIPS = [
   "Verify accreditation, materials included, and mock exam frequency.",
 ];
 
-function buildGoogleQuery(location: string, examFocus?: string | null): string {
+/** Rich query for Google AI Mode (udm=50) so answers cover fees, schedules, reviews, etc. */
+function buildReviewCenterAiModeQuery(location: string, examFocus?: string | null): string {
   const loc = location.trim() || "Philippines";
   const exam = examFocus?.trim();
-  const base = exam
-    ? `${exam} review center near ${loc}`
-    : `review centers for scholarships near ${loc}`;
-  const params = new URLSearchParams({ q: base, hl: "en", gl: "ph" });
-  return `https://www.google.com/search?${params.toString()}`;
+  if (exam) {
+    return (
+      `${exam} review center near ${loc} Philippines price range tuition fee passing rate ` +
+      `schedule options online or face to face teaching style and student reviews`
+    );
+  }
+  return (
+    `best review centers for college entrance exams near ${loc} Philippines comparing fees ` +
+    `schedule passing rates and student reviews`
+  );
 }
 
-export function ReviewCenterFinderCard({ defaultLocation }: ReviewCenterFinderCardProps) {
+export function ReviewCenterFinderCard({ defaultLocation, className }: ReviewCenterFinderCardProps) {
   const [location, setLocation] = useState(defaultLocation ?? "");
   const [selectedExam, setSelectedExam] = useState<string | null>(null);
 
   const googleHref = useMemo(
-    () => buildGoogleQuery(location, selectedExam),
+    () => buildGoogleAiModeSearchUrl(buildReviewCenterAiModeQuery(location, selectedExam)),
     [location, selectedExam],
   );
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div
+      className={[
+        "flex h-full min-h-0 flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <div className="mb-4 flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200">
           <MapPinIcon className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">Review Center Finder</h3>
-          <p className="mt-1 text-sm text-slate-600">
-            Find nearby review centers and prep programs. Pick an exam type to sharpen your Google
-            search, then open results in a new tab.
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Review Center Finder</h3>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            Find nearby review centers in Google&apos;s AI Mode — synthesized answers with fees,
+            schedules, and reviews. Pick an exam type, then open in a new tab.
           </p>
         </div>
       </div>
 
       <div className="space-y-3">
-        <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           City / region
         </label>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -85,7 +100,7 @@ export function ReviewCenterFinderCard({ defaultLocation }: ReviewCenterFinderCa
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="e.g., Quezon City, Cebu, Davao"
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-inner focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-inner focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-800"
           />
           <a
             href={googleHref}
@@ -94,16 +109,16 @@ export function ReviewCenterFinderCard({ defaultLocation }: ReviewCenterFinderCa
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-700 sm:w-auto sm:min-w-[200px]"
           >
             <SearchIcon className="h-4 w-4" />
-            Search with Google
+            Open in Google AI Mode
           </a>
         </div>
-        <p className="text-xs text-slate-500">
-          Opens Google in a new tab. We don&apos;t track your searches.
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Opens Google AI Mode in a new tab. We don&apos;t track your searches.
         </p>
       </div>
 
       <div className="mt-5">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Common exam types
         </p>
         <div className="flex flex-wrap gap-2">
@@ -116,8 +131,8 @@ export function ReviewCenterFinderCard({ defaultLocation }: ReviewCenterFinderCa
                 onClick={() => setSelectedExam(active ? null : exam)}
                 className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
                   active
-                    ? "border-sky-600 bg-sky-50 text-sky-800"
-                    : "border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300"
+                    ? "border-sky-600 bg-sky-50 text-sky-800 dark:border-sky-500 dark:bg-sky-950/50 dark:text-sky-200"
+                    : "border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:border-slate-500"
                 }`}
               >
                 {exam}
@@ -125,15 +140,15 @@ export function ReviewCenterFinderCard({ defaultLocation }: ReviewCenterFinderCa
             );
           })}
         </div>
-        <p className="mt-2 text-xs text-slate-500">
-          Selected exam is prepended to your search (e.g. &quot;UPCAT review center near Quezon
-          City&quot;).
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+          Your query includes fees, passing rates, online vs face-to-face, and reviews for better AI
+          answers.
         </p>
       </div>
 
-      <div className="mt-5 rounded-xl border border-slate-100 bg-slate-50 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Quick tips</p>
-        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-700">
+      <div className="mt-auto rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-900/80">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">Quick tips</p>
+        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-800 dark:text-slate-200">
           {QUICK_TIPS.map((tip) => (
             <li key={tip}>{tip}</li>
           ))}

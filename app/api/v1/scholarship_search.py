@@ -12,7 +12,7 @@ from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from app import models, schemas
-from app.api.v1.scholarships import _scholarship_to_response
+from app.api.v1.scholarships import _scholarship_to_response, get_cached_scholarship_dicts
 from app.db import get_db
 from app.limiter import limiter
 
@@ -88,25 +88,23 @@ def get_search_filter_options(
 ):
     """Return distinct filter values for search UI dropdowns."""
     logger.info("scholarship_search_filters")
-    scholarships = (
-        db.query(models.Scholarship)
-        .filter(models.Scholarship.is_active != False)  # noqa: E712
-        .all()
-    )
+    # Reuse cached active scholarship dicts (same path as list/match) instead of a full-table ORM load.
+    scholarship_dicts = get_cached_scholarship_dicts(db)
     providers = set()
     education_levels = set()
     regions = set()
     fields_of_study = set()
-    for s in scholarships:
-        if s.provider and s.provider.strip():
-            providers.add(s.provider.strip())
-        for level in _parse_json(getattr(s, "eligible_levels", None)):
+    for d in scholarship_dicts:
+        prov = d.get("provider")
+        if prov and str(prov).strip():
+            providers.add(str(prov).strip())
+        for level in _parse_json(d.get("eligible_levels")):
             if level and str(level).strip():
                 education_levels.add(str(level).strip())
-        for r in _parse_json(getattr(s, "eligible_regions", None)) or _parse_json(s.regions):
+        for r in _parse_json(d.get("eligible_regions")) or _parse_json(d.get("regions")):
             if r and str(r).strip():
                 regions.add(str(r).strip())
-        for f in _parse_json(getattr(s, "eligible_courses_psced", None)):
+        for f in _parse_json(d.get("eligible_courses_psced")):
             if f and str(f).strip():
                 fields_of_study.add(str(f).strip())
     return schemas.ScholarshipFilterOptions(

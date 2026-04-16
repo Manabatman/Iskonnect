@@ -55,12 +55,11 @@ export function RegisterPage() {
           <img src="/images/logo.svg" alt="ISKONNECT" className="absolute left-8 top-8 h-10 w-10 lg:left-12 lg:top-12" width={40} height={40} />
           <blockquote className="max-w-md">
             <p className="text-lg font-medium leading-relaxed text-white lg:text-xl">
-              &ldquo;One profile, ranked matches, and reminders — ISKONNECT feels like a partner, not another admin
-              tool.&rdquo;
+              One profile, ranked matches, and reminders — ISKONNECT feels like a partner, not another admin;
             </p>
             <footer className="mt-4 text-sm text-slate-300">
-              <span className="font-semibold text-white">Juan R.</span>
-              <span className="text-slate-400"> · Quezon City</span>
+              <span className="font-semibold text-white"></span>
+              <span className="text-slate-400"> · </span>
             </footer>
           </blockquote>
         </div>

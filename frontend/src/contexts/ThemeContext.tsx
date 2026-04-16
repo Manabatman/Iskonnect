@@ -13,7 +13,8 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
     const stored = localStorage.getItem("theme") as Theme | null;
-    return stored ?? "system";
+    // Default light for first visit; Settings still offers Dark / System.
+    return stored ?? "light";
   });
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 

@@ -29,12 +29,13 @@ const steps = [
   },
 ] as const;
 
+/** Neutral card + left accent stripe — readable in light and dark (no pastel text on dark). */
 const flowNodes = [
-  { label: "Profile data", className: "bg-primary-50 text-primary-900 dark:bg-primary-950/50 dark:text-primary-100" },
-  { label: "Eligibility gate", className: "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200" },
-  { label: "Scoring", className: "bg-primary-50 text-primary-900 dark:bg-primary-950/50 dark:text-primary-100" },
-  { label: "Ranked list", className: "bg-success-50 text-success-900 dark:bg-success-950/40 dark:text-success-100" },
-  { label: "You apply", className: "bg-accent-50 text-accent-900 dark:bg-accent-950/40 dark:text-accent-100" },
+  { label: "Profile data", accent: "border-l-4 border-l-primary-600 dark:border-l-primary-400" },
+  { label: "Eligibility gate", accent: "border-l-4 border-l-slate-500 dark:border-l-slate-400" },
+  { label: "Scoring", accent: "border-l-4 border-l-primary-600 dark:border-l-primary-400" },
+  { label: "Ranked list", accent: "border-l-4 border-l-emerald-600 dark:border-l-emerald-400" },
+  { label: "You apply", accent: "border-l-4 border-l-sky-600 dark:border-l-sky-400" },
 ] as const;
 
 const faqItems: { q: string; a: ReactNode }[] = [
@@ -77,7 +78,7 @@ export function HowItWorksPage() {
           {steps.map((s) => (
             <div
               key={s.n}
-              className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/40 sm:p-5"
+              className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:flex-row"
             >
               <span
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white"
@@ -94,14 +95,18 @@ export function HowItWorksPage() {
         </div>
 
         <div
-          className="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800/50"
+          className="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
           aria-hidden
         >
-          <p className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">At a glance</p>
+          <p className="text-center text-sm font-medium text-slate-600 dark:text-slate-300">At a glance</p>
           <div className="mt-4 flex min-w-min flex-nowrap items-center justify-center gap-1 px-1 text-xs font-medium sm:flex-wrap sm:gap-2 sm:text-sm">
             {flowNodes.map((node, i) => (
               <span key={node.label} className="flex shrink-0 items-center gap-1 sm:gap-2">
-                <span className={`whitespace-nowrap rounded-lg px-3 py-1.5 ${node.className}`}>{node.label}</span>
+                <span
+                  className={`whitespace-nowrap rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-900 shadow-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 ${node.accent}`}
+                >
+                  {node.label}
+                </span>
                 {i < flowNodes.length - 1 ? (
                   <span className="text-slate-400" aria-hidden>
                     →
