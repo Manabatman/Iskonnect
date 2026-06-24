@@ -1,6 +1,6 @@
-# ISKONNECT — Teaching Documentation
+# Iskonnect — Teaching Documentation
 
-This document explains how the ISKONNECT frontend is structured, how to edit it safely, and how it talks to the backend. Use it alongside the code in `scholarship-match/frontend/`.
+This document explains how the Iskonnect frontend is structured, how to edit it safely, and how it talks to the backend. Use it alongside the code in `scholarship-match/frontend/`.
 
 ---
 
@@ -180,4 +180,4 @@ From `AuthContext`: returns headers like `Authorization: Bearer <token>` for pro
 
 ---
 
-*This file is part of the ISKONNECT project documentation. Update it when you add major features or change the API contract.*
+*This file is part of the Iskonnect project documentation. Update it when you add major features or change the API contract.*

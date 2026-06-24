@@ -5,6 +5,7 @@ from datetime import timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel, EmailStr, field_validator
 from sqlalchemy.orm import Session
 
@@ -17,6 +18,7 @@ from app.auth import (
     hash_refresh_token,
     issue_refresh_token,
     new_refresh_token_plain,
+    revoke_all_refresh_tokens_for_user,
     revoke_refresh_token_plain,
     consume_refresh_token_rotation,
     verify_password,
@@ -25,6 +27,7 @@ from app.config import settings
 from app.db import get_db
 from app.limiter import limiter
 from app import models
+from app.utils.email import send_email_verification_email, send_password_reset_email
 from app.utils.timezone import utc_now_naive
 
 router = APIRouter()
@@ -54,6 +57,17 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
     user_id: int
     role: str
+
+
+class RegisterResponse(BaseModel):
+    """Registration may return tokens for new users only (non-enumerating for duplicates)."""
+
+    detail: str
+    access_token: str | None = None
+    refresh_token: str | None = None
+    token_type: str = "bearer"
+    user_id: int | None = None
+    role: str | None = None
 
 
 class RefreshRequest(BaseModel):
@@ -104,20 +118,19 @@ def _tokens_for_user(db: Session, user: models.User) -> TokenResponse:
     )
 
 
-@router.post("/auth/register", response_model=TokenResponse)
+@router.post("/auth/register", response_model=RegisterResponse)
 @limiter.limit("5/minute")
 def register(
     request: Request,
     register_req: Annotated[RegisterRequest, Body()],
     db: Session = Depends(get_db),
 ):
-    """Register a new user. Returns access + refresh tokens."""
+    """Register a new user. Returns tokens for new accounts; generic 200 if email already exists."""
     existing = db.query(models.User).filter(models.User.email == register_req.email).first()
     if existing:
         logger.warning("auth_register_failed email=%s reason=already_registered", register_req.email)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered",
+        return RegisterResponse(
+            detail="If this email is not already registered, your account has been created. Check your email to verify.",
         )
     user = models.User(
         email=register_req.email,
@@ -125,14 +138,25 @@ def register(
         email_verified=False,
     )
     db.add(user)
-    db.flush()
+    try:
+        db.flush()
+    except IntegrityError:
+        db.rollback()
+        logger.warning("auth_register_race email=%s", register_req.email)
+        return RegisterResponse(
+            detail="If this email is not already registered, your account has been created. Check your email to verify.",
+        )
     verify_jwt = create_email_verification_token(user.id)
-    logger.info(
-        "auth_register_ok user_id=%s email_verify_jwt_prefix=%s... (send via email in production)",
-        user.id,
-        verify_jwt[:16],
+    send_email_verification_email(register_req.email, verify_jwt)
+    tokens = _tokens_for_user(db, user)
+    logger.info("auth_register_ok user_id=%s", user.id)
+    return RegisterResponse(
+        detail="Account created. Check your email to verify your address.",
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        user_id=tokens.user_id,
+        role=tokens.role,
     )
-    return _tokens_for_user(db, user)
 
 
 @router.post("/auth/login", response_model=TokenResponse)
@@ -150,6 +174,8 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
+    if not bool(getattr(user, "email_verified", False)):
+        logger.info("auth_login_unverified email=%s user_id=%s", req.email, user.id)
     return _tokens_for_user(db, user)
 
 
@@ -226,11 +252,8 @@ def forgot_password(
         user.password_reset_token_hash = hash_refresh_token(raw)
         user.password_reset_expires_at = utc_now_naive() + timedelta(hours=1)
         db.commit()
-        logger.info(
-            "password_reset_token_issued user_id=%s token_prefix=%s... (email link in production)",
-            user.id,
-            raw[:12],
-        )
+        send_password_reset_email(user.email, raw)
+        logger.info("password_reset_token_issued user_id=%s", user.id)
     return {"detail": "If that email exists, reset instructions have been sent."}
 
 
@@ -251,6 +274,7 @@ def reset_password(
     user.password_hash = hash_password(body.new_password)
     user.password_reset_token_hash = None
     user.password_reset_expires_at = None
+    revoke_all_refresh_tokens_for_user(db, user.id)
     db.commit()
     return {"detail": "Password updated. You can sign in."}
 

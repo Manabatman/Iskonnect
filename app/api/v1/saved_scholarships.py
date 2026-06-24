@@ -7,6 +7,7 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -83,7 +84,11 @@ def save_scholarship(
 
     saved = models.SavedScholarship(user_id=uid, scholarship_id=body.scholarship_id)
     db.add(saved)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Scholarship already saved")
     db.refresh(saved)
 
     logger.info("saved_scholarships_saved id=%s user_id=%s scholarship_id=%s", saved.id, uid, body.scholarship_id)
@@ -121,24 +126,18 @@ def list_saved_scholarships(
     items = []
     for s in saved_list:
         sch = scholarships.get(s.scholarship_id)
-        if sch:
-            items.append(
-                schemas.SavedScholarshipResponse(
-                    id=s.id,
-                    scholarship_id=s.scholarship_id,
-                    created_at=s.created_at,
-                    scholarship=_scholarship_to_response(sch),
-                )
+        items.append(
+            schemas.SavedScholarshipSummary(
+                id=s.id,
+                scholarship_id=s.scholarship_id,
+                created_at=s.created_at,
+                title=sch.title if sch else None,
+                provider=sch.provider if sch else None,
+                benefit_tuition=sch.benefit_tuition if sch else None,
+                benefit_allowance_monthly=sch.benefit_allowance_monthly if sch else None,
+                benefit_total_value=sch.benefit_total_value if sch else None,
             )
-        else:
-            items.append(
-                schemas.SavedScholarshipResponse(
-                    id=s.id,
-                    scholarship_id=s.scholarship_id,
-                    created_at=s.created_at,
-                    scholarship=None,
-                )
-            )
+        )
 
     logger.info("saved_scholarships_list user_id=%s count=%s", uid, len(items))
     return schemas.SavedScholarshipListResponse(saved=items, total=len(items))

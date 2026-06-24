@@ -2,19 +2,22 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Request, Query
 from sqlalchemy.orm import Session
 
 from app import models
 from app.schemas import AuditLogResponse
 from app.auth import require_admin
 from app.db import get_db
+from app.limiter import limiter
 
 router = APIRouter(tags=["audit"])
 
 
 @router.get("/admin/audit/logs", response_model=list[AuditLogResponse])
+@limiter.limit("60/minute")
 def list_audit_logs(
+    request: Request,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
     action: str | None = Query(None),

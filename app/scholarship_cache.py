@@ -23,6 +23,23 @@ TTL_SECONDS = 300
 
 _process_cache: list | None = None
 _process_cache_time: float = 0.0
+_redis_client = None
+
+
+def _get_redis():
+    """Lazy singleton Redis client (reused across requests)."""
+    global _redis_client
+    if not settings.redis_url:
+        return None
+    if _redis_client is None:
+        try:
+            import redis
+
+            _redis_client = redis.from_url(settings.redis_url, decode_responses=True)
+        except Exception as e:
+            logger.warning("scholarship_cache_redis_connect_failed: %s", e)
+            return None
+    return _redis_client
 
 
 def invalidate_scholarship_cache() -> None:
@@ -30,11 +47,10 @@ def invalidate_scholarship_cache() -> None:
     global _process_cache, _process_cache_time
     _process_cache = None
     _process_cache_time = 0.0
-    if settings.redis_url:
+    r = _get_redis()
+    if r:
         try:
-            import redis
-
-            redis.from_url(settings.redis_url).delete(REDIS_KEY)
+            r.delete(REDIS_KEY)
         except Exception as e:
             logger.warning("scholarship_cache_redis_invalidate_failed: %s", e)
 
@@ -46,11 +62,9 @@ def get_cached_scholarship_dicts(
     """Load scholarship dicts from Redis, process cache, or DB."""
     global _process_cache, _process_cache_time
 
-    if settings.redis_url:
+    r = _get_redis()
+    if r:
         try:
-            import redis
-
-            r = redis.from_url(settings.redis_url, decode_responses=True)
             raw = r.get(REDIS_KEY)
             if raw:
                 return json.loads(raw)
@@ -65,13 +79,9 @@ def get_cached_scholarship_dicts(
     _process_cache = data
     _process_cache_time = now
 
-    if settings.redis_url:
+    if r:
         try:
-            import redis
-
-            redis.from_url(settings.redis_url, decode_responses=True).setex(
-                REDIS_KEY, TTL_SECONDS, json.dumps(data)
-            )
+            r.setex(REDIS_KEY, TTL_SECONDS, json.dumps(data))
         except Exception as e:
             logger.warning("scholarship_cache_redis_write_failed: %s", e)
 

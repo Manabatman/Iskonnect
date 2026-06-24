@@ -1,6 +1,14 @@
-const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env;
-export const API_BASE_URL = _env?.VITE_API_BASE_URL ?? "http://localhost:8000";
-if (!_env?.VITE_API_BASE_URL && typeof console !== "undefined") {
+const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string; PROD?: boolean } }).env;
+const _apiBase = _env?.VITE_API_BASE_URL?.trim();
+
+if (_env?.PROD && !_apiBase) {
+  throw new Error(
+    "VITE_API_BASE_URL must be set in production builds. Configure it in your hosting provider (e.g. Vercel) environment variables.",
+  );
+}
+
+export const API_BASE_URL = _apiBase ?? "http://localhost:8000";
+if (!_apiBase && typeof console !== "undefined") {
   console.warn(
     "[API] VITE_API_BASE_URL is not set; using http://localhost:8000. Set it in production builds.",
   );

@@ -3,8 +3,11 @@ Deterministic match explanation generator.
 Produces breakdown and plain-language explanation for every score.
 """
 
+from app.matching.hard_filters import DEADLINE_PASSED_MESSAGE
 from app.matching.scoring_port import ScoringPayload
 from app.taxonomy.equity_groups import EQUITY_GROUPS
+
+__all__ = ["DEADLINE_PASSED_MESSAGE", "build_breakdown", "build_explanation", "build_why_not_higher", "build_improvement_suggestions", "assess_confidence"]
 
 
 def _get_equity_match_reason(equity_flags: dict[str, bool], priority_groups: list[str]) -> str | None:
@@ -19,33 +22,6 @@ def _get_equity_match_reason(equity_flags: dict[str, bool], priority_groups: lis
             ra = info.get("ra_reference", group)
             return f"{group} ({ra})"
     return None
-
-
-def _compute_equity_multiplier(
-    equity_flags: dict[str, bool],
-    priority_groups: list[str],
-    equity_multipliers: dict[str, float],
-    max_cap: float,
-) -> tuple[float, str | None]:
-    """
-    Compute equity multiplier and reason (deprecated for scoring; kept for tests / compatibility).
-    Returns (multiplier, reason_string).
-    """
-    multiplier = 1.0
-    reason = None
-    for group in priority_groups or []:
-        if not group:
-            continue
-        flag_key = group.lower().replace(" ", "_").replace("/", "_")
-        profile_flag = EQUITY_GROUPS.get(group, {}).get("profile_flag") or f"is_{flag_key}"
-        if equity_flags.get(flag_key) or equity_flags.get(profile_flag) or equity_flags.get(group):
-            mult = equity_multipliers.get(profile_flag) or equity_multipliers.get(flag_key)
-            if mult and multiplier * mult <= max_cap:
-                multiplier *= mult
-                if not reason:
-                    info = EQUITY_GROUPS.get(group, {})
-                    reason = info.get("ra_reference", group)
-    return (min(multiplier, max_cap), reason)
 
 
 def build_breakdown(
@@ -313,17 +289,3 @@ def assess_confidence(payload: ScoringPayload) -> str:
     if missing >= 1:
         return "medium"
     return "high"
-
-
-def compute_equity_multiplier(
-    equity_flags: dict[str, bool],
-    priority_groups: list[str],
-    equity_multipliers: dict[str, float],
-    max_cap: float,
-) -> tuple[float, str | None]:
-    """
-    Deprecated: scoring no longer applies this multiplier; kept for compatibility and tests.
-    """
-    return _compute_equity_multiplier(
-        equity_flags, priority_groups, equity_multipliers, max_cap
-    )

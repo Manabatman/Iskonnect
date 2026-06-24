@@ -1,5 +1,5 @@
 """
-Shared pytest fixtures for ISKONNECT backend tests.
+Shared pytest fixtures for Iskonnect backend tests.
 
 Provides in-memory SQLite engine/session and optional FastAPI TestClient
 for integration tests that need a database.

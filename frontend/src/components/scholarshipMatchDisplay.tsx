@@ -1,8 +1,3 @@
-export function providerInitials(provider: string | null | undefined): string {
-  const clean = (provider ?? "").replace(/[^a-zA-Z0-9]/g, "").slice(0, 2);
-  return clean.length ? clean.toUpperCase() : "?";
-}
-
 export function statusToFactorPercent(status: string | undefined): number {
   const s = (status ?? "").toLowerCase();
   if (s === "met" || s === "exceeded" || s === "ready" || s === "matched") return 100;

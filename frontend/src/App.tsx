@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
@@ -9,7 +9,9 @@ import { PrivacyPage } from "./pages/PrivacyPage";
 import { ChangelogPage } from "./pages/ChangelogPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
-import { ScholarshipList } from "./components/ScholarshipList";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { VerifyEmailPage } from "./pages/VerifyEmailPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
@@ -19,7 +21,6 @@ import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { AdaptiveSearchLayout } from "./components/layout/AdaptiveSearchLayout";
 import { FeedbackProvider } from "./components/FeedbackModal";
-import { ENABLE_OPPORTUNITIES } from "./config/featureFlags";
 import { AdminGuard } from "./components/AdminGuard";
 import { SponsorGuard } from "./components/SponsorGuard";
 import { SchoolGuard } from "./components/SchoolGuard";
@@ -50,9 +51,6 @@ const ApplicationsPage = lazy(() =>
   import("./pages/ApplicationsPage").then((m) => ({ default: m.ApplicationsPage }))
 );
 const DocumentsPage = lazy(() => import("./pages/DocumentsPage").then((m) => ({ default: m.DocumentsPage })));
-const OpportunityBrowserPage = lazy(() =>
-  import("./pages/OpportunityBrowserPage").then((m) => ({ default: m.OpportunityBrowserPage }))
-);
 const ProfileBuilderPage = lazy(() =>
   import("./pages/ProfileBuilderPage").then((m) => ({ default: m.ProfileBuilderPage }))
 );
@@ -79,6 +77,9 @@ function AppRoutes() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/transparency" element={<TransparencyPage />} />
           <Route path="/success-stories" element={<SuccessStoriesPage />} />
@@ -102,17 +103,6 @@ function AppRoutes() {
           <Route path="/match/:profileId" element={<MatchResultsPage />} />
           <Route path="/match-compare" element={<MatchComparisonPage />} />
           <Route path="/scholarship/:id" element={<ScholarshipDetailPage />} />
-          <Route
-            path="/opportunities"
-            element={
-              ENABLE_OPPORTUNITIES ? (
-                <OpportunityBrowserPage />
-              ) : (
-                <Navigate to="/dashboard" replace />
-              )
-            }
-          />
-          <Route path="/scholarships" element={<ScholarshipList />} />
           <Route path="/profile-builder" element={<ProfileBuilderPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route

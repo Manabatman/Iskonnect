@@ -67,7 +67,7 @@ def score_field(field_match_level: str) -> float:
         "exact": 1.0,
         "broad": 0.75,
         "partial": 0.4,
-        "none": 0.0,
+        "none": 0.2,  # floor so course-restricted rows don't collapse total score
     }
     return mapping.get(level, 0.0)
 
@@ -113,13 +113,3 @@ def score_equity(equity_flags: dict[str, bool], priority_groups: list[str]) -> f
     if match_count == 1:
         return 0.75
     return 0.0
-
-
-def score_readiness(document_readiness_ratio: float) -> float:
-    """
-    Document readiness: direct pass-through of ratio (0.0 to 1.0).
-    Already computed by app/documents/readiness.py.
-    """
-    if document_readiness_ratio is None:
-        return 0.0
-    return max(0.0, min(1.0, float(document_readiness_ratio)))

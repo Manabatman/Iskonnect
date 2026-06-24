@@ -93,6 +93,22 @@ class Settings(BaseSettings):
         validation_alias="RETENTION_INACTIVE_DAYS",
     )
 
+    # Email (SMTP) — required in production for password reset / verification
+    smtp_host: str | None = Field(default=None, validation_alias="SMTP_HOST")
+    smtp_port: int = Field(default=587, validation_alias="SMTP_PORT")
+    smtp_user: str | None = Field(default=None, validation_alias="SMTP_USER")
+    smtp_password: str | None = Field(default=None, validation_alias="SMTP_PASSWORD")
+    smtp_use_tls: bool = Field(default=True, validation_alias="SMTP_USE_TLS")
+    email_from: str | None = Field(default=None, validation_alias="EMAIL_FROM")
+    frontend_url: str = Field(
+        default="http://localhost:5173",
+        validation_alias="FRONTEND_URL",
+    )
+
+    # SQLAlchemy pool (PostgreSQL multi-worker)
+    db_pool_size: int = Field(default=5, validation_alias="DB_POOL_SIZE")
+    db_max_overflow: int = Field(default=10, validation_alias="DB_MAX_OVERFLOW")
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""
@@ -105,6 +121,14 @@ class Settings(BaseSettings):
             if "localhost" not in lo and "127.0.0.1" not in lo:
                 return True
         return False
+
+    def frontend_url_is_production_ready(self) -> bool:
+        """True when FRONTEND_URL is not the localhost default."""
+        lo = (self.frontend_url or "").strip().lower()
+        return "localhost" not in lo and "127.0.0.1" not in lo
+
+    def email_is_configured(self) -> bool:
+        return bool(self.smtp_host and self.email_from)
 
     def validate_for_production(self) -> None:
         """
@@ -124,6 +148,16 @@ class Settings(BaseSettings):
         if not self.cors_has_non_localhost_origin():
             errors.append(
                 "CORS_ORIGINS must include at least one non-localhost origin in production"
+            )
+        if not self.email_is_configured():
+            errors.append("SMTP_HOST and EMAIL_FROM must be set in production for auth emails")
+        if not self.frontend_url_is_production_ready():
+            errors.append(
+                "FRONTEND_URL must be a non-localhost URL in production (used in password reset / verify links)"
+            )
+        if self.run_migrations_on_startup:
+            errors.append(
+                "RUN_MIGRATIONS_ON_STARTUP must be false in production; use release command: alembic upgrade head"
             )
         if errors:
             raise RuntimeError("Invalid production configuration: " + "; ".join(errors))

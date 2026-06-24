@@ -25,13 +25,13 @@ const CATEGORY_COPY: Record<
       "e.g. The match results didn't load after I saved my profile.",
   },
   suggestion: {
-    prompt: "What would you like to see in ISKONNECT?",
+    prompt: "What would you like to see in Iskonnect?",
     placeholder: "e.g. I wish I could filter scholarships by deadline.",
   },
   experience: {
     prompt: "Tell us your story — we'd love to hear it.",
     placeholder:
-      "e.g. ISKONNECT helped me find the scholarship I'm currently using to pay for college.",
+      "e.g. Iskonnect helped me find the scholarship I'm currently using to pay for college.",
   },
 };
 
@@ -95,13 +95,13 @@ const CATEGORIES: {
   {
     id: "suggestion",
     heading: "I have an idea",
-    subtext: "A way to make ISKONNECT better",
+    subtext: "A way to make Iskonnect better",
     Icon: IconLightbulb,
   },
   {
     id: "experience",
     heading: "Share your story",
-    subtext: "How ISKONNECT helped you",
+    subtext: "How Iskonnect helped you",
     Icon: IconHeart,
   },
 ];
@@ -186,7 +186,7 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
                   id="feedback-modal-desc"
                   className="mt-1 text-sm text-slate-600 dark:text-slate-400"
                 >
-                  Help us improve ISKONNECT. Your message goes straight to our team.
+                  Help us improve Iskonnect. Your message goes straight to our team.
                 </Dialog.Description>
               </div>
               <Dialog.Close
@@ -214,7 +214,7 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
                       type="button"
                       className="mt-6 inline-flex rounded-xl bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
                     >
-                      Back to ISKONNECT
+                      Back to Iskonnect
                     </button>
                   </Dialog.Close>
                 </div>

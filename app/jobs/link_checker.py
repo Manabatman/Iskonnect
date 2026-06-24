@@ -26,7 +26,7 @@ REQUEST_GAP_SEC = 1.0
 def _head_status(url: str) -> tuple[bool, str]:
     """Return (success, reason_tag)."""
     try:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "ISKONNECT-LinkChecker/1.0"})
+        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "Iskonnect-LinkChecker/1.0"})
         with urllib.request.urlopen(req, timeout=HEAD_TIMEOUT_SEC) as resp:
             code = getattr(resp, "status", resp.getcode())
             return (200 <= int(code) < 400, "ok")

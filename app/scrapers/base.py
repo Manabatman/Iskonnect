@@ -10,7 +10,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_UA = "ISKONNECT-ScholarshipBot/1.0 (+https://iskonnect.example)"
+DEFAULT_UA = "Iskonnect-ScholarshipBot/1.0 (+https://iskonnect.example)"
 REQUEST_GAP_SEC = 1.0
 
 

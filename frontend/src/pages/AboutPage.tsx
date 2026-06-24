@@ -4,13 +4,13 @@ export function AboutPage() {
   return (
     <section className="py-12">
       <div className="mx-auto max-w-3xl px-4">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">About ISKONNECT</h1>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">About Iskonnect</h1>
 
         <div className="mt-8 space-y-8 text-slate-700 dark:text-slate-300">
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Our Mission</h2>
             <p className="mt-2">
-              ISKONNECT helps Filipino students discover scholarships they qualify for. We match your profile against
+              Iskonnect helps Filipino students discover scholarships they qualify for. We match your profile against
               eligibility criteria from government, private, and institutional scholarship programs across the
               Philippines.
             </p>
@@ -29,7 +29,7 @@ export function AboutPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Transparency</h2>
             <p className="mt-2">
-              Our recommendations are based on publicly available eligibility criteria. ISKONNECT is not affiliated with
+              Our recommendations are based on publicly available eligibility criteria. Iskonnect is not affiliated with
               any scholarship provider. Always verify eligibility on the official scholarship website before applying.
             </p>
           </section>

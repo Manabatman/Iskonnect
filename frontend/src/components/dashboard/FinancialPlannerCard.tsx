@@ -50,7 +50,14 @@ export function FinancialPlannerCard({ saved, className }: Props) {
     return saved.find((s) => s.scholarship_id === id) ?? null;
   }, [saved, scholarshipId]);
 
-  const sch = selected?.scholarship;
+  const sch = selected?.scholarship ?? (selected
+    ? {
+        title: selected.title ?? undefined,
+        benefit_tuition: selected.benefit_tuition ?? undefined,
+        benefit_allowance_monthly: selected.benefit_allowance_monthly ?? undefined,
+        benefit_total_value: selected.benefit_total_value ?? undefined,
+      }
+    : undefined);
 
   const analysis = useMemo(() => {
     const tuitionN = parseMoney(tuitionPerTerm);
@@ -219,7 +226,7 @@ export function FinancialPlannerCard({ saved, className }: Props) {
       >
         {saved.map((s) => (
           <option key={s.id} value={s.scholarship_id}>
-            {s.scholarship?.title ?? `Scholarship #${s.scholarship_id}`}
+            {s.title ?? s.scholarship?.title ?? `Scholarship #${s.scholarship_id}`}
           </option>
         ))}
       </select>

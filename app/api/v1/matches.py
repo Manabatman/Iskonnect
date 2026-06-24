@@ -1,14 +1,15 @@
 import logging
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
-from app.auth import assert_can_read_profile, get_current_user_id
+from app import models
+from app.auth import assert_can_read_profile, get_current_user_id, get_profile_access_token
 from app.db import get_db
 from app.limiter import limiter
 from app.api.v1.profiles import get_profile_dict
-from app.api.v1.scholarships import get_cached_scholarship_dicts
+from app.api.v1.scholarships import get_cached_scholarship_dicts, _scholarship_to_response
 from app.config import settings
 from app.matching.match_service import MatchService
 from app.matching.profile_completeness import profile_completeness_payload
@@ -28,26 +29,67 @@ def _match_service_for_db(db: Session) -> MatchService:
     return match_service
 
 
+def _prefilter_scholarships_query(db: Session, profile: dict):
+    """SQL prefilter: active scholarships matching profile education level or nationwide."""
+    q = db.query(models.Scholarship).filter(models.Scholarship.is_active != False)  # noqa: E712
+    level = (profile.get("education_level") or "").strip()
+    if level:
+        q = q.filter(
+            (models.Scholarship.eligible_levels.ilike(f'%"{level}"%'))
+            | (models.Scholarship.eligible_levels.is_(None))
+            | (models.Scholarship.eligible_levels == "")
+            | (models.Scholarship.eligible_levels == "[]")
+        )
+    region = (profile.get("region") or "").strip()
+    if region:
+        q = q.filter(
+            (models.Scholarship.eligible_regions.ilike(f'%"{region}"%'))
+            | (models.Scholarship.regions.ilike(f"%{region}%"))
+            | (models.Scholarship.eligible_regions.is_(None))
+            | (models.Scholarship.eligible_regions == "")
+            | (models.Scholarship.eligible_regions == "[]")
+        )
+    return q
+
+
+def _scholarship_rows_to_dicts(rows: list[models.Scholarship]) -> list[dict]:
+    return [_scholarship_to_response(r) for r in rows]
+
+
 @router.get("/matches/{profile_id}")
 @limiter.limit("30/minute")
 def get_matches(
     request: Request,
     profile_id: int,
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+    profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
 ):
-    """Get ranked matches for a profile. Requires auth in production; must own profile."""
-    assert_can_read_profile(profile_id, db, user_id)
+    """Return ranked scholarship matches for a student profile.
+
+    Runs the two-stage pipeline: Stage 1 hard filters discard ineligible
+    scholarships; Stage 2 scores survivors with the weighted deterministic matrix.
+    Requires auth in production and profile ownership.
+    """
+    assert_can_read_profile(profile_id, db, user_id, profile_token)
     profile = get_profile_dict(profile_id, db)
     if not profile:
         logger.warning("matches_profile_not_found profile_id=%s", profile_id)
         raise HTTPException(status_code=404, detail="Profile not found")
 
-    scholarship_dicts = get_cached_scholarship_dicts(db)
+    if settings.filter_expired_from_matches:
+        prefetched = _prefilter_scholarships_query(db, profile).all()
+        scholarship_dicts = _scholarship_rows_to_dicts(prefetched)
+    else:
+        scholarship_dicts = get_cached_scholarship_dicts(db)
 
     results, diagnostics = _match_service_for_db(db).get_matches(profile, scholarship_dicts)
+    total = len(results)
+    results = results[offset : offset + limit]
 
-    # Ensure backward compatibility: score alias
+    # Legacy mobile clients expect ``score`` alongside ``final_score``.
     for r in results:
         if "final_score" in r and "score" not in r:
             r["score"] = r["final_score"]
@@ -56,6 +98,9 @@ def get_matches(
 
     response = {
         "matches": results,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
         "profile_completeness": profile_completeness_payload(profile),
         "diagnostics": diagnostics,
     }

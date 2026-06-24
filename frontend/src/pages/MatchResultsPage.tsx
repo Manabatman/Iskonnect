@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import type { MatchResult, ProfileCompleteness, UpcomingScholarship } from "../types";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
+import { VirtualizedMatchGrid } from "../components/VirtualizedMatchGrid";
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { UpcomingScholarshipCard } from "../components/UpcomingScholarshipCard";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,6 +12,8 @@ type MatchDiagnostics = {
   total_checked?: number;
   passed_hard_filters?: number;
   eliminated_by_filter?: Record<string, number>;
+  eliminated_scholarships?: Array<{ scholarship_id?: number; title?: string; filter?: string; reason?: string }>;
+  hard_exclusions?: Array<{ scholarship_id?: number; title?: string; filter?: string; reason?: string }>;
   missing_profile_fields?: string[];
   top_blockers?: string[];
 };
@@ -119,6 +122,9 @@ export function MatchResultsPage() {
     if (!open) setAnalysisMatch(null);
   }, []);
 
+  const activeMatches = matches.filter((m) => !m.deadline_passed);
+  const deadlinePassedMatches = matches.filter((m) => m.deadline_passed);
+
   if (loading) {
     return (
       <section className="py-12">
@@ -176,7 +182,7 @@ export function MatchResultsPage() {
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
             Your Top Matches
             <span className="ml-2 rounded-full bg-primary-100 dark:bg-primary-900 px-2.5 py-0.5 text-sm font-medium text-primary-800 dark:text-primary-300">
-              {matches.length}
+              {activeMatches.length}
             </span>
           </h2>
           <button
@@ -251,6 +257,23 @@ export function MatchResultsPage() {
                   filters before scoring.
                 </p>
               ) : null}
+              {(diagnostics?.hard_exclusions ?? diagnostics?.eliminated_scholarships ?? []).length > 0 ? (
+                <details className="mx-auto mt-4 max-w-lg text-left text-sm text-slate-600 dark:text-slate-300">
+                  <summary className="cursor-pointer font-medium">
+                    Why some scholarships were excluded (
+                    {(diagnostics?.hard_exclusions ?? diagnostics?.eliminated_scholarships)?.length})
+                  </summary>
+                  <ul className="mt-2 list-inside list-disc">
+                    {(diagnostics?.hard_exclusions ?? diagnostics?.eliminated_scholarships ?? [])
+                      .slice(0, 10)
+                      .map((row) => (
+                        <li key={`${row.scholarship_id}-${row.filter}`}>
+                          {row.title ?? "Scholarship"} — {row.reason ?? row.filter}
+                        </li>
+                      ))}
+                  </ul>
+                </details>
+              ) : null}
               {diagnostics?.top_blockers && diagnostics.top_blockers.length > 0 ? (
                 <ul className="mx-auto mt-4 max-w-lg list-inside list-disc text-left text-sm text-slate-600 dark:text-slate-300">
                   {diagnostics.top_blockers.map((b) => (
@@ -269,12 +292,31 @@ export function MatchResultsPage() {
             </div>
           )
         ) : (
-          <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {matches.map((match) => (
-              <ErrorBoundary key={match.id}>
-                <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
-              </ErrorBoundary>
-            ))}
+          <div className="space-y-10">
+            {activeMatches.length > 0 ? (
+              <VirtualizedMatchGrid matches={activeMatches} onShowAnalysis={setAnalysisMatch} />
+            ) : null}
+
+            {deadlinePassedMatches.length > 0 ? (
+              <div>
+                <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  Eligible but deadline passed
+                  <span className="ml-2 rounded-full bg-rose-100 px-2.5 py-0.5 text-sm font-medium text-rose-800 dark:bg-rose-900 dark:text-rose-200">
+                    {deadlinePassedMatches.length}
+                  </span>
+                </h3>
+                <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
+                  These scholarships match your profile, but the application window has closed. Watch for the next cycle.
+                </p>
+                <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {deadlinePassedMatches.map((match) => (
+                    <ErrorBoundary key={`deadline-${match.id}`}>
+                      <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
+                    </ErrorBoundary>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
       </div>

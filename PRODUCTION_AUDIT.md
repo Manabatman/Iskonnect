@@ -1,6 +1,6 @@
 # Production Engineering Audit
 
-An analysis of 8 production engineering concepts applied to the ISKONNECT scholarship matching platform. This audit evaluates whether each concept is needed, where it would apply, and what the simplest production-safe implementation would be.
+An analysis of 8 production engineering concepts applied to the Iskonnect scholarship matching platform. This audit evaluates whether each concept is needed, where it would apply, and what the simplest production-safe implementation would be.
 
 ---
 

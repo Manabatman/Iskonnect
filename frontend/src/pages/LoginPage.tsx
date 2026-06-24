@@ -62,7 +62,7 @@ export function LoginPage() {
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end p-8 lg:p-12">
           <img
             src={brandLogoSrc}
-            alt="ISKONNECT"
+            alt="Iskonnect"
             width={40}
             height={40}
             onError={(e) => {
@@ -107,9 +107,17 @@ export function LoginPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Password
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 id="password"
                 type="password"

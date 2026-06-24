@@ -36,8 +36,15 @@ def _public_base_tables(conn) -> list[str]:
     return [r[0] for r in rows]
 
 
+def _is_postgres(conn) -> bool:
+    return conn.dialect.name == "postgresql"
+
+
 def upgrade() -> None:
     conn = op.get_bind()
+    if not _is_postgres(conn):
+        # RLS is PostgreSQL-only; local SQLite dev skips this revision.
+        return
     for name in _public_base_tables(conn):
         safe = name.replace('"', '""')
         op.execute(sa.text(f'ALTER TABLE public."{safe}" ENABLE ROW LEVEL SECURITY'))
@@ -45,6 +52,8 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     conn = op.get_bind()
+    if not _is_postgres(conn):
+        return
     for name in _public_base_tables(conn):
         safe = name.replace('"', '""')
         op.execute(sa.text(f'ALTER TABLE public."{safe}" DISABLE ROW LEVEL SECURITY'))

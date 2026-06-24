@@ -7,7 +7,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
+from app.utils.dedupe import scholarship_dedupe_key
 import json
 import logging
 import os
@@ -25,11 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 def _dedupe_key(title: str, provider: str | None, link: str | None) -> str:
-    raw = (
-        f"{(title or '').strip().lower()}|{(provider or '').strip().lower()}"
-        f"|{(link or '').strip().lower()}"
-    )
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:64]
+    return scholarship_dedupe_key(title, provider, link)
 
 
 def _find_live_duplicate(db, title: str, provider: str | None, link: str | None) -> bool:

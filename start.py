@@ -1,11 +1,11 @@
 """
-Quick start script for the Scholarship Match backend
+Quick start script for the Iskonnect backend
 """
 import subprocess
 import sys
 
 if __name__ == "__main__":
-    print("Starting Scholarship Match Backend...")
+    print("Starting Iskonnect Backend...")
     print("API will be available at http://localhost:8000")
     print("API Docs at http://localhost:8000/docs")
     print("\nPress Ctrl+C to stop the server\n")

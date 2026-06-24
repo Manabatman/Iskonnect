@@ -24,11 +24,13 @@ def run_retention_scan() -> dict:
     get an audit log entry (candidate for review).
     """
     db = SessionLocal()
-    stats = {"candidates": 0}
+    stats = {"candidates": 0, "error": None}
     try:
         cutoff = datetime.now(timezone.utc) - timedelta(days=settings.retention_inactive_days)
-        # Users who have at least one student profile
-        user_ids = [r[0] for r in db.query(models.Student.user_id).filter(models.Student.user_id.isnot(None)).distinct().all()]
+        user_ids = [
+            r[0]
+            for r in db.query(models.Student.user_id).filter(models.Student.user_id.isnot(None)).distinct().all()
+        ]
         stale: list[int] = []
         for uid in user_ids:
             last_run = (
@@ -38,22 +40,32 @@ def run_retention_scan() -> dict:
                 stale.append(uid)
                 stats["candidates"] += 1
         if stale:
-            log_action(
-                db,
-                actor_id=None,
-                actor_type="system",
-                action="retention.scan",
-                resource_type="users",
-                resource_id=None,
-                details={
-                    "reason": "no_recent_match_activity",
-                    "inactive_days_threshold": settings.retention_inactive_days,
-                    "user_ids": stale[:100],
-                    "total": len(stale),
-                },
-                ip_address=None,
-            )
+            try:
+                log_action(
+                    db,
+                    actor_id=None,
+                    actor_type="system",
+                    action="retention.scan",
+                    resource_type="users",
+                    resource_id=None,
+                    details={
+                        "reason": "no_recent_match_activity",
+                        "inactive_days_threshold": settings.retention_inactive_days,
+                        "user_ids": stale[:100],
+                        "total": len(stale),
+                    },
+                    ip_address=None,
+                )
+                db.commit()
+            except Exception as audit_err:
+                db.rollback()
+                logger.exception("retention_audit_failed: %s", audit_err)
+                stats["error"] = str(audit_err)
         logger.info("retention_scan_done %s", stats)
+        return stats
+    except Exception as e:
+        logger.exception("retention_scan_failed: %s", e)
+        stats["error"] = str(e)
         return stats
     finally:
         db.close()

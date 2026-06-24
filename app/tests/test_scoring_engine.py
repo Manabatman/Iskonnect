@@ -10,11 +10,10 @@ from app.scoring.components import (
     score_field,
     score_geographic,
     score_income,
-    score_readiness,
 )
 from app.scoring.config import ScoringConfig
 from app.scoring.engine import WeightedDeterministicScorer
-from app.scoring.explanation import assess_confidence, compute_equity_multiplier
+from app.scoring.explanation import assess_confidence
 
 
 def _make_payload(**overrides) -> ScoringPayload:
@@ -25,23 +24,15 @@ def _make_payload(**overrides) -> ScoringPayload:
         "field_match_level": "exact",
         "geographic_match_level": "region",
         "equity_flags": {"is_pwd": False, "is_4ps_listahanan": False},
-        "extracurricular_match_count": 0,
-        "award_match_count": 0,
-        "school_type_match": True,
-        "age_within_range": True,
         "scholarship_type": "Merit-and-Need",
         "min_gwa_required": 75.0,
         "max_income_threshold": 250_000,
         "priority_groups": [],
-        "document_readiness_ratio": 0.8,
         "has_geographic_restriction": True,
         "has_field_restriction": True,
     }
     defaults.update(overrides)
     return ScoringPayload(**defaults)
-
-
-# --- Component unit tests ---
 
 
 def test_score_academic_exceeds_minimum():
@@ -102,7 +93,7 @@ def test_score_field_partial():
 
 
 def test_score_field_none():
-    assert score_field("none") == 0.0
+    assert score_field("none") == 0.2
 
 
 def test_score_geographic_city():
@@ -143,21 +134,6 @@ def test_score_equity_no_priority_groups():
     assert score_equity({}, []) == 0.5
 
 
-def test_score_readiness_full():
-    assert score_readiness(1.0) == 1.0
-
-
-def test_score_readiness_partial():
-    assert score_readiness(0.5) == 0.5
-
-
-def test_score_readiness_none():
-    assert score_readiness(0.0) == 0.0
-
-
-# --- Engine integration tests ---
-
-
 def test_engine_returns_scoring_result():
     scorer = WeightedDeterministicScorer()
     payload = _make_payload()
@@ -187,7 +163,6 @@ def test_engine_high_score_strong_match():
         gwa_normalized=92.0,
         field_match_level="exact",
         geographic_match_level="city",
-        document_readiness_ratio=1.0,
     )
     result = WeightedDeterministicScorer().score(payload)
     assert result.final_score >= 70
@@ -198,7 +173,6 @@ def test_engine_low_score_weak_match():
         gwa_normalized=None,
         field_match_level="none",
         geographic_match_level="none",
-        document_readiness_ratio=0.0,
     )
     result = WeightedDeterministicScorer().score(payload)
     assert result.final_score < 60
@@ -227,9 +201,6 @@ def test_open_field_scholarship_field_not_applicable():
     assert result.breakdown["field_relevance"]["weighted"] == 0
 
 
-# --- Edge cases ---
-
-
 def test_missing_gwa_confidence_low():
     payload = _make_payload(
         gwa_normalized=None,
@@ -249,17 +220,6 @@ def test_missing_income_confidence():
     )
     result = WeightedDeterministicScorer().score(payload)
     assert result.confidence in ("low", "medium", "high")
-
-
-def test_equity_multiplier_capped():
-    config = ScoringConfig()
-    config.max_equity_multiplier = 1.15
-    flags = {"is_pwd": True, "is_indigenous_people": True, "is_4ps_listahanan": True}
-    groups = ["PWD", "IP", "4Ps/Listahanan"]
-    mult, _ = compute_equity_multiplier(
-        flags, groups, config.equity_multipliers, config.max_equity_multiplier
-    )
-    assert mult <= 1.15
 
 
 def test_equity_priority_in_explanation():

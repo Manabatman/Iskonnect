@@ -1,5 +1,5 @@
 /**
- * Changelog for ISKONNECT (MVP). Newest versions first.
+ * Changelog for Iskonnect (MVP). Newest versions first.
  * To add a release: push a new ChangelogVersion object to the top of CHANGELOG_VERSIONS.
  */
 
@@ -257,7 +257,7 @@ export const CHANGELOG_VERSIONS: ChangelogVersion[] = [
     date: "March 2025",
     title: "Initial release",
     summary:
-      "First public MVP: build a student profile, run eligibility-based matching, and see ranked scholarship results.",
+      "First MVP in development: build a student profile, run eligibility-based matching, and see ranked scholarship results.",
     improvements: [
       {
         title: "Core matching",

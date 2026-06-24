@@ -6,7 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between">
           <div>
-            <p className="font-semibold text-white">ISKONNECT</p>
+            <p className="font-semibold text-white">Iskonnect</p>
             <p className="text-sm text-slate-400">Connecting Filipino Students to Opportunity</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4 text-sm">

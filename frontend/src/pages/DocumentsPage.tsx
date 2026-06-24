@@ -333,7 +333,7 @@ export function DocumentsPage() {
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Documents</h1>
       <p className="mt-3 text-slate-600 dark:text-slate-400">
-        Track document readiness per application. Files stay in <strong>your</strong> Google Drive — ISKONNECT does not
+        Track document readiness per application. Files stay in <strong>your</strong> Google Drive — Iskonnect does not
         store uploads. Use <strong>Upload to Drive</strong> to open the right folder and add files there.
       </p>
 

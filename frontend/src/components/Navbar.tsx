@@ -16,7 +16,7 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const { resolvedTheme } = useTheme();
   const path = location.pathname;
-  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.svg";
+  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.png";
 
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
@@ -31,12 +31,12 @@ export function Navbar() {
             width={40}
             height={40}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/logo.svg";
+              (e.target as HTMLImageElement).src = "/images/logo.png";
             }}
           />
           <span>
             <span className="block font-sans text-xl font-black uppercase tracking-[0.06em] text-primary-700 dark:text-primary-400 sm:text-2xl">
-              ISKONNECT
+              Iskonnect
             </span>
             <span className="block text-xs font-medium text-slate-500 dark:text-slate-400">
               Connecting Filipino Students to Opportunity

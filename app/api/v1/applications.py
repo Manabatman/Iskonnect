@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Annotated, Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -29,8 +30,12 @@ ALLOWED_STATUS = frozenset(
         "accepted",
         "rejected",
         "waitlisted",
+        "withdrawn",
     }
 )
+
+# Statuses students may set on their own applications (review outcomes are sponsor/school only).
+STUDENT_SETTABLE_STATUS = frozenset({"preparing", "submitted", "withdrawn"})
 
 
 class ApplicationCreate(BaseModel):
@@ -45,6 +50,7 @@ class ApplicationPatch(BaseModel):
 class DocumentChecklistPatch(BaseModel):
     status: str
     notes: Optional[str] = None
+    file_url: Optional[str] = None
 
 
 class ApplicationDriveFolderPatch(BaseModel):
@@ -92,7 +98,12 @@ class DocumentChecklistOut(BaseModel):
         from_attributes = True
 
 
-def _application_to_out(app: models.Application, sch: models.Scholarship | None) -> ApplicationOut:
+def _application_to_out(
+    app: models.Application,
+    sch: models.Scholarship | None,
+    *,
+    include_scholarship: bool = True,
+) -> ApplicationOut:
     return ApplicationOut(
         id=app.id,
         user_id=app.user_id,
@@ -103,7 +114,7 @@ def _application_to_out(app: models.Application, sch: models.Scholarship | None)
         updated_at=app.updated_at,
         drive_folder_url=app.drive_folder_url,
         removed_at=app.removed_at,
-        scholarship=_scholarship_to_response(sch) if sch else None,
+        scholarship=_scholarship_to_response(sch) if sch and include_scholarship else None,
     )
 
 
@@ -191,6 +202,7 @@ def _sync_student_documents_from_checklists(db: Session, user_id: int) -> None:
 @limiter.limit("60/minute")
 def list_applications(
     request: Request,
+    include_scholarship: bool = True,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
@@ -204,7 +216,7 @@ def list_applications(
     out: list[ApplicationOut] = []
     for a in rows:
         sch = db.query(models.Scholarship).filter(models.Scholarship.id == a.scholarship_id).first()
-        out.append(_application_to_out(a, sch))
+        out.append(_application_to_out(a, sch, include_scholarship=include_scholarship))
     return out
 
 
@@ -266,7 +278,21 @@ def create_application(
         )
     )
     _seed_checklist_from_scholarship(db, app, sch)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        dup = (
+            db.query(models.Application)
+            .filter(
+                models.Application.user_id == uid,
+                models.Application.scholarship_id == body.scholarship_id,
+            )
+            .first()
+        )
+        if dup and dup.removed_at is None:
+            raise HTTPException(status_code=409, detail="Application already exists for this scholarship")
+        raise HTTPException(status_code=409, detail="Application conflict")
     db.refresh(app)
     return _application_to_out(app, sch)
 
@@ -299,6 +325,11 @@ def patch_application(
     uid = _require_uid(user_id)
     if body.status not in ALLOWED_STATUS:
         raise HTTPException(status_code=422, detail="Invalid status")
+    if body.status not in STUDENT_SETTABLE_STATUS:
+        raise HTTPException(
+            status_code=403,
+            detail="Only preparing, submitted, or withdrawn may be set by students",
+        )
     app = db.query(models.Application).filter(models.Application.id == application_id).first()
     if not app or app.user_id != uid or app.removed_at is not None:
         raise HTTPException(status_code=404, detail="Application not found")
@@ -450,6 +481,11 @@ def patch_application_document(
     row.status = body.status
     if body.notes is not None:
         row.notes = body.notes
+    if body.file_url is not None:
+        url = body.file_url.strip()
+        if url and not url.lower().startswith("https://"):
+            raise HTTPException(status_code=422, detail="Document URL must be an HTTPS link to external storage")
+        row.file_url = url or None
     _sync_student_documents_from_checklists(db, uid)
     db.commit()
     db.refresh(row)

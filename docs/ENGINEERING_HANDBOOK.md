@@ -1,7 +1,9 @@
 # Engineering Learning Handbook
 
+> **Daily step-by-step plan:** [`ACTIVE_LEARNING_PATH.md`](ACTIVE_LEARNING_PATH.md) — start there for retrieval-based sessions. Use this handbook for deeper skill-building and mini projects.
+
 **A personal playbook for becoming a competent backend engineer**  
-**Audience:** You built **ISKONNECT** (`scholarship-match`) with AI help and want real understanding—not copy-paste skills.  
+**Audience:** You built **Iskonnect** (`scholarship-match`) with AI help and want real understanding—not copy-paste skills.  
 **Timeline:** Follow for **3–6 months** (1–2 focused hours/day beats weekend marathons).  
 **Philosophy:** Learn by doing. Build from scratch. Debug on purpose. Understand before optimizing. Simplicity over complexity.
 
@@ -29,7 +31,7 @@
 9. [Best practices](#9-best-practices)
 10. [Debugging skills](#10-debugging-skills)
 11. [Mini projects](#11-mini-projects)
-12. [Connection to ISKONNECT](#12-connection-to-iskonnect)
+12. [Connection to Iskonnect](#12-connection-to-Iskonnect)
 13. [How to study effectively](#13-how-to-study-effectively)
 
 ---
@@ -68,7 +70,7 @@ Production systems are edited locally, tested, committed, reviewed, merged, buil
 
 **Practice tasks**
 
-- [ ] Clone ISKONNECT, run backend + frontend locally (see [Section 8](#8-building-from-scratch))
+- [ ] Clone Iskonnect, run backend + frontend locally (see [Section 8](#8-building-from-scratch))
 - [ ] Create a branch, make a tiny change (comment), open a PR (even to yourself)
 - [ ] Use `git diff` before every commit for one week
 
@@ -87,7 +89,7 @@ Production systems are edited locally, tested, committed, reviewed, merged, buil
 
 **Why it matters**
 
-ISKONNECT’s backend is Python. You cannot debug FastAPI/SQLAlchemy without solid Python.
+Iskonnect’s backend is Python. You cannot debug FastAPI/SQLAlchemy without solid Python.
 
 **How it connects**
 
@@ -95,7 +97,7 @@ ISKONNECT’s backend is Python. You cannot debug FastAPI/SQLAlchemy without sol
 
 **Practice tasks**
 
-- [ ] Reimplement one small function from ISKONNECT in a scratch file **without** copy-paste
+- [ ] Reimplement one small function from Iskonnect in a scratch file **without** copy-paste
 - [ ] Write a CLI script that reads a JSON file and prints summary stats
 - [ ] Complete exercises in [Section 4](#4-python-mastery)
 
@@ -192,7 +194,7 @@ Rate limiting (`slowapi`), CORS config, optional Redis, Sentry for observability
 
 **Practice tasks**
 
-- [ ] Draw ISKONNECT architecture (boxes + arrows) from memory weekly
+- [ ] Draw Iskonnect architecture (boxes + arrows) from memory weekly
 - [ ] Write a 1-page “if we 10x users” note: what breaks first?
 
 ---
@@ -370,7 +372,7 @@ echo $env:DATABASE_URL
 
 ---
 
-### 2.9 Running servers (ISKONNECT-style)
+### 2.9 Running servers (Iskonnect-style)
 
 **Backend (FastAPI)**
 
@@ -576,7 +578,7 @@ git push -u origin feat/thing
 
 ---
 
-### 3.9 Connection to ISKONNECT
+### 3.9 Connection to Iskonnect
 
 - CI workflows live in `.github/workflows/`—every PR teaches you to read logs.
 - Treat failing CI as a lesson: reproduce locally first.
@@ -791,7 +793,7 @@ def hello() -> dict[str, str]:
 
 ---
 
-### 4.13 Connection to ISKONNECT files
+### 4.13 Connection to Iskonnect files
 
 | File | Python ideas to study |
 |------|------------------------|
@@ -913,7 +915,7 @@ json.loads('{"ok": true}')
 **Refresh tokens**
 
 - Short-lived access token + longer-lived refresh token
-- Refresh endpoint rotates refresh token (ISKONNECT pattern)
+- Refresh endpoint rotates refresh token (Iskonnect pattern)
 
 ---
 
@@ -985,7 +987,7 @@ uvicorn main:app --reload
 
 ---
 
-### 5.11 Connection to ISKONNECT
+### 5.11 Connection to Iskonnect
 
 | Concept | Where it shows up |
 |---------|-------------------|
@@ -1191,7 +1193,7 @@ UI button
 
 ---
 
-### 7.3 Deployment mental model (ISKONNECT)
+### 7.3 Deployment mental model (Iskonnect)
 
 ```mermaid
 flowchart LR
@@ -1243,7 +1245,7 @@ This section is the antidote to “I generated a repo and it’s magic.” You s
 ### 8.1 What to install first (recommended order)
 
 - [ ] **Git** (version control)
-- [ ] **Python 3.11+** (match ISKONNECT `.python-version` when possible)
+- [ ] **Python 3.11+** (match Iskonnect `.python-version` when possible)
 - [ ] **Node.js LTS** (for Vite/React)
 - [ ] **Docker Desktop** (optional early; required for realistic local DB parity)
 - [ ] **Editor** (VS Code / Cursor) + Python + ESLint/Prettier extensions as needed
@@ -1324,7 +1326,7 @@ DATABASE_URL=postgresql+psycopg2://user:pass@localhost:5432/mydb
 4. Run `alembic upgrade head`
 5. Use DB sessions in routes
 
-ISKONNECT already implements this pattern in `app/db.py` + `app/models.py` + `alembic/`.
+Iskonnect already implements this pattern in `app/db.py` + `app/models.py` + `alembic/`.
 
 ---
 
@@ -1360,11 +1362,11 @@ VITE_API_BASE_URL=http://localhost:8000
 - [ ] Frontend uses correct base URL (scheme + host + port)
 - [ ] You are not mixing `http` UI with `https` API unintentionally
 
-**Cookie vs Bearer note:** ISKONNECT SPA commonly uses **Bearer JWT** from `localStorage` (see frontend `AuthContext`).
+**Cookie vs Bearer note:** Iskonnect SPA commonly uses **Bearer JWT** from `localStorage` (see frontend `AuthContext`).
 
 ---
 
-### 8.6 ISKONNECT-specific setup pointers
+### 8.6 Iskonnect-specific setup pointers
 
 Read in this order:
 
@@ -1434,7 +1436,7 @@ Good separation:
 - `schemas/` Pydantic IO models
 - `jobs/` background/cron-like tasks
 
-ISKONNECT uses `app/api/v1/` + domain packages (`matching/`, `scoring/`, …).
+Iskonnect uses `app/api/v1/` + domain packages (`matching/`, `scoring/`, …).
 
 ---
 
@@ -1570,7 +1572,7 @@ print(x)
 
 ---
 
-### 10.8 Connection to ISKONNECT
+### 10.8 Connection to Iskonnect
 
 - Use `/health` and `/ready` as sanity checks when debugging deploy issues.
 - Sentry (if enabled) is for **production signals**—learn to attach user/request context responsibly (PII rules).
@@ -1649,7 +1651,7 @@ Each project should be rebuilt until you can do it **without notes**.
 
 **Reinforces:** crypto primitives, auth dependencies, security mindset
 
-**ISKONNECT parallel:** read `app/auth.py` + `app/api/v1/auth_routes.py` after you build yours.
+**Iskonnect parallel:** read `app/auth.py` + `app/api/v1/auth_routes.py` after you build yours.
 
 ---
 
@@ -1673,9 +1675,9 @@ Each project should be rebuilt until you can do it **without notes**.
 
 ---
 
-## 12. Connection to ISKONNECT
+## 12. Connection to Iskonnect
 
-ISKONNECT in this workspace is the `scholarship-match` repository: a **modular monolith** FastAPI backend + Vite/React SPA + Postgres (often Supabase-managed).
+Iskonnect in this workspace is the `scholarship-match` repository: a **modular monolith** FastAPI backend + Vite/React SPA + Postgres (often Supabase-managed).
 
 ### 12.1 Architecture map (study until you can redraw)
 
@@ -1711,7 +1713,7 @@ Deploy (typical)
 
 ### 12.2 Concept → file mapping
 
-| Concept | ISKONNECT location |
+| Concept | Iskonnect location |
 |---------|--------------------|
 | HTTP routing | `app/main.py`, `app/api/v1/*.py` |
 | Validation | Pydantic models in `app/schemas.py` (+ local schemas) |
@@ -1761,7 +1763,7 @@ Deploy (typical)
 
 ---
 
-### ISKONNECT integration checklist
+### Iskonnect integration checklist
 
 - [ ] Can draw architecture from memory
 - [ ] Can trace one user action across 3 layers
@@ -1779,7 +1781,7 @@ Deploy (typical)
 
 **Block B (40–80 min): deliberate build**
 
-- Mini project milestone OR read ISKONNECT code with a goal
+- Mini project milestone OR read Iskonnect code with a goal
 
 **Block C (10 min): log**
 
@@ -1855,7 +1857,7 @@ Competence is not “I memorized FastAPI.” Competence is:
 - You can **build** small systems from scratch
 - You can **read** large codebases without panic
 
-ISKONNECT is your gym. Use the handbook as a barbell: repeat lifts.
+Iskonnect is your gym. Use the handbook as a barbell: repeat lifts.
 
 ---
 

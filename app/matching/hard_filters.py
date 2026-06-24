@@ -4,12 +4,35 @@ If any hard filter fails, the scholarship is not shown.
 """
 
 import logging
+from datetime import date, datetime
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 from app.taxonomy.regions import normalize_region
 from app.utils.json_helpers import parse_json_list
+
+DEADLINE_PASSED_MESSAGE = (
+    "You satisfy the eligibility requirements but the application deadline has already passed."
+)
+
+
+def is_application_deadline_passed(application_deadline) -> bool:
+    """True when the scholarship application deadline is before today (Asia/Manila calendar day)."""
+    if application_deadline is None:
+        return False
+    if isinstance(application_deadline, datetime):
+        deadline_day = application_deadline.date()
+    elif isinstance(application_deadline, date):
+        deadline_day = application_deadline
+    elif isinstance(application_deadline, str) and application_deadline.strip():
+        try:
+            deadline_day = date.fromisoformat(application_deadline.strip()[:10])
+        except ValueError:
+            return False
+    else:
+        return False
+    return deadline_day < date.today()
 
 
 def _data_status_passes_for_matching(data_status: str | None) -> bool:
@@ -391,10 +414,30 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "gwa": 0,
         "field": 0,
     }
+    eliminated_scholarships: list[dict] = []
+    filter_labels = {
+        "data_status": "expired or broken-link data status",
+        "age": "age requirements",
+        "education_level": "education level",
+        "region": "region or city location",
+        "school_type": "school type (public/private)",
+        "income": "household income limits",
+        "gwa": "GWA / academic minimums",
+        "field": "field of study or course alignment",
+    }
     for sch in scholarships:
         stage = _hard_filter_failure_stage(profile, sch)
         if stage:
             eliminated[stage] = eliminated.get(stage, 0) + 1
+            if len(eliminated_scholarships) < 50:
+                eliminated_scholarships.append(
+                    {
+                        "scholarship_id": sch.get("id"),
+                        "title": sch.get("title"),
+                        "filter": stage,
+                        "reason": filter_labels.get(stage, stage),
+                    }
+                )
             continue
         result.append(sch)
 
@@ -403,7 +446,12 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "total_checked": len(scholarships),
         "passed_hard_filters": len(result),
         "eliminated_by_filter": {k: v for k, v in eliminated.items() if v},
+        "eliminated_scholarships": eliminated_scholarships,
+        "hard_exclusions": eliminated_scholarships,
         "missing_profile_fields": missing,
         "top_blockers": _top_blockers(eliminated, missing),
+        "deadline_passed_count": sum(
+            1 for sch in result if is_application_deadline_passed(sch.get("application_deadline"))
+        ),
     }
     return result, diagnostics

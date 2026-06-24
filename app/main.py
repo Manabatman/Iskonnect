@@ -1,6 +1,8 @@
 import logging
+import traceback
+from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler
@@ -39,14 +41,60 @@ from app.utils.logging_config import setup_logging
 
 logger = logging.getLogger(__name__)
 
-setup_logging(settings.structured_logging)
 
-settings.validate_for_production()
+def _db_label(url: str) -> str:
+    """Short DB description for logs (never log credentials)."""
+    u = (url or "").strip()
+    if u.lower().startswith("sqlite"):
+        return "sqlite (local dev.db)"
+    try:
+        host = u.split("@", 1)[1].split("/", 1)[0]
+    except Exception:
+        host = "?"
+    return f"postgres @ {host}"
 
-if settings.auth_disabled:
+
+def _run_startup_migrations() -> None:
+    if not settings.run_migrations_on_startup:
+        return
+    try:
+        from alembic import command
+        from alembic.config import Config
+
+        alembic_cfg = Config("alembic.ini")
+        command.upgrade(alembic_cfg, "head")
+    except Exception as e:
+        env = (settings.environment or "").strip().lower()
+        if env in ("production", "staging", "prod"):
+            logger.exception("alembic_upgrade_on_startup_failed: %s", e)
+            raise
+        logger.exception(
+            "alembic_upgrade_on_startup_failed (dev — API still starts; fix DATABASE_URL or run "
+            "`alembic upgrade head` manually): %s",
+            e,
+        )
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    setup_logging(settings.structured_logging)
+    settings.validate_for_production()
     logger.warning(
-        "AUTH_DISABLED=true — JWT checks are bypassed on many routes; do not use in production."
+        "[startup] environment=%s database=%s cors_origins=%s",
+        settings.environment,
+        _db_label(settings.database_url),
+        settings.cors_origins_list,
     )
+    if settings.auth_disabled:
+        logger.warning(
+            "AUTH_DISABLED=true — JWT checks are bypassed on many routes; do not use in production."
+        )
+    _run_startup_migrations()
+    yield
+
+
+setup_logging(settings.structured_logging)
+settings.validate_for_production()
 
 if settings.sentry_dsn:
     import sentry_sdk
@@ -59,10 +107,41 @@ if settings.sentry_dsn:
         environment=(settings.environment or "development").lower(),
     )
 
-app = FastAPI(title="Scholarship Matcher (Phase 1.5)")
+_env_lower = (settings.environment or "").strip().lower()
+_docs_disabled = _env_lower in ("production", "staging", "prod")
+
+app = FastAPI(
+    title="Iskonnect",
+    lifespan=lifespan,
+    docs_url=None if _docs_disabled else "/docs",
+    redoc_url=None if _docs_disabled else "/redoc",
+    openapi_url=None if _docs_disabled else "/openapi.json",
+)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    rid = getattr(request.state, "request_id", None) or request.headers.get("x-request-id", "unknown")
+    logger.error(
+        "[%s] unhandled_exception path=%s method=%s err=%s\n%s",
+        rid,
+        request.url.path,
+        request.method,
+        exc,
+        traceback.format_exc(),
+    )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "An internal error occurred. Please try again later.",
+            "request_id": rid,
+        },
+        headers={"X-Request-ID": str(rid)},
+    )
+
 
 # Add CORS middleware - origins from environment
 app.add_middleware(
@@ -70,7 +149,7 @@ app.add_middleware(
     allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
-    allow_headers=["Authorization", "Content-Type", "X-Request-ID", "Accept"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID", "X-Profile-Access-Token", "Accept"],
 )
 
 # Request logging for audit trail
@@ -97,29 +176,10 @@ app.include_router(notifications.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
 app.include_router(admin_extended.router, prefix="/api/v1")
 
-@app.on_event("startup")
-def run_migrations():
-    """
-    Optional: run Alembic migrations on startup (local dev only).
-    Production: set RUN_MIGRATIONS_ON_STARTUP=false and use release command: alembic upgrade head
-    """
-    if not settings.run_migrations_on_startup:
-        return
-    try:
-        from alembic import command
-        from alembic.config import Config
-
-        alembic_cfg = Config("alembic.ini")
-        command.upgrade(alembic_cfg, "head")
-    except Exception as e:
-        logger.exception("alembic_upgrade_on_startup_failed: %s", e)
-        raise
-
-
 
 @app.get("/health")
 def health(db: Session = Depends(get_db)):
-    checks: dict = {"db": False, "cache": False}
+    checks: dict = {"db": False, "cache": "skipped"}
     try:
         db.execute(text("SELECT 1"))
         checks["db"] = True
@@ -133,8 +193,9 @@ def health(db: Session = Depends(get_db)):
             checks["cache"] = True
         except Exception as e:
             logger.warning("health_redis_check_failed: %s", e)
+            checks["cache"] = False
     else:
-        checks["cache"] = True
+        checks["cache"] = "not_configured"
 
     scraper_last = None
     try:
@@ -152,7 +213,7 @@ def health(db: Session = Depends(get_db)):
         pass
     checks["scraper_last"] = scraper_last
 
-    core_ok = checks.get("db") and checks.get("cache")
+    core_ok = checks.get("db") is True
     overall = "ok" if core_ok else "degraded"
     payload = {"status": overall, "checks": checks}
     if not core_ok:
@@ -167,3 +228,26 @@ def ready(db: Session = Depends(get_db)):
         return {"status": "ready"}
     except Exception:
         return JSONResponse(status_code=503, content={"status": "not_ready"})
+
+
+@app.get("/metrics")
+def metrics(db: Session = Depends(get_db)):
+    """Lightweight operational counters (Prometheus-style text optional later)."""
+    from app import models
+
+    try:
+        scholarship_count = db.query(models.Scholarship).count()
+        user_count = db.query(models.User).count()
+        pending_staging = (
+            db.query(models.ScholarshipStaging)
+            .filter(models.ScholarshipStaging.status == "pending")
+            .count()
+        )
+        return {
+            "scholarships": scholarship_count,
+            "users": user_count,
+            "staging_pending": pending_staging,
+        }
+    except Exception as e:
+        logger.warning("metrics_failed: %s", e)
+        return JSONResponse(status_code=503, content={"detail": "metrics unavailable"})

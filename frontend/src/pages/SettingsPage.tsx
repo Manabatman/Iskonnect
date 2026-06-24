@@ -78,7 +78,7 @@ export function SettingsPage() {
       <div className="mx-auto max-w-2xl space-y-6 px-4">
         <header>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Your Account</h1>
-          <p className="mt-2 text-slate-600 dark:text-slate-400">Manage how ISKONNECT works for you.</p>
+          <p className="mt-2 text-slate-600 dark:text-slate-400">Manage how Iskonnect works for you.</p>
         </header>
 
         <Card>
@@ -101,7 +101,7 @@ export function SettingsPage() {
               ) : (
                 <>
                   <p className="font-semibold text-slate-900 dark:text-slate-100">
-                    {displayName || "ISKONNECT member"}
+                    {displayName || "Iskonnect member"}
                   </p>
                   {email ? (
                     <p className="mt-0.5 truncate text-sm text-slate-600 dark:text-slate-400">{email}</p>
@@ -124,7 +124,7 @@ export function SettingsPage() {
         <Card>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Display</h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Choose how ISKONNECT looks on your device.
+            Choose how Iskonnect looks on your device.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {themeOptions.map(({ id, label, Icon }) => {
@@ -251,7 +251,7 @@ export function SettingsPage() {
 
         <Card>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">About</h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">ISKONNECT v1.5.0</p>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Iskonnect v1.5.0</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm">
             <li>
               <Link to="/changelog" className="font-medium text-primary-600 hover:underline dark:text-primary-400">

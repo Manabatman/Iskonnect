@@ -44,7 +44,9 @@ def create_report(
 
 
 @router.get("/reports/pending", response_model=list[ScholarshipReportResponse])
+@limiter.limit("60/minute")
 def list_pending_reports(
+    request: Request,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
