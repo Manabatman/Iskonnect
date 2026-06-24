@@ -12,8 +12,6 @@ With DATABASE_URL set and migrations applied.
 from __future__ import annotations
 
 import argparse
-import csv
-import hashlib
 import json
 import sys
 from pathlib import Path
@@ -24,11 +22,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from app.db import SessionLocal
 from app import models
 from app.scripts.import_scholarships import load_csv  # reuse normalized CSV loader
+from app.utils.dedupe import scholarship_dedupe_key
 
 
-def _dedupe_key(title: str, provider: str | None) -> str:
-    raw = f"{(title or '').strip().lower()}|{(provider or '').strip().lower()}"
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:64]
+def _dedupe_key(title: str, provider: str | None, link: str | None = None) -> str:
+    return scholarship_dedupe_key(title, provider, link)
 
 
 def main() -> None:
@@ -47,7 +45,8 @@ def main() -> None:
                 skipped += 1
                 continue
             provider = row.get("provider")
-            key = _dedupe_key(title, provider)
+            link = row.get("link")
+            key = _dedupe_key(title, provider, link)
             if (
                 db.query(models.ScholarshipStaging)
                 .filter(models.ScholarshipStaging.dedupe_key == key, models.ScholarshipStaging.status == "pending")

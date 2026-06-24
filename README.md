@@ -1,4 +1,4 @@
-ISKONNECT – Scholarship Matcher Philippines
+Iskonnect – Scholarship Matcher Philippines
 
 A policy-aware scholarship matching platform that helps Filipino students discover scholarships they are eligible for.
 
@@ -12,7 +12,7 @@ Overview
 
 Many Filipino students struggle to find scholarships because information is fragmented across different websites and institutions.
 
-ISKONNECT attempts to solve this by:
+Iskonnect attempts to solve this by:
 
 Collecting scholarship opportunities into a structured database
 Allowing students to create a detailed academic and socioeconomic profile
@@ -119,6 +119,16 @@ alembic upgrade head
 Seed the database with scholarship data:
 
 python seed_data.py
+
+### Demo (local) — full scraped catalog
+
+For localhost demos with hundreds of real scholarships (PhilScholar + SIKAP), place the scraped CSVs in `../.cursor/plans/data/` (`philscholar.csv`, `sikap.csv`, `scholarships.csv`) or pass custom paths, then:
+
+```bash
+python -m app.scripts.seed_demo_csvs
+```
+
+This merges CSV rows with the 24 curated seed scholarships. Past-deadline rows stay matchable (`data_status=past_deadline`) so scoring still works during demos.
 
 Run the backend server:
 

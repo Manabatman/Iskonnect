@@ -1,1 +1,1 @@
-"""CLI and scheduled jobs (cron) for ISKONNECT."""
+"""CLI and scheduled jobs (cron) for Iskonnect."""

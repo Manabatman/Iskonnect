@@ -15,7 +15,7 @@ from typing import Annotated
 
 import bcrypt
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from sqlalchemy.orm import Session
@@ -77,6 +77,30 @@ def decode_email_verification_token(token: str) -> int | None:
         return None
 
 
+def create_profile_read_token(profile_id: int) -> str:
+    """Short-lived token for anonymous profile read access (prevents IDOR on profile_id)."""
+    exp = _token_expiry_epoch(60 * 24 * 30)  # 30 days
+    now = int(datetime.now(timezone.utc).timestamp())
+    payload = {
+        "sub": str(profile_id),
+        "iat": now,
+        "exp": exp,
+        "typ": "profile_read",
+    }
+    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+
+
+def decode_profile_read_token(token: str) -> int | None:
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        if payload.get("typ") != "profile_read":
+            return None
+        sub = payload.get("sub")
+        return int(sub) if sub else None
+    except (ExpiredSignatureError, InvalidTokenError, ValueError, TypeError):
+        return None
+
+
 def hash_refresh_token(raw: str) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
@@ -106,6 +130,22 @@ def revoke_refresh_token_plain(db: Session, raw: str) -> bool:
         return False
     row.revoked_at = utc_now_naive()
     return True
+
+
+def revoke_all_refresh_tokens_for_user(db: Session, user_id: int) -> int:
+    """Revoke all active refresh tokens for a user. Returns count revoked."""
+    now = utc_now_naive()
+    rows = (
+        db.query(models.RefreshToken)
+        .filter(
+            models.RefreshToken.user_id == user_id,
+            models.RefreshToken.revoked_at.is_(None),
+        )
+        .all()
+    )
+    for row in rows:
+        row.revoked_at = now
+    return len(rows)
 
 
 def consume_refresh_token_rotation(db: Session, raw: str) -> tuple[models.User, str] | None:
@@ -210,14 +250,11 @@ def get_current_user(
 
 def require_admin(
     user: Annotated[models.User | None, Depends(get_current_user)],
-) -> models.User | None:
+) -> models.User:
     """
     Dependency: require admin role for protected endpoints.
-    When AUTH_DISABLED=true, bypasses check (returns None, allows request).
-    When AUTH_DISABLED=false, raises 401 if not authenticated, 403 if not admin.
+    Raises 401 if not authenticated, 403 if not admin.
     """
-    if settings.auth_disabled:
-        return None
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -248,14 +285,21 @@ def require_profile_owner(
         raise HTTPException(status_code=403, detail="Access denied")
 
 
+def get_profile_access_token(request: Request) -> str | None:
+    """Optional header for anonymous profile read access."""
+    raw = request.headers.get("x-profile-access-token")
+    return raw.strip() if raw else None
+
+
 def assert_can_read_profile(
     profile_id: int,
     db: Session,
     user_id: int | None,
+    profile_access_token: str | None = None,
 ) -> None:
     """
     Enforce read access for a profile.
-    - Anonymous profiles (no linked user): readable by anyone (match flow after anonymous submit).
+    - Anonymous profiles: require valid X-Profile-Access-Token from creation.
     - Claimed profiles: only the owning user (valid JWT) may read.
     """
     profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
@@ -266,3 +310,10 @@ def assert_can_read_profile(
             raise HTTPException(status_code=403, detail="Access denied")
         if profile.user_id != user_id:
             raise HTTPException(status_code=403, detail="Access denied")
+        return
+    # Anonymous profile — require profile read token unless auth is disabled (local dev)
+    if settings.auth_disabled:
+        return
+    token_pid = decode_profile_read_token(profile_access_token) if profile_access_token else None
+    if token_pid != profile_id:
+        raise HTTPException(status_code=403, detail="Profile access token required")

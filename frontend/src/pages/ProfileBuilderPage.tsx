@@ -124,6 +124,18 @@ export function ProfileBuilderPage() {
       setSaveError("Please confirm the privacy consent checkbox before saving your profile.");
       return;
     }
+    if (!state.full_name?.trim() || state.full_name.trim().length < 2) {
+      setSaveError("Please enter your full name (at least 2 characters).");
+      return;
+    }
+    if (!state.email?.trim() || !state.email.includes("@")) {
+      setSaveError("Please enter a valid email address.");
+      return;
+    }
+    if (!state.region?.trim()) {
+      setSaveError("Please select your region before saving.");
+      return;
+    }
     setSaveLoading(true);
     try {
       const profile = buildStudentProfileFromBuilderState(state);

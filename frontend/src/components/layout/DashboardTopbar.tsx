@@ -252,7 +252,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
-          ISKONNECT
+          Iskonnect
         </p>
         <h1 className="truncate text-lg font-semibold text-slate-900 dark:text-slate-100">{pageTitle}</h1>
       </div>

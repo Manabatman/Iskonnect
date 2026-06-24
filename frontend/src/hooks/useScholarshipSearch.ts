@@ -7,6 +7,7 @@ import type {
   ScholarshipSearchResponse,
   ScholarshipSearchFilters,
 } from "../types";
+import { cacheSearchResults, readCachedSearchResults } from "../utils/offlineCache";
 
 const DEBOUNCE_MS = 300;
 const DEFAULT_LIMIT = 20;
@@ -82,10 +83,23 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
           setResults(data.results ?? []);
           setTotal(data.total ?? 0);
           setTotalPages(data.total_pages ?? 0);
+          void cacheSearchResults(`search:${debouncedQuery}:${page}`, data);
         }
       })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Search failed");
+      .catch(async (err) => {
+        if (!cancelled) {
+          const cached = await readCachedSearchResults<ScholarshipSearchResponse>(
+            `search:${debouncedQuery}:${page}`,
+          );
+          if (cached?.results) {
+            setResults(cached.results);
+            setTotal(cached.total ?? cached.results.length);
+            setTotalPages(cached.total_pages ?? 1);
+            setError(null);
+          } else {
+            setError(err instanceof Error ? err.message : "Search failed");
+          }
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

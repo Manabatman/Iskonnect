@@ -3,7 +3,8 @@ import json
 import logging
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -51,7 +52,12 @@ def _require_user_id(user_id: int | None) -> int:
     return user_id
 
 
-def _result_to_match_response(r: models.MatchResult, scholarship: models.Scholarship) -> dict:
+def _result_to_match_response(
+    r: models.MatchResult,
+    scholarship: models.Scholarship,
+    *,
+    fields: str = "full",
+) -> dict:
     """Build match response dict from MatchResult + Scholarship for display."""
     regions = []
     if scholarship.regions:
@@ -62,6 +68,19 @@ def _result_to_match_response(r: models.MatchResult, scholarship: models.Scholar
         except (json.JSONDecodeError, TypeError):
             regions = []
     score = r.final_score if r.final_score is not None else r.score
+    if fields == "minimal":
+        return {
+            "id": scholarship.id,
+            "title": scholarship.title,
+            "provider": scholarship.provider,
+            "score": score,
+            "final_score": score,
+            "eligibility_status": r.eligibility_status,
+            "confidence": r.confidence,
+            "application_deadline": scholarship.application_deadline.isoformat()
+            if scholarship.application_deadline
+            else None,
+        }
     return {
         "id": scholarship.id,
         "title": scholarship.title,
@@ -235,9 +254,18 @@ def list_match_runs(
     uid = _require_user_id(user_id)
 
     runs = db.query(models.MatchRun).filter(models.MatchRun.user_id == uid).order_by(models.MatchRun.created_at.desc()).all()
+    if not runs:
+        return []
+    run_ids = [r.id for r in runs]
+    counts = dict(
+        db.query(models.MatchResult.run_id, func.count(models.MatchResult.id))
+        .filter(models.MatchResult.run_id.in_(run_ids))
+        .group_by(models.MatchResult.run_id)
+        .all()
+    )
     out = []
     for r in runs:
-        count = db.query(models.MatchResult).filter(models.MatchResult.run_id == r.id).count()
+        count = int(counts.get(r.id, 0))
         out.append(
             schemas.MatchRunSummary(
                 id=r.id,
@@ -253,10 +281,11 @@ def list_match_runs(
 @router.get("/match-runs/{run_id}", response_model=schemas.MatchRunDetail)
 def get_match_run(
     run_id: int,
+    fields: str = Query("full", pattern="^(minimal|full)$"),
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
-    """Get full results for a specific run. Requires auth and ownership."""
+    """Get results for a specific run. Use ``fields=minimal`` for lightweight payloads."""
     uid = _require_user_id(user_id)
 
     run = db.query(models.MatchRun).filter(models.MatchRun.id == run_id).first()
@@ -272,7 +301,7 @@ def get_match_run(
     for r in results:
         s = scholarships.get(r.scholarship_id)
         if s:
-            match_responses.append(_result_to_match_response(r, s))
+            match_responses.append(_result_to_match_response(r, s, fields=fields))
 
     return schemas.MatchRunDetail(
         id=run.id,

@@ -197,6 +197,11 @@ export function ScholarshipCardV2({
               Broken link
             </span>
           ) : null}
+          {match?.deadline_passed ? (
+            <span className="rounded-full bg-rose-700/90 px-2 py-0.5 text-xs font-medium text-white shadow-sm">
+              Deadline passed
+            </span>
+          ) : null}
         </div>
       </div>
 
@@ -241,6 +246,12 @@ export function ScholarshipCardV2({
 
         {likelihood ? (
           <p className="mt-1 text-xs font-medium text-primary-700 dark:text-primary-300">{likelihood}</p>
+        ) : null}
+
+        {match?.deadline_passed ? (
+          <p className="mt-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs leading-relaxed text-rose-900 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-100">
+            You satisfy the eligibility requirements but the application deadline has already passed.
+          </p>
         ) : null}
 
         <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-slate-600 dark:text-slate-300">
@@ -320,7 +331,7 @@ export function ScholarshipCardV2({
         ) : null}
 
         <div className={`flex flex-col gap-2 sm:flex-row sm:flex-wrap ${showSecondaryActionsRow ? "mt-3" : ""}`}>
-          {hasLink ? (
+          {hasLink && !match?.deadline_passed ? (
             <a
               href={link}
               target="_blank"
@@ -330,6 +341,13 @@ export function ScholarshipCardV2({
             >
               Apply Now
             </a>
+          ) : match?.deadline_passed ? (
+            <span
+              className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400"
+              title="Application deadline has passed"
+            >
+              Deadline passed
+            </span>
           ) : (
             <span className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400">
               Link unavailable

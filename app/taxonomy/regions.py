@@ -87,7 +87,7 @@ ISLAND_GROUPS = {
 
 
 def normalize_region(region: str | None) -> str:
-    """Normalize region for matching (e.g. NCR -> metro manila)."""
+    """Normalize region for matching (e.g. NCR, Metro Manila -> ``ncr``)."""
     if not region or not str(region).strip():
         return ""
     key = str(region).strip().lower()

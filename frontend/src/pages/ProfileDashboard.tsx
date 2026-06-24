@@ -316,6 +316,14 @@ export function ProfileDashboard() {
             {error}
           </div>
         )}
+        {user && !user.emailVerified && (
+          <div
+            className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
+            role="status"
+          >
+            Please verify your email — check your inbox for the verification link from Iskonnect.
+          </div>
+        )}
 
         <div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
           <div className="min-w-0 space-y-8 lg:col-span-2">

@@ -144,6 +144,10 @@ class Student(Base):
     privacy_consent_at = Column(DateTime, nullable=True)
     privacy_consent_version = Column(String, nullable=True)
     google_drive_folder_url = Column(String(2048), nullable=True)
+    psgc_code = Column(String(9), nullable=True, index=True)
+    guardian_full_name = Column(String(255), nullable=True)
+    guardian_email = Column(String(255), nullable=True)
+    guardian_consent_at = Column(DateTime, nullable=True)
 
 
 class Scholarship(Base):
@@ -157,6 +161,7 @@ class Scholarship(Base):
     provider = Column(String)
     source = Column(String)  # Data provenance: "philscholar", "sikap", etc.
     link = Column(String)
+    dedupe_key = Column(String, unique=True, index=True, nullable=True)
     description = Column(Text)
     countries = Column(String)  # CSV string (legacy)
 
@@ -244,8 +249,8 @@ class MatchRun(Base):
     __tablename__ = "match_runs"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
-    profile_id = Column(Integer, ForeignKey("students.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    profile_id = Column(Integer, ForeignKey("students.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
@@ -255,8 +260,8 @@ class MatchResult(Base):
     __tablename__ = "match_results"
 
     id = Column(Integer, primary_key=True, index=True)
-    run_id = Column(Integer, ForeignKey("match_runs.id"), nullable=False, index=True)
-    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    run_id = Column(Integer, ForeignKey("match_runs.id", ondelete="CASCADE"), nullable=False, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
     score = Column(Float, nullable=False)
     final_score = Column(Float, nullable=True)
     explanation = Column(Text, nullable=True)  # JSON-encoded list
@@ -274,9 +279,13 @@ class SavedScholarship(Base):
     __tablename__ = "saved_scholarships"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
-    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "scholarship_id", name="uq_saved_scholarships_user_scholarship"),
+    )
 
 
 class ScholarshipReport(Base):
@@ -286,7 +295,7 @@ class ScholarshipReport(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
-    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
     issue_type = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     status = Column(String, nullable=False, server_default="pending")
@@ -313,7 +322,7 @@ class ScholarshipVersion(Base):
     __tablename__ = "scholarship_versions"
 
     id = Column(Integer, primary_key=True, index=True)
-    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=False, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
     version_number = Column(Integer, nullable=False)
     changes = Column(Text, nullable=False)
     changed_by = Column(Integer, ForeignKey("users.id"), nullable=True)
@@ -342,11 +351,11 @@ class Notification(Base):
     __tablename__ = "notifications"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     type = Column(String, nullable=False)
     title = Column(String, nullable=False)
     body = Column(Text, nullable=True)
-    scholarship_id = Column(Integer, ForeignKey("scholarships.id"), nullable=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=True, index=True)
     is_read = Column(Boolean, nullable=True, default=False)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
@@ -444,3 +453,55 @@ class ScraperRun(Base):
     error_detail = Column(Text, nullable=True)
     # SHA-256 hex (64 chars) of raw listing HTML for change detection; null for legacy rows
     listing_content_sha256 = Column(String(64), nullable=True)
+
+
+class HtePartner(Base):
+    """Host Training Establishment for SIPP/OJT placements (CHED CMO 104)."""
+
+    __tablename__ = "hte_partners"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    industry = Column(String(128), nullable=True)
+    moa_status = Column(String(32), nullable=False, server_default="pending")
+    contact_email = Column(String(255), nullable=True)
+    contact_phone = Column(String(32), nullable=True)
+    is_active = Column(Boolean, nullable=False, server_default="1")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class InternshipOpportunity(Base):
+    """Internship slot offered by an HTE."""
+
+    __tablename__ = "internship_opportunities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    hte_id = Column(Integer, ForeignKey("hte_partners.id", ondelete="CASCADE"), nullable=False, index=True)
+    title = Column(String(255), nullable=False)
+    priority_courses = Column(Text, nullable=True)  # JSON array of PSCED codes
+    region = Column(String(64), nullable=True)
+    province = Column(String(128), nullable=True)
+    psgc_code = Column(String(9), nullable=True, index=True)
+    slots = Column(Integer, nullable=True)
+    allowance_status = Column(String(32), nullable=True)
+    allowance_amount = Column(Float, nullable=True)
+    application_deadline = Column(Date, nullable=True)
+    is_active = Column(Boolean, nullable=False, server_default="1")
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class OjtComplianceVault(Base):
+    """Pre-populated SIPP compliance documents stored in external vault URLs."""
+
+    __tablename__ = "ojt_compliance_vault"
+
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(Integer, ForeignKey("students.id", ondelete="CASCADE"), nullable=False, index=True)
+    internship_id = Column(Integer, ForeignKey("internship_opportunities.id", ondelete="SET NULL"), nullable=True, index=True)
+    document_type = Column(String(48), nullable=False)
+    template_version = Column(String(32), nullable=True)
+    prefilled_fields = Column(Text, nullable=True)  # JSON merge-data
+    external_url = Column(String(2048), nullable=True)
+    status = Column(String(32), nullable=False, server_default="pending")
+    guardian_consent_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)

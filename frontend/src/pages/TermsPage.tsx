@@ -19,7 +19,7 @@ export function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">2. Description of Service</h2>
             <p className="mt-2">
-              ISKONNECT is a scholarship matching tool. It helps you find scholarships you may qualify for based on your
+              Iskonnect is a scholarship matching tool. It helps you find scholarships you may qualify for based on your
               profile. This is not an application portal—you apply directly through each scholarship provider official
               website.
             </p>

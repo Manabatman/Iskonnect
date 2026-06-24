@@ -1,5 +1,5 @@
 """
-CSV Scholarship Import Script for ISKONNECT.
+CSV Scholarship Import Script for Iskonnect.
 
 Loads scraped scholarship CSV files, cleans and maps data to the Scholarship model,
 and inserts records into the database with duplicate prevention and batch insertion.
@@ -20,6 +20,30 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from app.db import SessionLocal
 from app import models
+from app.utils.dedupe import scholarship_dedupe_key
+from app.scholarship_cache import invalidate_scholarship_cache
+
+
+# PSCED broad disciplines inferred from specific course names in CSV text
+PSCED_KEYWORDS: dict[str, list[str]] = {
+    "STEM": [
+        "computer science", "data science", "biology", "chemistry", "physics",
+        "mathematics", "statistics", "information tech", "information systems",
+        "engineering", "wildlife", "zoology", "ocean sciences", "environmental science",
+        "natural resources",
+    ],
+    "Engineering": [
+        "civil engineering", "mechanical engineering", "electrical engineering",
+        "electronics engineering", "chemical engineering", "industrial engineering",
+        "geodetic engineering", "agricultural engineering",
+    ],
+    "IT": ["computer science", "information tech", "information systems"],
+    "Education": ["education", "bsed", "beed", "bse ", " bsed", " beed"],
+    "Medical": ["nursing", "medicine", "pharmacy", "medical tech", "physical therapy"],
+    "Business": ["business", "accountancy", "economics", "auditing"],
+    "Agriculture": ["agriculture", "forestry", "fisheries"],
+    "Arts": ["communication", "psychology", "sociology", "literature", "art education"],
+}
 
 
 # --- CSV Loading ---
@@ -116,25 +140,83 @@ def parse_deadline(text: str | None) -> date | None:
     return None
 
 
+def derive_psced_from_courses(courses: list[str]) -> list[str]:
+    """Map specific course names to PSCED broad discipline codes."""
+    if not courses:
+        return []
+    blob = " ".join(courses).lower()
+    hits: list[str] = []
+    for discipline, keywords in PSCED_KEYWORDS.items():
+        if any(kw in blob for kw in keywords):
+            hits.append(discipline)
+    return hits
+
+
+def detect_eligible_levels(*texts: str | None) -> list[str]:
+    """
+    Infer education levels from qualification/title text.
+    Defaults to College + Graduate so typical demo profiles are not level-blocked.
+    """
+    combined = " ".join(t for t in texts if t).lower()
+    if not combined.strip():
+        return ["College", "Graduate"]
+
+    levels: list[str] = []
+    if any(k in combined for k in ("graduate", "master", "phd", "doctoral", "ms ", " ma ")):
+        levels.append("Graduate")
+    if any(
+        k in combined
+        for k in (
+            "college",
+            "undergrad",
+            "1st year",
+            "2nd year",
+            "3rd year",
+            "4th year",
+            "incoming first-year",
+            "incoming first year",
+            "senior high",
+            "grade 11",
+            "grade 12",
+        )
+    ):
+        levels.append("College")
+    if "high school" in combined and "College" not in levels:
+        levels.append("High School")
+    if "tvet" in combined or "vocational" in combined:
+        levels.append("TVET")
+
+    # SIKAP undergrad-only standing
+    if "year level standing" in combined and "undergrad" in combined:
+        return ["College"]
+
+    if not levels:
+        return ["College", "Graduate"]
+    return levels
+
+
 def parse_qualifications(text: str | None) -> dict:
     """
     Extract structured fields from qualification text.
-    Returns: max_income, min_gwa_normalized, eligible_courses_specific, eligible_regions
+    Returns max_income, min_gwa, courses, regions (geographic only), eligible_schools.
+    University names are NOT written to eligible_regions (they break geographic matching).
     """
     result = {
         "max_income_threshold": None,
         "min_gwa_normalized": None,
         "eligible_courses_specific": [],
         "eligible_regions": [],
+        "eligible_schools": [],
     }
 
     if not text or not text.strip():
         return result
 
-    lines = text.lower().split("\n")
+    lines = text.split("\n")
 
-    for line in lines:
-        line = line.strip()
+    for raw_line in lines:
+        line = raw_line.strip()
+        line_lower = line.lower()
         if not line:
             continue
 
@@ -145,7 +227,7 @@ def parse_qualifications(text: str | None) -> dict:
             line,
             re.IGNORECASE
         )
-        if income_match and ("income" in line or "gross" in line or "combined" in line):
+        if income_match and ("income" in line_lower or "gross" in line_lower or "combined" in line_lower):
             try:
                 val = int(income_match.group(1).replace(",", ""))
                 if result["max_income_threshold"] is None or val < result["max_income_threshold"]:
@@ -182,17 +264,25 @@ def parse_qualifications(text: str | None) -> dict:
                 pass
 
         # Courses: "Courses must be within the ff: BS Chemistry, BSEd ..."
-        if "courses must be within" in line or "courses must be within the ff:" in line:
-            # Extract after colon
+        if "courses must be within" in line_lower:
             after_colon = line.split(":", 1)[-1].strip()
             courses = [c.strip() for c in re.split(r",\s*", after_colon) if c.strip()]
-            result["eligible_courses_specific"] = courses
+            if courses:
+                result["eligible_courses_specific"] = courses
 
-        # University/Region: "University must be within the ff: UP Diliman"
-        if "university must be within" in line or "university must be within the ff:" in line:
+        # University restriction — informational only; do NOT map to eligible_regions
+        if "university must be within" in line_lower:
             after_colon = line.split(":", 1)[-1].strip()
             unis = [u.strip() for u in re.split(r",\s*", after_colon) if u.strip()]
-            result["eligible_regions"] = unis
+            if unis:
+                result["eligible_schools"] = unis
+
+        # True geographic regions (rare in CSV but supported)
+        if "region must be within" in line_lower or "residence" in line_lower and "must" in line_lower:
+            after_colon = line.split(":", 1)[-1].strip() if ":" in line else line
+            regions = [r.strip() for r in re.split(r",\s*", after_colon) if r.strip()]
+            if regions:
+                result["eligible_regions"].extend(regions)
 
     return result
 
@@ -278,8 +368,28 @@ def clean_row(row: dict) -> dict | None:
     elif primary_qual or secondary_qual:
         description = (primary_qual or "") + "\n" + (secondary_qual or "")
 
-    # Parse structured fields
-    parsed_qual = parse_qualifications(primary_qual or secondary_qual)
+    # Parse structured fields from both qualification blocks
+    qual_blob = "\n".join(filter(None, [primary_qual, secondary_qual]))
+    parsed_qual_primary = parse_qualifications(primary_qual)
+    parsed_qual_secondary = parse_qualifications(secondary_qual)
+    parsed_qual = {
+        "max_income_threshold": parsed_qual_primary["max_income_threshold"]
+        or parsed_qual_secondary["max_income_threshold"],
+        "min_gwa_normalized": parsed_qual_primary["min_gwa_normalized"]
+        or parsed_qual_secondary["min_gwa_normalized"],
+        "eligible_courses_specific": parsed_qual_primary["eligible_courses_specific"]
+        or parsed_qual_secondary["eligible_courses_specific"],
+        "eligible_regions": list(
+            dict.fromkeys(
+                parsed_qual_primary["eligible_regions"] + parsed_qual_secondary["eligible_regions"]
+            )
+        ),
+        "eligible_schools": list(
+            dict.fromkeys(
+                parsed_qual_primary["eligible_schools"] + parsed_qual_secondary["eligible_schools"]
+            )
+        ),
+    }
     parsed_ben = parse_benefits(row.get("benefits"))
     parsed_deadline = parse_deadline(row.get("deadline"))
 
@@ -291,10 +401,20 @@ def clean_row(row: dict) -> dict | None:
         elif "philscholar.com" in link:
             source = "philscholar"
 
-    # is_active: False if deadline has passed
-    is_active = True
+    eligible_levels = detect_eligible_levels(title, qual_blob)
+    psced_codes = derive_psced_from_courses(parsed_qual["eligible_courses_specific"])
+
+    # Demo: keep rows matchable; mark past deadlines without deactivating
+    data_status = None
     if parsed_deadline and parsed_deadline < date.today():
-        is_active = False
+        data_status = "past_deadline"
+
+    # Append school restrictions to description for transparency
+    if parsed_qual["eligible_schools"] and description:
+        schools_note = ", ".join(parsed_qual["eligible_schools"][:5])
+        if len(parsed_qual["eligible_schools"]) > 5:
+            schools_note += ", ..."
+        description = description + f"\n\nEligible universities: {schools_note}"
 
     return {
         "title": title,
@@ -303,7 +423,7 @@ def clean_row(row: dict) -> dict | None:
         "link": link or None,
         "description": description[:10000] if description else None,  # Limit length
         "countries": "Philippines",
-        "regions": ",".join(parsed_qual["eligible_regions"]) if parsed_qual["eligible_regions"] else None,
+        "regions": None,
         "eligible_regions": json.dumps(parsed_qual["eligible_regions"]) if parsed_qual["eligible_regions"] else None,
         "eligible_courses_specific": json.dumps(parsed_qual["eligible_courses_specific"]) if parsed_qual["eligible_courses_specific"] else None,
         "max_income_threshold": parsed_qual["max_income_threshold"],
@@ -313,16 +433,18 @@ def clean_row(row: dict) -> dict | None:
         "benefit_books": parsed_ben["benefit_books"],
         "benefit_miscellaneous": parsed_ben["benefit_miscellaneous"],
         "application_deadline": parsed_deadline,
-        "is_active": is_active,
-        "eligible_levels": json.dumps(["College"]),  # Default
+        "is_active": True,
+        "data_status": data_status,
+        "verification_source": "csv_import",
+        "eligible_levels": json.dumps(eligible_levels),
         "eligible_cities": None,
         "residency_required": False,
         "eligible_school_types": json.dumps(["Public", "Private"]),
-        "eligible_courses_psced": None,
+        "eligible_courses_psced": json.dumps(psced_codes) if psced_codes else None,
         "min_age": None,
         "max_age": None,
         "provider_type": None,
-        "scholarship_type": None,
+        "scholarship_type": "Merit-and-Need",
         "priority_groups": None,
         "preferred_extracurriculars": None,
         "preferred_awards": None,
@@ -334,17 +456,19 @@ def clean_row(row: dict) -> dict | None:
         "has_return_service": False,
         "application_open_date": None,
         "academic_year_target": None,
-        "level": "College",
+        "level": eligible_levels[0] if eligible_levels else "College",
         "needs_tags": None,
     }
 
 
 # --- Duplicate Check & Batch Insert ---
 
-def get_existing_keys(db) -> set[tuple[str, str | None]]:
-    """Return set of (title_lower, link) for existing scholarships."""
-    scholarships = db.query(models.Scholarship).all()
-    return {(s.title.lower().strip(), s.link or "") for s in scholarships}
+def get_existing_dedupe_keys(db) -> set[str]:
+    """Return set of scholarship dedupe keys already in the database."""
+    keys: set[str] = set()
+    for s in db.query(models.Scholarship.title, models.Scholarship.provider, models.Scholarship.link).all():
+        keys.add(scholarship_dedupe_key(s.title, s.provider, s.link))
+    return keys
 
 
 def run_import(csv_path: str, batch_size: int = 50) -> dict:
@@ -356,7 +480,7 @@ def run_import(csv_path: str, batch_size: int = 50) -> dict:
     total = len(rows)
 
     db = SessionLocal()
-    existing_keys = get_existing_keys(db)
+    existing_keys = get_existing_dedupe_keys(db)
 
     inserted = 0
     skipped = 0
@@ -371,7 +495,7 @@ def run_import(csv_path: str, batch_size: int = 50) -> dict:
 
         title_lower = cleaned["title"].lower().strip()
         link = cleaned["link"] or ""
-        key = (title_lower, link)
+        key = scholarship_dedupe_key(cleaned["title"], cleaned.get("provider"), link)
 
         if key in existing_keys:
             skipped += 1
@@ -392,6 +516,7 @@ def run_import(csv_path: str, batch_size: int = 50) -> dict:
                 db.commit()
                 inserted += len(batch)
                 batch = []
+                invalidate_scholarship_cache()
             except Exception as e:
                 db.rollback()
                 print(f"  Batch error at row {i + 1}: {e}", file=sys.stderr)
@@ -407,6 +532,8 @@ def run_import(csv_path: str, batch_size: int = 50) -> dict:
             db.rollback()
             print(f"  Final batch error: {e}", file=sys.stderr)
             errors += len(batch)
+
+    invalidate_scholarship_cache()
 
     db_total = db.query(models.Scholarship).count()
     db.close()
@@ -424,7 +551,7 @@ def run_import(csv_path: str, batch_size: int = 50) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Import scholarship data from CSV into ISKONNECT database."
+        description="Import scholarship data from CSV into Iskonnect database."
     )
     parser.add_argument(
         "--csv",

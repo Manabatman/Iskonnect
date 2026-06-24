@@ -11,6 +11,8 @@ if settings.database_url.startswith("sqlite"):
 else:
     engine_kwargs["pool_pre_ping"] = True
     engine_kwargs["pool_recycle"] = 300
+    engine_kwargs["pool_size"] = settings.db_pool_size
+    engine_kwargs["max_overflow"] = settings.db_max_overflow
 
 engine = create_engine(
     settings.database_url,

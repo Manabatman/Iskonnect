@@ -7,3 +7,6 @@ __pycache__
 server_debug.log
 data/raw/*.json
 !data/raw/.gitkeep
+.pytest_cache
+dist
+node_modules

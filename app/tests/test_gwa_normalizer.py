@@ -2,7 +2,7 @@
 
 import pytest
 
-from app.taxonomy.gwa_normalizer import normalize_gwa
+from app.taxonomy.gwa_normalizer import normalize_gwa, resolve_gwa_scale
 
 
 class TestFivePointScale:
@@ -60,6 +60,19 @@ class TestPercentageAndDefault:
     def test_invalid_input_returns_none(self):
         assert normalize_gwa(None, "5.0_scale") is None
         assert normalize_gwa("not-a-number", "5.0_scale") is None
+
+
+class TestScaleAliases:
+    def test_alias_map(self):
+        assert resolve_gwa_scale("NUMERIC_1_TO_5") == "5.0_scale"
+        assert resolve_gwa_scale("numeric_4_scale") == "4.0_scale"
+        assert resolve_gwa_scale("percentage_75_to_100") == "percentage"
+
+    def test_unknown_scale_ambiguous_value_returns_none(self):
+        assert normalize_gwa(2.5, "unknown_scale") is None
+
+    def test_unknown_scale_high_percentage_still_works(self):
+        assert normalize_gwa(92, "unknown_scale") == 92.0
 
 
 class TestStringParsing:

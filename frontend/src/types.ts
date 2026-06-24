@@ -86,6 +86,8 @@ export interface MatchResult {
   score: number;
   final_score?: number;
   eligibility_status?: boolean;
+  /** True when student meets hard filters but application deadline has passed */
+  deadline_passed?: boolean;
   readiness_score?: number;
   explanation?: string[];
   breakdown?: MatchBreakdown;
@@ -197,5 +199,10 @@ export interface SavedScholarship {
   id: number;
   scholarship_id: number;
   created_at: string;
+  title?: string | null;
+  provider?: string | null;
+  benefit_tuition?: boolean | null;
+  benefit_allowance_monthly?: number | null;
+  benefit_total_value?: number | null;
   scholarship?: ScholarshipInfo;
 }

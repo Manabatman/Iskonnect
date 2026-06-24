@@ -67,6 +67,40 @@ def _validate_entry(row: dict) -> bool:
     return True
 
 
+def _parse_detail_page(html: str) -> dict:
+    """Extract description and provider hints from a scholarship detail page."""
+    soup = BeautifulSoup(html, "lxml")
+    out: dict = {}
+    content = soup.select_one(".entry-content, article .post-content, .post-content, article")
+    if content:
+        text = content.get_text(" ", strip=True)
+        if text:
+            out["description"] = text[:8000]
+    provider_el = soup.select_one(".author a, .posted-by a, .provider, meta[property='og:site_name']")
+    if provider_el:
+        if provider_el.name == "meta":
+            out["provider"] = (provider_el.get("content") or "").strip() or None
+        else:
+            out["provider"] = provider_el.get_text(strip=True) or None
+    return out
+
+
+def _enrich_row_from_detail(row: dict) -> dict:
+    """Fetch detail page for description/provider (rate-limited via base.fetch_text)."""
+    link = (row.get("link") or "").strip()
+    if not link:
+        return row
+    html = fetch_text(link)
+    if not html:
+        return row
+    try:
+        extra = _parse_detail_page(html)
+        return {**row, **{k: v for k, v in extra.items() if v}}
+    except Exception:
+        logger.warning("scrape_philscholar_detail_parse_failed link=%s", link, exc_info=True)
+        return row
+
+
 def _parse_listing(html: str) -> list[dict]:
     soup = BeautifulSoup(html, "lxml")
     out: list[dict] = []
@@ -133,13 +167,20 @@ def run_scrape() -> Path:
     if len(valid_rows) < len(rows):
         logger.info("scrape_philscholar_filtered invalid=%s valid=%s", len(rows) - len(valid_rows), len(valid_rows))
 
+    enriched_rows: list[dict] = []
+    for i, row in enumerate(valid_rows):
+        if i < 25:
+            enriched_rows.append(_enrich_row_from_detail(row))
+        else:
+            enriched_rows.append(row)
+
     payload = [
         {
             **r,
             "scraped_at": datetime.now(timezone.utc).isoformat(),
-            "scraper_version": "1.1",
+            "scraper_version": "1.2",
         }
-        for r in valid_rows
+        for r in enriched_rows
     ]
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     skip_path.unlink(missing_ok=True)  # type: ignore[arg-type]
@@ -147,6 +188,9 @@ def run_scrape() -> Path:
 
     status = "success" if payload else ("partial" if html else "failed")
     err = None if html else "no_html_response"
+    if html and not payload:
+        status = "failed"
+        err = "zero_valid_records"
     log_scraper_run(
         "philscholar",
         status,
@@ -155,6 +199,8 @@ def run_scrape() -> Path:
         error_detail=err,
         listing_content_sha256=content_hash if html else None,
     )
+    if not payload and html:
+        raise SystemExit("scrape_philscholar: zero valid records — failing workflow")
     return out_path
 
 

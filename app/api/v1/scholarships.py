@@ -21,6 +21,7 @@ from app.utils.scholarship_versioning import (
 )
 from app.scholarship_cache import get_cached_scholarship_dicts as _cache_fetch_dicts
 from app.scholarship_cache import invalidate_scholarship_cache
+from app.utils.dedupe import scholarship_dedupe_key
 from app.utils.timezone import utc_now_naive
 
 logger = logging.getLogger(__name__)
@@ -134,10 +135,20 @@ def persist_scholarship_from_schema(
 
     When auto_commit is False, caller must commit (e.g. single transaction with staging row update).
     """
+    dedupe = scholarship_dedupe_key(scholarship.title, scholarship.provider, scholarship.link)
+    dup = (
+        db.query(models.Scholarship)
+        .filter(models.Scholarship.dedupe_key == dedupe)
+        .first()
+    )
+    if dup:
+        raise HTTPException(status_code=409, detail="Scholarship with same title, provider, and link already exists")
+
     db_scholarship = models.Scholarship(
         title=strip_tags(scholarship.title) or scholarship.title,
         provider=strip_tags(scholarship.provider) or scholarship.provider if scholarship.provider else None,
         source=strip_tags(scholarship.source) or scholarship.source if scholarship.source else None,
+        dedupe_key=dedupe,
         countries=",".join(scholarship.countries or []),
         regions=",".join(scholarship.regions or []),
         min_age=scholarship.min_age,
@@ -174,7 +185,7 @@ def persist_scholarship_from_schema(
         academic_year_target=scholarship.academic_year_target,
         is_active=scholarship.is_active if scholarship.is_active is not None else True,
         last_verified_at=utc_now_naive(),
-        verification_source=vs,
+        verification_source=verification_source,
         data_status="active",
     )
     db.add(db_scholarship)
@@ -197,6 +208,7 @@ def persist_scholarship_from_schema(
 
 
 @router.post("/scholarships", response_model=schemas.ScholarshipResponse)
+@limiter.limit("30/minute")
 def create_scholarship(
     request: Request,
     scholarship: schemas.Scholarship,
@@ -240,7 +252,9 @@ def list_scholarships(
 
 
 @router.get("/scholarships/{scholarship_id}", response_model=schemas.ScholarshipResponse)
+@limiter.limit("120/minute")
 def get_scholarship(
+    request: Request,
     scholarship_id: int,
     db: Session = Depends(get_db),
 ):
@@ -252,6 +266,7 @@ def get_scholarship(
 
 
 @router.put("/scholarships/{scholarship_id}", response_model=schemas.ScholarshipResponse)
+@limiter.limit("30/minute")
 def update_scholarship(
     request: Request,
     scholarship_id: int,
@@ -329,6 +344,7 @@ def update_scholarship(
 
 
 @router.delete("/scholarships/{scholarship_id}")
+@limiter.limit("30/minute")
 def delete_scholarship(
     request: Request,
     scholarship_id: int,

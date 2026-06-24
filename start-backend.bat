@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo Starting Scholarship Match Backend
+echo Starting Iskonnect Backend
 echo ========================================
 echo.
 

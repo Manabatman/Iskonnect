@@ -3,9 +3,8 @@
 name: Scholarship scrape and ingest
 
 on:
-  # Scraping temporarily disabled — uncomment schedule to re-enable automated runs.
-  # schedule:
-  #   - cron: "0 19 * * 1,4" # Mon & Thu ~03:00 PHT
+  schedule:
+    - cron: "0 19 * * 1,4" # Mon & Thu ~03:00 PHT
   workflow_dispatch:
 
 jobs:

@@ -3,6 +3,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Request
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import models
@@ -43,9 +44,18 @@ def admin_recent_match_runs(
     limit: int = Query(50, ge=1, le=200),
 ):
     runs = db.query(models.MatchRun).order_by(models.MatchRun.created_at.desc()).limit(limit).all()
+    if not runs:
+        return []
+    run_ids = [r.id for r in runs]
+    counts = dict(
+        db.query(models.MatchResult.run_id, func.count(models.MatchResult.id))
+        .filter(models.MatchResult.run_id.in_(run_ids))
+        .group_by(models.MatchResult.run_id)
+        .all()
+    )
     out = []
     for r in runs:
-        cnt = db.query(models.MatchResult).filter(models.MatchResult.run_id == r.id).count()
+        cnt = int(counts.get(r.id, 0))
         out.append(
             {
                 "id": r.id,

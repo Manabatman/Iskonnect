@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import hashlib
+from app.utils.dedupe import scholarship_dedupe_key
 import json
 import logging
 from datetime import datetime, timezone
@@ -11,6 +11,7 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -18,6 +19,7 @@ from app.api.v1.scholarships import _scholarship_to_response, persist_scholarshi
 from app.scholarship_cache import invalidate_scholarship_cache
 from app.auth import require_admin
 from app.db import get_db
+from app.limiter import limiter
 from app.utils.audit import log_action
 
 logger = logging.getLogger(__name__)
@@ -42,9 +44,8 @@ def _find_live_duplicate(db: Session, sch: schemas.Scholarship) -> models.Schola
     return None
 
 
-def _dedupe_key(title: str, provider: str | None) -> str:
-    raw = f"{(title or '').strip().lower()}|{(provider or '').strip().lower()}"
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:64]
+def _dedupe_key(title: str, provider: str | None, link: str | None = None) -> str:
+    return scholarship_dedupe_key(title, provider, link)
 
 
 class StagingRowSummary(BaseModel):
@@ -60,11 +61,13 @@ class StagingRowSummary(BaseModel):
 class StagingImportRequest(BaseModel):
     """JSON body matching schemas.Scholarship fields (stored as payload_json)."""
 
-    rows: list[dict[str, Any]] = Field(..., min_length=1)
+    rows: list[dict[str, Any]] = Field(..., min_length=1, max_length=100)
 
 
 @router.get("/scholarships/staging/pending", response_model=list[StagingRowSummary])
+@limiter.limit("60/minute")
 def list_staging_pending(
+    request: Request,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
@@ -89,7 +92,9 @@ def list_staging_pending(
 
 
 @router.post("/scholarships/staging/import")
+@limiter.limit("30/minute")
 def import_staging_rows(
+    request: Request,
     body: StagingImportRequest,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
@@ -104,7 +109,7 @@ def import_staging_rows(
             logger.warning("staging_import_invalid_row: %s", e)
             skipped += 1
             continue
-        key = _dedupe_key(sch.title, sch.provider)
+        key = _dedupe_key(sch.title, sch.provider, sch.link)
         existing = (
             db.query(models.ScholarshipStaging)
             .filter(models.ScholarshipStaging.dedupe_key == key, models.ScholarshipStaging.status == "pending")
@@ -123,11 +128,16 @@ def import_staging_rows(
         )
         db.add(st)
         created += 1
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Duplicate staging row detected")
     return {"created": created, "skipped": skipped}
 
 
 @router.post("/scholarships/staging/{staging_id}/approve", response_model=schemas.ScholarshipResponse)
+@limiter.limit("30/minute")
 def approve_staging(
     request: Request,
     staging_id: int,
@@ -190,6 +200,7 @@ def approve_staging(
 
 
 @router.post("/scholarships/staging/{staging_id}/reject")
+@limiter.limit("30/minute")
 def reject_staging(
     request: Request,
     staging_id: int,

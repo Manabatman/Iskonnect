@@ -1,4 +1,4 @@
-# ISKONNECT beginner handbook
+# Iskonnect beginner handbook
 
 How your live system fits together, what each piece does, and what to check when something breaks.
 
@@ -32,7 +32,7 @@ GitHub Actions → same Supabase (optional scheduled scrape → staging; daily c
 
 | Variable | Where | Purpose |
 |----------|--------|---------|
-| `VITE_API_BASE_URL` | **Vercel** (build env) | Full origin of your Render API, e.g. `https://iskonnect-api.onrender.com` — **no** trailing slash. Changing it requires a **new Vercel deploy** (Vite bakes it in at build time). |
+| `VITE_API_BASE_URL` | **Vercel** (build env) | Full origin of your Render API, e.g. `https://Iskonnect-api.onrender.com` — **no** trailing slash. Changing it requires a **new Vercel deploy** (Vite bakes it in at build time). |
 | `DATABASE_URL` | **Render** + **GitHub Actions secret** | Supabase **transaction pooler** URI with `postgresql+psycopg2://...?sslmode=require`. |
 | `CORS_ORIGINS` | **Render** | Comma-separated list of allowed **browser origins** (your Vercel URL **exactly**: `https://….vercel.app`). Must match or the browser blocks API calls. |
 | `SECRET_KEY`, `ENVIRONMENT`, `AUTH_DISABLED` | **Render** | JWT signing and production guards (`app/config.py`). |
@@ -56,7 +56,7 @@ Point **UptimeRobot** (or similar) at `/health` every few minutes to reduce Rend
 
 | Symptom | Check |
 |---------|--------|
-| “Unable to reach the server” / spinner forever | Render service **asleep**? Wait up to ~30s. Wrong `VITE_API_BASE_URL`? Browser **Network** tab: request URL and CORS errors. |
+| “Unable to reach the server” / spinner forever | **Local:** Is `uvicorn` running on port 8000? Check terminal for `[startup]` and Alembic errors. Wrong `VITE_API_BASE_URL`? **Production:** Render asleep (~30s), CORS, or wrong API URL in Vite build. |
 | CORS error in console | `CORS_ORIGINS` on Render must include **exact** Vercel origin (`https://`, no typo). |
 | 401 on API | Log in again; token in `localStorage`. `AUTH_DISABLED` should be `false` in production. |
 | Empty search / no matches | Supabase **Table Editor** → `scholarships`: rows exist? `is_active`? |
@@ -64,13 +64,44 @@ Point **UptimeRobot** (or similar) at `/health` every few minutes to reduce Rend
 | `/health` 503 | `DATABASE_URL`, Supabase project status, network. Render logs for traceback. |
 | Deployed frontend still calls old API | Rebuild Vercel after changing `VITE_*` env vars. |
 
-## 7. Safe local workflow
+## 7. Run the demo locally (recommended)
 
-1. Copy `.env.example` → `.env` at repo root; use SQLite for quick dev unless you need Postgres parity.
-2. `alembic upgrade head`
-3. `uvicorn app.main:app --reload --port 8000`
-4. In `frontend/`: `npm install` && `npm run dev`, with `VITE_API_BASE_URL=http://localhost:8000`
-5. Before production changes: `npm run build` and `python -m pytest app/tests/ -v`
+Use **SQLite** in repo-root `.env` so the backend starts without reaching Supabase. The frontend only needs `VITE_API_BASE_URL` — use `frontend/.env` or copy [`frontend/.env.example`](frontend/.env.example). **Do not** put `DATABASE_URL` in the frontend; it is unused and unsafe.
+
+**Backend**
+
+```bash
+# From repo root (Windows PowerShell)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+On startup you should see a log line like: `[startup] environment=development database=sqlite (local dev.db) cors_origins=[...]`.
+
+**Frontend**
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open **http://localhost:5173** — the app calls **http://localhost:8000** by default (`frontend/src/api/client.ts`).
+
+**Switch to Supabase for local dev**
+
+1. In repo-root `.env`, comment `DATABASE_URL=sqlite:///./dev.db` and uncomment the Supabase line; paste the URI from Supabase (transaction pooler, `?sslmode=require`).
+2. Restart the API. The startup log will show `database=postgres @ ...pooler.supabase.com:6543`.
+
+**If SQLite schema looks wrong**
+
+Delete `dev.db` in the repo root and restart the API (with `RUN_MIGRATIONS_ON_STARTUP=true`) so Alembic recreates tables.
+
+**Before production changes**
+
+`npm run build` in `frontend/` and `python -m pytest app/tests/ -v` at repo root.
 
 ## 8. What not to change without a plan
 

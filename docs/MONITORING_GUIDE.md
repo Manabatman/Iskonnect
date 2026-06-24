@@ -1,4 +1,4 @@
-# ISKONNECT monitoring guide (beginner-friendly)
+# Iskonnect monitoring guide (beginner-friendly)
 
 Use a **hybrid** approach: Supabase + platform logs + the in-app **Admin** UI (`/admin`, admin role).
 

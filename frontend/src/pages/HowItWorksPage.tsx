@@ -68,7 +68,7 @@ export function HowItWorksPage() {
       <div className="mx-auto max-w-3xl px-4">
         <p className="text-sm font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">How it works</p>
         <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
-          How ISKONNECT finds your scholarships
+          How Iskonnect finds your scholarships
         </h1>
         <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
           We don&apos;t guess. Every match is based on actual program rules and your real profile.

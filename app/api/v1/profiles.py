@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
-from app.auth import assert_can_read_profile, get_current_user_id
+from app.auth import assert_can_read_profile, create_profile_read_token, get_current_user_id, get_profile_access_token
 from app.utils.audit import log_action
 from app.config import settings
 from app.db import get_db
@@ -23,8 +23,8 @@ from app.taxonomy.gwa_normalizer import normalize_gwa
 router = APIRouter()
 
 
-def _profile_to_response(p):
-    return {
+def _profile_to_response(p, *, include_access_token: bool = False):
+    out = {
         "id": p.id,
         "full_name": p.full_name,
         "email": p.email,
@@ -67,7 +67,14 @@ def _profile_to_response(p):
         "privacy_consent_at": p.privacy_consent_at.isoformat() if getattr(p, "privacy_consent_at", None) else None,
         "privacy_consent_version": getattr(p, "privacy_consent_version", None),
         "google_drive_folder_url": getattr(p, "google_drive_folder_url", None),
+        "psgc_code": getattr(p, "psgc_code", None),
+        "guardian_full_name": getattr(p, "guardian_full_name", None),
+        "guardian_email": getattr(p, "guardian_email", None),
+        "guardian_consent_at": p.guardian_consent_at.isoformat() if getattr(p, "guardian_consent_at", None) else None,
     }
+    if include_access_token and getattr(p, "user_id", None) is None:
+        out["profile_access_token"] = create_profile_read_token(p.id)
+    return out
 
 
 def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
@@ -95,6 +102,7 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "province": profile.province,
         "city_municipality": profile.city_municipality,
         "barangay": profile.barangay,
+        "psgc_code": profile.psgc_code,
         "school_type": profile.school_type,
         "target_school": profile.target_school,
         "gwa_raw": profile.gwa_raw,
@@ -117,6 +125,9 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "is_farmer_fisher_dependent": profile.is_farmer_fisher_dependent or False,
         "is_4ps_listahanan": profile.is_4ps_listahanan or False,
         "parent_occupation": profile.parent_occupation,
+        "guardian_full_name": strip_tags(profile.guardian_full_name) if profile.guardian_full_name else None,
+        "guardian_email": str(profile.guardian_email) if profile.guardian_email else None,
+        "guardian_consent_at": datetime.now(timezone.utc) if profile.guardian_consent else None,
         "documents": json.dumps(
             [d.model_dump() for d in (profile.documents or [])],
         ),
@@ -337,7 +348,7 @@ def create_profile(
             details={"email": profile.email},
             ip_address=request.client.host if request.client else None,
         )
-        return _profile_to_response(db_profile)
+        return _profile_to_response(db_profile, include_access_token=user_id is None)
     except IntegrityError:
         db.rollback()
         logger.warning("profile_create_integrity_conflict email=%s", profile.email)
@@ -381,8 +392,9 @@ def get_profile(
     profile_id: int,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+    profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
 ):
-    assert_can_read_profile(profile_id, db, user_id)
+    assert_can_read_profile(profile_id, db, user_id, profile_token)
     profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
     if not profile:
         logger.warning("profile_get_not_found profile_id=%s", profile_id)

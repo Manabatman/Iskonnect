@@ -10,24 +10,6 @@ ProviderTypeOption = Literal["Government", "Private", "LGU", "Institutional"]
 ScholarshipTypeOption = Literal["Merit-and-Need", "Need", "Affiliation", "Merit-based"]
 
 
-# === Match Breakdown (Structure Only) ===
-class MatchFactorSchema(BaseModel):
-    category: Optional[str] = None
-    status: str  # met, exceeded, partial, missing, disqualified
-    user_value: str
-    requirement_value: str
-    detail: Optional[str] = None
-
-
-class MatchBreakdownSchema(BaseModel):
-    academic: Optional[dict] = None
-    socioeconomic: Optional[dict] = None
-    field_relevance: Optional[dict] = None
-    geographic: Optional[dict] = None
-    document_readiness: Optional[dict] = None
-    priority_group: Optional[dict] = None
-
-
 # === Student Profile ===
 class DocumentEntry(BaseModel):
     """Structured document row from the client."""
@@ -46,7 +28,6 @@ class StudentProfile(BaseModel):
     school: Optional[str] = None
     needs: Optional[List[str]] = []
     education_level: Optional[EducationLevel] = None
-    # New fields
     gender: Optional[GenderOption] = None
     birthdate: Optional[date] = None
     current_academic_stage: Optional[str] = None
@@ -54,6 +35,7 @@ class StudentProfile(BaseModel):
     province: Optional[str] = None
     city_municipality: Optional[str] = None
     barangay: Optional[str] = None
+    psgc_code: Optional[str] = Field(default=None, max_length=9)
     school_type: Optional[SchoolTypeOption] = None
     target_school: Optional[str] = None
     gwa_raw: Optional[str] = None
@@ -76,6 +58,9 @@ class StudentProfile(BaseModel):
     is_farmer_fisher_dependent: Optional[bool] = False
     is_4ps_listahanan: Optional[bool] = False
     parent_occupation: Optional[str] = None
+    guardian_full_name: Optional[str] = Field(default=None, max_length=255)
+    guardian_email: Optional[EmailStr] = None
+    guardian_consent: bool = False
     documents: Optional[List[DocumentEntry]] = []
     # RA 10173 — must be true to submit (validated server-side)
     privacy_consent: bool = False
@@ -114,6 +99,24 @@ class StudentProfile(BaseModel):
         if not v:
             raise ValueError("You must accept the privacy notice to continue (Data Privacy Act of 2012 / RA 10173).")
         return v
+
+    @model_validator(mode="after")
+    def require_guardian_consent_for_minors(self) -> "StudentProfile":
+        """Profiles for users under 18 require guardian consent (RA 10173)."""
+        is_minor = self.age is not None and self.age < 18
+        if not is_minor and self.birthdate is not None:
+            today = date.today()
+            years = today.year - self.birthdate.year
+            if (today.month, today.day) < (self.birthdate.month, self.birthdate.day):
+                years -= 1
+            is_minor = years < 18
+        if is_minor and not self.guardian_consent:
+            raise ValueError(
+                "Guardian or parent consent is required for users under 18 years of age."
+            )
+        if is_minor and not (self.guardian_full_name or "").strip():
+            raise ValueError("Guardian full name is required for users under 18.")
+        return self
 
 
 class GoogleDriveVaultUpdate(BaseModel):
@@ -176,6 +179,7 @@ class StudentProfileResponse(BaseModel):
     privacy_consent_at: Optional[datetime] = None
     privacy_consent_version: Optional[str] = None
     google_drive_folder_url: Optional[str] = None
+    profile_access_token: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -407,6 +411,19 @@ class MatchResponse(BaseModel):
     scoring_policy_version: Optional[str] = None
 
 
+class MatchResponseMinimal(BaseModel):
+    """Lightweight match row for list views (<50KB payloads)."""
+
+    id: int
+    title: str
+    provider: Optional[str] = None
+    score: float
+    final_score: Optional[float] = None
+    eligibility_status: Optional[bool] = None
+    confidence: Optional[str] = None
+    application_deadline: Optional[str] = None
+
+
 # === Upcoming Scholarship (Cycle Prediction) ===
 class UpcomingScholarship(BaseModel):
     id: int
@@ -489,6 +506,75 @@ class SavedScholarshipResponse(BaseModel):
         from_attributes = True
 
 
+class SavedScholarshipSummary(BaseModel):
+    """Slim saved-scholarship row without nested full scholarship payload."""
+
+    id: int
+    scholarship_id: int
+    created_at: datetime
+    title: Optional[str] = None
+    provider: Optional[str] = None
+    benefit_tuition: Optional[bool] = None
+    benefit_allowance_monthly: Optional[int] = None
+    benefit_total_value: Optional[int] = None
+
+
 class SavedScholarshipListResponse(BaseModel):
-    saved: List[SavedScholarshipResponse] = []
+    saved: List[SavedScholarshipSummary] = []
     total: int = 0
+
+
+# === SIPP / OJT (CHED CMO 104) ===
+class HtePartnerBase(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255)
+    industry: Optional[str] = Field(default=None, max_length=128)
+    moa_status: Optional[str] = Field(default="pending", max_length=32)
+    contact_email: Optional[EmailStr] = None
+    contact_phone: Optional[str] = Field(default=None, max_length=32)
+    is_active: bool = True
+
+
+class HtePartnerResponse(HtePartnerBase):
+    id: int
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class InternshipOpportunityBase(BaseModel):
+    title: str = Field(..., min_length=1, max_length=255)
+    priority_courses: Optional[List[str]] = []
+    region: Optional[str] = None
+    province: Optional[str] = None
+    psgc_code: Optional[str] = Field(default=None, max_length=9)
+    slots: Optional[int] = Field(default=None, ge=0)
+    allowance_status: Optional[str] = Field(default=None, max_length=32)
+    allowance_amount: Optional[float] = Field(default=None, ge=0)
+    application_deadline: Optional[date] = None
+    is_active: bool = True
+
+
+class InternshipOpportunityResponse(InternshipOpportunityBase):
+    id: int
+    hte_id: int
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class OjtComplianceVaultBase(BaseModel):
+    document_type: str = Field(..., max_length=48)
+    template_version: Optional[str] = Field(default=None, max_length=32)
+    prefilled_fields: Optional[dict[str, Any]] = None
+    external_url: Optional[str] = Field(default=None, max_length=2048)
+    status: str = Field(default="pending", max_length=32)
+
+
+class OjtComplianceVaultResponse(OjtComplianceVaultBase):
+    id: int
+    student_id: int
+    internship_id: Optional[int] = None
+    guardian_consent_at: Optional[datetime] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

@@ -11,6 +11,7 @@ from app import models
 from app.schemas import ScoringWeightItem, ScoringWeightResponse, ScoringWeightsUpdateRequest
 from app.auth import require_admin
 from app.db import get_db
+from app.limiter import limiter
 from app.utils.audit import log_action
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,9 @@ _EXPECTED = {"academic", "income", "field_alignment", "geographic", "equity_prio
 
 
 @router.get("/admin/scoring/weights", response_model=ScoringWeightResponse)
+@limiter.limit("60/minute")
 def get_scoring_weights(
+    request: Request,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
@@ -32,6 +35,7 @@ def get_scoring_weights(
 
 
 @router.put("/admin/scoring/weights", response_model=ScoringWeightResponse)
+@limiter.limit("30/minute")
 def put_scoring_weights(
     request: Request,
     body: ScoringWeightsUpdateRequest,

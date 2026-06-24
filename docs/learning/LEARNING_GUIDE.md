@@ -1,4 +1,6 @@
-# Scholarship Match Learning Guide
+# Iskonnect Learning Guide
+
+> **Want a day-by-day study plan?** Start with [`docs/ACTIVE_LEARNING_PATH.md`](docs/ACTIVE_LEARNING_PATH.md) — retrieval practice, traces, and checkpoints. Use this guide as reference while you work through that path.
 
 This document is a beginner-friendly reverse engineering guide for the `scholarship-match` project.
 
@@ -286,7 +288,7 @@ This section focuses on the hand-written project files.
 
 #### `frontend/public/`
 
-- `frontend/public/logo_iskonnect.png`: Logo asset for branding.
+- `frontend/public/logo_Iskonnect.png`: Logo asset for branding.
 - `frontend/public/images/README.txt`: Notes about image assets.
 - `frontend/public/images/logo.svg`: SVG logo asset.
 - `frontend/public/images/hero/hero-1.svg`: Landing-page illustration asset.
@@ -1254,7 +1256,7 @@ Where:
 
 What is happening:
 
-- `START_HERE.md` still tells you to `cd iskconnect-frontend`, which is the wrong path now.
+- `START_HERE.md` still tells you to `cd Iskonnect-frontend`, which is the wrong path now.
 - `README.md` mentions `START_BOTH.bat`, but that file lives one level above the repo.
 - `START_BOTH.bat` still uses older "ISKOLAR" naming.
 

@@ -24,6 +24,7 @@ export interface AuthUser {
   id: number;
   email: string;
   role: string;
+  emailVerified: boolean;
 }
 
 interface AuthContextType {
@@ -96,7 +97,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return true;
         }
         const data = await res.json();
-        setUser({ id: data.id, email: data.email, role: data.role ?? "student" });
+        setUser({
+          id: data.id,
+          email: data.email,
+          role: data.role ?? "student",
+          emailVerified: Boolean(data.email_verified),
+        });
         setAuthError(null);
         return true;
       };
@@ -170,6 +176,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(data?.detail ?? "Registration failed");
       }
       const data = await res.json();
+      if (!data.access_token || data.user_id == null) {
+        throw new Error(data.detail ?? "Registration could not be completed. Try signing in if you already have an account.");
+      }
       setUser(null);
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);

@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo Starting ISKONNECT Frontend
+echo Starting Iskonnect Frontend
 echo ========================================
 echo.
 

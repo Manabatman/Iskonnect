@@ -5,12 +5,11 @@ Match service - orchestrates hard filtering, scoring, and result assembly.
 import logging
 
 logger = logging.getLogger(__name__)
-from app.matching.hard_filters import filter_scholarships
+from app.matching.hard_filters import DEADLINE_PASSED_MESSAGE, filter_scholarships, is_application_deadline_passed
 from app.matching.scoring_port import ScoringEnginePort, ScoringPayload, ScoringResult
 from app.scoring import WeightedDeterministicScorer
 from app.taxonomy.regions import normalize_region
 from app.taxonomy.income_brackets import get_income_bracket
-from app.documents.readiness import compute_readiness
 from app.utils.json_helpers import parse_json
 
 
@@ -125,20 +124,6 @@ def _get_equity_flags(profile: dict) -> dict[str, bool]:
     }
 
 
-def _count_matches(profile_list: list, scholarship_list: list) -> int:
-    """Count overlapping items (case-insensitive substring match)."""
-    if not profile_list or not scholarship_list:
-        return 0
-    count = 0
-    for p in profile_list:
-        p_lower = str(p).lower()
-        for s in scholarship_list:
-            if s and (p_lower in str(s).lower() or str(s).lower() in p_lower):
-                count += 1
-                break
-    return count
-
-
 class MatchService:
     """Orchestrates hard filter -> score -> explain -> rank."""
 
@@ -166,14 +151,29 @@ class MatchService:
             match_result = self._build_match_result(sch, scoring_result)
             results.append(match_result)
 
-        results.sort(key=lambda m: m.get("final_score", 0), reverse=True)
+        results.sort(
+            key=lambda m: (
+                1 if m.get("deadline_passed") else 0,
+                -m.get("final_score", 0),
+            ),
+        )
+
+        deadline_passed_matches = [m for m in results if m.get("deadline_passed")]
+        active_matches = [m for m in results if not m.get("deadline_passed")]
 
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug("match_service: scored results=%d", len(results))
+            logger.debug(
+                "match_service: scored results=%d (active=%d deadline_passed=%d)",
+                len(results),
+                len(active_matches),
+                len(deadline_passed_matches),
+            )
 
         diagnostics = {
             **filter_diagnostics,
             "scored_match_count": len(results),
+            "active_match_count": len(active_matches),
+            "deadline_passed_match_count": len(deadline_passed_matches),
         }
         return results, diagnostics
 
@@ -182,18 +182,6 @@ class MatchService:
         eligible_levels = parse_json(scholarship.get("eligible_levels"))
         legacy_level = scholarship.get("level")
         profile_level = profile.get("education_level") or profile.get("current_academic_stage")
-        age = profile.get("age")
-        min_age = scholarship.get("min_age")
-        max_age = scholarship.get("max_age")
-        age_ok = (min_age is None or age is None or age >= min_age) and (
-            max_age is None or age is None or age <= max_age
-        )
-
-        profile_school_type = (profile.get("school_type") or "").strip().lower()
-        eligible_school_types = parse_json(scholarship.get("eligible_school_types"))
-        school_match = not eligible_school_types or not profile_school_type or any(
-            (st or "").strip().lower() == profile_school_type for st in eligible_school_types
-        )
 
         income = profile.get("household_income_annual")
         if income is None and profile.get("income_bracket"):
@@ -226,20 +214,6 @@ class MatchService:
             legacy_regions,
         )
 
-        extrac_match = _count_matches(
-            parse_json(profile.get("extracurriculars")),
-            parse_json(scholarship.get("preferred_extracurriculars")),
-        )
-        award_match = _count_matches(
-            parse_json(profile.get("awards")),
-            parse_json(scholarship.get("preferred_awards")),
-        )
-
-        readiness = compute_readiness(
-            profile.get("documents"),
-            scholarship.get("required_documents"),
-        )
-
         return ScoringPayload(
             gwa_normalized=profile.get("gwa_normalized"),
             household_income_annual=income,
@@ -247,15 +221,10 @@ class MatchService:
             field_match_level=field_match,
             geographic_match_level=geo_match,
             equity_flags=_get_equity_flags(profile),
-            extracurricular_match_count=extrac_match,
-            award_match_count=award_match,
-            school_type_match=school_match,
-            age_within_range=age_ok,
             scholarship_type=scholarship.get("scholarship_type") or "Merit-and-Need",
             min_gwa_required=scholarship.get("min_gwa_normalized"),
             max_income_threshold=scholarship.get("max_income_threshold"),
             priority_groups=parse_json(scholarship.get("priority_groups")),
-            document_readiness_ratio=readiness.ratio,
             profile_region=profile.get("region"),
             profile_city=profile.get("city_municipality"),
             eligible_regions=eligible_regions or legacy_regions,
@@ -266,6 +235,12 @@ class MatchService:
 
     def _build_match_result(self, scholarship: dict, scoring_result: ScoringResult) -> dict:
         """Build API response dict from scholarship and scoring result."""
+        deadline_passed = is_application_deadline_passed(scholarship.get("application_deadline"))
+        eligibility_status = scoring_result.eligibility_status and not deadline_passed
+        explanation = list(scoring_result.explanation)
+        if deadline_passed and DEADLINE_PASSED_MESSAGE not in explanation:
+            explanation.insert(0, DEADLINE_PASSED_MESSAGE)
+
         return {
             "id": scholarship.get("id"),
             "title": scholarship.get("title"),
@@ -278,9 +253,10 @@ class MatchService:
             "level": scholarship.get("level"),
             "score": scoring_result.final_score,
             "final_score": scoring_result.final_score,
-            "eligibility_status": scoring_result.eligibility_status,
+            "eligibility_status": eligibility_status,
+            "deadline_passed": deadline_passed,
             "readiness_score": scoring_result.readiness_score,
-            "explanation": scoring_result.explanation,
+            "explanation": explanation,
             "breakdown": scoring_result.breakdown,
             "confidence": scoring_result.confidence,
             "suggestions": getattr(scoring_result, "suggestions", None) or [],

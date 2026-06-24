@@ -1,1 +1,1 @@
-# Scripts package for ISKONNECT
+# Scripts package for Iskonnect

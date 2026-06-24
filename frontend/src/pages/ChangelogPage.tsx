@@ -24,7 +24,7 @@ export function ChangelogPage() {
       <div className="mx-auto max-w-3xl px-4">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Changelog</h1>
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-          What changed in ISKONNECT. We keep notes practical and honest—this is an MVP that grows with feedback.
+          What changed in Iskonnect. We keep notes practical and honest—this is an MVP that grows with feedback.
         </p>
 
         <div className="mt-10 space-y-10">
