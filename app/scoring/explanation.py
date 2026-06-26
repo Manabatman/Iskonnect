@@ -239,6 +239,17 @@ def build_explanation(
     equity_line = _get_equity_match_reason(payload.equity_flags, payload.priority_groups or [])
     if equity_line:
         lines.append(f"Equity priority: {equity_line}")
+
+    if not lines:
+        if not payload.has_field_restriction and not payload.has_geographic_restriction:
+            lines.append("Open to all fields and nationwide — you meet the listed requirements.")
+        elif not payload.has_field_restriction:
+            lines.append("Open to all fields of study — you meet the listed requirements.")
+        elif not payload.has_geographic_restriction:
+            lines.append("Nationwide — no location restriction; you meet the listed requirements.")
+        else:
+            lines.append("You meet the listed eligibility requirements for this program.")
+
     return lines
 
 

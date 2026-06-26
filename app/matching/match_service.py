@@ -22,9 +22,12 @@ def _get_field_match_level(
     eligible_specific: list,
     needs_tags: list,
 ) -> str:
-    """Determine field match level: exact, broad, partial, none.
-    Uses FIELD_HIERARCHY so e.g. Engineering matches STEM-eligible scholarships as 'broad'."""
-    from app.taxonomy.psced_fields import FIELD_HIERARCHY
+    """Determine field match level: exact, broad, partial, none."""
+    from app.matching.field_match import (
+        profile_fields_for_matching,
+        psced_code_matches,
+        specific_course_matches,
+    )
 
     eligible_psced = [str(x).strip().lower() for x in (eligible_psced or []) if x]
     eligible_specific = [str(x).strip().lower() for x in (eligible_specific or []) if x]
@@ -33,11 +36,7 @@ def _get_field_match_level(
     profile_specific = (profile_field_specific or "").strip().lower()
     profile_needs = [str(x).strip().lower() for x in (profile_needs or []) if x]
 
-    profile_fields_to_check = [profile_broad] if profile_broad else []
-    if profile_field_broad:
-        parents = FIELD_HIERARCHY.get(profile_field_broad.strip())
-        if parents:
-            profile_fields_to_check.extend(p.strip().lower() for p in parents)
+    profile_fields_to_check = [f for f in profile_fields_for_matching(profile_field_broad) if f]
 
     preferred_courses = [str(x).strip().lower() for x in (profile_preferred_courses or []) if x]
 
@@ -47,14 +46,19 @@ def _get_field_match_level(
                 return "exact"
         for pf in profile_fields_to_check:
             for ep in eligible_psced:
-                if ep in pf or pf in ep:
+                if psced_code_matches(pf, ep):
                     return "broad"
     courses_to_check = preferred_courses or ([profile_specific] if profile_specific else [])
     for course in courses_to_check:
-        if course and eligible_specific and (course in eligible_specific or any(es in course for es in eligible_specific)):
-            return "exact"
+        if course and eligible_specific:
+            if course in eligible_specific:
+                return "exact"
+            if any(specific_course_matches(course, es) for es in eligible_specific):
+                return "exact"
     if profile_specific and eligible_specific:
-        if profile_specific in eligible_specific or any(ps in profile_specific for ps in eligible_specific):
+        if profile_specific in eligible_specific:
+            return "exact"
+        if any(specific_course_matches(profile_specific, ps) for ps in eligible_specific):
             return "exact"
     if profile_needs and needs_tags:
         for pn in profile_needs:

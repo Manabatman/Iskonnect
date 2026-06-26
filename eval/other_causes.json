@@ -1,0 +1,44 @@
+[
+  {
+    "path": "core",
+    "kind": "FN",
+    "profile_id": 11,
+    "scholarship_id": 81,
+    "scholarship_title": "Arts Excellence 1"
+  },
+  {
+    "path": "core",
+    "kind": "FN",
+    "profile_id": 11,
+    "scholarship_id": 82,
+    "scholarship_title": "Arts Excellence 2"
+  },
+  {
+    "path": "core",
+    "kind": "FN",
+    "profile_id": 11,
+    "scholarship_id": 83,
+    "scholarship_title": "Arts Excellence 3"
+  },
+  {
+    "path": "prod",
+    "kind": "FN",
+    "profile_id": 11,
+    "scholarship_id": 81,
+    "scholarship_title": "Arts Excellence 1"
+  },
+  {
+    "path": "prod",
+    "kind": "FN",
+    "profile_id": 11,
+    "scholarship_id": 82,
+    "scholarship_title": "Arts Excellence 2"
+  },
+  {
+    "path": "prod",
+    "kind": "FN",
+    "profile_id": 11,
+    "scholarship_id": 83,
+    "scholarship_title": "Arts Excellence 3"
+  }
+]

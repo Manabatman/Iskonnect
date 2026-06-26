@@ -81,7 +81,7 @@ def analytics_overview(
         "pending_verifications": pending_verifications,
         "avg_match_score": avg_match_score,
         "scholarships_by_status": scholarships_by_status,
-        "scholarships_by_region_sample": scholarships_by_region,
+        "scholarships_by_region": scholarships_by_region,
         "profiles_by_region": profiles_by_region,
         "match_runs_last_30_days": match_runs_last_30,
     }

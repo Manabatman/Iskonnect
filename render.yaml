@@ -1,5 +1,6 @@
-# DEPRECATED for current ISKONNECT production: live stack uses Supabase Postgres + GitHub Actions
-# (see docs/DEPLOYMENT.md). This file is an optional Render-native blueprint (Render Postgres + optional cron).
+# DEPRECATED — do not use for Iskonnect production.
+# Live stack: Supabase Postgres + Render (gunicorn via Procfile) + GitHub Actions crons.
+# See docs/DEPLOYMENT.md. This file is an optional Render-native blueprint only.
 # Render.com blueprint - optional
 # Create a Web Service and PostgreSQL database in the dashboard, then set:
 # DATABASE_URL, CORS_ORIGINS, SECRET_KEY, AUTH_DISABLED=false

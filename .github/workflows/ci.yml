@@ -31,6 +31,46 @@ jobs:
       - name: Run tests
         run: python -m pytest app/tests/ -v --tb=short
 
+      - name: Matching eval regression gate
+        run: python -m pytest app/tests/test_eval_regression.py -v --tb=short
+
+  migrate-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: iskonnect_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Alembic upgrade, downgrade, upgrade
+        env:
+          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/iskonnect_ci
+        run: |
+          alembic upgrade head
+          alembic downgrade base
+          alembic upgrade head
+
   frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -50,15 +90,5 @@ jobs:
         run: |
           npm ci
           npm run lint
+          npm test
           npm run build
-
-  # Optional: wire deploy hooks after enabling Render/Vercel secrets in the repo
-  # deploy:
-  #   needs: test
-  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Trigger Render deploy
-  #       run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
-  #     - name: Trigger Vercel deploy
-  #       run: curl -fsS -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"

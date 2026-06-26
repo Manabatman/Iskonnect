@@ -16,7 +16,7 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const { resolvedTheme } = useTheme();
   const path = location.pathname;
-  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.png";
+  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.svg";
 
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
@@ -31,7 +31,7 @@ export function Navbar() {
             width={40}
             height={40}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/logo.png";
+              (e.target as HTMLImageElement).src = "/images/logo.svg";
             }}
           />
           <span>

@@ -28,6 +28,7 @@ from app.db import get_db
 from app.limiter import limiter
 from app import models
 from app.utils.email import send_email_verification_email, send_password_reset_email
+from app.utils.email_abuse import can_send_transactional_email, record_transactional_email_sent
 from app.utils.timezone import utc_now_naive
 
 router = APIRouter()
@@ -105,6 +106,22 @@ class UserMeResponse(BaseModel):
     email_verified: bool = False
 
 
+def _maybe_send_verification_email(to_email: str, token: str) -> None:
+    if can_send_transactional_email("verify", to_email):
+        if send_email_verification_email(to_email, token):
+            record_transactional_email_sent("verify", to_email)
+    else:
+        logger.warning("email_verify_throttled to=%s", to_email)
+
+
+def _maybe_send_password_reset_email(to_email: str, token: str) -> None:
+    if can_send_transactional_email("reset", to_email):
+        if send_password_reset_email(to_email, token):
+            record_transactional_email_sent("reset", to_email)
+    else:
+        logger.warning("email_reset_throttled to=%s", to_email)
+
+
 def _tokens_for_user(db: Session, user: models.User) -> TokenResponse:
     role = getattr(user, "role", "student")
     access = create_access_token(user.id, role=role)
@@ -147,7 +164,7 @@ def register(
             detail="If this email is not already registered, your account has been created. Check your email to verify.",
         )
     verify_jwt = create_email_verification_token(user.id)
-    send_email_verification_email(register_req.email, verify_jwt)
+    _maybe_send_verification_email(register_req.email, verify_jwt)
     tokens = _tokens_for_user(db, user)
     logger.info("auth_register_ok user_id=%s", user.id)
     return RegisterResponse(
@@ -175,6 +192,12 @@ def login(
             detail="Invalid email or password",
         )
     if not bool(getattr(user, "email_verified", False)):
+        if settings.email_is_configured():
+            logger.info("auth_login_blocked_unverified email=%s user_id=%s", req.email, user.id)
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Please verify your email before signing in. Check your inbox or request a new verification link.",
+            )
         logger.info("auth_login_unverified email=%s user_id=%s", req.email, user.id)
     return _tokens_for_user(db, user)
 
@@ -252,7 +275,7 @@ def forgot_password(
         user.password_reset_token_hash = hash_refresh_token(raw)
         user.password_reset_expires_at = utc_now_naive() + timedelta(hours=1)
         db.commit()
-        send_password_reset_email(user.email, raw)
+        _maybe_send_password_reset_email(user.email, raw)
         logger.info("password_reset_token_issued user_id=%s", user.id)
     return {"detail": "If that email exists, reset instructions have been sent."}
 
@@ -297,4 +320,26 @@ def verify_email(
     user.email_verified_at = utc_now_naive()
     db.commit()
     return {"detail": "Email verified."}
+
+
+@router.post("/auth/resend-verification")
+@limiter.limit("3/minute")
+def resend_verification(
+    request: Request,
+    user: Annotated[models.User | None, Depends(get_current_user)],
+    db: Session = Depends(get_db),
+):
+    """Resend verification email for the authenticated user. Generic response when already verified."""
+    generic = {"detail": "If your email is not verified, a new verification link has been sent."}
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if bool(getattr(user, "email_verified", False)):
+        return generic
+    verify_jwt = create_email_verification_token(user.id)
+    _maybe_send_verification_email(user.email, verify_jwt)
+    return generic
 

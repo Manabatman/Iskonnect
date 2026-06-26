@@ -1,0 +1,402 @@
+{
+  "core": {
+    "path": "CORE",
+    "confusion": {
+      "TP": 5447,
+      "FP": 4,
+      "FN": 3,
+      "TN": 14546
+    },
+    "recall": 0.9994495412844037,
+    "precision": 0.9992661896899652,
+    "macro_recall": 0.9997029702970298,
+    "recall_by_region": {
+      "BARMM": [
+        1.0,
+        795
+      ],
+      "CAR": [
+        1.0,
+        488
+      ],
+      "NCR": [
+        0.996969696969697,
+        990
+      ],
+      "Region III - Central Luzon": [
+        1.0,
+        776
+      ],
+      "Region IV-A - Calabarzon": [
+        1.0,
+        642
+      ],
+      "Region VI - Western Visayas": [
+        1.0,
+        568
+      ],
+      "Region VII - Central Visayas": [
+        1.0,
+        697
+      ],
+      "Region XI - Davao": [
+        1.0,
+        494
+      ]
+    },
+    "recall_by_field": {
+      "Agriculture": [
+        1.0,
+        601
+      ],
+      "Architecture": [
+        1.0,
+        364
+      ],
+      "Arts": [
+        1.0,
+        606
+      ],
+      "Business": [
+        1.0,
+        361
+      ],
+      "Education": [
+        1.0,
+        594
+      ],
+      "Engineering": [
+        1.0,
+        470
+      ],
+      "HUMSS": [
+        0.986784140969163,
+        227
+      ],
+      "IT": [
+        1.0,
+        413
+      ],
+      "Mathematics": [
+        1.0,
+        515
+      ],
+      "Medical": [
+        1.0,
+        614
+      ],
+      "Science": [
+        1.0,
+        463
+      ],
+      "TVL": [
+        1.0,
+        222
+      ]
+    },
+    "recall_by_level": {
+      "college": [
+        0.9993445488311121,
+        4577
+      ],
+      "senior high": [
+        1.0,
+        873
+      ]
+    },
+    "recall_by_income": {
+      "250k_400k": [
+        1.0,
+        1190
+      ],
+      "400k_500k": [
+        0.9978571428571429,
+        1400
+      ],
+      "above_500k": [
+        1.0,
+        309
+      ],
+      "below_250k": [
+        1.0,
+        2551
+      ]
+    },
+    "fn_causes": {
+      "other": 3
+    },
+    "fp_causes": {
+      "field_substring_overmatch (hard filter)": 4
+    },
+    "fn_examples": [
+      [
+        11,
+        "NCR",
+        "Arts Excellence 1",
+        "other"
+      ],
+      [
+        11,
+        "NCR",
+        "Arts Excellence 2",
+        "other"
+      ],
+      [
+        11,
+        "NCR",
+        "Arts Excellence 3",
+        "other"
+      ]
+    ],
+    "fp_examples": [
+      [
+        20,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ],
+      [
+        56,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ],
+      [
+        97,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ],
+      [
+        100,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ]
+    ],
+    "precision_at_10": 1.0,
+    "ndcg_at_20": 1.0,
+    "deadline_order_ok_rate": 1.0,
+    "explanation_coverage": 1.0,
+    "explanation_coherence": 0.9996533138578593,
+    "explanation_false_claim_rows": 4,
+    "other_pairs": [
+      {
+        "kind": "FN",
+        "profile_id": 11,
+        "scholarship_id": 81,
+        "scholarship_title": "Arts Excellence 1"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 11,
+        "scholarship_id": 82,
+        "scholarship_title": "Arts Excellence 2"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 11,
+        "scholarship_id": 83,
+        "scholarship_title": "Arts Excellence 3"
+      }
+    ]
+  },
+  "prod": {
+    "path": "PROD (SQL prefilter)",
+    "confusion": {
+      "TP": 5447,
+      "FP": 4,
+      "FN": 3,
+      "TN": 14546
+    },
+    "recall": 0.9994495412844037,
+    "precision": 0.9992661896899652,
+    "macro_recall": 0.9997029702970298,
+    "recall_by_region": {
+      "BARMM": [
+        1.0,
+        795
+      ],
+      "CAR": [
+        1.0,
+        488
+      ],
+      "NCR": [
+        0.996969696969697,
+        990
+      ],
+      "Region III - Central Luzon": [
+        1.0,
+        776
+      ],
+      "Region IV-A - Calabarzon": [
+        1.0,
+        642
+      ],
+      "Region VI - Western Visayas": [
+        1.0,
+        568
+      ],
+      "Region VII - Central Visayas": [
+        1.0,
+        697
+      ],
+      "Region XI - Davao": [
+        1.0,
+        494
+      ]
+    },
+    "recall_by_field": {
+      "Agriculture": [
+        1.0,
+        601
+      ],
+      "Architecture": [
+        1.0,
+        364
+      ],
+      "Arts": [
+        1.0,
+        606
+      ],
+      "Business": [
+        1.0,
+        361
+      ],
+      "Education": [
+        1.0,
+        594
+      ],
+      "Engineering": [
+        1.0,
+        470
+      ],
+      "HUMSS": [
+        0.986784140969163,
+        227
+      ],
+      "IT": [
+        1.0,
+        413
+      ],
+      "Mathematics": [
+        1.0,
+        515
+      ],
+      "Medical": [
+        1.0,
+        614
+      ],
+      "Science": [
+        1.0,
+        463
+      ],
+      "TVL": [
+        1.0,
+        222
+      ]
+    },
+    "recall_by_level": {
+      "college": [
+        0.9993445488311121,
+        4577
+      ],
+      "senior high": [
+        1.0,
+        873
+      ]
+    },
+    "recall_by_income": {
+      "250k_400k": [
+        1.0,
+        1190
+      ],
+      "400k_500k": [
+        0.9978571428571429,
+        1400
+      ],
+      "above_500k": [
+        1.0,
+        309
+      ],
+      "below_250k": [
+        1.0,
+        2551
+      ]
+    },
+    "fn_causes": {
+      "other": 3
+    },
+    "fp_causes": {
+      "field_substring_overmatch (hard filter)": 4
+    },
+    "fn_examples": [
+      [
+        11,
+        "NCR",
+        "Arts Excellence 1",
+        "other"
+      ],
+      [
+        11,
+        "NCR",
+        "Arts Excellence 2",
+        "other"
+      ],
+      [
+        11,
+        "NCR",
+        "Arts Excellence 3",
+        "other"
+      ]
+    ],
+    "fp_examples": [
+      [
+        20,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ],
+      [
+        56,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ],
+      [
+        97,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ],
+      [
+        100,
+        "BS Civil Engineering Award",
+        "field_substring_overmatch (hard filter)"
+      ]
+    ],
+    "precision_at_10": 1.0,
+    "ndcg_at_20": 1.0,
+    "deadline_order_ok_rate": 1.0,
+    "explanation_coverage": 1.0,
+    "explanation_coherence": 0.9996533138578593,
+    "explanation_false_claim_rows": 4,
+    "other_pairs": [
+      {
+        "kind": "FN",
+        "profile_id": 11,
+        "scholarship_id": 81,
+        "scholarship_title": "Arts Excellence 1"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 11,
+        "scholarship_id": 82,
+        "scholarship_title": "Arts Excellence 2"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 11,
+        "scholarship_id": 83,
+        "scholarship_title": "Arts Excellence 3"
+      }
+    ]
+  },
+  "dataset": {
+    "profiles": 100,
+    "scholarships": 200
+  }
+}

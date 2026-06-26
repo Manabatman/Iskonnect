@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column("contact_email", sa.String(255), nullable=True),
         sa.Column("contact_phone", sa.String(32), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=False, server_default=sa.text("true")),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("CURRENT_TIMESTAMP"), nullable=False),
     )
 
     op.create_table(
@@ -42,7 +42,7 @@ def upgrade() -> None:
         sa.Column("allowance_amount", sa.Float(), nullable=True),
         sa.Column("application_deadline", sa.Date(), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=False, server_default=sa.text("true")),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("CURRENT_TIMESTAMP"), nullable=False),
     )
     op.create_index("ix_internship_opportunities_hte_id", "internship_opportunities", ["hte_id"])
     op.create_index("ix_internship_opportunities_psgc_code", "internship_opportunities", ["psgc_code"])
@@ -63,7 +63,7 @@ def upgrade() -> None:
         sa.Column("external_url", sa.String(2048), nullable=True),
         sa.Column("status", sa.String(32), nullable=False, server_default="pending"),
         sa.Column("guardian_consent_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("CURRENT_TIMESTAMP"), nullable=False),
     )
     op.create_index("ix_ojt_compliance_vault_student_id", "ojt_compliance_vault", ["student_id"])
     op.create_index("ix_ojt_compliance_vault_internship_id", "ojt_compliance_vault", ["internship_id"])

@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiFetch } from "../api/client";
-
-function getAuthHeaders(): HeadersInit {
-  const token = localStorage.getItem("auth_token");
-  const headers: HeadersInit = { "Content-Type": "application/json" };
-  if (token) headers["Authorization"] = `Bearer ${token}`;
-  return headers;
-}
+import { useAuth } from "../contexts/AuthContext";
 
 interface Overview {
   total_scholarships: number;
@@ -16,18 +10,19 @@ interface Overview {
   avg_match_score: number | null;
   scholarships_by_status: Record<string, number>;
   profiles_by_region: Record<string, number>;
-  scholarships_by_region_sample: Record<string, number>;
+  scholarships_by_region: Record<string, number>;
   match_runs_last_30_days: number;
 }
 
 export function AdminAnalyticsPage() {
+  const { authHeaders } = useAuth();
   const [data, setData] = useState<Overview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
-    apiFetch("/api/v1/admin/analytics/overview", { headers: getAuthHeaders() })
+    apiFetch("/api/v1/admin/analytics/overview", { headers: authHeaders() })
       .then((res) => {
         if (!res.ok) throw new Error("Unauthorized or failed to load analytics");
         return res.json();
@@ -35,7 +30,7 @@ export function AdminAnalyticsPage() {
       .then((d: Overview) => setData(d))
       .catch((err) => setError(err instanceof Error ? err.message : "Error"))
       .finally(() => setLoading(false));
-  }, []);
+  }, [authHeaders]);
 
   if (loading) {
     return (
@@ -113,10 +108,24 @@ export function AdminAnalyticsPage() {
           </div>
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-              Profiles by region (sample)
+              Profiles by region
             </h3>
-            <ul className="mt-2 max-h-48 overflow-auto space-y-1 text-sm text-slate-700 dark:text-slate-300">
+            <ul className="mt-2 max-h-48 space-y-1 overflow-auto text-sm text-slate-700 dark:text-slate-300">
               {Object.entries(data.profiles_by_region)
+                .slice(0, 20)
+                .map(([k, v]) => (
+                  <li key={k}>
+                    {k}: <strong>{v}</strong>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          <div className="lg:col-span-2">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Scholarships by eligible regions
+            </h3>
+            <ul className="mt-2 max-h-48 space-y-1 overflow-auto text-sm text-slate-700 dark:text-slate-300">
+              {Object.entries(data.scholarships_by_region)
                 .slice(0, 20)
                 .map(([k, v]) => (
                   <li key={k}>

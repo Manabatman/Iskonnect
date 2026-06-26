@@ -15,7 +15,7 @@ GitHub Actions → same Supabase (optional scheduled scrape → staging; daily c
 ```
 
 - **Vercel** only serves built HTML/JS/CSS. It does **not** run your Python code.
-- **Render** runs **FastAPI** (`uvicorn app.main:app`). This is where `/api/v1/...` lives.
+- **Render** runs **FastAPI** via **gunicorn** + Uvicorn workers in production (see [Procfile](../Procfile)); locally you use `uvicorn app.main:app`. This is where `/api/v1/...` lives.
 - **Supabase** is **Postgres**. Your API talks to it with **SQLAlchemy** (see `app/db.py`, `app/models.py`) and **Alembic** migrations — not the Supabase JS client in this repo.
 - **GitHub Actions** run scripts that connect to the **same** `DATABASE_URL` (repository secret): optional PhilScholar scrape + ingest, and daily catalog maintenance.
 
@@ -36,6 +36,7 @@ GitHub Actions → same Supabase (optional scheduled scrape → staging; daily c
 | `DATABASE_URL` | **Render** + **GitHub Actions secret** | Supabase **transaction pooler** URI with `postgresql+psycopg2://...?sslmode=require`. |
 | `CORS_ORIGINS` | **Render** | Comma-separated list of allowed **browser origins** (your Vercel URL **exactly**: `https://….vercel.app`). Must match or the browser blocks API calls. |
 | `SECRET_KEY`, `ENVIRONMENT`, `AUTH_DISABLED` | **Render** | JWT signing and production guards (`app/config.py`). |
+| `REDIS_URL`, `TRUST_PROXY_HEADERS`, `SMTP_*`, `EMAIL_FROM`, `FRONTEND_URL` | **Render** | Required in production for rate limits, email, and auth links. See [DEPLOYMENT.md](DEPLOYMENT.md). |
 
 Never put `DATABASE_URL` or `SECRET_KEY` in Vercel — the frontend is public.
 
