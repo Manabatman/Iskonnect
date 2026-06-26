@@ -94,6 +94,7 @@ export function EligibilityGoalsStep({ state, onChange }: EligibilityStepProps) 
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-800/50">
         <label className="flex cursor-pointer gap-3 text-sm text-slate-800 dark:text-slate-100">
           <input
+            id="privacy-consent-checkbox"
             type="checkbox"
             checked={state.privacy_consent === "on"}
             onChange={() => onChange("privacy_consent", state.privacy_consent === "on" ? "" : "on")}

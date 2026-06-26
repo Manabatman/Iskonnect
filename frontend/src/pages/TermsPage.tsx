@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { BackNavLink } from "../components/BackNavLink";
 
 export function TermsPage() {
   return (
@@ -90,9 +91,7 @@ export function TermsPage() {
         </div>
 
         <div className="mt-12">
-          <Link to="/settings" className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700">
-            Back to Settings
-          </Link>
+          <BackNavLink />
         </div>
       </div>
     </section>

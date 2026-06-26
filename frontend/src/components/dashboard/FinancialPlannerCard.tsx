@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { SavedScholarship } from "../../types";
 
 type Props = {
@@ -44,6 +44,17 @@ export function FinancialPlannerCard({ saved, className }: Props) {
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
   const [weeklyExpenses, setWeeklyExpenses] = useState("");
   const [activeSchoolWeeks, setActiveSchoolWeeks] = useState("");
+
+  useEffect(() => {
+    if (saved.length === 0) {
+      setScholarshipId("");
+      return;
+    }
+    const stillSaved = saved.some((s) => String(s.scholarship_id) === scholarshipId);
+    if (!stillSaved) {
+      setScholarshipId(String(saved[0]?.scholarship_id ?? ""));
+    }
+  }, [saved, scholarshipId]);
 
   const selected = useMemo(() => {
     const id = Number(scholarshipId);
@@ -120,16 +131,16 @@ export function FinancialPlannerCard({ saved, className }: Props) {
         const tuitionCov = Math.min(sch.benefit_total_value, tuitionAnnual);
         covered += tuitionCov;
         notes.push(
-          `Catalog benefit value capped to your estimated annual tuition: up to ₱${tuitionCov.toLocaleString("en-PH")} / year (catalog total ₱${sch.benefit_total_value.toLocaleString("en-PH")}; multi-year programs may cover more than one year — confirm on the official page).`
+          `This scholarship may cover up to ₱${tuitionCov.toLocaleString("en-PH")} per year toward your estimated tuition (listed benefit ₱${sch.benefit_total_value.toLocaleString("en-PH")}; multi-year programs may cover more — confirm on the official page).`
         );
       } else if (tuitionAnnual > 0) {
         covered += tuitionAnnual;
         notes.push(
-          "Scholarship indicates tuition support but no fixed per-term amount in catalog — coverage assumed up to your entered annual tuition."
+          "This scholarship includes tuition support but no fixed amount is listed — coverage assumed up to your entered annual tuition."
         );
       } else if (sch.benefit_total_value != null && sch.benefit_total_value > 0 && terms === 0) {
         notes.push(
-          "Scholarship lists a tuition benefit in the catalog — set your term structure to estimate annual tuition coverage."
+          "This scholarship lists tuition support — set your term structure to estimate how much it may cover."
         );
       }
     }
@@ -147,13 +158,13 @@ export function FinancialPlannerCard({ saved, className }: Props) {
       if (cap > 0) {
         covered += cap;
         notes.push(
-          `Total benefit value (catalog) applied up to ₱${cap.toLocaleString("en-PH")} toward remaining need.`
+          `Total scholarship benefit of up to ₱${cap.toLocaleString("en-PH")} applied toward remaining costs.`
         );
       }
     }
 
     if (notes.length === 0) {
-      notes.push("No structured benefit amounts in catalog — check the official program page.");
+      notes.push("No benefit amounts listed for this scholarship — check the official program page.");
     }
 
     const gap = Math.max(0, annualNeed - covered);
@@ -198,7 +209,7 @@ export function FinancialPlannerCard({ saved, className }: Props) {
       <div className={cardRootClass(className)}>
         <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Financial Planner</h3>
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-          Save scholarships to compare expected costs against catalog benefits.
+          Save scholarships to compare your expected costs against what each program covers.
         </p>
       </div>
     );
@@ -214,7 +225,7 @@ export function FinancialPlannerCard({ saved, className }: Props) {
         </div>
         <div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Financial Planner</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Annual estimate vs catalog benefits</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Your yearly cost vs what this scholarship covers</p>
         </div>
       </div>
 
@@ -376,10 +387,10 @@ export function FinancialPlannerCard({ saved, className }: Props) {
                 ) : null}
               </li>
               <li>
-                Estimated coverage (catalog): <strong>₱{analysis.covered.toLocaleString("en-PH")}</strong>
+                What this scholarship covers: <strong>₱{analysis.covered.toLocaleString("en-PH")}</strong>
               </li>
               <li>
-                Difference (you may still need): <strong>₱{analysis.gap.toLocaleString("en-PH")}</strong>
+                What you may still need: <strong>₱{analysis.gap.toLocaleString("en-PH")}</strong>
               </li>
             </ul>
             <ul className="mt-3 list-inside list-disc text-xs text-slate-600 dark:text-slate-400">

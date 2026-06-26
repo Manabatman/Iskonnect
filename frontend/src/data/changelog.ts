@@ -1,6 +1,6 @@
 /**
- * Changelog for Iskonnect (MVP). Newest versions first.
- * To add a release: push a new ChangelogVersion object to the top of CHANGELOG_VERSIONS.
+ * Changelog for Iskonnect. Newest versions first.
+ * Grounded in repository git history (Jan 2026 – Jun 2026).
  */
 
 export interface ChangelogItem {
@@ -20,11 +20,95 @@ export interface ChangelogVersion {
 
 export const CHANGELOG_VERSIONS: ChangelogVersion[] = [
   {
-    version: "1.6.0",
-    date: "April 2026",
-    title: "Career Roadmap, AI Mode search, and UX polish",
+    version: "2.0.0",
+    date: "June 2026",
+    title: "Launch readiness and production hardening",
     summary:
-      "Career Roadmap returns on the dashboard with Google AI Mode links; Review Center Finder opens the same AI-style Google view with richer queries. Scraping cron is paused (manual runs still available). Lighter default theme, dark-mode logo swap, clearer profile labels, fewer redundant API calls, and CI on Node.js 24.",
+      "Production deployment fixes, database migration corrections, security hardening, admin-only metrics, email-verification gate at login, and deployment documentation aligned with the live stack (Vercel + Render + Supabase).",
+    fixes: [
+      {
+        title: "Database migration 023",
+        description:
+          "Fixed scholarships_staging index name, enabled pgcrypto for dedupe backfill, and removed silent failure on duplicate dedupe keys so migrations apply cleanly on Supabase.",
+      },
+      {
+        title: "Profile completion accuracy",
+        description:
+          "Optional fields such as parent occupation no longer block 100% profile completion; income bracket and annual income count as one satisfied signal.",
+      },
+    ],
+    improvements: [
+      {
+        title: "Account deletion",
+        description:
+          "Settings now supports self-service account deletion with confirmation, aligned with RA 10173 right to erasure.",
+      },
+      {
+        title: "Match results layout",
+        description:
+          "Active match results use the same responsive card grid as scholarship search for easier scanning.",
+      },
+      {
+        title: "Launch polish",
+        description:
+          "Plain-language Financial Planner copy, clearer save-scholarship actions, consent modal, trust banner palette, and consistent profile CTAs.",
+      },
+    ],
+    behindTheScenes: [
+      {
+        title: "RLS on SIPP/OJT tables",
+        description:
+          "Row Level Security enabled on hte_partners, internship_opportunities, and ojt_compliance_vault for Supabase Data API hardening.",
+      },
+      {
+        title: "Admin-only /metrics",
+        description:
+          "Operational counters require an admin JWT instead of being publicly accessible.",
+      },
+      {
+        title: "Supabase pooler compatibility",
+        description:
+          "Postgres connection uses prepare_threshold=0 for the transaction pooler; ACCESS_TOKEN_EXPIRE_MINUTES is env-configurable.",
+      },
+    ],
+  },
+  {
+    version: "1.6.0",
+    date: "June 2026",
+    title: "Matching engine remediation and Iskonnect branding",
+    summary:
+      "Matching engine hardening, education-level taxonomy, members-only scholarships, guardian/PSGC fields, auth isolation tests, and production sanitation for public launch.",
+    improvements: [
+      {
+        title: "Matching engine remediation",
+        description:
+          "Hard filters, field matching, and scoring explanations refined; eval regression gate added to CI.",
+      },
+      {
+        title: "Members-only scholarships",
+        description:
+          "Scholarships can be flagged members_only for exclusive priority-group programs.",
+      },
+      {
+        title: "Guardian and PSGC fields",
+        description:
+          "Student profiles support guardian consent and PSGC location codes for finer regional matching.",
+      },
+    ],
+    behindTheScenes: [
+      {
+        title: "Auth isolation tests",
+        description:
+          "Automated tests verify users cannot access each other's profiles, matches, or saved scholarships.",
+      },
+    ],
+  },
+  {
+    version: "1.5.0",
+    date: "April 2026",
+    title: "Stability, dashboard layout, and theme UX",
+    summary:
+      "Dashboard layout refinements, theme UX polish, Career Roadmap and Review Center Finder with Google AI Mode, saved-scholarships context deduplication, and notification polling improvements.",
     improvements: [
       {
         title: "Career Roadmap card",
@@ -32,238 +116,222 @@ export const CHANGELOG_VERSIONS: ChangelogVersion[] = [
           "Dashboard card builds a Philippines-focused career query and opens Google AI Mode in a new tab.",
       },
       {
-        title: "Review Center Finder + Google AI Mode",
+        title: "Review Center Finder",
         description:
-          "Links use udm=50 with queries that mention fees, schedules, passing rates, and reviews for better synthesized answers.",
+          "Location- and exam-aware queries open Google AI Mode with fees, schedules, passing rates, and reviews.",
       },
       {
         title: "Saved scholarships in one place",
         description:
-          "SavedScholarshipsContext loads the full saved list once; dashboard and applications reuse it instead of duplicating GET /saved-scholarships.",
-      },
-      {
-        title: "Notification badge polling",
-        description:
-          "Unread count refreshes every 60 seconds instead of on every route change.",
+          "SavedScholarshipsContext loads the full saved list once; dashboard and applications reuse it.",
       },
     ],
     fixes: [
-      {
-        title: "Target education level wording",
-        description:
-          "Profile builder clarifies “Target education level for scholarship” vs current academic stage.",
-      },
-      {
-        title: "Match score ring in dark mode",
-        description:
-          "Arc and track colors are slightly brighter on dark backgrounds for readability.",
-      },
-    ],
-    behindTheScenes: [
-      {
-        title: "Scraping schedule",
-        description:
-          "Automated PhilScholar cron commented out in scraper.yml; re-enable by uncommenting schedule. Manual workflow_dispatch still runs scrape + ingest.",
-      },
-      {
-        title: "CI Node version",
-        description:
-          "GitHub Actions frontend job uses Node.js 24.",
-      },
-    ],
-  },
-  {
-    version: "1.5.0",
-    date: "April 2026",
-    title: "Stability, security, and deployment readiness",
-    summary:
-      "Auth isolation fixes, UI polish, smarter scraping, deadline maintenance, production deployment helpers, and removal of the experimental AI roadmap card.",
-    fixes: [
-      {
-        title: "Review Center Finder dark mode",
-        description:
-          "The finder card now respects dark theme so it matches the rest of the dashboard.",
-      },
       {
         title: "Financial Planner tuition coverage",
         description:
-          "Catalog total benefit is no longer multiplied by term count; coverage is capped to your estimated annual tuition with clearer notes.",
+          "Scholarship benefit value is capped to estimated annual tuition (not multiplied by term count) with clearer notes.",
       },
       {
         title: "Account / profile isolation",
         description:
-          "Local auth defaults to JWT required; dashboard state resets when the signed-in user changes to avoid stale profile data.",
-      },
-    ],
-    improvements: [
-      {
-        title: "Scraper change detection",
-        description:
-          "PhilScholar listing HTML is hashed; unchanged listings skip ingest. GitHub Actions validates DATABASE_URL and scrape output before ingest.",
-      },
-      {
-        title: "Deadline maintenance",
-        description:
-          "Daily workflow deactivates scholarships whose application deadline is in the past (no re-scrape required).",
-      },
-      {
-        title: "Scholarship card images",
-        description:
-          "Static hero images under /public/images/scholarships with provider-type fallback and graceful image error handling.",
+          "Dashboard state resets when the signed-in user changes to avoid stale profile data.",
       },
     ],
     behindTheScenes: [
       {
-        title: "CI and tooling",
+        title: "Scraper schedule",
         description:
-          "GitHub Actions frontend job uses Node.js 22. Render: add .python-version (3.11.x) to avoid Python 3.14 build failures. See docs/DEPLOYMENT.md.",
+          "PhilScholar scrape runs Mon and Thu via GitHub Actions (workflow_dispatch also available). Listing change detection skips ingest when HTML is unchanged.",
       },
       {
-        title: "Admin monitoring",
-        description:
-          "GET /api/v1/admin/staging/stats for staging queue counts (admin). Existing scraper run list endpoint unchanged.",
+        title: "CI Node version",
+        description: "GitHub Actions frontend job uses Node.js 24.",
       },
     ],
   },
   {
     version: "1.4.0",
-    date: "March 2026",
-    title: "Reliability and clearer errors",
+    date: "April 2026",
+    title: "Documents, financial planner, and AI tools",
     summary:
-      "Fixed a backend bug that could break profile loading, and improved how the app explains connection problems so you know what to check.",
-    fixes: [
+      "Document vault workflow, financial planner on the dashboard, applications timeline, sponsor/school portals, and scraper pipeline with admin staging approval.",
+    improvements: [
       {
-        title: "Profile list responses",
+        title: "Documents workflow",
         description:
-          "Resolved a server error when reading saved list fields (courses, activities, awards) from profiles. Listing and saving profiles should work reliably again.",
+          "Per-application document checklists, Drive folder links, and profile document sync from application progress.",
       },
       {
-        title: "Dashboard and match errors",
+        title: "Financial Planner",
         description:
-          "When the API is unreachable, messages now point to checking that the server is running and that the app is pointed at the correct API URL—instead of only a generic failure.",
+          "Compare your estimated annual costs against saved scholarship benefit amounts.",
+      },
+      {
+        title: "Applications tracker",
+        description:
+          "Track scholarship applications with status timeline and document links.",
+      },
+      {
+        title: "Scraper and staging",
+        description:
+          "PhilScholar scraper ingests into a staging queue; admins approve rows before they enter the live catalog.",
       },
     ],
     behindTheScenes: [
       {
-        title: "Configuration check",
+        title: "Refresh tokens",
         description:
-          "Confirmed CORS and frontend API base URL settings for typical local development (Vite + FastAPI).",
+          "Rotating refresh tokens stored hashed in the database; shorter-lived access tokens.",
+      },
+      {
+        title: "Deadline maintenance",
+        description:
+          "Daily GitHub Action expires scholarships whose application deadline has passed.",
       },
     ],
   },
   {
     version: "1.3.0",
-    date: "March 2026",
-    title: "Unified dashboard and landing",
+    date: "April 2026",
+    title: "Trust-focused UX and transparency",
     summary:
-      "Signed-in users get a consistent dashboard experience. Visitors see a clear landing page; logout returns home without odd mixed layouts.",
+      "Feedback modal, transparency page explaining match scores, scholarship card redesign, and marketing landing improvements.",
     improvements: [
       {
-        title: "One layout when signed in",
+        title: "Transparency page",
         description:
-          "Dashboard routes use a single sidebar layout. Unauthenticated visitors are redirected to sign in instead of seeing broken chrome.",
+          "Explains what match scores mean, scoring weights, and why scores can change.",
       },
       {
-        title: "New landing page",
-        description:
-          "Public home explains the product and points to sign up or sign in without the old long-form profile on the same screen.",
+        title: "Feedback",
+        description: "In-app feedback modal sends suggestions and bug reports to the team.",
       },
       {
-        title: "Profile builder as the main path",
-        description:
-          "Links to create or edit a profile go to the step-by-step profile builder. Successful login and registration open the builder first.",
-      },
-    ],
-    fixes: [
-      {
-        title: "Match results and auth",
-        description:
-          "Match requests include auth headers where the API expects them, reducing failed loads after you save a profile.",
-      },
-      {
-        title: "Logout destination",
-        description:
-          "Signing out sends you to the public home instead of leaving you on a half-logged-in dashboard screen.",
+        title: "Scholarship cards",
+        description: "Redesigned cards with score rings, urgency badges, and match analysis modal.",
       },
     ],
   },
   {
     version: "1.2.0",
-    date: "March 2025",
-    title: "Search and saved scholarships",
-    summary: "Browse programs with filters and save the ones you care about to your dashboard.",
+    date: "March 2026",
+    title: "Unified dashboard, search, and admin",
+    summary:
+      "Unified dashboard layout, scholarship search with filters, saved scholarships, admin analytics, and profile builder as the main onboarding path.",
     improvements: [
       {
         title: "Scholarship search",
         description:
-          "Browse scholarships with a search bar, filters (region, field, income, education level, provider), and pagination. A detail panel opens when you select a result.",
+          "Browse programs with search, filters (region, field, income, education level), and pagination.",
       },
       {
         title: "Save scholarships",
+        description: "Bookmark scholarships; saved items appear on your dashboard.",
+      },
+      {
+        title: "Unified dashboard",
         description:
-          "Bookmark scholarships with a save control. Saved items appear on your dashboard when you are signed in.",
+          "Signed-in users get a consistent sidebar layout; visitors see a dedicated landing page.",
+      },
+      {
+        title: "Admin analytics",
+        description: "Admin overview of scholarships, profiles, match runs, and staging queue.",
+      },
+    ],
+    fixes: [
+      {
+        title: "Profile list responses",
+        description:
+          "Resolved server errors when reading list fields (courses, activities, awards) from profiles.",
+      },
+      {
+        title: "Registration and profile persistence",
+        description:
+          "Fixed registration fetch failures and improved profile save reliability.",
       },
     ],
   },
   {
     version: "1.1.0",
-    date: "March 2025",
-    title: "Stronger profiles and clearer matches",
-    summary: "Richer profile options, legal pages, and a clearer view of why a scholarship matched.",
+    date: "March 2026",
+    title: "Production readiness foundation",
+    summary:
+      "PostgreSQL with Alembic migrations, JWT authentication, Sentry error tracking, React Router, admin UI, rate limiting, and scholarship cache with TTL.",
     improvements: [
       {
-        title: "Scholarship detail page",
+        title: "PostgreSQL and migrations",
         description:
-          "View Details opens an internal page with eligibility, benefits, requirements, and timeline.",
+          "Alembic migration chain replaces SQLite-only dev; Supabase-compatible schema.",
       },
       {
-        title: "Multiple course preferences",
-        description: "Specify up to three preferred courses to improve how matches are ranked.",
+        title: "JWT authentication",
+        description: "Register, login, and protected API routes with bcrypt password hashing.",
       },
       {
-        title: "Tiered form validation",
-        description: "Required and recommended fields with clearer validation and confirmation where needed.",
-      },
-      {
-        title: "Legal and account pages",
-        description: "About, Terms, Privacy, Settings, and Changelog pages added.",
-      },
-      {
-        title: "Region dropdown",
-        description: "Region selection uses a dropdown of Philippine regions.",
-      },
-      {
-        title: "Why you matched",
-        description: "Match breakdown appears as a clearer, card-style scorecard.",
-      },
-      {
-        title: "Nationwide scholarships",
-        description: "Programs that apply nationwide display correctly when region lists are empty.",
-      },
-      {
-        title: "Application timing",
-        description: "Shows when an application window opens in the future (for example, opens in X days).",
+        title: "Scholarship cache",
+        description: "Redis-backed scholarship list cache with TTL and invalidation on catalog changes.",
       },
     ],
-    fixes: [
+    behindTheScenes: [
       {
-        title: "Duplicate questions",
-        description: "Removed duplicate prompts for underprivileged status and OFW dependent where they appeared twice.",
+        title: "CI pipeline",
+        description:
+          "GitHub Actions runs pytest, Postgres migration round-trip, and frontend lint/test/build.",
       },
     ],
   },
   {
     version: "1.0.0",
-    date: "March 2025",
-    title: "Initial release",
+    date: "February 2026",
+    title: "Policy-aligned matching and national branding",
     summary:
-      "First MVP in development: build a student profile, run eligibility-based matching, and see ranked scholarship results.",
+      "Philippine scholarship policy alignment, domain-layer scoring refactor, needs picker, scholarship browser, and Iskonnect national branding.",
     improvements: [
       {
-        title: "Core matching",
+        title: "Policy-aligned matching",
         description:
-          "Profile builder, rule-based eligibility matching, and ranked results with explanations.",
+          "Eligibility rules aligned with Philippine scholarship programs; improved level and region handling.",
+      },
+      {
+        title: "Scholarship browser",
+        description: "Browse and filter scholarships before the full search experience.",
+      },
+      {
+        title: "Iskonnect branding",
+        description: "National Filipino branding, component structure, and dark mode support.",
+      },
+    ],
+    fixes: [
+      {
+        title: "Scoring architecture",
+        description: "Moved scoring logic to a dedicated domain layer with test coverage.",
+      },
+      {
+        title: "CORS and region field",
+        description: "Removed duplicate CORS middleware; fixed region field styling.",
+      },
+    ],
+  },
+  {
+    version: "0.1.0",
+    date: "January 2026",
+    title: "Project genesis",
+    summary:
+      "FastAPI skeleton with profile creation, rule-based scholarship scoring, SQLite persistence, and initial React frontend.",
+    improvements: [
+      {
+        title: "Core matching MVP",
+        description:
+          "Student profile creation, eligibility-based matching, and ranked results with explanations.",
+      },
+      {
+        title: "API foundation",
+        description: "FastAPI with profiles and scholarships CRUD; health endpoint.",
       },
     ],
   },
 ];
+
+/** Latest version string for Settings and other UI surfaces. */
+export const APP_VERSION = CHANGELOG_VERSIONS[0]?.version ?? "2.0.0";

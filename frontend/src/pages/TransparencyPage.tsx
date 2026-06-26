@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-
+import { BackNavLink } from "../components/BackNavLink";
 const factors = [
   {
     name: "Academic Performance",
@@ -111,11 +110,11 @@ export function TransparencyPage() {
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             What the numbers mean
           </h2>
-          <div className="mt-3 flex gap-3 overflow-x-auto pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {scoreRanges.map((s) => (
               <div
                 key={s.range}
-                className={`min-w-[200px] shrink-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900 ${s.accent}`}
+                className={`rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900 ${s.accent}`}
               >
                 <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{s.range}</p>
                 <p className="mt-1 font-semibold text-slate-900 dark:text-slate-50">{s.label}</p>
@@ -176,19 +175,8 @@ export function TransparencyPage() {
           </p>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
-          <Link
-            to="/profile-builder"
-            className="inline-flex justify-center rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white hover:bg-primary-700"
-          >
-            Improve Your Profile
-          </Link>
-          <Link
-            to="/dashboard"
-            className="inline-flex justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
-          >
-            View My Matches
-          </Link>
+        <div className="mt-12">
+          <BackNavLink />
         </div>
       </div>
     </section>

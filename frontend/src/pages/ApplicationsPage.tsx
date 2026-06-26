@@ -160,7 +160,7 @@ export function ApplicationsPage() {
   const removeEntry = async (applicationId: number) => {
     if (
       !window.confirm(
-        "Remove this entry? It will disappear from your list but your history stays on record (not deleted)."
+        "Delete this application permanently? Its status timeline and document checklist will be removed and cannot be recovered."
       )
     ) {
       return;
@@ -168,8 +168,8 @@ export function ApplicationsPage() {
     setRemovingId(applicationId);
     setError(null);
     try {
-      const res = await apiFetch(`/api/v1/applications/${applicationId}/remove`, {
-        method: "POST",
+      const res = await apiFetch(`/api/v1/applications/${applicationId}`, {
+        method: "DELETE",
         headers: authHeaders(),
       });
       if (!res.ok) {
@@ -336,7 +336,7 @@ export function ApplicationsPage() {
                             onClick={() => void removeEntry(app.id)}
                             className="rounded-lg border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950/40"
                           >
-                            {removingId === app.id ? "Removing…" : "Remove"}
+                            {removingId === app.id ? "Deleting…" : "Delete"}
                           </button>
                         </div>
                       </div>

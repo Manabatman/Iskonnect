@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { BackNavLink } from "../components/BackNavLink";
 
 const steps = [
   {
@@ -172,6 +173,10 @@ export function HowItWorksPage() {
           </Link>
           .
         </p>
+
+        <div className="mt-10 flex justify-center">
+          <BackNavLink />
+        </div>
       </div>
     </section>
   );

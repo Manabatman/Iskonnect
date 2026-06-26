@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { CHANGELOG_VERSIONS, type ChangelogItem } from "../data/changelog";
+import { BackNavLink } from "../components/BackNavLink";
 
 function ItemList({ heading, items }: { heading: string; items: ChangelogItem[] }) {
   if (!items.length) return null;
@@ -49,13 +49,8 @@ export function ChangelogPage() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-wrap gap-4 text-sm">
-          <Link to="/" className="font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400">
-            ← Back to home
-          </Link>
-          <Link to="/settings" className="font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100">
-            Account settings
-          </Link>
+        <div className="mt-12">
+          <BackNavLink />
         </div>
       </div>
     </section>

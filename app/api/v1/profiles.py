@@ -267,6 +267,9 @@ def delete_my_data(
     db.query(models.SavedScholarship).filter(models.SavedScholarship.user_id == user_id).delete(
         synchronize_session=False
     )
+    db.query(models.Application).filter(models.Application.user_id == user_id).delete(
+        synchronize_session=False
+    )
     db.query(models.Notification).filter(models.Notification.user_id == user_id).delete(synchronize_session=False)
     db.query(models.ScholarshipReport).filter(models.ScholarshipReport.user_id == user_id).delete(
         synchronize_session=False

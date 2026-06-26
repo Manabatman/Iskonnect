@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { BackNavLink } from "../components/BackNavLink";
 
 export function PrivacyPage() {
   return (
@@ -28,7 +29,8 @@ export function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Data Retention</h2>
             <p className="mt-2">
-              Profile data is stored to enable match retrieval. You can request deletion of your data by contacting us.
+              Profile data is stored to enable match retrieval. Signed-in users can delete their account anytime from
+              Account Settings — this permanently erases your profile, matches, saved scholarships, and applications.
             </p>
           </section>
 
@@ -69,12 +71,7 @@ export function PrivacyPage() {
         </div>
 
         <div className="mt-12">
-          <Link
-            to="/settings"
-            className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700"
-          >
-            ← Back to Settings
-          </Link>
+          <BackNavLink />
         </div>
       </div>
     </section>

@@ -10,6 +10,13 @@ import { NetworkError, apiFetch } from "../api/client";
 import { useAuth } from "./AuthContext";
 import type { SavedScholarship } from "../types";
 
+export const SAVED_SCHOLARSHIP_CHANGED_EVENT = "iskonnect:saved-scholarship-changed";
+
+export type SavedScholarshipChangedDetail = {
+  scholarshipId: number;
+  saved: boolean;
+};
+
 interface SavedScholarshipsContextType {
   savedIds: Set<number>;
   /** Full saved rows (same shape as GET /saved-scholarships) for dashboard and applications. */
@@ -96,6 +103,11 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
           });
           if (!res.ok) throw new Error("Failed to unsave");
           setSavedScholarships((prev) => prev.filter((s) => s.scholarship_id !== id));
+          window.dispatchEvent(
+            new CustomEvent<SavedScholarshipChangedDetail>(SAVED_SCHOLARSHIP_CHANGED_EVENT, {
+              detail: { scholarshipId: id, saved: false },
+            })
+          );
           return false;
         } else {
           const res = await apiFetch("/api/v1/saved-scholarships", {
@@ -116,6 +128,11 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
           }
           const row = (await res.json()) as SavedScholarship;
           setSavedScholarships((prev) => [row, ...prev.filter((s) => s.scholarship_id !== id)]);
+          window.dispatchEvent(
+            new CustomEvent<SavedScholarshipChangedDetail>(SAVED_SCHOLARSHIP_CHANGED_EVENT, {
+              detail: { scholarshipId: id, saved: true },
+            })
+          );
           return true;
         }
       } catch {

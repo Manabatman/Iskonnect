@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { BackNavLink } from "../components/BackNavLink";
 
 export function AboutPage() {
   return (
@@ -48,12 +50,7 @@ export function AboutPage() {
         </div>
 
         <div className="mt-12">
-          <Link
-            to="/"
-            className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700"
-          >
-            ← Get started
-          </Link>
+          <BackNavLink />
         </div>
       </div>
     </section>
