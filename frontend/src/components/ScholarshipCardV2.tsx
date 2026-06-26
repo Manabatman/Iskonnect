@@ -360,6 +360,7 @@ export function ScholarshipCardV2({
           >
             View Details
           </Link>
+          <BookmarkButton scholarshipId={base.id} variant="labeled" className="flex-1 justify-center" />
         </div>
       </div>
     </article>

@@ -70,3 +70,40 @@ def test_student_cannot_set_accepted_status(api_with_db):
     )
     assert ok_r.status_code == 200
     assert ok_r.json()["status"] == "submitted"
+
+
+def test_student_can_permanently_delete_own_application(api_with_db):
+    client, Session = api_with_db
+    student_headers, _user = _student_headers(client, Session, email="app_delete@example.com")
+    admin_headers = _admin_headers(client, Session)
+
+    sch_r = client.post(
+        "/api/v1/scholarships",
+        json={"title": "Delete Test Scholarship", "provider": "Test", "link": "https://example.com/d"},
+        headers=admin_headers,
+    )
+    assert sch_r.status_code == 200
+    sch_id = sch_r.json()["id"]
+
+    create_r = client.post(
+        "/api/v1/applications",
+        json={"scholarship_id": sch_id},
+        headers=student_headers,
+    )
+    assert create_r.status_code == 200
+    app_id = create_r.json()["id"]
+
+    ev_r = client.get(f"/api/v1/applications/{app_id}/events", headers=student_headers)
+    assert ev_r.status_code == 200
+    assert len(ev_r.json()) >= 1
+
+    del_r = client.delete(f"/api/v1/applications/{app_id}", headers=student_headers)
+    assert del_r.status_code == 200
+    assert del_r.json()["status"] == "deleted"
+
+    list_r = client.get("/api/v1/applications", headers=student_headers)
+    assert list_r.status_code == 200
+    assert all(row["id"] != app_id for row in list_r.json())
+
+    ev_r2 = client.get(f"/api/v1/applications/{app_id}/events", headers=student_headers)
+    assert ev_r2.status_code == 404

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { buildGoogleAiModeSearchUrl } from "../../utils/googleAiModeSearch";
+import { buildReviewCenterAiModeQuery } from "../../utils/aiModeQueries";
 
 function MapPinIcon({ className }: { className?: string }) {
   return (
@@ -42,22 +43,6 @@ const QUICK_TIPS = [
   "Ask about schedule options: weekend, daily, or online/hybrid.",
   "Verify accreditation, materials included, and mock exam frequency.",
 ];
-
-/** Rich query for Google AI Mode (udm=50) so answers cover fees, schedules, reviews, etc. */
-function buildReviewCenterAiModeQuery(location: string, examFocus?: string | null): string {
-  const loc = location.trim() || "Philippines";
-  const exam = examFocus?.trim();
-  if (exam) {
-    return (
-      `${exam} review center near ${loc} Philippines price range tuition fee passing rate ` +
-      `schedule options online or face to face teaching style and student reviews`
-    );
-  }
-  return (
-    `best review centers for college entrance exams near ${loc} Philippines comparing fees ` +
-    `schedule passing rates and student reviews`
-  );
-}
 
 export function ReviewCenterFinderCard({ defaultLocation, className }: ReviewCenterFinderCardProps) {
   const [location, setLocation] = useState(defaultLocation ?? "");

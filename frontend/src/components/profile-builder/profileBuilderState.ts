@@ -51,6 +51,7 @@ export const OPTIONAL_PROFILE_FIELDS = new Set<keyof ProfileBuilderState>([
   "preferred_course_3",
   "extracurriculars",
   "awards",
+  "parent_occupation",
 ]);
 
 /** RA priority flags — any number can apply; not required for 100% completion. */
@@ -144,9 +145,6 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
       "province",
       "city_municipality",
       "barangay",
-      "household_income_annual",
-      "income_bracket",
-      "parent_occupation",
     ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
@@ -189,6 +187,19 @@ export function computeStepCompletion(
 ): { filled: number; total: number } {
   const step = PROFILE_BUILDER_STEPS.find((s) => s.id === stepId);
   if (!step) return { filled: 0, total: 0 };
+
+  if (stepId === 3) {
+    let filled = 0;
+    for (const key of step.fields) {
+      if (isFieldFilled(key, state[key])) filled += 1;
+    }
+    const incomeFilled =
+      isFieldFilled("household_income_annual", state.household_income_annual) ||
+      isFieldFilled("income_bracket", state.income_bracket);
+    if (incomeFilled) filled += 1;
+    return { filled, total: step.fields.length + 1 };
+  }
+
   let filled = 0;
   for (const key of step.fields) {
     if (isFieldFilled(key, state[key])) filled += 1;

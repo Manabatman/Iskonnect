@@ -14,6 +14,12 @@ import { MatchScoreRing } from "../components/MatchScoreRing";
 import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
 import { ReviewCenterFinderCard } from "../components/dashboard/ReviewCenterFinderCard";
 import { CareerRoadmapCard } from "../components/dashboard/CareerRoadmapCard";
+import {
+  INITIAL_STATE,
+  computeOverallCompletion,
+  type ProfileBuilderState,
+} from "../components/profile-builder/profileBuilderState";
+import { profileToInitialValues } from "../utils/profileDraft";
 
 function IconGraduationCap({ className }: { className?: string }) {
   return (
@@ -74,16 +80,9 @@ function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upco
 
 function profileCompleteness(p: StudentProfileResponse | undefined): number {
   if (!p) return 0;
-  const fields = [
-    p.full_name,
-    p.region,
-    p.education_level || p.current_academic_stage,
-    p.field_of_study_broad,
-    p.gwa_normalized != null ? "1" : "",
-    p.household_income_annual != null || p.income_bracket ? "1" : "",
-  ];
-  const filled = fields.filter(Boolean).length;
-  return Math.round((filled / fields.length) * 100);
+  const flat = profileToInitialValues(p as { id?: number; [key: string]: unknown });
+  const state = { ...INITIAL_STATE, ...flat } as ProfileBuilderState;
+  return computeOverallCompletion(state);
 }
 
 export function ProfileDashboard() {

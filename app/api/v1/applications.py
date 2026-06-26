@@ -374,6 +374,25 @@ def patch_application_drive_folder(
     return _application_to_out(app, sch)
 
 
+@router.delete("/applications/{application_id}")
+@limiter.limit("30/minute")
+def delete_application_permanently(
+    request: Request,
+    application_id: int,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """Permanently delete application and cascaded timeline/checklists."""
+    uid = _require_uid(user_id)
+    app = db.query(models.Application).filter(models.Application.id == application_id).first()
+    if not app or app.user_id != uid:
+        raise HTTPException(status_code=404, detail="Application not found")
+    db.delete(app)
+    _sync_student_documents_from_checklists(db, uid)
+    db.commit()
+    return {"status": "deleted"}
+
+
 @router.post("/applications/{application_id}/remove", response_model=ApplicationOut)
 @limiter.limit("30/minute")
 def remove_application_entry(

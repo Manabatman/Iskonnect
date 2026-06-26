@@ -1,6 +1,14 @@
 /**
  * Landing hero carousel — primary assets under public/images/hero/ (.jpg).
  * If a file is missing, HeroCarousel falls back to the matching SVG placeholder.
+ *
+ * ## Replacing images (no code change required)
+ * Swap files in place keeping the same filenames:
+ * - hero-1.jpg — graduates / celebration (recommended 1920×1080 or 16:9, &lt; 400 KB WebP/JPEG)
+ * - hero-2.jpg — ceremony / campus wide shot
+ * - hero-3.jpg — inspirational campus or student life
+ *
+ * Alt text for each slide is set in LandingPage `heroAlts` (same order as this array).
  */
 export const HERO_CAROUSEL_IMAGES = [
   "/images/hero/hero-1.jpg",

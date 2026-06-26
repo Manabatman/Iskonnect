@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { EDUCATION_LEVELS } from "../../constants/profileOptions";
 import { buildGoogleAiModeSearchUrl } from "../../utils/googleAiModeSearch";
+import { buildCareerRoadmapQuery } from "../../utils/aiModeQueries";
 
 function CompassIcon({ className }: { className?: string }) {
   return (
@@ -31,20 +32,6 @@ const ROADMAP_TIPS = [
   "Use your target education level so the roadmap matches scholarships you’re aiming for.",
   "Bookmark useful links from the AI answer into your Applications or notes.",
 ];
-
-/**
- * Long-form query so Google AI Mode returns a rich career overview (PH context).
- */
-export function buildCareerRoadmapQuery(career: string, educationLevel: string): string {
-  const job = career.trim() || "undecided career path";
-  const level = educationLevel.trim() || "a Filipino student";
-  return (
-    `career roadmap for ${job} in the Philippines for ${level} including realistic job roles, ` +
-    `day-to-day tasks, required technical and soft skills, entry-level requirements, ` +
-    `salary range in PHP, career progression from entry to senior, common struggles in the field, ` +
-    `and recommended courses or certifications`
-  );
-}
 
 export function CareerRoadmapCard({ defaultEducationLevel, className }: CareerRoadmapCardProps) {
   const [careerInterest, setCareerInterest] = useState("");

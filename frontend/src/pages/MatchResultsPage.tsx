@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import type { MatchResult, ProfileCompleteness, UpcomingScholarship } from "../types";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
-import { VirtualizedMatchGrid } from "../components/VirtualizedMatchGrid";
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { UpcomingScholarshipCard } from "../components/UpcomingScholarshipCard";
 import { useAuth } from "../contexts/AuthContext";
@@ -153,7 +152,7 @@ export function MatchResultsPage() {
               onClick={handleReset}
               className="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-white hover:bg-primary-700"
             >
-              Start new profile
+              Update Your Profile
             </button>
           </div>
         </div>
@@ -189,9 +188,9 @@ export function MatchResultsPage() {
             type="button"
             onClick={handleReset}
             className="w-fit text-sm font-medium text-primary-600 transition hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
-            aria-label="Start a new profile"
+            aria-label="Update your profile"
           >
-            Start new profile
+            Update Your Profile
           </button>
         </div>
 
@@ -223,9 +222,9 @@ export function MatchResultsPage() {
                   type="button"
                   onClick={handleReset}
                   className="rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                  aria-label="Start a new profile"
+                  aria-label="Update your profile"
                 >
-                  Start new profile
+                  Update Your Profile
                 </button>
               </div>
             </div>
@@ -285,16 +284,22 @@ export function MatchResultsPage() {
                 type="button"
                 onClick={handleReset}
                 className="mt-6 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                aria-label="Start a new profile"
+                aria-label="Update your profile"
               >
-                Start new profile
+                Update Your Profile
               </button>
             </div>
           )
         ) : (
           <div className="space-y-10">
             {activeMatches.length > 0 ? (
-              <VirtualizedMatchGrid matches={activeMatches} onShowAnalysis={setAnalysisMatch} />
+              <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {activeMatches.map((match) => (
+                  <ErrorBoundary key={match.id}>
+                    <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
+                  </ErrorBoundary>
+                ))}
+              </div>
             ) : null}
 
             {deadlinePassedMatches.length > 0 ? (

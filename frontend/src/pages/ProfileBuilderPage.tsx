@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/client";
+import { ConsentRequiredModal } from "../components/ConsentRequiredModal";
 import { SplitLayout } from "../components/layout/SplitLayout";
 import { EducationStep } from "../components/profile-builder/EducationStep";
 import { EligibilityGoalsStep } from "../components/profile-builder/EligibilityGoalsStep";
@@ -44,6 +45,8 @@ export function ProfileBuilderPage() {
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveOk, setSaveOk] = useState<string | null>(null);
+  const [consentModalOpen, setConsentModalOpen] = useState(false);
+  const consentCheckboxRef = useRef<HTMLInputElement | null>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -121,7 +124,7 @@ export function ProfileBuilderPage() {
       return;
     }
     if (state.privacy_consent !== "on") {
-      setSaveError("Please confirm the privacy consent checkbox before saving your profile.");
+      setConsentModalOpen(true);
       return;
     }
     if (!state.full_name?.trim() || state.full_name.trim().length < 2) {
@@ -249,6 +252,16 @@ export function ProfileBuilderPage() {
           }
         />
       </div>
+      <ConsentRequiredModal
+        open={consentModalOpen}
+        onOpenChange={setConsentModalOpen}
+        onGoToConsent={() => {
+          setCurrentStep(5);
+          window.setTimeout(() => {
+            document.getElementById("privacy-consent-checkbox")?.focus();
+          }, 150);
+        }}
+      />
     </section>
   );
 }

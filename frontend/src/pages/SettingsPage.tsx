@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
 import { FEEDBACK_CATEGORIES, useFeedback } from "../components/FeedbackModal";
+import { DeleteAccountModal } from "../components/DeleteAccountModal";
+import { APP_VERSION } from "../data/changelog";
 
 function emailToDisplayName(email: string): string {
   const local = email.split("@")[0] ?? "";
@@ -68,6 +71,7 @@ export function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const { user } = useAuth();
   const { openFeedback } = useFeedback();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const email = user?.email ?? "";
   const displayName = email ? emailToDisplayName(email) : "";
@@ -117,7 +121,7 @@ export function SettingsPage() {
             to="/profile-builder"
             className="mt-4 inline-flex items-center rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
           >
-            Update Scholarship Profile →
+            Update Your Profile →
           </Link>
         </Card>
 
@@ -217,16 +221,16 @@ export function SettingsPage() {
           <div className="mt-8 rounded-xl border border-danger-100 p-4 dark:border-danger-900/40">
             <h3 className="text-sm font-semibold text-danger-600 dark:text-danger-400">Delete account</h3>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              This removes your profile, matches, and saved scholarships permanently.
+              Permanently removes your profile, match history, saved scholarships, and applications. Product feedback you
+              submitted may be kept anonymously.
             </p>
             <button
               type="button"
-              disabled
-              className="mt-3 cursor-not-allowed rounded-lg border border-danger-200 bg-white px-3 py-2 text-sm font-semibold text-danger-400 opacity-70 dark:border-danger-800 dark:bg-slate-900 dark:text-danger-500"
+              onClick={() => setDeleteModalOpen(true)}
+              className="mt-3 rounded-lg border border-danger-200 bg-white px-3 py-2 text-sm font-semibold text-danger-600 hover:bg-danger-50 dark:border-danger-800 dark:bg-slate-900 dark:text-danger-400 dark:hover:bg-danger-950/30"
             >
-              Request deletion
+              Delete account
             </button>
-            <span className="ml-2 text-xs font-medium text-slate-500 dark:text-slate-400">Coming soon</span>
           </div>
         </Card>
 
@@ -251,7 +255,7 @@ export function SettingsPage() {
 
         <Card>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">About</h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Iskonnect v1.5.0</p>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Iskonnect v{APP_VERSION}</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm">
             <li>
               <Link to="/changelog" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
@@ -284,6 +288,9 @@ export function SettingsPage() {
             ← Back to Dashboard
           </Link>
         </div>
+        {email ? (
+          <DeleteAccountModal open={deleteModalOpen} onOpenChange={setDeleteModalOpen} userEmail={email} />
+        ) : null}
       </div>
     </section>
   );

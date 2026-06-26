@@ -116,9 +116,9 @@ export function LandingPage() {
   }
 
   const heroAlts = [
-    "Filipino graduates celebrating together",
-    "Graduation ceremony in the Philippines",
-    "University campus at sunset — inspiration for students",
+    "Filipino students in graduation caps celebrating achievement",
+    "Scholarship recipients at a Philippine university ceremony",
+    "Students walking on a Philippine university campus at golden hour",
   ] as const;
 
   return (
@@ -189,13 +189,13 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Trust */}
-      <section className="bg-slate-950 py-16 text-white sm:py-20">
+      {/* Trust — deep navy aligns with primary palette; reads as institutional, not harsh black */}
+      <section className="bg-gradient-to-b from-slate-900 to-slate-800 py-16 text-white sm:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl font-bold sm:text-3xl">Built for the Philippines</h2>
-              <p className="mt-2 max-w-xl text-sm text-slate-400">
+              <p className="mt-2 max-w-xl text-sm text-slate-300">
                 Programs from government, LGUs, and schools — always verify details on the official site before you
                 apply.
               </p>
