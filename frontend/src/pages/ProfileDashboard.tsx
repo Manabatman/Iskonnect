@@ -322,6 +322,23 @@ export function ProfileDashboard() {
             role="status"
           >
             Please verify your email — check your inbox for the verification link from Iskonnect.
+            {" "}
+            <button
+              type="button"
+              className="font-semibold underline"
+              onClick={async () => {
+                try {
+                  await apiFetch("/api/v1/auth/resend-verification", {
+                    method: "POST",
+                    headers: authHeaders(),
+                  });
+                } catch {
+                  /* generic UX — server always returns 200 when authenticated */
+                }
+              }}
+            >
+              Resend verification email
+            </button>
           </div>
         )}
 

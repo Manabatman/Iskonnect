@@ -9,6 +9,7 @@ engine_kwargs: dict = {}
 if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 else:
+    connect_args["prepare_threshold"] = 0  # Supabase transaction pooler (PgBouncer)
     engine_kwargs["pool_pre_ping"] = True
     engine_kwargs["pool_recycle"] = 300
     engine_kwargs["pool_size"] = settings.db_pool_size

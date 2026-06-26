@@ -19,12 +19,13 @@ echo Installing dependencies...
 pip install --upgrade pip
 pip install -r requirements.txt
 
-REM Seed the database
-echo Seeding database...
-python seed_data.py
-
-REM Free port 8000 if already in use (fixes WinError 10013)
-python free_port.py 8000
+REM Optional: seed local SQLite demo data (set SEED_LOCAL=1 to enable)
+if "%SEED_LOCAL%"=="1" (
+    echo Seeding local database...
+    python seed_data.py
+) else (
+    echo Skipping seed_data.py ^(set SEED_LOCAL=1 to seed^).
+)
 
 REM Start backend server
 echo Starting backend server on http://localhost:8000

@@ -10,6 +10,14 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 from app.taxonomy.regions import normalize_region
+from app.taxonomy.education_levels import education_levels_compatible
+from app.taxonomy.equity_groups import EQUITY_GROUPS
+from app.matching.field_match import (
+    broad_maps_to_specific_eligible,
+    profile_fields_for_matching,
+    psced_code_matches,
+    specific_course_matches,
+)
 from app.utils.json_helpers import parse_json_list
 
 DEADLINE_PASSED_MESSAGE = (
@@ -46,30 +54,14 @@ def _level_matches(profile_level: str | None, eligible_levels: list, legacy_leve
     """Check if profile education level matches scholarship eligibility."""
     if not profile_level or not profile_level.strip():
         return True  # No filter if profile has no level
-    profile_lower = profile_level.strip().lower()
-
-    # Map legacy level names to broader categories
-    level_map = {
-        "high school": ["high school", "grade 11", "grade 12"],
-        "college": ["college", "college 1st year", "college 2nd year", "college 3rd year", "college 4th year"],
-        "tvet": ["tvet", "vocational"],
-        "graduate": ["graduate", "master's", "phd", "doctoral"],
-    }
 
     levels_to_check = eligible_levels if eligible_levels else ([legacy_level] if legacy_level else [])
     if not levels_to_check:
         return True
 
     for el in levels_to_check:
-        el_lower = str(el).strip().lower()
-        if profile_lower == el_lower:
+        if el and education_levels_compatible(profile_level, str(el)):
             return True
-        # Check broad category
-        for broad, variants in level_map.items():
-            if el_lower == broad and profile_lower in variants:
-                return True
-            if profile_lower == broad and el_lower in variants:
-                return True
     return False
 
 
@@ -236,37 +228,57 @@ def _field_matches(
     eligible_courses_psced: list,
     eligible_courses_specific: list,
 ) -> bool:
-    """Check if profile field of study matches scholarship course eligibility.
-    Uses FIELD_HIERARCHY so e.g. Engineering matches STEM-eligible scholarships.
-    Also checks preferred_courses against eligible_courses_specific."""
+    """Check if profile field of study matches scholarship course eligibility."""
     if not eligible_courses_psced and not eligible_courses_specific:
         return True
-    has_profile_data = (profile_field_broad and profile_field_broad.strip()) or (profile_preferred_courses and any(p for p in profile_preferred_courses if p))
+    has_profile_data = (profile_field_broad and profile_field_broad.strip()) or (
+        profile_preferred_courses and any(p for p in profile_preferred_courses if p)
+    )
     if not has_profile_data:
         return True
-    from app.taxonomy.psced_fields import FIELD_HIERARCHY
 
-    profile_f = profile_field_broad.strip().lower()
-    profile_fields_to_check = [profile_f]
-    parents = FIELD_HIERARCHY.get(profile_field_broad.strip())
-    if parents:
-        profile_fields_to_check.extend(p.strip().lower() for p in parents)
+    profile_fields_to_check = profile_fields_for_matching(profile_field_broad)
 
     for ec in eligible_courses_psced:
         if not ec:
             continue
-        ec_lower = ec.strip().lower()
         for pf in profile_fields_to_check:
-            if ec_lower in pf or pf in ec_lower:
+            if psced_code_matches(pf, str(ec)):
                 return True
 
-    for pc in (profile_preferred_courses or []):
+    for pc in profile_preferred_courses or []:
         if not pc:
             continue
-        pc_lower = str(pc).strip().lower()
-        for ec in (eligible_courses_specific or []):
-            if ec and (pc_lower in str(ec).lower() or str(ec).lower() in pc_lower):
+        for ec in eligible_courses_specific or []:
+            if ec and specific_course_matches(str(pc), str(ec)):
                 return True
+
+    if broad_maps_to_specific_eligible(profile_field_broad, eligible_courses_specific):
+        return True
+
+    return False
+
+
+def _members_only_matches(profile: dict, scholarship: dict) -> bool:
+    """
+    When members_only is set, student must belong to at least one priority group.
+    Preferential (non-exclusive) priority scholarships are not gated here.
+    """
+    if not scholarship.get("members_only"):
+        return True
+    groups = parse_json_list(scholarship.get("priority_groups"))
+    if not groups:
+        return True
+    for group in groups:
+        if not group:
+            continue
+        info = EQUITY_GROUPS.get(group, {})
+        flag = info.get("profile_flag")
+        if not flag:
+            flag_key = str(group).lower().replace(" ", "_").replace("/", "_")
+            flag = f"is_{flag_key}"
+        if profile.get(flag):
+            return True
     return False
 
 
@@ -326,6 +338,7 @@ def _top_blockers(eliminated: dict[str, int], missing: list[str]) -> list[str]:
         "income": "household income limits",
         "gwa": "GWA / academic minimums",
         "field": "field of study or course alignment",
+        "members_only": "members-only priority group",
     }
     for key, count in sorted(eliminated.items(), key=lambda x: -x[1]):
         if count <= 0:
@@ -395,6 +408,8 @@ def _hard_filter_failure_stage(profile: dict, sch: dict) -> str | None:
         parse_json_list(sch.get("eligible_courses_specific")),
     ):
         return "field"
+    if not _members_only_matches(profile, sch):
+        return "members_only"
     return None
 
 
@@ -413,6 +428,7 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "income": 0,
         "gwa": 0,
         "field": 0,
+        "members_only": 0,
     }
     eliminated_scholarships: list[dict] = []
     filter_labels = {
@@ -424,6 +440,7 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "income": "household income limits",
         "gwa": "GWA / academic minimums",
         "field": "field of study or course alignment",
+        "members_only": "members-only priority group",
     }
     for sch in scholarships:
         stage = _hard_filter_failure_stage(profile, sch)

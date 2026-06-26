@@ -43,7 +43,10 @@ class Settings(BaseSettings):
         validation_alias="SECRET_KEY",
     )
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30  # short-lived access token; use refresh token for renewal
+    access_token_expire_minutes: int = Field(
+        default=30,
+        validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES",
+    )
     refresh_token_expire_days: int = Field(
         default=14,
         validation_alias="REFRESH_TOKEN_EXPIRE_DAYS",
@@ -66,6 +69,12 @@ class Settings(BaseSettings):
 
     # Optional Redis URL for shared scholarship cache across workers (e.g. redis://localhost:6379/0)
     redis_url: str | None = Field(default=None, validation_alias="REDIS_URL")
+
+    # Gunicorn worker count (production); default 2
+    web_concurrency: int = Field(default=2, validation_alias="WEB_CONCURRENCY")
+
+    # Trust X-Forwarded-For for rate limits when behind Render/Railway reverse proxy
+    trust_proxy_headers: bool = Field(default=False, validation_alias="TRUST_PROXY_HEADERS")
 
     # Feature flags (safe defaults: off)
     filter_expired_from_matches: bool = Field(
@@ -158,6 +167,14 @@ class Settings(BaseSettings):
         if self.run_migrations_on_startup:
             errors.append(
                 "RUN_MIGRATIONS_ON_STARTUP must be false in production; use release command: alembic upgrade head"
+            )
+        if not self.redis_url:
+            errors.append(
+                "REDIS_URL must be set in production for shared rate limits and scholarship cache"
+            )
+        if not self.trust_proxy_headers:
+            errors.append(
+                "TRUST_PROXY_HEADERS must be true in production when deployed behind Render/Railway"
             )
         if errors:
             raise RuntimeError("Invalid production configuration: " + "; ".join(errors))

@@ -2,7 +2,7 @@
 Import a CSV of scholarship rows into the staging table (pending admin approval).
 
 Each row should use column headers that map to Scholarship API fields (see schemas.Scholarship).
-Requires admin auth in production; for local dev with AUTH_DISABLED=true, staging import is open.
+Requires admin auth in production; staging import API uses require_admin.
 
 Usage:
   python -m app.scripts.csv_to_staging --csv path/to/file.csv

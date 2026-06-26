@@ -82,6 +82,7 @@ def _scholarship_to_response(s):
         "max_income_threshold": getattr(s, "max_income_threshold", None),
         "min_gwa_normalized": getattr(s, "min_gwa_normalized", None),
         "priority_groups": parse_json(getattr(s, "priority_groups", None)),
+        "members_only": getattr(s, "members_only", False) or False,
         "benefit_tuition": getattr(s, "benefit_tuition", False) or False,
         "benefit_allowance_monthly": getattr(s, "benefit_allowance_monthly", None),
         "benefit_books": getattr(s, "benefit_books", False) or False,
@@ -171,6 +172,7 @@ def persist_scholarship_from_schema(
         max_income_threshold=scholarship.max_income_threshold,
         min_gwa_normalized=scholarship.min_gwa_normalized,
         priority_groups=json.dumps(scholarship.priority_groups or []),
+        members_only=scholarship.members_only or False,
         benefit_tuition=scholarship.benefit_tuition or False,
         benefit_allowance_monthly=scholarship.benefit_allowance_monthly,
         benefit_books=scholarship.benefit_books or False,
@@ -304,6 +306,7 @@ def update_scholarship(
     s.max_income_threshold = scholarship.max_income_threshold
     s.min_gwa_normalized = scholarship.min_gwa_normalized
     s.priority_groups = json.dumps(scholarship.priority_groups or [])
+    s.members_only = scholarship.members_only or False
     s.benefit_tuition = scholarship.benefit_tuition or False
     s.benefit_allowance_monthly = scholarship.benefit_allowance_monthly
     s.benefit_books = scholarship.benefit_books or False

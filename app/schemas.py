@@ -210,6 +210,7 @@ class Scholarship(BaseModel):
     max_income_threshold: Optional[int] = Field(default=None, ge=0)
     min_gwa_normalized: Optional[float] = Field(default=None, ge=0, le=100)
     priority_groups: Optional[List[str]] = []
+    members_only: Optional[bool] = False
     preferred_extracurriculars: Optional[List[str]] = []
     preferred_awards: Optional[List[str]] = []
     benefit_tuition: Optional[bool] = False
@@ -285,6 +286,7 @@ class ScholarshipResponse(BaseModel):
     max_income_threshold: Optional[int] = None
     min_gwa_normalized: Optional[float] = None
     priority_groups: Optional[List[str]] = []
+    members_only: Optional[bool] = False
     benefit_tuition: Optional[bool] = False
     benefit_allowance_monthly: Optional[int] = None
     benefit_books: Optional[bool] = False

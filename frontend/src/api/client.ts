@@ -1,7 +1,8 @@
 const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string; PROD?: boolean } }).env;
 const _apiBase = _env?.VITE_API_BASE_URL?.trim();
+const _isProd = Boolean(_env?.PROD);
 
-if (_env?.PROD && !_apiBase) {
+if (_isProd && !_apiBase) {
   throw new Error(
     "VITE_API_BASE_URL must be set in production builds. Configure it in your hosting provider (e.g. Vercel) environment variables.",
   );
@@ -13,6 +14,9 @@ if (!_apiBase && typeof console !== "undefined") {
     "[API] VITE_API_BASE_URL is not set; using http://localhost:8000. Set it in production builds.",
   );
 }
+
+const AUTH_TOKEN_KEY = "auth_token";
+const AUTH_REFRESH_KEY = "auth_refresh_token";
 
 /** Long enough for Render cold starts (often 15–30s on free tier). */
 const FETCH_TIMEOUT_MS = 30_000;
@@ -58,6 +62,56 @@ function isIdempotentMethod(options?: RequestInit): boolean {
   return m === "GET" || m === "HEAD";
 }
 
+function hasAuthHeader(options?: RequestInit): boolean {
+  const headers = options?.headers;
+  if (!headers) return false;
+  if (headers instanceof Headers) {
+    return headers.has("Authorization");
+  }
+  if (Array.isArray(headers)) {
+    return headers.some(([k]) => k.toLowerCase() === "authorization");
+  }
+  return "Authorization" in headers || "authorization" in headers;
+}
+
+async function refreshAccessToken(): Promise<string | null> {
+  const rt = localStorage.getItem(AUTH_REFRESH_KEY);
+  if (!rt) return null;
+
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: rt }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      localStorage.removeItem(AUTH_REFRESH_KEY);
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      return null;
+    }
+    const data = (await res.json()) as { access_token?: string; refresh_token?: string };
+    if (!data.access_token) return null;
+    localStorage.setItem(AUTH_TOKEN_KEY, data.access_token);
+    if (data.refresh_token) {
+      localStorage.setItem(AUTH_REFRESH_KEY, data.refresh_token);
+    }
+    return data.access_token;
+  } catch {
+    return null;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+function withBearerToken(options: RequestInit | undefined, accessToken: string): RequestInit {
+  const headers = new Headers(options?.headers ?? undefined);
+  headers.set("Authorization", `Bearer ${accessToken}`);
+  return { ...options, headers };
+}
+
 async function fetchOnce(url: string, options?: RequestInit): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
@@ -66,7 +120,7 @@ async function fetchOnce(url: string, options?: RequestInit): Promise<Response> 
       ...options,
       signal: controller.signal,
     });
-    if (!res.ok) {
+    if (!res.ok && !_isProd) {
       const pathOnly = url.replace(/^https?:\/\/[^/]+/, "");
       const body = await res.clone().text().catch(() => "");
       console.error(`[API] ${options?.method ?? "GET"} ${pathOnly} -> ${res.status}`, body);
@@ -80,9 +134,9 @@ async function fetchOnce(url: string, options?: RequestInit): Promise<Response> 
 export async function apiFetch(path: string, options?: RequestInit): Promise<Response> {
   const url = `${API_BASE_URL}${path}`;
 
-  const attempt = async (): Promise<Response> => {
+  const attempt = async (opts?: RequestInit): Promise<Response> => {
     try {
-      return await fetchOnce(url, options);
+      return await fetchOnce(url, opts);
     } catch (err) {
       if (!isAbortOrNetworkFailure(err)) throw err;
       throw new NetworkError("Unable to reach the server", { cause: err });
@@ -92,12 +146,24 @@ export async function apiFetch(path: string, options?: RequestInit): Promise<Res
   bumpApiInFlight(1);
   try {
     try {
-      return await attempt();
+      let res = await attempt(options);
+      if (
+        res.status === 401 &&
+        hasAuthHeader(options) &&
+        !path.includes("/auth/refresh") &&
+        !path.includes("/auth/login")
+      ) {
+        const newToken = await refreshAccessToken();
+        if (newToken) {
+          res = await attempt(withBearerToken(options, newToken));
+        }
+      }
+      return res;
     } catch (first) {
       if (!(first instanceof NetworkError)) throw first;
       if (!isIdempotentMethod(options)) throw first;
       await new Promise((r) => setTimeout(r, NETWORK_RETRY_DELAY_MS));
-      return await attempt();
+      return await attempt(options);
     }
   } finally {
     bumpApiInFlight(-1);

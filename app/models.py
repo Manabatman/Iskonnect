@@ -184,6 +184,7 @@ class Scholarship(Base):
     provider_type = Column(String)  # Government | Private | LGU | Institutional
     scholarship_type = Column(String)  # Merit | Need | Merit-and-Need | Affiliation
     priority_groups = Column(Text)  # JSON list
+    members_only = Column(Boolean, default=False, nullable=False)
     preferred_extracurriculars = Column(Text)  # JSON list
     preferred_awards = Column(Text)  # JSON list
 

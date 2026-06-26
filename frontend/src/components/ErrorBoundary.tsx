@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import * as Sentry from "@sentry/react";
 
 interface Props {
   children: ReactNode;
@@ -7,6 +8,10 @@ interface Props {
 interface State {
   error: Error | null;
 }
+
+const sentryEnabled = Boolean(
+  (import.meta as unknown as { env?: { VITE_SENTRY_DSN?: string } }).env?.VITE_SENTRY_DSN,
+);
 
 /**
  * Catches render errors in child trees so one bad page does not white-screen the whole app.
@@ -19,7 +24,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   override componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("[ErrorBoundary]", error, info.componentStack);
+    if (!import.meta.env.PROD) {
+      console.error("[ErrorBoundary]", error, info.componentStack);
+    }
+    if (sentryEnabled) {
+      Sentry.captureException(error, {
+        contexts: { react: { componentStack: info.componentStack } },
+      });
+    }
   }
 
   override render() {

@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
-from app.auth import assert_can_read_profile, create_profile_read_token, get_current_user_id, get_profile_access_token
+from app.auth import assert_can_read_profile, create_profile_read_token, get_current_user_id, get_optional_user_id, get_profile_access_token
 from app.utils.audit import log_action
 from app.config import settings
 from app.db import get_db
@@ -391,7 +391,7 @@ def create_profile(
 def get_profile(
     profile_id: int,
     db: Session = Depends(get_db),
-    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+    user_id: Annotated[int | None, Depends(get_optional_user_id)] = None,
     profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
 ):
     assert_can_read_profile(profile_id, db, user_id, profile_token)

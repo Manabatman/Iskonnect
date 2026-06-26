@@ -33,6 +33,7 @@ def upgrade() -> None:
 
     # Backfill dedupe_key from title|provider|link
     if bind.dialect.name == "postgresql":
+        op.execute(text("CREATE EXTENSION IF NOT EXISTS pgcrypto"))
         op.execute(
             text(
                 """
@@ -57,10 +58,7 @@ def upgrade() -> None:
         pass
 
     if "uq_scholarships_dedupe_key" not in _index_names("scholarships", bind):
-        try:
-            op.create_index("uq_scholarships_dedupe_key", "scholarships", ["dedupe_key"], unique=True)
-        except Exception:
-            pass
+        op.create_index("uq_scholarships_dedupe_key", "scholarships", ["dedupe_key"], unique=True)
 
     # Partial unique: one pending staging row per dedupe_key
     if bind.dialect.name == "postgresql":
@@ -68,7 +66,7 @@ def upgrade() -> None:
             text(
                 """
                 CREATE UNIQUE INDEX IF NOT EXISTS uq_staging_pending_dedupe_key
-                ON scholarship_staging (dedupe_key)
+                ON scholarships_staging (dedupe_key)
                 WHERE status = 'pending' AND dedupe_key IS NOT NULL
                 """
             )

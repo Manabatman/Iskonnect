@@ -23,4 +23,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:${PORT:-8000}/health', timeout=4)" || exit 1
 
 # shell form so PORT from the platform is honored (HF Spaces uses 7860)
-CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+CMD sh -c "gunicorn app.main:app -k uvicorn.workers.UvicornWorker -w ${WEB_CONCURRENCY:-2} -b 0.0.0.0:${PORT:-8000} --forwarded-allow-ips='*' --proxy-headers"

@@ -2,6 +2,8 @@ import logging
 import traceback
 from contextlib import asynccontextmanager
 
+from typing import Annotated
+
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -33,7 +35,9 @@ from app.api.v1 import (
     suggestions,
 )
 from app.config import settings
+from app.auth import require_admin
 from app.db import engine, get_db
+from app import models
 from app.limiter import limiter
 from app.middleware.request_logger import RequestLoggingMiddleware
 from app.middleware.security_headers import SecurityHeadersMiddleware
@@ -125,6 +129,16 @@ app.add_middleware(SlowAPIMiddleware)
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     rid = getattr(request.state, "request_id", None) or request.headers.get("x-request-id", "unknown")
+    if settings.sentry_dsn:
+        try:
+            import sentry_sdk
+
+            with sentry_sdk.push_scope() as scope:
+                scope.set_tag("request_id", str(rid))
+                scope.set_tag("path", request.url.path)
+                sentry_sdk.capture_exception(exc)
+        except Exception:
+            logger.exception("sentry_capture_failed")
     logger.error(
         "[%s] unhandled_exception path=%s method=%s err=%s\n%s",
         rid,
@@ -231,9 +245,11 @@ def ready(db: Session = Depends(get_db)):
 
 
 @app.get("/metrics")
-def metrics(db: Session = Depends(get_db)):
-    """Lightweight operational counters (Prometheus-style text optional later)."""
-    from app import models
+def metrics(
+    _admin: Annotated[models.User, Depends(require_admin)],
+    db: Session = Depends(get_db),
+):
+    """Admin-only operational counters (not exposed to the public internet)."""
 
     try:
         scholarship_count = db.query(models.Scholarship).count()

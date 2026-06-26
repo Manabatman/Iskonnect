@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app import models
-from app.auth import assert_can_read_profile, get_current_user_id, get_profile_access_token
+from app.auth import assert_can_read_profile, get_optional_user_id, get_profile_access_token
 from app.db import get_db
 from app.limiter import limiter
 from app.api.v1.profiles import get_profile_dict
@@ -16,6 +16,7 @@ from app.matching.profile_completeness import profile_completeness_payload
 from app.prediction.cycle_predictor import get_upcoming_scholarships
 from app.scoring import WeightedDeterministicScorer
 from app.scoring.config import ScoringConfig
+from app.taxonomy.education_levels import level_search_literals
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -30,25 +31,25 @@ def _match_service_for_db(db: Session) -> MatchService:
 
 
 def _prefilter_scholarships_query(db: Session, profile: dict):
-    """SQL prefilter: active scholarships matching profile education level or nationwide."""
+    """SQL prefilter: active scholarships; level synonyms OR nationwide level lists.
+
+    Region is intentionally not prefiltered here — Python ``_region_matches`` applies
+    ``normalize_region`` and is the correctness layer.
+    """
+    from sqlalchemy import or_
+
     q = db.query(models.Scholarship).filter(models.Scholarship.is_active != False)  # noqa: E712
     level = (profile.get("education_level") or "").strip()
     if level:
-        q = q.filter(
-            (models.Scholarship.eligible_levels.ilike(f'%"{level}"%'))
-            | (models.Scholarship.eligible_levels.is_(None))
-            | (models.Scholarship.eligible_levels == "")
-            | (models.Scholarship.eligible_levels == "[]")
-        )
-    region = (profile.get("region") or "").strip()
-    if region:
-        q = q.filter(
-            (models.Scholarship.eligible_regions.ilike(f'%"{region}"%'))
-            | (models.Scholarship.regions.ilike(f"%{region}%"))
-            | (models.Scholarship.eligible_regions.is_(None))
-            | (models.Scholarship.eligible_regions == "")
-            | (models.Scholarship.eligible_regions == "[]")
-        )
+        literals = level_search_literals(level)
+        level_clauses = [
+            models.Scholarship.eligible_levels.is_(None),
+            models.Scholarship.eligible_levels == "",
+            models.Scholarship.eligible_levels == "[]",
+        ]
+        for lit in literals:
+            level_clauses.append(models.Scholarship.eligible_levels.ilike(f'%"{lit}"%'))
+        q = q.filter(or_(*level_clauses))
     return q
 
 
@@ -64,7 +65,7 @@ def get_matches(
     limit: int = Query(100, ge=1, le=500),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
-    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+    user_id: Annotated[int | None, Depends(get_optional_user_id)] = None,
     profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
 ):
     """Return ranked scholarship matches for a student profile.
