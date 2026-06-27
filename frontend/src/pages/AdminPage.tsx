@@ -58,6 +58,8 @@ export function AdminPage() {
   const [reports, setReports] = useState<AdminReport[]>([]);
   const [scraperRuns, setScraperRuns] = useState<ScraperRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
+  const [dataQuality, setDataQuality] = useState<Record<string, number> | null>(null);
+  const [uploadingImageId, setUploadingImageId] = useState<number | null>(null);
 
   const headers = useCallback(() => authHeaders(), [authHeaders]);
 
@@ -134,14 +136,20 @@ export function AdminPage() {
         if (!r.ok) throw new Error("scraper runs");
         return r.json();
       }),
+      apiFetch("/api/v1/admin/data-quality", { headers: headers() }).then((r) => {
+        if (!r.ok) throw new Error("data quality");
+        return r.json();
+      }),
     ])
-      .then(([h, s]) => {
+      .then(([h, s, dq]) => {
         setHealthJson(JSON.stringify(h, null, 2));
         setScraperRuns(Array.isArray(s) ? s : []);
+        setDataQuality(dq && typeof dq === "object" ? dq : null);
       })
       .catch(() => {
         setHealthJson(null);
         setScraperRuns([]);
+        setDataQuality(null);
         setError("Could not load system health (check admin role and API URL).");
       });
   }, [tab, headers]);
@@ -157,6 +165,50 @@ export function AdminPage() {
         fetchScholarships();
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Error"));
+  };
+
+  const handleImageUpload = async (scholarshipId: number, file: File) => {
+    setUploadingImageId(scholarshipId);
+    setError(null);
+    try {
+      const title = scholarships.find((s) => s.id === scholarshipId)?.title ?? "";
+      const fd = new FormData();
+      fd.append("file", file);
+      if (title) fd.append("image_alt", title);
+      const res = await apiFetch(`/api/v1/scholarships/${scholarshipId}/image`, {
+        method: "POST",
+        headers: headers(),
+        body: fd,
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.detail ?? "Image upload failed");
+      }
+      const updated = (await res.json()) as ScholarshipInfo;
+      setScholarships((prev) => prev.map((s) => (s.id === scholarshipId ? { ...s, ...updated } : s)));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Image upload failed");
+    } finally {
+      setUploadingImageId(null);
+    }
+  };
+
+  const handleImageDelete = async (scholarshipId: number) => {
+    if (!confirm("Remove this scholarship image?")) return;
+    setUploadingImageId(scholarshipId);
+    try {
+      const res = await apiFetch(`/api/v1/scholarships/${scholarshipId}/image`, {
+        method: "DELETE",
+        headers: headers(),
+      });
+      if (!res.ok) throw new Error("Failed to remove image");
+      const updated = (await res.json()) as ScholarshipInfo;
+      setScholarships((prev) => prev.map((s) => (s.id === scholarshipId ? { ...s, ...updated } : s)));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to remove image");
+    } finally {
+      setUploadingImageId(null);
+    }
   };
 
   const tabs: { id: Tab; label: string }[] = [
@@ -240,7 +292,7 @@ export function AdminPage() {
         {tab === "scholarships" && (
           <>
             <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
-              {scholarships.length} scholarships. Use API POST/PUT to add or edit.
+              {scholarships.length} scholarships. Upload banner images below or use API POST/PUT for other fields.
             </p>
             <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
               <table className="min-w-full text-sm">
@@ -250,6 +302,7 @@ export function AdminPage() {
                     <th className="px-4 py-2 text-left font-semibold">Title</th>
                     <th className="px-4 py-2 text-left font-semibold">Provider</th>
                     <th className="px-4 py-2 text-left font-semibold">Level</th>
+                    <th className="px-4 py-2 text-left font-semibold">Image</th>
                     <th className="px-4 py-2 text-left font-semibold">Active</th>
                     <th className="px-4 py-2 text-left font-semibold">Actions</th>
                   </tr>
@@ -261,6 +314,46 @@ export function AdminPage() {
                       <td className="px-4 py-2 font-medium text-slate-900 dark:text-slate-100">{s.title}</td>
                       <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{s.provider ?? "—"}</td>
                       <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{s.level ?? "—"}</td>
+                      <td className="px-4 py-2">
+                        <div className="flex flex-col gap-1">
+                          {s.image_url ? (
+                            <a
+                              href={s.image_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs text-primary-600 hover:underline dark:text-primary-400"
+                            >
+                              View
+                            </a>
+                          ) : (
+                            <span className="text-xs text-slate-400">None</span>
+                          )}
+                          <label className="cursor-pointer text-xs font-medium text-primary-600 hover:underline dark:text-primary-400">
+                            {uploadingImageId === s.id ? "Uploading…" : "Upload"}
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp"
+                              className="sr-only"
+                              disabled={uploadingImageId === s.id}
+                              onChange={(e) => {
+                                const f = e.target.files?.[0];
+                                if (f) void handleImageUpload(s.id, f);
+                                e.target.value = "";
+                              }}
+                            />
+                          </label>
+                          {s.image_url ? (
+                            <button
+                              type="button"
+                              className="text-left text-xs text-red-600 hover:underline"
+                              disabled={uploadingImageId === s.id}
+                              onClick={() => void handleImageDelete(s.id)}
+                            >
+                              Remove
+                            </button>
+                          ) : null}
+                        </div>
+                      </td>
                       <td className="px-4 py-2">
                         <span
                           className={`rounded px-2 py-0.5 text-xs font-medium ${
@@ -385,6 +478,24 @@ export function AdminPage() {
               </pre>
             </div>
             <div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Data quality</h3>
+              {dataQuality ? (
+                <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2">
+                  {Object.entries(dataQuality).map(([k, v]) => (
+                    <li
+                      key={k}
+                      className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                    >
+                      <span className="text-slate-600 dark:text-slate-400">{k.replace(/_/g, " ")}</span>
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">{v}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-sm text-slate-500">—</p>
+              )}
+            </div>
+            <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Recent scraper runs</h3>
               <div className="mt-2 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
                 <table className="min-w-full text-sm">
@@ -394,7 +505,7 @@ export function AdminPage() {
                       <th className="px-3 py-2 text-left">Source</th>
                       <th className="px-3 py-2 text-left">Status</th>
                       <th className="px-3 py-2 text-left">Found</th>
-                      <th className="px-3 py-2 text-left">Ingested</th>
+                      <th className="px-3 py-2 text-left">Error / snapshot</th>
                       <th className="px-3 py-2 text-left">Started</th>
                     </tr>
                   </thead>
@@ -405,7 +516,9 @@ export function AdminPage() {
                         <td className="px-3 py-2">{r.source}</td>
                         <td className="px-3 py-2">{r.status}</td>
                         <td className="px-3 py-2">{r.records_found ?? "—"}</td>
-                        <td className="px-3 py-2">{r.records_ingested ?? "—"}</td>
+                        <td className="max-w-xs truncate px-3 py-2 text-xs text-slate-600 dark:text-slate-400">
+                          {r.error_detail ?? r.output_path ?? "—"}
+                        </td>
                         <td className="px-3 py-2 text-xs">{r.started_at}</td>
                       </tr>
                     ))}

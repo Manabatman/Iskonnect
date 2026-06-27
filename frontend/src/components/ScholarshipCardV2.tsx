@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
@@ -84,6 +84,7 @@ export function ScholarshipCardV2({
   className = "",
 }: ScholarshipCardV2Props) {
   const [heroImageFailed, setHeroImageFailed] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const base = scholarship;
   const match = getEffectiveMatch(scholarship, matchOverlay);
   const info = asScholarshipInfo(scholarship);
@@ -93,7 +94,16 @@ export function ScholarshipCardV2({
 
   const score = match != null ? (match.final_score ?? match.score) : null;
   const visualClass = getCardVisualClasses(base.provider_type, base.scholarship_type, base.provider);
-  const heroUrl = getScholarshipHeroImageUrl(base.provider, base.provider_type);
+  const dbImageUrl = info.image_url?.trim() || null;
+  const categorySvgUrl = dbImageUrl ? null : getScholarshipHeroImageUrl(base.provider, base.provider_type);
+  const displayImageUrl = heroImageFailed ? null : dbImageUrl || categorySvgUrl;
+  const hasRealImage = Boolean(dbImageUrl && !heroImageFailed);
+
+  useEffect(() => {
+    setHeroImageFailed(false);
+    setImageLoaded(false);
+  }, [dbImageUrl]);
+
   const locationLabel = formatScholarshipLocation(base.regions, base.provider);
 
   const urgency = match
@@ -127,7 +137,7 @@ export function ScholarshipCardV2({
 
   return (
     <article
-      className={`flex h-full min-h-[520px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
+      className={`group flex h-full min-h-[520px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
       aria-labelledby={`scholarship-card-title-${base.id}`}
       role={cardInteractive ? "button" : undefined}
       tabIndex={cardInteractive ? 0 : undefined}
@@ -145,16 +155,31 @@ export function ScholarshipCardV2({
     >
       {/* Visual header */}
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-t-2xl">
-        {heroUrl && !heroImageFailed ? (
-          <img
-            src={heroUrl}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-            onError={() => setHeroImageFailed(true)}
-          />
+        {displayImageUrl ? (
+          <>
+            {!imageLoaded ? (
+              <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-slate-600 to-slate-800" aria-hidden />
+            ) : null}
+            <img
+              src={displayImageUrl}
+              alt={info.image_alt?.trim() || base.title}
+              loading="lazy"
+              decoding="async"
+              className={[
+                "absolute inset-0 h-full w-full object-cover transition-all duration-300 group-hover:scale-[1.02]",
+                imageLoaded ? "opacity-100" : "opacity-0",
+              ].join(" ")}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setHeroImageFailed(true)}
+            />
+          </>
         ) : null}
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${visualClass} ${heroUrl && !heroImageFailed ? "opacity-75" : ""}`}
+          className={[
+            "absolute inset-0 bg-gradient-to-br",
+            visualClass,
+            displayImageUrl && imageLoaded ? (hasRealImage ? "opacity-40" : "opacity-75") : "",
+          ].join(" ")}
           aria-hidden
         />
         <div

@@ -227,6 +227,8 @@ class Scholarship(BaseModel):
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
     is_active: Optional[bool] = True
+    image_url: Optional[str] = Field(default=None, max_length=2048)
+    image_alt: Optional[str] = Field(default=None, max_length=300)
 
     @field_validator("provider_type", "scholarship_type", mode="before")
     @classmethod
@@ -257,6 +259,13 @@ class Scholarship(BaseModel):
         if v and v.strip() and not v.strip().startswith(("http://", "https://")):
             raise ValueError("Link must be a valid HTTP or HTTPS URL")
         return v
+
+    @field_validator("image_url")
+    @classmethod
+    def validate_image_url(cls, v: Optional[str]) -> Optional[str]:
+        if v and v.strip() and not v.strip().startswith("https://"):
+            raise ValueError("image_url must be an HTTPS URL")
+        return v.strip() if v else v
 
 
 class ScholarshipResponse(BaseModel):
@@ -300,6 +309,8 @@ class ScholarshipResponse(BaseModel):
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
     is_active: Optional[bool] = True
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
     # Data reliability & link integrity (optional; backward compatible)
     last_verified_at: Optional[datetime] = None
     verification_source: Optional[str] = None

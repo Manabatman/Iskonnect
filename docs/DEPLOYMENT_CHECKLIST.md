@@ -1,11 +1,11 @@
 # Deployment checklist (manual verification)
 
-Use this after deploying frontend (**Vercel**) and API (**Render**) and running migrations on **Supabase** (head revision **027**).
+Use this after deploying frontend (**Vercel**) and API (**Render**) and running migrations on **Supabase** (head revision **028**).
 
 ## One-time setup
 
 - [ ] Supabase project created; **Transaction pooler** connection string copied (`postgresql+psycopg2://...:6543/...?sslmode=require`).
-- [ ] `python -m alembic upgrade head` run against production `DATABASE_URL` (verify `alembic_version` = `027`).
+- [ ] `python -m alembic upgrade head` run against production `DATABASE_URL` (verify `alembic_version` = `028`).
 - [ ] Backups enabled — see [BACKUPS.md](BACKUPS.md) (PITR or scheduled `pg_dump`).
 - [ ] `SECRET_KEY` set (e.g. `openssl rand -hex 32`).
 - [ ] `ENVIRONMENT=production`, `AUTH_DISABLED=false`, `RUN_MIGRATIONS_ON_STARTUP=false`.

@@ -43,6 +43,8 @@ export function HeroCarousel({ images, alts, className = "" }: HeroCarouselProps
             src={src}
             alt=""
             decoding="async"
+            fetchPriority={i === index ? "high" : undefined}
+            loading={i === index ? "eager" : "lazy"}
             onError={() => {
               setLoadAttemptByIndex((prev) => {
                 const a = prev[i] ?? 0;
@@ -50,7 +52,7 @@ export function HeroCarousel({ images, alts, className = "" }: HeroCarouselProps
                 return { ...prev, [i]: a + 1 };
               });
             }}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+            className={`absolute inset-0 h-full w-full object-cover object-[50%_35%] transition-opacity duration-1000 ease-in-out md:object-center ${
               i === index ? "opacity-100" : "opacity-0"
             }`}
           />

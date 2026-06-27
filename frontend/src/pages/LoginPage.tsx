@@ -71,8 +71,7 @@ export function LoginPage() {
             className="absolute left-8 top-8 h-10 w-10 lg:left-12 lg:top-12"
           />
           <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">
-            Built for Filipino students navigating scholarships and programs — with transparency,
-            clarity, and control.
+            Welcome back, Iskolar. Let's pick up right where you left off on your journey.
           </p>
         </div>
       </div>

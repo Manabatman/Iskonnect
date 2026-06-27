@@ -118,6 +118,20 @@ class Settings(BaseSettings):
     db_pool_size: int = Field(default=5, validation_alias="DB_POOL_SIZE")
     db_max_overflow: int = Field(default=10, validation_alias="DB_MAX_OVERFLOW")
 
+    # Supabase Storage (scholarship images) — optional until admin uploads enabled
+    supabase_url: str | None = Field(default=None, validation_alias="SUPABASE_URL")
+    supabase_service_role_key: str | None = Field(
+        default=None, validation_alias="SUPABASE_SERVICE_ROLE_KEY"
+    )
+    scholarship_image_bucket: str = Field(
+        default="scholarship-images",
+        validation_alias="SCHOLARSHIP_IMAGE_BUCKET",
+    )
+    scholarship_image_max_bytes: int = Field(
+        default=5 * 1024 * 1024,
+        validation_alias="SCHOLARSHIP_IMAGE_MAX_BYTES",
+    )
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""

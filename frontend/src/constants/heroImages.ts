@@ -4,7 +4,7 @@
  *
  * ## Replacing images (no code change required)
  * Swap files in place keeping the same filenames:
- * - hero-1.jpg — graduates / celebration (recommended 1920×1080 or 16:9, &lt; 400 KB WebP/JPEG)
+ * - hero-1.jpeg — graduates / celebration (recommended 1920×1080 or 16:9, &lt; 400 KB WebP/JPEG)
  * - hero-2.jpg — ceremony / campus wide shot
  * - hero-3.jpg — inspirational campus or student life
  *

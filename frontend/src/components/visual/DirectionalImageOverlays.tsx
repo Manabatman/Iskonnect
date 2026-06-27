@@ -9,7 +9,7 @@ export function HeroDirectionalOverlay() {
       {/* Left → right: copy sits on the left */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-slate-950/88 via-slate-950/50 to-slate-950/15"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-slate-950/90 via-slate-950/55 to-slate-950/20 sm:from-slate-950/85 sm:via-slate-950/50 sm:to-slate-950/15 lg:from-slate-950/80"
       />
       {/* Top depth + bottom weight */}
       <div

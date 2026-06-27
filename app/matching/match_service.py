@@ -283,4 +283,6 @@ class MatchService:
                 else scholarship.get("application_open_date")
             ),
             "required_documents": parse_json(scholarship.get("required_documents")),
+            "image_url": scholarship.get("image_url"),
+            "image_alt": scholarship.get("image_alt"),
         }

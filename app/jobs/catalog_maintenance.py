@@ -14,6 +14,7 @@ from sqlalchemy import or_, update
 
 from app import models
 from app.db import SessionLocal
+from app.jobs.data_quality import run_data_quality_checks
 from app.scrapers.run_logging import log_scraper_run
 from app.scholarship_cache import invalidate_scholarship_cache
 
@@ -72,6 +73,8 @@ def run_catalog_maintenance() -> dict[str, int]:
         except Exception as cache_err:
             logger.warning("catalog_maintenance_cache_invalidate_failed: %s", cache_err)
 
+        quality = run_data_quality_checks()
+
         log_scraper_run(
             "catalog_maintenance",
             "success",
@@ -80,7 +83,7 @@ def run_catalog_maintenance() -> dict[str, int]:
             output_path=None,
             error_detail=None,
         )
-        return {"expired": expired_count, "needs_review": review_count}
+        return {"expired": expired_count, "needs_review": review_count, "data_quality": quality}
     except Exception:
         db.rollback()
         logger.exception("catalog_maintenance_failed")
