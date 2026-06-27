@@ -163,6 +163,8 @@ class Scholarship(Base):
     link = Column(String)
     dedupe_key = Column(String, unique=True, index=True, nullable=True)
     description = Column(Text)
+    image_url = Column(String(2048), nullable=True)
+    image_alt = Column(String(300), nullable=True)
     countries = Column(String)  # CSV string (legacy)
 
     # === HARD FILTER FIELDS (must-match or score=0) ===

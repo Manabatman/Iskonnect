@@ -75,6 +75,8 @@ export interface UpcomingScholarship {
   predicted_next_open?: string | null;
   link?: string | null;
   description?: string;
+  image_url?: string | null;
+  image_alt?: string | null;
   benefit_tuition?: boolean;
   benefit_total_value?: number | null;
 }
@@ -100,6 +102,8 @@ export interface MatchResult {
   level?: string | null;
   provider_type?: string | null;
   scholarship_type?: string | null;
+  image_url?: string | null;
+  image_alt?: string | null;
   benefit_tuition?: boolean;
   benefit_allowance_monthly?: number | null;
   benefit_books?: boolean;
@@ -167,6 +171,8 @@ export interface ScholarshipInfo {
   level?: string | null;
   provider_type?: string | null;
   scholarship_type?: string | null;
+  image_url?: string | null;
+  image_alt?: string | null;
   benefit_tuition?: boolean;
   benefit_allowance_monthly?: number | null;
   benefit_books?: boolean;

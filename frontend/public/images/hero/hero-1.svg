@@ -7,5 +7,5 @@
     </linearGradient>
   </defs>
   <rect width="800" height="600" fill="url(#g1)"/>
-  <text x="400" y="300" text-anchor="middle" fill="white" fill-opacity="0.35" font-family="system-ui,sans-serif" font-size="22">Hero slide 1 - add hero-1.jpg in public/images/hero/</text>
+  <text x="400" y="300" text-anchor="middle" fill="white" fill-opacity="0.35" font-family="system-ui,sans-serif" font-size="22">Hero slide 1 - add hero-1.jpeg in public/images/hero/</text>
 </svg>

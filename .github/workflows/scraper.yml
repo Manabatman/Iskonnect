@@ -21,7 +21,7 @@ jobs:
       - name: Run PhilScholar scraper
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python -m app.scrapers.scrape_philscholar
+        run: python -m app.scrapers.scrape_runner --source philscholar
       - name: Ingest into staging
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}

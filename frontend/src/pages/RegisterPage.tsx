@@ -53,15 +53,9 @@ export function RegisterPage() {
         <AuthDirectionalOverlay />
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end p-8 lg:p-12">
           <img src="/images/logo.svg" alt="Iskonnect" className="absolute left-8 top-8 h-10 w-10 lg:left-12 lg:top-12" width={40} height={40} />
-          <blockquote className="max-w-md">
-            <p className="text-lg font-medium leading-relaxed text-white lg:text-xl">
-              One profile, ranked matches, and reminders — Iskonnect feels like a partner, not another admin
-            </p>
-            <footer className="mt-4 text-sm text-slate-300">
-              <span className="font-semibold text-white"></span>
-              <span className="text-slate-400"> · </span>
-            </footer>
-          </blockquote>
+          <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">
+            Hindi mo kailangang mangapa mag-isa.
+          </p>
         </div>
       </div>
 

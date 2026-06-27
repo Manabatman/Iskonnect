@@ -3,7 +3,7 @@ import logging
 import time
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -21,7 +21,14 @@ from app.utils.scholarship_versioning import (
 )
 from app.scholarship_cache import get_cached_scholarship_dicts as _cache_fetch_dicts
 from app.scholarship_cache import invalidate_scholarship_cache
+from app.storage.supabase_storage import (
+    StorageNotConfiguredError,
+    delete_object,
+    storage_path_from_public_url,
+    upload_object,
+)
 from app.utils.dedupe import scholarship_dedupe_key
+from app.utils.image_processing import compress_scholarship_image
 from app.utils.timezone import utc_now_naive
 
 logger = logging.getLogger(__name__)
@@ -68,6 +75,8 @@ def _scholarship_to_response(s):
         "level": getattr(s, "level", None),
         "link": s.link,
         "description": s.description,
+        "image_url": getattr(s, "image_url", None),
+        "image_alt": getattr(s, "image_alt", None),
         "provider_type": getattr(s, "provider_type", None),
         "scholarship_type": getattr(s, "scholarship_type", None),
         "eligible_levels": parse_json(getattr(s, "eligible_levels", None)),
@@ -158,6 +167,8 @@ def persist_scholarship_from_schema(
         level=scholarship.level,
         link=scholarship.link,
         description=strip_tags(scholarship.description) or scholarship.description if scholarship.description else None,
+        image_url=scholarship.image_url,
+        image_alt=strip_tags(scholarship.image_alt) or scholarship.image_alt if scholarship.image_alt else None,
         provider_type=scholarship.provider_type,
         scholarship_type=scholarship.scholarship_type,
         eligible_levels=json.dumps(scholarship.eligible_levels or []),
@@ -292,6 +303,10 @@ def update_scholarship(
     s.level = scholarship.level
     s.link = scholarship.link
     s.description = strip_tags(scholarship.description) or scholarship.description if scholarship.description else None
+    if scholarship.image_url is not None:
+        s.image_url = scholarship.image_url
+    if scholarship.image_alt is not None:
+        s.image_alt = strip_tags(scholarship.image_alt) or scholarship.image_alt
     s.provider_type = scholarship.provider_type
     s.scholarship_type = scholarship.scholarship_type
     s.eligible_levels = json.dumps(scholarship.eligible_levels or [])
@@ -372,3 +387,101 @@ def delete_scholarship(
         ip_address=request.client.host if request.client else None,
     )
     return {"status": "deactivated"}
+
+
+@router.post("/scholarships/{scholarship_id}/image", response_model=schemas.ScholarshipResponse)
+@limiter.limit("20/minute")
+async def upload_scholarship_image(
+    request: Request,
+    scholarship_id: int,
+    file: UploadFile = File(...),
+    image_alt: str | None = Form(default=None),
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Admin: upload a scholarship banner image to Supabase Storage."""
+    s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+
+    content_type = (file.content_type or "").split(";")[0].strip().lower()
+    raw = await file.read()
+    webp, digest = compress_scholarship_image(
+        raw, content_type, settings.scholarship_image_max_bytes
+    )
+    object_path = f"{scholarship_id}/{digest}.webp"
+
+    try:
+        public_url = upload_object(object_path, webp, content_type="image/webp")
+    except StorageNotConfiguredError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.exception("scholarship_image_upload_failed scholarship_id=%s", scholarship_id)
+        raise HTTPException(status_code=502, detail="Image upload failed") from exc
+
+    old_path = storage_path_from_public_url(s.image_url)
+    s.image_url = public_url
+    alt = (image_alt or s.title or "").strip()
+    s.image_alt = alt[:300] if alt else None
+    db.commit()
+    db.refresh(s)
+    invalidate_scholarship_cache()
+
+    if old_path and old_path != object_path:
+        try:
+            delete_object(old_path)
+        except Exception:
+            logger.warning("scholarship_image_old_delete_failed path=%s", old_path)
+
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="scholarship.image_upload",
+        resource_type="scholarship",
+        resource_id=scholarship_id,
+        details={"image_url": public_url},
+        ip_address=request.client.host if request.client else None,
+    )
+    return _scholarship_to_response(s)
+
+
+@router.delete("/scholarships/{scholarship_id}/image", response_model=schemas.ScholarshipResponse)
+@limiter.limit("20/minute")
+def delete_scholarship_image(
+    request: Request,
+    scholarship_id: int,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Admin: remove scholarship image from storage and clear DB fields."""
+    s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+
+    old_path = storage_path_from_public_url(s.image_url)
+    s.image_url = None
+    s.image_alt = None
+    db.commit()
+    db.refresh(s)
+    invalidate_scholarship_cache()
+
+    if old_path:
+        try:
+            delete_object(old_path)
+        except StorageNotConfiguredError:
+            pass
+        except Exception:
+            logger.warning("scholarship_image_delete_failed path=%s", old_path)
+
+    log_action(
+        db,
+        actor_id=_admin.id if _admin else None,
+        actor_type="admin",
+        action="scholarship.image_delete",
+        resource_type="scholarship",
+        resource_id=scholarship_id,
+        details={},
+        ip_address=request.client.host if request.client else None,
+    )
+    return _scholarship_to_response(s)

@@ -46,7 +46,6 @@ export function ProfileBuilderPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveOk, setSaveOk] = useState<string | null>(null);
   const [consentModalOpen, setConsentModalOpen] = useState(false);
-  const consentCheckboxRef = useRef<HTMLInputElement | null>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {

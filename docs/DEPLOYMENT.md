@@ -40,9 +40,23 @@ Beginner-oriented architecture and debugging: **[HANDBOOK.md](HANDBOOK.md)**.
 
 ## Supabase
 
-- Run migrations locally: `python -m alembic upgrade head` with `DATABASE_URL` pointing at Supabase. Head revision is **027**.
+- Run migrations locally: `python -m alembic upgrade head` with `DATABASE_URL` pointing at Supabase. Head revision is **028**.
 - Enable backups: see **[BACKUPS.md](BACKUPS.md)** (PITR or scheduled `pg_dump`).
 - GitHub secret `DATABASE_URL`: same URI as Render (for scraper, deadline, and retention workflows).
+
+### Scholarship images (Supabase Storage)
+
+Optional admin-uploaded banner images use **Supabase Storage**, not the database.
+
+1. In Supabase Dashboard → **Storage** → **New bucket** → name `scholarship-images` → **Public bucket** enabled.
+2. **Policies** (Storage → bucket → Policies): allow public `SELECT`; do **not** grant `INSERT`/`UPDATE`/`DELETE` to `anon` or `authenticated`. The FastAPI backend uploads with the **service role** key (bypasses RLS).
+3. On Render, set:
+   - `SUPABASE_URL` — project URL (`https://<project-ref>.supabase.co`)
+   - `SUPABASE_SERVICE_ROLE_KEY` — service role secret (server only; never in Vercel)
+   - `SCHOLARSHIP_IMAGE_BUCKET=scholarship-images` (optional; this is the default)
+4. After deploy, admins upload via `POST /api/v1/scholarships/{id}/image` (multipart) or the Admin UI. Public URLs look like:
+   `https://<project>.supabase.co/storage/v1/object/public/scholarship-images/<id>/<hash>.webp`
+5. Scholarships without `image_url` keep the existing gradient/SVG card fallback (backward compatible).
 
 ## GitHub Actions
 
