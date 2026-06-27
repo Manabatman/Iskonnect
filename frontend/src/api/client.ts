@@ -18,8 +18,8 @@ if (!_apiBase && typeof console !== "undefined") {
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
 
-/** Long enough for Render cold starts (often 15–30s on free tier). */
-const FETCH_TIMEOUT_MS = 30_000;
+/** Long enough for Render free-tier cold starts (often 50s+ after spin-down). */
+const FETCH_TIMEOUT_MS = 70_000;
 const NETWORK_RETRY_DELAY_MS = 1_000;
 
 const API_BUSY = "iskonnect-api-busy";
