@@ -38,7 +38,7 @@ export function ApiWarmupBanner() {
       aria-live="polite"
     >
       Connecting to server… If this is your first visit after a while, waking the API can take up
-      to 30 seconds — please wait.
+      to 70 seconds — please wait.
     </div>
   );
 }
