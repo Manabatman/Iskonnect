@@ -1,8 +1,0 @@
-<!-- Replace this file to customize the dark-theme logo (light strokes on dark chrome). -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <path fill="#e2e8f0" d="M32 4L8 18v4l24 12 24-12v-4L32 4z"/>
-  <path fill="#e2e8f0" d="M8 26v18c0 6 10.7 12 24 12s24-6 24-12V26L32 38 8 26z"/>
-  <circle cx="32" cy="18" r="4" fill="#0f172a"/>
-  <path stroke="#0f172a" stroke-width="2" stroke-linecap="round" d="M36 18h14"/>
-  <path fill="#e2e8f0" d="M46 22c2 0 4 2 4 4v6h-4v-6c0-.6-.4-1-1-1h-2v-3h3z"/>
-</svg>

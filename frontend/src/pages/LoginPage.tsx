@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
+import { brandLogoSrc, LOGO_LIGHT_SRC } from "../lib/brandLogo";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
@@ -30,7 +31,7 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [authPanelSrc, setAuthPanelSrc] = useState(AUTH_PANEL_PRIMARY);
-  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.svg";
+  const logoSrc = brandLogoSrc(resolvedTheme);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -61,14 +62,14 @@ export function LoginPage() {
         <AuthDirectionalOverlay />
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end p-8 lg:p-12">
           <img
-            src={brandLogoSrc}
+            src={logoSrc}
             alt="Iskonnect"
             width={40}
             height={40}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/logo.svg";
+              (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
             }}
-            className="absolute left-8 top-8 h-10 w-10 lg:left-12 lg:top-12"
+            className="absolute left-8 top-8 h-10 w-10 object-contain lg:left-12 lg:top-12"
           />
           <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">
             Welcome back, Iskolar. Let's pick up right where you left off on your journey.

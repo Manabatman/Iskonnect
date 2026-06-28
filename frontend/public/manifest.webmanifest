@@ -9,9 +9,9 @@ export default {
   start_url: "/",
   icons: [
     {
-      src: "/images/logo.svg",
-      sizes: "any",
-      type: "image/svg+xml",
+      src: "/images/logo-light.png",
+      sizes: "512x512",
+      type: "image/png",
       purpose: "any",
     },
   ],

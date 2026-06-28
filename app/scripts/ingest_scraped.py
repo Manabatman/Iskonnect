@@ -1,5 +1,5 @@
 """
-Load raw JSON from scrapers into scholarships_staging (pending admin approval).
+Load raw JSON from scrapers into scholarships_staging; trusted scraper sources auto-promote to live.
 
 Usage:
   python -m app.scripts.ingest_scraped --source data/raw/philscholar_2026-04-03.json
@@ -20,6 +20,8 @@ from app.config import settings
 from app.db import SessionLocal
 from app import models
 from app.schemas import Scholarship
+from app.scholarship_cache import invalidate_scholarship_cache
+from app.utils.staging_promotion import is_trusted_scraper_source, promote_staging_row
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +86,7 @@ def main() -> None:
         raise SystemExit("JSON root must be an array")
 
     db = SessionLocal()
-    created = skipped_dup = skipped_inv = skipped_live = 0
+    created_staging = approved_live = skipped_dup = skipped_inv = skipped_live = 0
     try:
         for i, row in enumerate(data):
             if not isinstance(row, dict):
@@ -136,11 +138,21 @@ def main() -> None:
                 dedupe_key=key,
             )
             db.add(st)
-            created += 1
+            db.flush()
+            if is_trusted_scraper_source(source):
+                if promote_staging_row(db, st) is not None:
+                    approved_live += 1
+                else:
+                    skipped_dup += 1
+            else:
+                created_staging += 1
         db.commit()
+        if approved_live > 0:
+            invalidate_scholarship_cache()
         print(
-            f"Ingest complete: created={created}, skipped_duplicate={skipped_dup}, "
-            f"skipped_invalid={skipped_inv}, skipped_already_live={skipped_live}"
+            f"Ingest complete: staging_pending={created_staging}, approved_live={approved_live}, "
+            f"skipped_duplicate={skipped_dup}, skipped_invalid={skipped_inv}, "
+            f"skipped_already_live={skipped_live}"
         )
         try:
             from app.scrapers.run_logging import log_scraper_run
@@ -149,7 +161,7 @@ def main() -> None:
                 "philscholar_ingest",
                 "success",
                 records_found=len(data),
-                records_ingested=created,
+                records_ingested=approved_live + created_staging,
                 output_path=str(path),
             )
         except Exception as log_err:

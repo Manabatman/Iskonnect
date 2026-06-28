@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
 
-type Tab = "scholarships" | "users" | "matches" | "feedback" | "reports" | "system";
+type Tab = "scholarships" | "staging" | "users" | "matches" | "feedback" | "reports" | "system";
 
 type AdminUser = { id: number; email: string; role: string; email_verified: boolean };
 type AdminMatchRun = {
@@ -44,6 +44,15 @@ type ScraperRunRow = {
   output_path: string | null;
   error_detail: string | null;
 };
+type StagingRow = {
+  id: number;
+  title: string;
+  provider: string | null;
+  source: string | null;
+  status: string;
+  dedupe_key: string | null;
+  created_at: string;
+};
 
 export function AdminPage() {
   const { authHeaders } = useAuth();
@@ -60,6 +69,8 @@ export function AdminPage() {
   const [healthJson, setHealthJson] = useState<string | null>(null);
   const [dataQuality, setDataQuality] = useState<Record<string, number> | null>(null);
   const [uploadingImageId, setUploadingImageId] = useState<number | null>(null);
+  const [stagingRows, setStagingRows] = useState<StagingRow[]>([]);
+  const [stagingActionId, setStagingActionId] = useState<number | null>(null);
 
   const headers = useCallback(() => authHeaders(), [authHeaders]);
 
@@ -112,6 +123,18 @@ export function AdminPage() {
         return r.json();
       })
       .then((d: AdminFeedback[]) => setFeedback(Array.isArray(d) ? d : []))
+      .catch((e) => setError(e instanceof Error ? e.message : "Error"));
+  }, [tab, headers]);
+
+  useEffect(() => {
+    if (tab !== "staging") return;
+    setError(null);
+    apiFetch("/api/v1/scholarships/staging/pending", { headers: headers() })
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load pending staging rows");
+        return r.json();
+      })
+      .then((d: StagingRow[]) => setStagingRows(Array.isArray(d) ? d : []))
       .catch((e) => setError(e instanceof Error ? e.message : "Error"));
   }, [tab, headers]);
 
@@ -211,8 +234,51 @@ export function AdminPage() {
     }
   };
 
+  const handleStagingApprove = async (stagingId: number) => {
+    setStagingActionId(stagingId);
+    setError(null);
+    try {
+      const res = await apiFetch(`/api/v1/scholarships/staging/${stagingId}/approve`, {
+        method: "POST",
+        headers: headers(),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.detail ?? "Approve failed");
+      }
+      setStagingRows((prev) => prev.filter((r) => r.id !== stagingId));
+      fetchScholarships();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Approve failed");
+    } finally {
+      setStagingActionId(null);
+    }
+  };
+
+  const handleStagingReject = async (stagingId: number) => {
+    if (!confirm("Reject this staging row? It will not be added to the live catalog.")) return;
+    setStagingActionId(stagingId);
+    setError(null);
+    try {
+      const res = await apiFetch(`/api/v1/scholarships/staging/${stagingId}/reject`, {
+        method: "POST",
+        headers: headers(),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.detail ?? "Reject failed");
+      }
+      setStagingRows((prev) => prev.filter((r) => r.id !== stagingId));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Reject failed");
+    } finally {
+      setStagingActionId(null);
+    }
+  };
+
   const tabs: { id: Tab; label: string }[] = [
     { id: "scholarships", label: "Scholarships" },
+    { id: "staging", label: "Pending" },
     { id: "users", label: "Users" },
     { id: "matches", label: "Matches" },
     { id: "feedback", label: "Feedback" },
@@ -380,6 +446,64 @@ export function AdminPage() {
                 </tbody>
               </table>
             </div>
+          </>
+        )}
+
+        {tab === "staging" && (
+          <>
+            <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
+              {stagingRows.length} pending row(s) awaiting approval. Approved rows are published to the live
+              catalog; rejected rows are discarded.
+            </p>
+            {stagingRows.length === 0 ? (
+              <p className="text-slate-600 dark:text-slate-400">No pending staging scholarships.</p>
+            ) : (
+              <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-slate-50 dark:bg-slate-800">
+                    <tr>
+                      <th className="px-4 py-2 text-left font-semibold">ID</th>
+                      <th className="px-4 py-2 text-left font-semibold">Title</th>
+                      <th className="px-4 py-2 text-left font-semibold">Provider</th>
+                      <th className="px-4 py-2 text-left font-semibold">Source</th>
+                      <th className="px-4 py-2 text-left font-semibold">Queued</th>
+                      <th className="px-4 py-2 text-left font-semibold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stagingRows.map((r) => (
+                      <tr key={r.id} className="border-t border-slate-100 dark:border-slate-700">
+                        <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{r.id}</td>
+                        <td className="px-4 py-2 font-medium text-slate-900 dark:text-slate-100">{r.title}</td>
+                        <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{r.provider ?? "—"}</td>
+                        <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{r.source ?? "—"}</td>
+                        <td className="px-4 py-2 text-xs text-slate-500">{formatDateTime(r.created_at)}</td>
+                        <td className="px-4 py-2">
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              disabled={stagingActionId === r.id}
+                              onClick={() => void handleStagingApprove(r.id)}
+                              className="rounded bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                            >
+                              {stagingActionId === r.id ? "…" : "Approve"}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={stagingActionId === r.id}
+                              onClick={() => void handleStagingReject(r.id)}
+                              className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950/40"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </>
         )}
 

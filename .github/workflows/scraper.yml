@@ -41,3 +41,7 @@ jobs:
             exit 1
           fi
           python -m app.scripts.ingest_scraped --source "data/raw/philscholar_${TODAY}.json"
+      - name: Promote any backlog pending scraper staging rows
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python -m app.scripts.promote_pending_scraper_staging
