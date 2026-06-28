@@ -18,8 +18,35 @@ class StorageNotConfiguredError(RuntimeError):
     """Raised when SUPABASE_URL or service role key is missing."""
 
 
+def _normalize_supabase_base(url: str) -> str:
+    """Project root only — Storage API is not under /rest/v1."""
+    base = url.strip().rstrip("/")
+    if base.endswith("/rest/v1"):
+        base = base[: -len("/rest/v1")].rstrip("/")
+    return base
+
+
+def _storage_auth_headers(
+    key: str,
+    *,
+    content_type: str | None = None,
+    upsert: bool = False,
+) -> dict[str, str]:
+    """Supabase Storage requires both Authorization and apikey."""
+    headers = {
+        "Authorization": f"Bearer {key}",
+        "apikey": key,
+    }
+    if content_type:
+        headers["Content-Type"] = content_type
+        headers["Cache-Control"] = CACHE_CONTROL
+    if upsert:
+        headers["x-upsert"] = "true"
+    return headers
+
+
 def _require_config() -> tuple[str, str, str]:
-    base = (settings.supabase_url or "").strip().rstrip("/")
+    base = _normalize_supabase_base(settings.supabase_url or "")
     key = (settings.supabase_service_role_key or "").strip()
     bucket = (settings.scholarship_image_bucket or "scholarship-images").strip()
     if not base or not key:
@@ -50,13 +77,7 @@ def upload_object(
     b = bucket or default_bucket
     encoded = "/".join(quote(part, safe="") for part in object_path.split("/"))
     url = f"{base}/storage/v1/object/{b}/{encoded}"
-    headers = {
-        "Authorization": f"Bearer {key}",
-        "Content-Type": content_type,
-        "Cache-Control": CACHE_CONTROL,
-    }
-    if upsert:
-        headers["x-upsert"] = "true"
+    headers = _storage_auth_headers(key, content_type=content_type, upsert=upsert)
     with httpx.Client(timeout=30.0) as client:
         r = client.post(url, content=data, headers=headers)
         if r.status_code not in (200, 201):
@@ -71,7 +92,7 @@ def delete_object(object_path: str, *, bucket: str | None = None) -> None:
     b = bucket or default_bucket
     encoded = "/".join(quote(part, safe="") for part in object_path.split("/"))
     url = f"{base}/storage/v1/object/{b}/{encoded}"
-    headers = {"Authorization": f"Bearer {key}"}
+    headers = _storage_auth_headers(key)
     with httpx.Client(timeout=30.0) as client:
         r = client.delete(url, headers=headers)
         if r.status_code not in (200, 204, 404):
