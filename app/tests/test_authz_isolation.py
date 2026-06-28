@@ -108,6 +108,84 @@ def test_user_cannot_access_other_users_match_run(api_with_db):
     assert denied.status_code == 404
 
 
+def test_user_can_delete_own_match_run(api_with_db):
+    client, Session = api_with_db
+    user_a, headers_a = _user_token(Session, "delete_match_a@example.com")
+
+    db = Session()
+    try:
+        sch = models.Scholarship(
+            title="Delete Run Test",
+            provider="Test",
+            link="https://example.com/delete-run",
+            is_active=True,
+        )
+        db.add(sch)
+        db.commit()
+        db.refresh(sch)
+
+        profile = models.Student(user_id=user_a.id, full_name="Delete Match A", email=user_a.email)
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+        run = models.MatchRun(user_id=user_a.id, profile_id=profile.id)
+        db.add(run)
+        db.flush()
+        db.add(
+            models.MatchResult(
+                run_id=run.id,
+                scholarship_id=sch.id,
+                score=0.5,
+                final_score=0.5,
+            )
+        )
+        db.commit()
+        db.refresh(run)
+        run_id = run.id
+    finally:
+        db.close()
+
+    deleted = client.delete(f"/api/v1/match-runs/{run_id}", headers=headers_a)
+    assert deleted.status_code == 200
+    assert deleted.json()["status"] == "deleted"
+
+    gone = client.get(f"/api/v1/match-runs/{run_id}", headers=headers_a)
+    assert gone.status_code == 404
+
+    db = Session()
+    try:
+        assert db.query(models.MatchRun).filter(models.MatchRun.id == run_id).first() is None
+        assert db.query(models.MatchResult).filter(models.MatchResult.run_id == run_id).count() == 0
+    finally:
+        db.close()
+
+
+def test_user_cannot_delete_other_users_match_run(api_with_db):
+    client, Session = api_with_db
+    user_a, headers_a = _user_token(Session, "delete_match_owner@example.com")
+    _user_b, headers_b = _user_token(Session, "delete_match_other@example.com")
+
+    db = Session()
+    try:
+        profile = models.Student(user_id=user_a.id, full_name="Owner", email=user_a.email)
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+        run = models.MatchRun(user_id=user_a.id, profile_id=profile.id)
+        db.add(run)
+        db.commit()
+        db.refresh(run)
+        run_id = run.id
+    finally:
+        db.close()
+
+    denied = client.delete(f"/api/v1/match-runs/{run_id}", headers=headers_b)
+    assert denied.status_code == 404
+
+    ok = client.get(f"/api/v1/match-runs/{run_id}", headers=headers_a)
+    assert ok.status_code == 200
+
+
 def test_user_b_cannot_remove_user_a_saved_scholarship(api_with_db):
     client, Session = api_with_db
     _user_a, headers_a = _user_token(Session, "saved_a@example.com")

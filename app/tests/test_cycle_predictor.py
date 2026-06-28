@@ -69,5 +69,7 @@ def test_get_upcoming_scholarships_returns_qualifying_with_future_prediction():
     result = get_upcoming_scholarships(profile, scholarships)
     assert len(result) == 1
     assert result[0]["title"] == "Test Scholarship"
+    assert "image_url" in result[0]
+    assert "image_alt" in result[0]
     expected_next = (last_open.replace(year=last_open.year + 1)).isoformat()
     assert result[0]["predicted_next_open"] == expected_next

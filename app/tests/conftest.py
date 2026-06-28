@@ -21,6 +21,24 @@ from app import models  # noqa: F401 — register ORM models on Base
 from app.db import Base, get_db
 
 
+@pytest.fixture(autouse=True)
+def _reset_api_rate_limits():
+    """Clear in-memory rate-limit counters between tests (shared TestClient IP)."""
+    from app.limiter import limiter
+
+    def _clear() -> None:
+        try:
+            storage = getattr(limiter, "_storage", None)
+            if storage is not None and hasattr(storage, "storage"):
+                storage.storage.clear()
+        except Exception:
+            pass
+
+    _clear()
+    yield
+    _clear()
+
+
 @pytest.fixture
 def sqlite_engine():
     """In-memory SQLite engine with StaticPool (single connection for thread safety)."""

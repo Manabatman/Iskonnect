@@ -10,6 +10,7 @@ from app.matching.scoring_port import ScoringEnginePort, ScoringPayload, Scoring
 from app.scoring import WeightedDeterministicScorer
 from app.taxonomy.regions import normalize_region
 from app.taxonomy.income_brackets import get_income_bracket
+from app.serialization.scholarship import build_match_result_payload
 from app.utils.json_helpers import parse_json
 
 
@@ -245,16 +246,7 @@ class MatchService:
         if deadline_passed and DEADLINE_PASSED_MESSAGE not in explanation:
             explanation.insert(0, DEADLINE_PASSED_MESSAGE)
 
-        return {
-            "id": scholarship.get("id"),
-            "title": scholarship.get("title"),
-            "provider": scholarship.get("provider"),
-            "link": scholarship.get("link"),
-            "description": scholarship.get("description"),
-            "regions": parse_json(scholarship.get("regions") or scholarship.get("eligible_regions")),
-            "min_age": scholarship.get("min_age"),
-            "max_age": scholarship.get("max_age"),
-            "level": scholarship.get("level"),
+        scoring = {
             "score": scoring_result.final_score,
             "final_score": scoring_result.final_score,
             "eligibility_status": eligibility_status,
@@ -266,23 +258,5 @@ class MatchService:
             "suggestions": getattr(scoring_result, "suggestions", None) or [],
             "why_not_higher": getattr(scoring_result, "why_not_higher", None) or [],
             "scoring_policy_version": getattr(scoring_result, "scoring_policy_version", None) or "",
-            "provider_type": scholarship.get("provider_type"),
-            "scholarship_type": scholarship.get("scholarship_type"),
-            "benefit_tuition": scholarship.get("benefit_tuition"),
-            "benefit_allowance_monthly": scholarship.get("benefit_allowance_monthly"),
-            "benefit_books": scholarship.get("benefit_books"),
-            "benefit_total_value": scholarship.get("benefit_total_value"),
-            "application_deadline": (
-                scholarship.get("application_deadline").isoformat()
-                if hasattr(scholarship.get("application_deadline"), "isoformat")
-                else scholarship.get("application_deadline")
-            ),
-            "application_open_date": (
-                scholarship.get("application_open_date").isoformat()
-                if hasattr(scholarship.get("application_open_date"), "isoformat")
-                else scholarship.get("application_open_date")
-            ),
-            "required_documents": parse_json(scholarship.get("required_documents")),
-            "image_url": scholarship.get("image_url"),
-            "image_alt": scholarship.get("image_alt"),
         }
+        return build_match_result_payload(scholarship, scoring=scoring)

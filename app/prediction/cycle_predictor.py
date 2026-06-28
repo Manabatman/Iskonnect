@@ -6,6 +6,7 @@ import logging
 from datetime import date
 
 from app.matching.hard_filters import filter_scholarships
+from app.serialization.scholarship import build_upcoming_scholarship_payload
 
 logger = logging.getLogger(__name__)
 
@@ -84,19 +85,15 @@ def get_upcoming_scholarships(
         last_close_str = last_close.isoformat() if last_close else None
         predicted_str = predicted.isoformat() if predicted else None
         results.append(
-            {
-                "id": sch.get("id"),
-                "title": sch.get("title"),
-                "provider": sch.get("provider"),
-                "cycle_type": cycle_type,
-                "last_open_date": last_open_str,
-                "last_close_date": last_close_str,
-                "predicted_next_open": predicted_str,
-                "link": sch.get("link"),
-                "description": sch.get("description"),
-                "benefit_tuition": sch.get("benefit_tuition"),
-                "benefit_total_value": sch.get("benefit_total_value"),
-            }
+            build_upcoming_scholarship_payload(
+                sch,
+                cycle={
+                    "cycle_type": cycle_type,
+                    "last_open_date": last_open_str,
+                    "last_close_date": last_close_str,
+                    "predicted_next_open": predicted_str,
+                },
+            )
         )
     results.sort(key=lambda r: r.get("predicted_next_open") or "")
     if logger.isEnabledFor(logging.DEBUG):

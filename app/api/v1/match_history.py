@@ -14,6 +14,14 @@ from app.limiter import limiter
 from app.api.v1.matches import _match_service_for_db
 from app.api.v1.profiles import get_profile_dict
 from app.api.v1.scholarships import get_cached_scholarship_dicts
+from app.matching.hard_filters import is_application_deadline_passed
+from app.serialization.scholarship import (
+    MATCH_MINIMAL_EXTRA_KEYS,
+    build_match_result_payload,
+    build_stored_match_scoring,
+    scholarship_card_fields,
+    scholarship_to_catalog_dict,
+)
 from app.utils.notification_helpers import create_notifications_for_match_results
 from app.utils.timezone import to_philippine_iso
 
@@ -59,55 +67,24 @@ def _result_to_match_response(
     fields: str = "full",
 ) -> dict:
     """Build match response dict from MatchResult + Scholarship for display."""
-    regions = []
-    if scholarship.regions:
-        regions = [x.strip() for x in scholarship.regions.split(",") if x.strip()]
-    if not regions and scholarship.eligible_regions:
-        try:
-            regions = json.loads(scholarship.eligible_regions) if isinstance(scholarship.eligible_regions, str) else scholarship.eligible_regions or []
-        except (json.JSONDecodeError, TypeError):
-            regions = []
-    score = r.final_score if r.final_score is not None else r.score
+    catalog = scholarship_to_catalog_dict(scholarship)
+    scoring = build_stored_match_scoring(
+        r,
+        explanation=_json_list_from_db(r.explanation),
+        breakdown=_json_dict_from_db(r.breakdown),
+        suggestions=_json_list_from_db(r.suggestions),
+        why_not_higher=_json_list_from_db(r.why_not_higher),
+    )
+    scoring["deadline_passed"] = is_application_deadline_passed(catalog.get("application_deadline"))
+    payload = build_match_result_payload(catalog, scoring=scoring)
     if fields == "minimal":
-        return {
-            "id": scholarship.id,
-            "title": scholarship.title,
-            "provider": scholarship.provider,
-            "score": score,
-            "final_score": score,
-            "eligibility_status": r.eligibility_status,
-            "confidence": r.confidence,
-            "application_deadline": scholarship.application_deadline.isoformat()
-            if scholarship.application_deadline
-            else None,
-        }
-    return {
-        "id": scholarship.id,
-        "title": scholarship.title,
-        "provider": scholarship.provider,
-        "score": score,
-        "final_score": score,
-        "explanation": _json_list_from_db(r.explanation),
-        "breakdown": _json_dict_from_db(r.breakdown),
-        "link": scholarship.link,
-        "description": scholarship.description,
-        "regions": regions,
-        "min_age": scholarship.min_age,
-        "max_age": scholarship.max_age,
-        "level": scholarship.level,
-        "provider_type": scholarship.provider_type,
-        "scholarship_type": scholarship.scholarship_type,
-        "benefit_tuition": scholarship.benefit_tuition,
-        "benefit_allowance_monthly": scholarship.benefit_allowance_monthly,
-        "benefit_books": scholarship.benefit_books,
-        "benefit_total_value": scholarship.benefit_total_value,
-        "application_deadline": scholarship.application_deadline.isoformat() if scholarship.application_deadline else None,
-        "required_documents": _json_list_from_db(scholarship.required_documents),
-        "suggestions": _json_list_from_db(r.suggestions),
-        "confidence": r.confidence,
-        "why_not_higher": _json_list_from_db(r.why_not_higher),
-        "scoring_policy_version": r.scoring_policy_version,
-    }
+        card = scholarship_card_fields(catalog)
+        minimal = {k: card.get(k) for k in ("id", "title", "provider", "image_url", "image_alt")}
+        for key in MATCH_MINIMAL_EXTRA_KEYS:
+            if key in payload:
+                minimal[key] = payload[key]
+        return minimal
+    return payload
 
 
 @router.post("/match-runs")
@@ -310,3 +287,29 @@ def get_match_run(
         results=match_responses,
         ph_created_at=to_philippine_iso(run.created_at),
     )
+
+
+@router.delete("/match-runs/{run_id}")
+@limiter.limit("30/minute")
+def delete_match_run(
+    request: Request,
+    run_id: int,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """Delete a match run and its results. Requires auth and ownership."""
+    uid = _require_user_id(user_id)
+
+    run = db.query(models.MatchRun).filter(models.MatchRun.id == run_id).first()
+    if not run or run.user_id != uid:
+        logger.warning("match_run_delete_not_found run_id=%s user_id=%s", run_id, uid)
+        raise HTTPException(status_code=404, detail="Match run not found")
+
+    db.query(models.MatchResult).filter(models.MatchResult.run_id == run_id).delete(
+        synchronize_session=False
+    )
+    db.delete(run)
+    db.commit()
+
+    logger.info("match_run_deleted run_id=%s user_id=%s", run_id, uid)
+    return {"status": "deleted"}

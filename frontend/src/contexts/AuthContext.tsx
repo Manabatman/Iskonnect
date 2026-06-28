@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { NetworkError, apiFetch } from "../api/client";
+import { clearProfileDraft } from "../components/profile-builder/profileBuilderState";
 
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
@@ -160,6 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);
       setAuthError(null);
+      clearProfileDraft();
       dispatchAuthUserChanged(data.user_id);
     },
     [setToken, setRefreshToken]
@@ -183,6 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);
       setAuthError(null);
+      clearProfileDraft();
       dispatchAuthUserChanged(data.user_id);
     },
     [setToken, setRefreshToken]
@@ -205,6 +208,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     setUser(null);
     setAuthError(null);
+    clearProfileDraft();
     dispatchAuthUserChanged(null);
   }, [setToken, setRefreshToken]);
 

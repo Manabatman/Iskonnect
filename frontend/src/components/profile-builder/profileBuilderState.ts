@@ -43,6 +43,15 @@ export interface ProfileBuilderState {
 
 export const DRAFT_KEY = "iskonnect_profile_draft";
 
+/** Remove device-local profile builder draft (call on login/register/logout). */
+export function clearProfileDraft(): void {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Not counted toward profile-builder completion % (optional UX fields). */
 export const OPTIONAL_PROFILE_FIELDS = new Set<keyof ProfileBuilderState>([
   "barangay",
