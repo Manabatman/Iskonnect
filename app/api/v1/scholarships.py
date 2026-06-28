@@ -58,79 +58,10 @@ def get_cached_scholarship_dicts(db: Session) -> list[dict]:
     return _cache_fetch_dicts(db, _build_all_scholarship_dicts)
 
 
-def _scholarship_to_response(s):
-    regions = parse_json(s.regions)
-    if not regions and getattr(s, "eligible_regions", None):
-        regions = parse_json(s.eligible_regions)
-    return {
-        "id": s.id,
-        "title": s.title,
-        "provider": s.provider,
-        "source": getattr(s, "source", None),
-        "countries": parse_json(s.countries),
-        "regions": regions,
-        "min_age": s.min_age,
-        "max_age": s.max_age,
-        "needs_tags": parse_json(s.needs_tags),
-        "level": getattr(s, "level", None),
-        "link": s.link,
-        "description": s.description,
-        "image_url": getattr(s, "image_url", None),
-        "image_alt": getattr(s, "image_alt", None),
-        "provider_type": getattr(s, "provider_type", None),
-        "scholarship_type": getattr(s, "scholarship_type", None),
-        "eligible_levels": parse_json(getattr(s, "eligible_levels", None)),
-        "eligible_regions": parse_json(getattr(s, "eligible_regions", None)),
-        "eligible_cities": parse_json(getattr(s, "eligible_cities", None)),
-        "residency_required": getattr(s, "residency_required", False) or False,
-        "eligible_school_types": parse_json(getattr(s, "eligible_school_types", None)),
-        "eligible_courses_psced": parse_json(getattr(s, "eligible_courses_psced", None)),
-        "eligible_courses_specific": parse_json(getattr(s, "eligible_courses_specific", None)),
-        "preferred_extracurriculars": parse_json(getattr(s, "preferred_extracurriculars", None)),
-        "preferred_awards": parse_json(getattr(s, "preferred_awards", None)),
-        "max_income_threshold": getattr(s, "max_income_threshold", None),
-        "min_gwa_normalized": getattr(s, "min_gwa_normalized", None),
-        "priority_groups": parse_json(getattr(s, "priority_groups", None)),
-        "members_only": getattr(s, "members_only", False) or False,
-        "benefit_tuition": getattr(s, "benefit_tuition", False) or False,
-        "benefit_allowance_monthly": getattr(s, "benefit_allowance_monthly", None),
-        "benefit_books": getattr(s, "benefit_books", False) or False,
-        "benefit_total_value": getattr(s, "benefit_total_value", None),
-        "required_documents": parse_json(getattr(s, "required_documents", None)),
-        "has_qualifying_exam": getattr(s, "has_qualifying_exam", False) or False,
-        "has_interview": getattr(s, "has_interview", False) or False,
-        "has_essay_requirement": getattr(s, "has_essay_requirement", False) or False,
-        "has_return_service": getattr(s, "has_return_service", False) or False,
-        "application_deadline": getattr(s, "application_deadline", None),
-        "application_open_date": getattr(s, "application_open_date", None),
-        "academic_year_target": getattr(s, "academic_year_target", None),
-        "is_active": getattr(s, "is_active", True),
-        "last_verified_at": getattr(s, "last_verified_at", None),
-        "verification_source": getattr(s, "verification_source", None),
-        "confidence_score": getattr(s, "confidence_score", None),
-        "data_status": getattr(s, "data_status", None),
-        "link_status": getattr(s, "link_status", None),
-        "link_last_checked_at": getattr(s, "link_last_checked_at", None),
-        "link_failure_count": getattr(s, "link_failure_count", None),
-    }
-
-
-def _scholarship_to_dict(s):
-    """Full dict for matching (includes all fields)."""
-    d = _scholarship_to_response(s)
-    ad = getattr(s, "application_deadline", None)
-    d["application_deadline"] = ad.isoformat() if ad and hasattr(ad, "isoformat") else ad
-    # Cycle prediction fields
-    lod = getattr(s, "last_open_date", None)
-    lcd = getattr(s, "last_close_date", None)
-    d["last_open_date"] = lod.isoformat() if lod and hasattr(lod, "isoformat") else lod
-    d["last_close_date"] = lcd.isoformat() if lcd and hasattr(lcd, "isoformat") else lcd
-    d["cycle_type"] = getattr(s, "cycle_type", None)
-    lva = getattr(s, "last_verified_at", None)
-    d["last_verified_at"] = lva.isoformat() if lva and hasattr(lva, "isoformat") else lva
-    llc = getattr(s, "link_last_checked_at", None)
-    d["link_last_checked_at"] = llc.isoformat() if llc and hasattr(llc, "isoformat") else llc
-    return d
+from app.serialization.scholarship import (
+    scholarship_to_api_payload as _scholarship_to_response,
+    scholarship_to_catalog_dict as _scholarship_to_dict,
+)
 
 
 def persist_scholarship_from_schema(

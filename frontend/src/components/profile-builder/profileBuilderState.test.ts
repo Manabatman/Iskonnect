@@ -1,6 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  DRAFT_KEY,
   INITIAL_STATE,
+  clearProfileDraft,
   computeOverallCompletion,
   computeStepCompletion,
   type ProfileBuilderState,
@@ -46,5 +48,28 @@ describe("profile completion", () => {
   it("does not require parent_occupation for 100%", () => {
     const state = filledState({ parent_occupation: "" });
     expect(computeOverallCompletion(state)).toBe(100);
+  });
+});
+
+describe("clearProfileDraft", () => {
+  const store: Record<string, string> = {};
+
+  beforeEach(() => {
+    Object.keys(store).forEach((k) => delete store[k]);
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => store[key] ?? null,
+      setItem: (key: string, value: string) => {
+        store[key] = value;
+      },
+      removeItem: (key: string) => {
+        delete store[key];
+      },
+    });
+  });
+
+  it("removes the device-local profile draft from localStorage", () => {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ full_name: "Previous User" }));
+    clearProfileDraft();
+    expect(localStorage.getItem(DRAFT_KEY)).toBeNull();
   });
 });

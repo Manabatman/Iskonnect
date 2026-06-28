@@ -11,12 +11,13 @@ import { PersonalInfoStep } from "../components/profile-builder/PersonalInfoStep
 import {
   DRAFT_KEY,
   INITIAL_STATE,
+  clearProfileDraft,
   type ProfileBuilderState,
   parseDraftFromStorage,
   profileBuilderReducer,
 } from "../components/profile-builder/profileBuilderState";
 import { StepperSidebar } from "../components/profile-builder/StepperSidebar";
-import { useAuth } from "../contexts/AuthContext";
+import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { buildStudentProfileFromBuilderState } from "../utils/studentProfilePayload";
 import { profileToInitialValues } from "../utils/profileDraft";
 
@@ -47,6 +48,16 @@ export function ProfileBuilderPage() {
   const [saveOk, setSaveOk] = useState<string | null>(null);
   const [consentModalOpen, setConsentModalOpen] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const onAuthChange = () => {
+      clearProfileDraft();
+      dispatch({ type: "RESET" });
+      setCurrentStep(1);
+    };
+    window.addEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
+    return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
+  }, []);
 
   useEffect(() => {
     if (authLoading || !user) return;

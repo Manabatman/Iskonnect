@@ -9,7 +9,7 @@ from app.auth import assert_can_read_profile, get_optional_user_id, get_profile_
 from app.db import get_db
 from app.limiter import limiter
 from app.api.v1.profiles import get_profile_dict
-from app.api.v1.scholarships import get_cached_scholarship_dicts, _scholarship_to_response
+from app.api.v1.scholarships import get_cached_scholarship_dicts, _scholarship_to_dict
 from app.config import settings
 from app.matching.match_service import MatchService
 from app.matching.profile_completeness import profile_completeness_payload
@@ -54,7 +54,7 @@ def _prefilter_scholarships_query(db: Session, profile: dict):
 
 
 def _scholarship_rows_to_dicts(rows: list[models.Scholarship]) -> list[dict]:
-    return [_scholarship_to_response(r) for r in rows]
+    return [_scholarship_to_dict(r) for r in rows]
 
 
 @router.get("/matches/{profile_id}")

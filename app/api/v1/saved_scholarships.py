@@ -127,15 +127,11 @@ def list_saved_scholarships(
     for s in saved_list:
         sch = scholarships.get(s.scholarship_id)
         items.append(
-            schemas.SavedScholarshipSummary(
+            schemas.SavedScholarshipResponse(
                 id=s.id,
                 scholarship_id=s.scholarship_id,
                 created_at=s.created_at,
-                title=sch.title if sch else None,
-                provider=sch.provider if sch else None,
-                benefit_tuition=sch.benefit_tuition if sch else None,
-                benefit_allowance_monthly=sch.benefit_allowance_monthly if sch else None,
-                benefit_total_value=sch.benefit_total_value if sch else None,
+                scholarship=_scholarship_to_response(sch) if sch else None,
             )
         )
 

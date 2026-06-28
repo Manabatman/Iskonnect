@@ -311,6 +311,7 @@ class ScholarshipResponse(BaseModel):
     is_active: Optional[bool] = True
     image_url: Optional[str] = None
     image_alt: Optional[str] = None
+    provider_logo: Optional[str] = None
     # Data reliability & link integrity (optional; backward compatible)
     last_verified_at: Optional[datetime] = None
     verification_source: Optional[str] = None
@@ -418,6 +419,15 @@ class MatchResponse(BaseModel):
     benefit_books: Optional[bool] = None
     benefit_total_value: Optional[int] = None
     application_deadline: Optional[str] = None
+    application_open_date: Optional[str] = None
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
+    provider_logo: Optional[str] = None
+    needs_tags: Optional[List[str]] = []
+    deadline_passed: Optional[bool] = None
+    data_status: Optional[str] = None
+    link_status: Optional[str] = None
+    verification_source: Optional[str] = None
     required_documents: Optional[List[str]] = []
     suggestions: Optional[List[str]] = []
     why_not_higher: Optional[List[str]] = []
@@ -435,6 +445,8 @@ class MatchResponseMinimal(BaseModel):
     eligibility_status: Optional[bool] = None
     confidence: Optional[str] = None
     application_deadline: Optional[str] = None
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
 
 
 # === Upcoming Scholarship (Cycle Prediction) ===
@@ -448,8 +460,18 @@ class UpcomingScholarship(BaseModel):
     predicted_next_open: Optional[str] = None
     link: Optional[str] = None
     description: Optional[str] = None
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
+    provider_logo: Optional[str] = None
+    needs_tags: Optional[List[str]] = []
     benefit_tuition: Optional[bool] = None
+    benefit_allowance_monthly: Optional[int] = None
+    benefit_books: Optional[bool] = None
     benefit_total_value: Optional[int] = None
+    application_deadline: Optional[str] = None
+    application_open_date: Optional[str] = None
+    data_status: Optional[str] = None
+    verification_source: Optional[str] = None
 
 
 # === Match History ===
@@ -533,7 +555,7 @@ class SavedScholarshipSummary(BaseModel):
 
 
 class SavedScholarshipListResponse(BaseModel):
-    saved: List[SavedScholarshipSummary] = []
+    saved: List[SavedScholarshipResponse] = []
     total: int = 0
 
 

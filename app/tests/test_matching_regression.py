@@ -127,3 +127,6 @@ def test_scholarship_dict_includes_matching_fields(db_session, specific):
     assert d.get("eligible_courses_specific") == specific
     assert d.get("preferred_extracurriculars") == ["Debate"]
     assert d.get("preferred_awards") == ["Science Fair"]
+    assert "image_url" in d
+    assert "image_alt" in d
+    assert "application_open_date" in d
