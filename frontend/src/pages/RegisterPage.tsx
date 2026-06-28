@@ -3,7 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
-import { brandLogoSrc, LOGO_LIGHT_SRC } from "../lib/brandLogo";
+import {
+  brandLogoSrc,
+  BRAND_LOGO_AUTH_CLASS,
+  BRAND_LOGO_AUTH_HEIGHT,
+  BRAND_LOGO_AUTH_WIDTH,
+  LOGO_LIGHT_SRC,
+} from "../lib/brandLogo";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/register-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-2.svg";
@@ -59,9 +65,9 @@ export function RegisterPage() {
           <img
             src={logoSrc}
             alt="Iskonnect"
-            className="absolute left-8 top-8 h-10 w-10 object-contain lg:left-12 lg:top-12"
-            width={40}
-            height={40}
+            className={BRAND_LOGO_AUTH_CLASS}
+            width={BRAND_LOGO_AUTH_WIDTH}
+            height={BRAND_LOGO_AUTH_HEIGHT}
             onError={(e) => {
               (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
             }}

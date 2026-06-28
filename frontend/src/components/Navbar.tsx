@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
-import { brandLogoSrc, LOGO_LIGHT_SRC } from "../lib/brandLogo";
+import { brandLogoSrc, BRAND_LOGO_NAV_CLASS, BRAND_LOGO_NAV_HEIGHT, BRAND_LOGO_NAV_WIDTH, LOGO_LIGHT_SRC } from "../lib/brandLogo";
 
 const navLinkClass = (active: boolean) =>
   [
@@ -103,9 +103,9 @@ export function Navbar() {
           <img
             src={logoSrc}
             alt=""
-            className="h-10 w-10 object-contain"
-            width={40}
-            height={40}
+            className={BRAND_LOGO_NAV_CLASS}
+            width={BRAND_LOGO_NAV_WIDTH}
+            height={BRAND_LOGO_NAV_HEIGHT}
             onError={(e) => {
               (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
             }}
