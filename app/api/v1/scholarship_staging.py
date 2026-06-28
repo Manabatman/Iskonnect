@@ -21,6 +21,7 @@ from app.auth import require_admin
 from app.db import get_db
 from app.limiter import limiter
 from app.utils.audit import log_action
+from app.utils.staging_promotion import verification_source_for
 
 logger = logging.getLogger(__name__)
 
@@ -164,19 +165,12 @@ def approve_staging(
             detail=f"A scholarship with this title and provider already exists (id={dup.id}).",
         )
     try:
-        src_lo = (row.source or "").strip().lower()
-        if src_lo in ("philscholar", "scraper"):
-            vs = "scraper"
-        elif "csv" in src_lo:
-            vs = "csv_import"
-        else:
-            vs = "manual"
         db_sch = persist_scholarship_from_schema(
             db,
             sch,
             version_changed_by=_admin.id if _admin else None,
             auto_commit=False,
-            verification_source=vs,
+            verification_source=verification_source_for(row.source),
         )
         row.status = "approved"
         row.reviewed_at = datetime.now(timezone.utc)

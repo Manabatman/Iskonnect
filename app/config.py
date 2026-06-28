@@ -3,8 +3,12 @@ Application configuration via environment variables.
 Uses pydantic-settings for validation and .env file support.
 """
 
+import logging
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
 
 # Must match the default Field value for secret_key (used for production guard)
 DEFAULT_SECRET_KEY_VALUE = "change-me-in-production-use-openssl-rand-hex-32"
@@ -192,6 +196,12 @@ class Settings(BaseSettings):
             )
         if errors:
             raise RuntimeError("Invalid production configuration: " + "; ".join(errors))
+        if not (self.supabase_url and self.supabase_service_role_key):
+            logger.warning(
+                "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are not set — scholarship image uploads "
+                "will return 503 until configured (create public bucket %s in Supabase Storage)",
+                self.scholarship_image_bucket,
+            )
 
 
 settings = Settings()

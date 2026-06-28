@@ -203,7 +203,11 @@ def health(db: Session = Depends(get_db)):
         try:
             import redis
 
-            redis.from_url(settings.redis_url).ping()
+            redis.from_url(
+                settings.redis_url,
+                socket_connect_timeout=2,
+                socket_timeout=2,
+            ).ping()
             checks["cache"] = True
         except Exception as e:
             logger.warning("health_redis_check_failed: %s", e)

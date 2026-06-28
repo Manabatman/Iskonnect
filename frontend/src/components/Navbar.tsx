@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
+import { brandLogoSrc, LOGO_LIGHT_SRC } from "../lib/brandLogo";
 
 const navLinkClass = (active: boolean) =>
   [
@@ -21,7 +22,7 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const { resolvedTheme } = useTheme();
   const path = location.pathname;
-  const brandLogoSrc = resolvedTheme === "dark" ? "/images/logo-dark.svg" : "/images/logo.svg";
+  const logoSrc = brandLogoSrc(resolvedTheme);
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -100,13 +101,13 @@ export function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
         <Link to="/" className="flex shrink-0 items-center gap-3">
           <img
-            src={brandLogoSrc}
+            src={logoSrc}
             alt=""
-            className="h-10 w-10"
+            className="h-10 w-10 object-contain"
             width={40}
             height={40}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/logo.svg";
+              (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
             }}
           />
           <span>

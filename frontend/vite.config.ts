@@ -7,10 +7,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["images/logo.svg"],
+      includeAssets: ["images/logo-light.png", "images/logo-dark.png"],
       manifest: false,
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,svg,woff2}"],
+        globPatterns: ["**/*.{js,css,html,ico,svg,png,woff2}"],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {

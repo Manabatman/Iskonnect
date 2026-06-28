@@ -9,11 +9,14 @@ engine_kwargs: dict = {}
 if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 else:
-    connect_args["prepare_threshold"] = 0  # Supabase transaction pooler (PgBouncer)
+    # Fast-fail on unreachable Supabase pooler (psycopg2/libpq; no prepare_threshold — psycopg3-only)
+    connect_args["connect_timeout"] = 5
+    connect_args["options"] = "-c statement_timeout=15000"
     engine_kwargs["pool_pre_ping"] = True
     engine_kwargs["pool_recycle"] = 300
     engine_kwargs["pool_size"] = settings.db_pool_size
     engine_kwargs["max_overflow"] = settings.db_max_overflow
+    engine_kwargs["pool_timeout"] = 10
 
 engine = create_engine(
     settings.database_url,
