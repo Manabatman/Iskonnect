@@ -85,3 +85,58 @@ def test_verify_email(api_with_db):
     finally:
         db.close()
 
+
+def test_login_unverified_blocked_when_verification_required(api_with_db, monkeypatch):
+    client, Session = api_with_db
+    monkeypatch.setattr("app.config.settings.require_email_verification", True)
+    monkeypatch.setattr("app.config.settings.smtp_host", "smtp.example.com")
+    monkeypatch.setattr("app.config.settings.email_from", "noreply@example.com")
+    _create_user(Session, "unverified@example.com", "password1")
+    r = client.post(
+        "/api/v1/auth/login",
+        json={"email": "unverified@example.com", "password": "password1"},
+    )
+    assert r.status_code == 403
+
+
+def test_login_unverified_allowed_when_verification_disabled(api_with_db, monkeypatch):
+    client, Session = api_with_db
+    monkeypatch.setattr("app.config.settings.require_email_verification", False)
+    _create_user(Session, "beta_user@example.com", "password1")
+    r = client.post(
+        "/api/v1/auth/login",
+        json={"email": "beta_user@example.com", "password": "password1"},
+    )
+    assert r.status_code == 200
+    assert r.json().get("access_token")
+
+
+def test_register_auto_verifies_when_verification_disabled(api_with_db, monkeypatch):
+    client, Session = api_with_db
+    monkeypatch.setattr("app.config.settings.require_email_verification", False)
+    r = client.post(
+        "/api/v1/auth/register",
+        json={"email": "auto_verify@example.com", "password": "password1"},
+    )
+    assert r.status_code == 200
+    assert r.json().get("access_token")
+
+    db = Session()
+    try:
+        row = db.query(models.User).filter(models.User.email == "auto_verify@example.com").first()
+        assert row is not None
+        assert row.email_verified is True
+    finally:
+        db.close()
+
+
+def test_auth_me_includes_require_email_verification_flag(api_with_db, monkeypatch):
+    client, Session = api_with_db
+    monkeypatch.setattr("app.config.settings.require_email_verification", False)
+    user = _create_user(Session, "me_flag@example.com", "password1")
+    from app.auth import create_access_token
+
+    token = create_access_token(user.id)
+    r = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    assert r.json().get("require_email_verification") is False

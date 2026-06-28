@@ -104,9 +104,12 @@ class UserMeResponse(BaseModel):
     email: str
     role: str
     email_verified: bool = False
+    require_email_verification: bool = True
 
 
 def _maybe_send_verification_email(to_email: str, token: str) -> None:
+    if not settings.require_email_verification:
+        return
     if can_send_transactional_email("verify", to_email):
         if send_email_verification_email(to_email, token):
             record_transactional_email_sent("verify", to_email)
@@ -149,10 +152,12 @@ def register(
         return RegisterResponse(
             detail="If this email is not already registered, your account has been created. Check your email to verify.",
         )
+    auto_verify = not settings.require_email_verification
     user = models.User(
         email=register_req.email,
         password_hash=hash_password(register_req.password),
-        email_verified=False,
+        email_verified=auto_verify,
+        email_verified_at=utc_now_naive() if auto_verify else None,
     )
     db.add(user)
     try:
@@ -163,12 +168,18 @@ def register(
         return RegisterResponse(
             detail="If this email is not already registered, your account has been created. Check your email to verify.",
         )
-    verify_jwt = create_email_verification_token(user.id)
-    _maybe_send_verification_email(register_req.email, verify_jwt)
+    if settings.require_email_verification:
+        verify_jwt = create_email_verification_token(user.id)
+        _maybe_send_verification_email(register_req.email, verify_jwt)
     tokens = _tokens_for_user(db, user)
     logger.info("auth_register_ok user_id=%s", user.id)
+    register_detail = (
+        "Account created. You can sign in now."
+        if auto_verify
+        else "Account created. Check your email to verify your address."
+    )
     return RegisterResponse(
-        detail="Account created. Check your email to verify your address.",
+        detail=register_detail,
         access_token=tokens.access_token,
         refresh_token=tokens.refresh_token,
         user_id=tokens.user_id,
@@ -191,14 +202,12 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
-    if not bool(getattr(user, "email_verified", False)):
-        if settings.email_is_configured():
-            logger.info("auth_login_blocked_unverified email=%s user_id=%s", req.email, user.id)
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Please verify your email before signing in. Check your inbox or request a new verification link.",
-            )
-        logger.info("auth_login_unverified email=%s user_id=%s", req.email, user.id)
+    if settings.require_email_verification and not bool(getattr(user, "email_verified", False)):
+        logger.info("auth_login_blocked_unverified email=%s user_id=%s", req.email, user.id)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Please verify your email before signing in. Check your inbox or request a new verification link.",
+        )
     return _tokens_for_user(db, user)
 
 
@@ -258,6 +267,7 @@ def get_me(
         email=user.email,
         role=getattr(user, "role", "student"),
         email_verified=verified,
+        require_email_verification=settings.require_email_verification,
     )
 
 
@@ -337,6 +347,8 @@ def resend_verification(
             detail="Not authenticated",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if not settings.require_email_verification:
+        return generic
     if bool(getattr(user, "email_verified", False)):
         return generic
     verify_jwt = create_email_verification_token(user.id)
