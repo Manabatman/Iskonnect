@@ -106,7 +106,13 @@ class Settings(BaseSettings):
         validation_alias="RETENTION_INACTIVE_DAYS",
     )
 
-    # Email (SMTP) — required in production for password reset / verification
+    # When false, users can sign in without verifying email (beta testing). SMTP not required in production.
+    require_email_verification: bool = Field(
+        default=True,
+        validation_alias="REQUIRE_EMAIL_VERIFICATION",
+    )
+
+    # Email (SMTP) — required in production when REQUIRE_EMAIL_VERIFICATION=true
     smtp_host: str | None = Field(default=None, validation_alias="SMTP_HOST")
     smtp_port: int = Field(default=587, validation_alias="SMTP_PORT")
     smtp_user: str | None = Field(default=None, validation_alias="SMTP_USER")
@@ -176,11 +182,16 @@ class Settings(BaseSettings):
             errors.append(
                 "CORS_ORIGINS must include at least one non-localhost origin in production"
             )
-        if not self.email_is_configured():
-            errors.append("SMTP_HOST and EMAIL_FROM must be set in production for auth emails")
-        if not self.frontend_url_is_production_ready():
-            errors.append(
-                "FRONTEND_URL must be a non-localhost URL in production (used in password reset / verify links)"
+        if self.require_email_verification:
+            if not self.email_is_configured():
+                errors.append("SMTP_HOST and EMAIL_FROM must be set in production for auth emails")
+            if not self.frontend_url_is_production_ready():
+                errors.append(
+                    "FRONTEND_URL must be a non-localhost URL in production (used in password reset / verify links)"
+                )
+        else:
+            logger.warning(
+                "REQUIRE_EMAIL_VERIFICATION=false — unverified users may sign in; re-enable before public launch"
             )
         if self.run_migrations_on_startup:
             errors.append(

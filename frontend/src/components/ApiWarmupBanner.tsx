@@ -33,7 +33,7 @@ export function ApiWarmupBanner() {
 
   return (
     <div
-      className="pointer-events-none fixed bottom-0 left-0 right-0 z-[100] border-t border-primary-200 bg-primary-50/95 px-4 py-2 text-center text-sm text-primary-900 shadow-lg backdrop-blur dark:border-primary-800 dark:bg-primary-950/90 dark:text-primary-100"
+      className="pointer-events-none fixed bottom-0 left-0 right-0 z-[100] border-t border-primary-200 bg-primary-50/95 px-4 py-2 text-center text-sm text-primary-900 shadow-lg backdrop-blur dark:border-slate-600 dark:bg-slate-800/95 dark:text-slate-200"
       role="status"
       aria-live="polite"
     >
