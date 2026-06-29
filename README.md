@@ -205,14 +205,3 @@ See LICENSE if present in the repository.
 Contributing
 Issues and PRs welcome. For large data imports, use the staging workflow rather than writing directly to production tables.
 
----
-## What changed vs your current README
-1. **Formatting** — Proper headings, tables, and fenced code blocks (your version had merged lines and broken numbering).
-2. **Accurate local setup** — `AUTH_DISABLED=false` + `REQUIRE_EMAIL_VERIFICATION=false` matches current `.env` practice; venv recreation note implied via standard `python -m venv`.
-3. **API update** — `/matches/{profile_id}` → **`/plan/{profile_id}`** plus search, auth, match-runs, staging.
-4. **Stack honesty** — SQLite local, Postgres + Redis production; not “SQLite only.”
-5. **Feature coverage** — Search, saved scholarships, admin pipeline, document readiness called out without over-selling.
-6. **Scannable structure** — Tables for features, API, docs; clear beta status.
-Replace `YOUR_ORG/YOUR_REPO` with your real GitHub URL. If the GitHub repo root *is* `scholarship-match` (not the `Iskonnect` monorepo), drop the `../START_HERE.md` row and adjust clone paths.
-If you want this written directly into `README.md` in the repo, switch to **Agent mode** and I can apply it.
-
