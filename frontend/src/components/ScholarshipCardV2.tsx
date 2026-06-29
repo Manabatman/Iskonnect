@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
+import { BookmarkButton } from "./BookmarkButton";
 import { FreshnessChipRow, freshnessFromMatch } from "./FreshnessChip";
 import { MatchScoreRing } from "./MatchScoreRing";
+import { getUrgencyBadgeClasses, getUrgencyLevel } from "./scholarshipMatchDisplay";
 import { getCardVisualClasses } from "../utils/cardImages";
 import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
 import { formatScholarshipLocation } from "../utils/normalizeLocation";

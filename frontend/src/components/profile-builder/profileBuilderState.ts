@@ -134,41 +134,47 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
     id: 2,
     label: "Education",
     shortLabel: "Education",
-    fields: [
-      "education_level",
-      "current_academic_stage",
-      "target_academic_year",
-      "school",
-      "school_type",
-      "target_school",
-      "gwa_raw",
-      "gwa_scale",
-    ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
+    fields: (
+      [
+        "education_level",
+        "current_academic_stage",
+        "target_academic_year",
+        "school",
+        "school_type",
+        "target_school",
+        "gwa_raw",
+        "gwa_scale",
+      ] as (keyof ProfileBuilderState)[]
+    ).filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
     id: 3,
     label: "Location and Background",
     shortLabel: "Location",
-    fields: [
-      "region",
-      "province",
-      "city_municipality",
-      "barangay",
-    ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
+    fields: (
+      [
+        "region",
+        "province",
+        "city_municipality",
+        "barangay",
+      ] as (keyof ProfileBuilderState)[]
+    ).filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
     id: 4,
     label: "Field of Study and Skills",
     shortLabel: "Skills",
-    fields: [
-      "field_of_study_broad",
-      "field_of_study_specific",
-      "preferred_course_1",
-      "preferred_course_2",
-      "preferred_course_3",
-      "extracurriculars",
-      "awards",
-    ].filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
+    fields: (
+      [
+        "field_of_study_broad",
+        "field_of_study_specific",
+        "preferred_course_1",
+        "preferred_course_2",
+        "preferred_course_3",
+        "extracurriculars",
+        "awards",
+      ] as (keyof ProfileBuilderState)[]
+    ).filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
   },
   {
     id: 5,

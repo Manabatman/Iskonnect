@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
+import { formatDate } from "../utils/formatDate";
 import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
 
 const DOCUMENT_LABELS: Record<string, string> = {
