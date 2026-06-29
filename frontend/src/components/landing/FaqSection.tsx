@@ -9,10 +9,10 @@ export function FaqSection() {
       <SectionHeader
         eyebrow="FAQ"
         title="Common questions"
-        description="Straight answers about how matching works and how we handle your data."
+        description="Straight answers about matching, trust, and how we handle your data."
       />
       <div className="mx-auto mt-12 max-w-2xl space-y-2 sm:mt-16">
-        {faqItems.map((item, i) => (
+        {faqItems.slice(0, 5).map((item, i) => (
           <Reveal key={item.q} delay={i * 0.06}>
             <details className="group rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60">
               <summary className="cursor-pointer list-none px-4 py-3 pr-10 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-slate-100 dark:focus-visible:ring-offset-slate-900 [&::-webkit-details-marker]:hidden">
@@ -38,6 +38,17 @@ export function FaqSection() {
                     </Link>{" "}
                     for full details.
                   </>
+                ) : item.q === "Where does scholarship information come from?" ? (
+                  <>
+                    From official public sources—CHED, DOST-SEI, TESDA, LGUs, universities, and foundations. Read{" "}
+                    <Link
+                      to="/how-we-verify"
+                      className="font-medium text-primary-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-primary-400"
+                    >
+                      how we verify scholarships
+                    </Link>
+                    .
+                  </>
                 ) : (
                   item.a
                 )}
@@ -45,6 +56,11 @@ export function FaqSection() {
             </details>
           </Reveal>
         ))}
+        <p className="pt-4 text-center text-sm">
+          <Link to="/faq" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+            View all FAQs →
+          </Link>
+        </p>
       </div>
     </Section>
   );

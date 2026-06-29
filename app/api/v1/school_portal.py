@@ -90,6 +90,9 @@ def patch_verification(
     )
     if not row:
         raise HTTPException(status_code=404, detail="Verification not found")
+    allowed = {"pending", "approved", "rejected", "needs_info"}
+    if body.status not in allowed:
+        raise HTTPException(status_code=400, detail=f"status must be one of {sorted(allowed)}")
     row.status = body.status
     if body.notes is not None:
         row.notes = body.notes

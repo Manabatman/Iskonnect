@@ -245,12 +245,12 @@ def generate_scholarships() -> list[dict]:
 
     # --- A. Nationwide generic (no restrictions) ---
     for i in range(30):
-        st = rng.choice(["Merit", "Need", "Merit-and-Need"])
+        st = rng.choice(["Merit-based", "Need", "Merit-and-Need"])
         add({
             "title": f"Nationwide Grant {i+1}", "provider": f"Foundation {i+1}",
             "scholarship_type": st,
             "eligible_levels": rng.choice([[], ["College"], ["College", "Senior High School"]]),
-            "max_income_threshold": None if st == "Merit" else rng.choice([400_000, 500_000]),
+            "max_income_threshold": None if st == "Merit-based" else rng.choice([400_000, 500_000]),
             "min_gwa_normalized": rng.choice([None, 80.0, 85.0]),
         })
 
@@ -271,7 +271,7 @@ def generate_scholarships() -> list[dict]:
         for k in range(3):
             add({
                 "title": f"{code} Excellence {k+1}", "provider": f"{code} Council",
-                "scholarship_type": rng.choice(["Merit", "Merit-and-Need"]),
+                "scholarship_type": rng.choice(["Merit-based", "Merit-and-Need"]),
                 "eligible_courses_psced": [code],
                 "eligible_levels": ["College"],
                 "min_gwa_normalized": rng.choice([None, 85.0, 88.0]),
@@ -326,7 +326,7 @@ def generate_scholarships() -> list[dict]:
     for k in range(8):
         add({
             "title": f"Academic Merit {k+1}", "provider": "Merit Board",
-            "scholarship_type": "Merit",
+            "scholarship_type": "Merit-based",
             "min_gwa_normalized": rng.choice([88.0, 90.0, 92.0]),
             "eligible_levels": ["College"],
         })

@@ -48,6 +48,7 @@ export function ScholarshipSearchPage() {
   const [checkMatchLoading, setCheckMatchLoading] = useState(false);
   const [checkMatchError, setCheckMatchError] = useState<string | null>(null);
   const [findMatchesNavLoading, setFindMatchesNavLoading] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const inflightMatchMap = useRef<Promise<Map<number, MatchResult>> | null>(null);
 
@@ -107,7 +108,7 @@ export function ScholarshipSearchPage() {
           throw new Error("PROFILE_REQUIRED");
         }
         const profileId = prof.id;
-        const mRes = await apiFetch(`/api/v1/matches/${profileId}`, { headers: authHeaders() });
+        const mRes = await apiFetch(`/api/v1/plan/${profileId}`, { headers: authHeaders() });
         if (mRes.status === 401 || mRes.status === 403) {
           throw new Error("Session expired. Please sign in again.");
         }
@@ -252,8 +253,36 @@ export function ScholarshipSearchPage() {
           )}
         </form>
 
+        <div className="mb-4 flex items-center justify-between lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileFiltersOpen(true)}
+            className="min-h-[44px] rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+          >
+            Filters
+          </button>
+        </div>
+
+        {mobileFiltersOpen ? (
+          <div className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-slate-900 lg:hidden">
+            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-slate-700">
+              <h2 className="text-lg font-semibold">Filters</h2>
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="min-h-[44px] rounded-lg px-3 text-sm font-medium text-primary-600"
+              >
+                Done
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4">
+              <ScholarshipSearchFilters filters={filters} onChange={handleFiltersChange} />
+            </div>
+          </div>
+        ) : null}
+
         <div className="flex flex-col gap-6 lg:flex-row">
-          <div className="lg:w-64 lg:shrink-0">
+          <div className="hidden lg:block lg:w-64 lg:shrink-0">
             <ScholarshipSearchFilters filters={filters} onChange={handleFiltersChange} />
           </div>
 
@@ -292,7 +321,7 @@ export function ScholarshipSearchPage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="grid grid-cols-1 items-stretch gap-6">
                       {results.map((s) => (
                         <ScholarshipCardV2
                           key={s.id}

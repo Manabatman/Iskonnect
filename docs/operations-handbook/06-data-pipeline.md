@@ -50,8 +50,37 @@ flowchart TB
 ```
 
 **Alternate ingestion paths** (same staging/live flow):
-- **CSV import:** `app/scripts/import_scholarships.py` → live table (admin) or `csv_to_staging.py` → staging
+- **CSV import:** `app/scripts/import_scholarships.py` → live table (legacy scraper columns) or `csv_to_staging.py` → staging
+- **Gemini / research CSV:** pipe-delimited lists in cells; `schemas.Scholarship` coerces `|` → lists on staging approve (see [Beta CSV import](#beta-csv-import-gemini--research) below)
 - **Manual admin entry:** Admin UI → staging or direct
+
+### Beta CSV import (Gemini / research)
+
+Use this path to load 200–500 researched scholarships without manual cell editing.
+
+**CSV conventions**
+- List columns use **pipe** separators inside cells: `College|Graduate`, `Public|Private`, `ITR|TOR`
+- Empty cells = unknown (coerced to `null` / `[]` by Pydantic validators in `app/schemas.py`)
+- `scholarship_type`: use `Merit-based` (aliases `Merit`, `Academic` normalize automatically)
+- Research-only columns (`application_status`, `cycle_type`, `last_open_date`, `last_close_date`, `research_notes`, `source_urls`) are **ignored** on import (`extra="ignore"`)
+
+**Provenance**
+- Set `source=gemini_research` in the CSV
+- On staging approve, `verification_source` is set to `manual` via `verification_source_for()` in `app/utils/staging_promotion.py` (trusted auto-promote applies only to `philscholar` / `scraper`)
+
+**Commands**
+```powershell
+python -m app.scripts.csv_to_staging --csv data/scholarships.csv
+# Admin → Staging tab → approve rows
+```
+
+Or batch JSON: `POST /api/v1/scholarships/staging/import` with `{ "rows": [ ... ] }` (admin JWT).
+
+**Verify after import**
+```powershell
+python -m pytest app/tests/test_scholarship_csv_coercion.py -v
+python -m app.jobs.catalog_maintenance
+```
 
 ---
 

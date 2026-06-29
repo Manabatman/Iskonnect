@@ -22,6 +22,14 @@ from app.db import Base, get_db
 
 
 @pytest.fixture(autouse=True)
+def _test_email_verification_off(monkeypatch):
+    """Tests expect register→token flow unless explicitly testing verification."""
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "require_email_verification", False)
+
+
+@pytest.fixture(autouse=True)
 def _reset_api_rate_limits():
     """Clear in-memory rate-limit counters between tests (shared TestClient IP)."""
     from app.limiter import limiter

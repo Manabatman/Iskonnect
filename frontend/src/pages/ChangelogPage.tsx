@@ -5,7 +5,7 @@ function ItemList({ heading, items }: { heading: string; items: ChangelogItem[] 
   if (!items.length) return null;
   return (
     <div className="mt-6">
-      <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{heading}</h3>
+      <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200">{heading}</h3>
       <ul className="mt-3 space-y-4">
         {items.map((item) => (
           <li key={item.title}>
@@ -22,9 +22,10 @@ export function ChangelogPage() {
   return (
     <section className="py-12">
       <div className="mx-auto max-w-3xl px-4">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Changelog</h1>
-        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-          What changed in Iskonnect. We keep notes practical and honest—this is an MVP that grows with feedback.
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">What&apos;s new</h1>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          Updates that help you discover scholarships sooner, trust what you read, and prepare before deadlines—not
+          technical release notes. We improve ISKONNECT based on what students need.
         </p>
 
         <div className="mt-10 space-y-10">
@@ -42,9 +43,9 @@ export function ChangelogPage() {
               <h2 className="mt-4 text-xl font-semibold text-slate-900 dark:text-slate-100">{release.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{release.summary}</p>
 
-              <ItemList heading="Fixes" items={release.fixes ?? []} />
-              <ItemList heading="Improvements" items={release.improvements ?? []} />
-              <ItemList heading="Behind the scenes" items={release.behindTheScenes ?? []} />
+              {release.sections.map((section) => (
+                <ItemList key={section.heading} heading={section.heading} items={section.items} />
+              ))}
             </article>
           ))}
         </div>

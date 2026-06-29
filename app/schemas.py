@@ -9,6 +9,64 @@ SchoolTypeOption = Literal["Public", "Private"]
 ProviderTypeOption = Literal["Government", "Private", "LGU", "Institutional"]
 ScholarshipTypeOption = Literal["Merit-and-Need", "Need", "Affiliation", "Merit-based"]
 
+# Pipe-delimited list fields on Scholarship (CSV / staging import).
+_SCHOLARSHIP_LIST_FIELDS = (
+    "countries",
+    "regions",
+    "needs_tags",
+    "eligible_levels",
+    "eligible_regions",
+    "eligible_cities",
+    "eligible_school_types",
+    "eligible_courses_psced",
+    "eligible_courses_specific",
+    "priority_groups",
+    "preferred_extracurriculars",
+    "preferred_awards",
+    "required_documents",
+)
+
+# Optional scalars that arrive as blank CSV cells.
+_SCHOLARSHIP_EMPTY_SCALAR_FIELDS = (
+    "min_age",
+    "max_age",
+    "max_income_threshold",
+    "benefit_allowance_monthly",
+    "benefit_total_value",
+    "min_gwa_normalized",
+    "application_open_date",
+    "application_deadline",
+    "last_open_date",
+    "last_close_date",
+)
+
+
+def _coerce_pipe_delimited_list(v: Any) -> list[str]:
+    """CSV cells use pipe-separated values; API may send real lists."""
+    if v is None or v == "":
+        return []
+    if isinstance(v, list):
+        return v
+    if isinstance(v, str):
+        return [part.strip() for part in v.split("|") if part.strip()]
+    return v
+
+
+def _empty_str_to_none_scalar(v: Any) -> Any:
+    if v == "":
+        return None
+    return v
+
+
+def _normalize_scholarship_type(v: Any) -> Any:
+    if v == "":
+        return None
+    if isinstance(v, str):
+        key = v.strip().lower().replace("-", " ")
+        if key in ("merit", "merit based", "academic"):
+            return "Merit-based"
+    return v
+
 
 # === Student Profile ===
 class DocumentEntry(BaseModel):
@@ -187,6 +245,8 @@ class StudentProfileResponse(BaseModel):
 
 # === Scholarship ===
 class Scholarship(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     title: str
     provider: Optional[str] = None
     source: Optional[str] = None
@@ -226,16 +286,41 @@ class Scholarship(BaseModel):
     application_deadline: Optional[date] = None
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
+    cycle_type: Optional[str] = None  # annual | semester | rolling
+    last_open_date: Optional[date] = None
+    last_close_date: Optional[date] = None
     is_active: Optional[bool] = True
     image_url: Optional[str] = Field(default=None, max_length=2048)
     image_alt: Optional[str] = Field(default=None, max_length=300)
 
-    @field_validator("provider_type", "scholarship_type", mode="before")
+    @field_validator(*_SCHOLARSHIP_LIST_FIELDS, mode="before")
     @classmethod
-    def scholarship_empty_str_to_none(cls, v: Any) -> Any:
+    def coerce_scholarship_list_fields(cls, v: Any) -> Any:
+        return _coerce_pipe_delimited_list(v)
+
+    @field_validator(*_SCHOLARSHIP_EMPTY_SCALAR_FIELDS, mode="before")
+    @classmethod
+    def coerce_scholarship_empty_scalars(cls, v: Any) -> Any:
+        return _empty_str_to_none_scalar(v)
+
+    @field_validator("provider_type", mode="before")
+    @classmethod
+    def scholarship_provider_type_empty(cls, v: Any) -> Any:
         if v == "":
             return None
         return v
+
+    @field_validator("cycle_type", mode="before")
+    @classmethod
+    def scholarship_cycle_type_empty(cls, v: Any) -> Any:
+        if v == "":
+            return None
+        return v
+
+    @field_validator("scholarship_type", mode="before")
+    @classmethod
+    def scholarship_type_normalize(cls, v: Any) -> Any:
+        return _normalize_scholarship_type(v)
 
     @model_validator(mode="after")
     def check_age_range(self) -> "Scholarship":
@@ -308,6 +393,9 @@ class ScholarshipResponse(BaseModel):
     application_deadline: Optional[date] = None
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
+    cycle_type: Optional[str] = None
+    last_open_date: Optional[date] = None
+    last_close_date: Optional[date] = None
     is_active: Optional[bool] = True
     image_url: Optional[str] = None
     image_alt: Optional[str] = None
@@ -524,6 +612,8 @@ class ScholarshipFilterOptions(BaseModel):
     education_levels: List[str] = []
     regions: List[str] = []
     fields_of_study: List[str] = []
+    timing_options: List[str] = []
+    life_stages: List[str] = []
 
 
 # === Saved Scholarships ===

@@ -20,7 +20,7 @@ def run_data_quality_checks() -> dict[str, int]:
     """
     db = SessionLocal()
     today = date.today()
-    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=180)
+    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     orphan_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     try:
         duplicate_rows = (
@@ -104,6 +104,29 @@ def run_data_quality_checks() -> dict[str, int]:
             or 0
         )
 
+        missing_image = (
+            db.query(func.count(models.Scholarship.id))
+            .filter(
+                models.Scholarship.is_active == True,  # noqa: E712
+                or_(models.Scholarship.image_url.is_(None), models.Scholarship.image_url == ""),
+            )
+            .scalar()
+            or 0
+        )
+
+        low_quality = (
+            db.query(func.count(models.Scholarship.id))
+            .filter(
+                models.Scholarship.is_active == True,  # noqa: E712
+                or_(
+                    models.Scholarship.confidence_score.is_(None),
+                    models.Scholarship.confidence_score < 0.5,
+                ),
+            )
+            .scalar()
+            or 0
+        )
+
         result = {
             "duplicate_dedupe_keys": int(duplicate_dedupe),
             "missing_deadline_active": int(missing_deadline),
@@ -113,6 +136,8 @@ def run_data_quality_checks() -> dict[str, int]:
             "stale_verification_active": int(stale_scholarships),
             "orphan_staging_pending_30d": int(orphan_staging),
             "expired_deadline_still_active": int(expired_active),
+            "missing_image_active": int(missing_image),
+            "low_quality_active": int(low_quality),
         }
         logger.info("data_quality_checks %s", result)
         return result

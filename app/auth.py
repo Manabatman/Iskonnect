@@ -274,12 +274,18 @@ def require_profile_owner(
     profile_id: int,
     user_id: int,
     db: Session,
+    profile_access_token: str | None = None,
 ) -> None:
-    """Raise 403 if profile does not belong to user. Anonymous profiles (user_id NULL) allow any caller."""
+    """Raise 403 if profile does not belong to user. Anonymous profiles require profile read token."""
     profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
     if profile.user_id is None:
+        if settings.auth_disabled:
+            return
+        token_pid = decode_profile_read_token(profile_access_token) if profile_access_token else None
+        if token_pid != profile_id:
+            raise HTTPException(status_code=403, detail="Profile access token required")
         return
     if profile.user_id != user_id:
         raise HTTPException(status_code=403, detail="Access denied")

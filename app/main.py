@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.api.v1 import (
     admin_extended,
+    admin_queues,
     analytics,
     applications,
     audit_routes,
@@ -23,6 +24,7 @@ from app.api.v1 import (
     match_history,
     matches,
     notifications,
+    product_features,
     profiles,
     reports,
     saved_scholarships,
@@ -180,6 +182,7 @@ app.include_router(scholarship_search.router, prefix="/api/v1")
 app.include_router(scholarships.router, prefix="/api/v1")
 app.include_router(scholarship_staging.router, prefix="/api/v1")
 app.include_router(matches.router, prefix="/api/v1")
+app.include_router(product_features.router, prefix="/api/v1")
 app.include_router(match_history.router, prefix="/api/v1")
 app.include_router(saved_scholarships.router, prefix="/api/v1")
 app.include_router(suggestions.router, prefix="/api/v1")
@@ -189,6 +192,7 @@ app.include_router(audit_routes.router, prefix="/api/v1")
 app.include_router(notifications.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
 app.include_router(admin_extended.router, prefix="/api/v1")
+app.include_router(admin_queues.router, prefix="/api/v1")
 
 
 @app.get("/health")

@@ -26,7 +26,8 @@ export function HeroSection() {
             </h1>
             <p className="mt-[clamp(1rem,2vh,1.5rem)] max-w-xl text-pretty text-[clamp(1rem,1.4vw,1.25rem)] leading-relaxed text-slate-200">
               ISKONNECT matches you to scholarships from government agencies, universities, LGUs, and private
-              foundations based on your profile—so you stop searching and start applying.
+              foundations—then helps you plan ahead: apply now, prepare documents early, or watch for programs you&apos;ll
+              qualify for later.
             </p>
 
             <div className="mt-[clamp(1.5rem,3vh,2rem)] flex flex-col gap-3 sm:flex-row sm:items-center">

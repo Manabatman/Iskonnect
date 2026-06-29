@@ -47,6 +47,8 @@ export function ProfileBuilderPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveOk, setSaveOk] = useState<string | null>(null);
   const [consentModalOpen, setConsentModalOpen] = useState(false);
+  const [sampleMatches, setSampleMatches] = useState<Array<{ id: number; title: string; score?: number; final_score?: number }>>([]);
+  const [sampleLoading, setSampleLoading] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -83,6 +85,38 @@ export function ProfileBuilderPage() {
       cancelled = true;
     };
   }, [user, authLoading, authHeaders]);
+
+  useEffect(() => {
+    if (currentStep < 2) return;
+    if (!state.region?.trim() || !state.education_level?.trim()) {
+      setSampleMatches([]);
+      return;
+    }
+    let cancelled = false;
+    setSampleLoading(true);
+    const params = new URLSearchParams({
+      region: state.region.trim(),
+      education_level: state.education_level.trim(),
+      limit: "4",
+    });
+    if (state.age) params.set("age", state.age);
+    apiFetch(`/api/v1/profiles/sample-matches?${params.toString()}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.sample_matches) {
+          setSampleMatches(data.sample_matches);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSampleMatches([]);
+      })
+      .finally(() => {
+        if (!cancelled) setSampleLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [currentStep, state.region, state.education_level, state.age]);
 
   useEffect(() => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
@@ -218,6 +252,33 @@ export function ProfileBuilderPage() {
           listPane={<StepperSidebar currentStep={currentStep} onStepClick={setCurrentStep} state={state} />}
           detailPane={
             <div className="flex min-h-0 flex-col">
+              {currentStep >= 2 && (sampleLoading || sampleMatches.length > 0) ? (
+                <div className="mb-6 rounded-xl border border-primary-200 bg-primary-50/70 p-4 dark:border-primary-800 dark:bg-primary-950/30">
+                  <p className="text-sm font-semibold text-primary-900 dark:text-primary-100">Preview matches</p>
+                  <p className="mt-1 text-xs text-primary-800/80 dark:text-primary-200/80">
+                    Based on your region and education level so far — complete your profile for full results.
+                  </p>
+                  {sampleLoading ? (
+                    <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">Loading preview…</p>
+                  ) : (
+                    <ul className="mt-3 space-y-2">
+                      {sampleMatches.map((m) => (
+                        <li
+                          key={m.id}
+                          className="rounded-lg border border-white/60 bg-white/80 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900/50"
+                        >
+                          <span className="font-medium text-slate-900 dark:text-slate-100">{m.title}</span>
+                          {m.final_score != null || m.score != null ? (
+                            <span className="ml-2 text-xs text-primary-700 dark:text-primary-300">
+                              {Math.round(m.final_score ?? m.score ?? 0)}% match
+                            </span>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : null}
               <div className="min-h-0 flex-1">{stepContent}</div>
               <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 dark:border-slate-700 sm:flex-row sm:justify-between">
                 <button

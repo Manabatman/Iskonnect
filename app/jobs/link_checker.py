@@ -80,6 +80,12 @@ def run_link_check() -> dict[str, Any]:
                     stats["broken"] += 1
             db.add(s)
         db.commit()
+        try:
+            from app.scholarship_cache import invalidate_scholarship_cache
+
+            invalidate_scholarship_cache()
+        except Exception as cache_err:
+            logger.warning("link_checker_cache_invalidate_failed: %s", cache_err)
         logger.info("link_checker_done %s", stats)
         return stats
     except Exception:

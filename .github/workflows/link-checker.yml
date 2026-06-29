@@ -1,0 +1,22 @@
+name: Link checker
+
+on:
+  schedule:
+    - cron: "0 21 * * *"
+  workflow_dispatch:
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run link checker
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ENABLE_LINK_CHECKER: "true"
+        run: python -m app.jobs.link_checker

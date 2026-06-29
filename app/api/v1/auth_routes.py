@@ -171,6 +171,11 @@ def register(
     if settings.require_email_verification:
         verify_jwt = create_email_verification_token(user.id)
         _maybe_send_verification_email(register_req.email, verify_jwt)
+        db.commit()
+        logger.info("auth_register_ok user_id=%s (verification required)", user.id)
+        return RegisterResponse(
+            detail="Account created. Check your email to verify your address before signing in.",
+        )
     tokens = _tokens_for_user(db, user)
     logger.info("auth_register_ok user_id=%s", user.id)
     register_detail = (

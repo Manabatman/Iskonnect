@@ -20,7 +20,9 @@ def test_notifications_skipped_when_disabled():
 
 def test_notifications_commits_when_enabled():
     db = MagicMock()
-    with patch("app.utils.notification_helpers.settings") as s:
+    with patch("app.utils.notification_helpers.settings") as s, patch(
+        "app.utils.notification_helpers.notification_exists_recently", return_value=False
+    ):
         s.enable_notifications = True
         create_notifications_for_match_results(
             db,

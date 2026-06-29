@@ -60,6 +60,7 @@ def list_pending_reports(
 
 
 @router.post("/reports/{report_id}/resolve")
+@limiter.limit("30/minute")
 def resolve_report(
     report_id: int,
     request: Request,
@@ -88,6 +89,7 @@ def resolve_report(
 
 
 @router.post("/reports/{report_id}/dismiss")
+@limiter.limit("30/minute")
 def dismiss_report(
     report_id: int,
     request: Request,

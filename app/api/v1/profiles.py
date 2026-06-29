@@ -137,7 +137,9 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
 
 
 @router.get("/profiles", response_model=list[schemas.StudentProfileResponse])
+@limiter.limit("60/minute")
 def list_profiles(
+    request: Request,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
@@ -150,7 +152,9 @@ def list_profiles(
 
 
 @router.get("/profiles/me", response_model=schemas.StudentProfileResponse)
+@limiter.limit("60/minute")
 def get_my_profile(
+    request: Request,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
@@ -391,7 +395,9 @@ def create_profile(
 
 
 @router.get("/profiles/{profile_id}", response_model=schemas.StudentProfileResponse)
+@limiter.limit("60/minute")
 def get_profile(
+    request: Request,
     profile_id: int,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_optional_user_id)] = None,

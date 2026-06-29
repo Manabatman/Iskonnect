@@ -2,25 +2,28 @@
 
 from __future__ import annotations
 
-from app.utils.dedupe import scholarship_dedupe_key
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.api.v1.scholarships import _scholarship_to_response, persist_scholarship_from_schema
-from app.scholarship_cache import invalidate_scholarship_cache
 from app.auth import require_admin
 from app.db import get_db
 from app.limiter import limiter
+from app.scholarship_cache import invalidate_scholarship_cache
 from app.utils.audit import log_action
+from app.utils.dedupe import scholarship_dedupe_key
+from app.utils.duplicate_candidates import find_duplicate_candidates, merge_confidence
+from app.utils.import_validation import summarize_import_report, validate_import_row
+from app.utils.scholarship_persist import find_existing_scholarship
+from app.utils.scholarship_versioning import diff_snapshots, snapshot_scholarship_row
 from app.utils.staging_promotion import verification_source_for
 
 logger = logging.getLogger(__name__)
@@ -28,25 +31,36 @@ logger = logging.getLogger(__name__)
 router = APIRouter(tags=["scholarship-staging"])
 
 
-def _find_live_duplicate(db: Session, sch: schemas.Scholarship) -> models.Scholarship | None:
-    """Return an existing live scholarship with same normalized title + provider."""
-    want_t = (sch.title or "").strip().lower()
-    want_p = (sch.provider or "").strip().lower()
-    if not want_t:
-        return None
-    candidates = (
-        db.query(models.Scholarship)
-        .filter(func.lower(func.trim(models.Scholarship.title)) == want_t)
-        .all()
-    )
-    for row in candidates:
-        if (row.provider or "").strip().lower() == want_p:
-            return row
-    return None
-
-
 def _dedupe_key(title: str, provider: str | None, link: str | None = None) -> str:
     return scholarship_dedupe_key(title, provider, link)
+
+
+def _live_catalog_index(db: Session) -> list[dict]:
+    rows = db.query(models.Scholarship).all()
+    return [
+        {
+            "id": r.id,
+            "title": r.title,
+            "provider": r.provider,
+            "link": r.link,
+            "dedupe_key": r.dedupe_key,
+        }
+        for r in rows
+    ]
+
+
+def _pending_dedupe_keys(db: Session) -> set[str]:
+    keys = (
+        db.query(models.ScholarshipStaging.dedupe_key)
+        .filter(models.ScholarshipStaging.status == "pending")
+        .all()
+    )
+    return {k[0] for k in keys if k[0]}
+
+
+def _live_dedupe_keys(db: Session) -> set[str]:
+    keys = db.query(models.Scholarship.dedupe_key).filter(models.Scholarship.dedupe_key.isnot(None)).all()
+    return {k[0] for k in keys}
 
 
 class StagingRowSummary(BaseModel):
@@ -57,12 +71,20 @@ class StagingRowSummary(BaseModel):
     status: str
     dedupe_key: str | None
     created_at: datetime
+    duplicate_candidates: list[dict] = []
 
 
 class StagingImportRequest(BaseModel):
     """JSON body matching schemas.Scholarship fields (stored as payload_json)."""
 
     rows: list[dict[str, Any]] = Field(..., min_length=1, max_length=100)
+
+
+class StagingApproveRequest(BaseModel):
+    """How to promote a staging row to the live catalog."""
+
+    action: Literal["create", "update", "merge", "ignore"] = "create"
+    target_scholarship_id: int | None = None
 
 
 @router.get("/scholarships/staging/pending", response_model=list[StagingRowSummary])
@@ -72,24 +94,36 @@ def list_staging_pending(
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
+    catalog = _live_catalog_index(db)
     rows = (
         db.query(models.ScholarshipStaging)
         .filter(models.ScholarshipStaging.status == "pending")
         .order_by(models.ScholarshipStaging.created_at.asc())
         .all()
     )
-    return [
-        StagingRowSummary(
-            id=r.id,
-            title=r.title,
-            provider=r.provider,
-            source=r.source,
-            status=r.status,
-            dedupe_key=r.dedupe_key,
-            created_at=r.created_at,
+    out: list[StagingRowSummary] = []
+    for r in rows:
+        try:
+            data = json.loads(r.payload_json)
+            title = data.get("title") or r.title
+            provider = data.get("provider") or r.provider
+            link = data.get("link")
+        except Exception:
+            title, provider, link = r.title, r.provider, None
+        candidates = find_duplicate_candidates(title, provider, link, known=catalog)
+        out.append(
+            StagingRowSummary(
+                id=r.id,
+                title=r.title,
+                provider=r.provider,
+                source=r.source,
+                status=r.status,
+                dedupe_key=r.dedupe_key,
+                created_at=r.created_at,
+                duplicate_candidates=candidates,
+            )
         )
-        for r in rows
-    ]
+    return out
 
 
 @router.post("/scholarships/staging/import")
@@ -100,25 +134,39 @@ def import_staging_rows(
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
-    """Batch insert rows into staging. Each row must be a JSON object compatible with Scholarship schema."""
+    """Batch insert rows into staging with per-row validation report."""
+    live_keys = _live_dedupe_keys(db)
+    pending_keys = _pending_dedupe_keys(db)
+    catalog = _live_catalog_index(db)
+    report_rows: list[dict[str, Any]] = []
     created = 0
     skipped = 0
+    invalid = 0
+
     for row in body.rows:
+        result = validate_import_row(row, live_dedupe_keys=live_keys, pending_dedupe_keys=pending_keys)
+        if result.get("status") == "invalid":
+            invalid += 1
+            report_rows.append(result)
+            continue
+        if result.get("status") == "skipped":
+            skipped += 1
+            report_rows.append(result)
+            continue
+
         try:
             sch = schemas.Scholarship.model_validate(row)
         except Exception as e:
-            logger.warning("staging_import_invalid_row: %s", e)
-            skipped += 1
+            invalid += 1
+            report_rows.append(
+                {"status": "invalid", "title": row.get("title"), "error": str(e), "warnings": []}
+            )
             continue
+
         key = _dedupe_key(sch.title, sch.provider, sch.link)
-        existing = (
-            db.query(models.ScholarshipStaging)
-            .filter(models.ScholarshipStaging.dedupe_key == key, models.ScholarshipStaging.status == "pending")
-            .first()
-        )
-        if existing:
-            skipped += 1
-            continue
+        candidates = find_duplicate_candidates(sch.title, sch.provider, sch.link, known=catalog)
+        result["duplicate_candidates"] = candidates
+
         st = models.ScholarshipStaging(
             title=sch.title,
             provider=sch.provider,
@@ -128,13 +176,57 @@ def import_staging_rows(
             dedupe_key=key,
         )
         db.add(st)
+        pending_keys.add(key)
         created += 1
+        result["status"] = "created"
+        report_rows.append(result)
+
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=409, detail="Duplicate staging row detected")
-    return {"created": created, "skipped": skipped}
+
+    report = summarize_import_report(report_rows)
+    report["created"] = created
+    report["skipped"] = skipped
+    report["invalid"] = invalid
+    return report
+
+
+@router.get("/scholarships/staging/{staging_id}/diff")
+@limiter.limit("60/minute")
+def staging_diff(
+    request: Request,
+    staging_id: int,
+    target_scholarship_id: int | None = None,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Preview field diff between staging payload and a live scholarship."""
+    row = db.query(models.ScholarshipStaging).filter(models.ScholarshipStaging.id == staging_id).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Staging row not found")
+    data = json.loads(row.payload_json)
+    sch = schemas.Scholarship.model_validate(data)
+    live = None
+    if target_scholarship_id:
+        live = db.query(models.Scholarship).filter(models.Scholarship.id == target_scholarship_id).first()
+    if not live:
+        live = find_existing_scholarship(db, sch)
+    if not live:
+        return {"has_live_match": False, "diff": {}, "duplicate_candidates": []}
+    catalog = _live_catalog_index(db)
+    candidates = find_duplicate_candidates(sch.title, sch.provider, sch.link, known=catalog)
+    return {
+        "has_live_match": True,
+        "live_scholarship_id": live.id,
+        "diff": diff_snapshots(snapshot_scholarship_row(live), {
+            **snapshot_scholarship_row(live),
+            **{k: getattr(sch, k, None) for k in snapshot_scholarship_row(live).keys()},
+        }),
+        "duplicate_candidates": candidates,
+    }
 
 
 @router.post("/scholarships/staging/{staging_id}/approve", response_model=schemas.ScholarshipResponse)
@@ -142,6 +234,7 @@ def import_staging_rows(
 def approve_staging(
     request: Request,
     staging_id: int,
+    body: StagingApproveRequest | None = None,
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
@@ -152,18 +245,43 @@ def approve_staging(
     )
     if not row:
         raise HTTPException(status_code=404, detail="Staging row not found or already processed")
+    action = (body.action if body else "create")
     try:
         data = json.loads(row.payload_json)
         sch = schemas.Scholarship.model_validate(data)
     except Exception as e:
         logger.error("staging_approve_invalid_payload id=%s err=%s", staging_id, e)
         raise HTTPException(status_code=400, detail="Invalid payload_json for scholarship schema")
-    dup = _find_live_duplicate(db, sch)
-    if dup:
+
+    if action == "ignore":
+        row.status = "rejected"
+        row.reviewed_at = datetime.now(timezone.utc)
+        db.commit()
+        return {"status": "ignored", "id": staging_id}
+
+    existing = find_existing_scholarship(db, sch)
+    catalog = _live_catalog_index(db)
+    candidates = find_duplicate_candidates(sch.title, sch.provider, sch.link, known=catalog)
+
+    if action == "merge" and body and body.target_scholarship_id:
+        existing = db.query(models.Scholarship).filter(models.Scholarship.id == body.target_scholarship_id).first()
+        if not existing:
+            raise HTTPException(status_code=404, detail="Target scholarship not found")
+        top = candidates[0] if candidates else None
+        if top and merge_confidence(top["confidence"]) == "low":
+            raise HTTPException(
+                status_code=409,
+                detail="Merge confidence too low; use update with explicit target or create new",
+            )
+
+    allow_upsert = action in ("update", "merge") or (action == "create" and existing is not None)
+    if action == "create" and existing and not allow_upsert:
         raise HTTPException(
             status_code=409,
-            detail=f"A scholarship with this title and provider already exists (id={dup.id}).",
+            detail=f"A scholarship with this title and provider already exists (id={existing.id}). "
+            "Use action=update to refresh the existing row.",
         )
+
     try:
         db_sch = persist_scholarship_from_schema(
             db,
@@ -171,6 +289,7 @@ def approve_staging(
             version_changed_by=_admin.id if _admin else None,
             auto_commit=False,
             verification_source=verification_source_for(row.source),
+            allow_upsert=allow_upsert,
         )
         row.status = "approved"
         row.reviewed_at = datetime.now(timezone.utc)
@@ -187,7 +306,7 @@ def approve_staging(
         action="staging.approve",
         resource_type="scholarship_staging",
         resource_id=staging_id,
-        details={"scholarship_id": db_sch.id},
+        details={"scholarship_id": db_sch.id, "action": action},
         ip_address=request.client.host if request.client else None,
     )
     return _scholarship_to_response(db_sch)

@@ -197,7 +197,7 @@ def test_explanation_never_empty_for_generic_scholarship():
         field_match_level="none",
         geographic_match_level="none",
         equity_flags={},
-        scholarship_type="Merit",
+        scholarship_type="Merit-based",
         min_gwa_required=None,
         max_income_threshold=None,
         priority_groups=[],

@@ -16,6 +16,10 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
 import { TransparencyPage } from "./pages/TransparencyPage";
+import { WhyIskonnectPage } from "./pages/WhyIskonnectPage";
+import { VerificationPage } from "./pages/VerificationPage";
+import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
+import { FaqPage } from "./pages/FaqPage";
 import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
 import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
@@ -82,6 +86,10 @@ function AppRoutes() {
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/transparency" element={<TransparencyPage />} />
+          <Route path="/why-iskonnect" element={<WhyIskonnectPage />} />
+          <Route path="/how-we-verify" element={<VerificationPage />} />
+          <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/success-stories" element={<SuccessStoriesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/terms" element={<TermsPage />} />
@@ -98,11 +106,21 @@ function AppRoutes() {
           }
         />
 
+        <Route
+          path="/scholarship/:id"
+          element={
+            <PublicShell>
+              <Suspense fallback={<RouteFallback />}>
+                <ScholarshipDetailPage />
+              </Suspense>
+            </PublicShell>
+          }
+        />
+
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<ProfileDashboard />} />
           <Route path="/match/:profileId" element={<MatchResultsPage />} />
           <Route path="/match-compare" element={<MatchComparisonPage />} />
-          <Route path="/scholarship/:id" element={<ScholarshipDetailPage />} />
           <Route path="/profile-builder" element={<ProfileBuilderPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route

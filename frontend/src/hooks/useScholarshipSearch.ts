@@ -63,6 +63,9 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
       if (searchFilters.school?.trim()) {
         params.set("school", searchFilters.school.trim());
       }
+      if (searchFilters.timing) params.set("timing", searchFilters.timing);
+      if (searchFilters.life_stage) params.set("life_stage", searchFilters.life_stage);
+      if (searchFilters.include_closed) params.set("include_closed", "true");
       params.set("page", String(pageNum));
       params.set("limit", String(limit));
 

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
-import { formatDate } from "../utils/formatDate";
+import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -47,9 +47,13 @@ interface ScholarshipDetail {
   application_deadline?: string | null;
   application_open_date?: string | null;
   academic_year_target?: string | null;
+  image_url?: string | null;
+  image_alt?: string | null;
   data_status?: string | null;
   link_status?: string | null;
   verification_source?: string | null;
+  confidence_score?: number | null;
+  last_verified_at?: string | null;
 }
 
 const ISSUE_TYPES = [
@@ -168,6 +172,27 @@ export function ScholarshipDetailPage() {
         </button>
 
         <article className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-md">
+          <div
+            className="mb-6 rounded-lg border border-primary-200 bg-primary-50/80 px-4 py-3 text-sm leading-relaxed text-primary-900 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-100"
+            role="note"
+          >
+            <p className="font-medium">Always confirm on the official provider&apos;s site</p>
+            <p className="mt-1 text-primary-800/90 dark:text-primary-200/90">
+              Deadlines, income ceilings, and document requirements can change without notice. Before you apply, verify
+              every detail on the scholarship provider&apos;s website.{" "}
+              <Link to="/how-we-verify" className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300">
+                How we verify
+              </Link>
+              {" · "}
+              <Link
+                to="/scholarship-status"
+                className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300"
+              >
+                Status guide
+              </Link>
+            </p>
+          </div>
+
           <div className="mb-6">
             <div className="flex flex-wrap gap-2">
               {scholarship.provider_type && (
@@ -195,7 +220,18 @@ export function ScholarshipDetailPage() {
                   Broken link
                 </span>
               ) : null}
+              <FreshnessChipRow chips={freshnessFromScholarship(scholarship)} />
             </div>
+            {scholarship.image_url ? (
+              <img
+                src={scholarship.image_url}
+                alt={scholarship.image_alt?.trim() || scholarship.title}
+                className="mt-4 h-48 w-full rounded-xl object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <p className="mt-4 text-xs text-slate-500">No banner image assigned yet.</p>
+            )}
             <h1 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{scholarship.title}</h1>
             <p className="mt-1 text-slate-600 dark:text-slate-400">{scholarship.provider}</p>
           </div>

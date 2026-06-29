@@ -22,7 +22,7 @@ export const officialSources = [
 export const heroTrustChips = [
   "Free for students",
   "Official sources only",
-  "Eligibility-based matching",
+  "Plan ahead—not just search",
 ] as const;
 
 export const problemItems = [
@@ -38,7 +38,7 @@ export const problemItems = [
   },
   {
     title: "Deadlines missed in the noise",
-    body: "Application windows close while you're still digging through outdated posts and broken links.",
+    body: "Application windows close while you're still digging through outdated posts and broken links—or before you've gathered documents.",
     Icon: CalendarX,
   },
 ] as const;
@@ -47,7 +47,7 @@ export const howItWorksSteps = [
   {
     n: 1,
     title: "Build your profile once",
-    body: "Tell us your GWA, region, course interests, income range, and household background. One profile powers every match.",
+    body: "Tell us your GWA, region, course interests, income range, and household background. One profile powers your entire scholarship plan.",
     Icon: UserCircle,
   },
   {
@@ -58,8 +58,8 @@ export const howItWorksSteps = [
   },
   {
     n: 3,
-    title: "See ranked matches you qualify for",
-    body: "Programs you don't qualify for are removed. What remains is scored and ranked so your best fits rise to the top.",
+    title: "See your plan—not just matches",
+    body: "Programs you don't qualify for are filtered out. What's left is ranked, timed, and organized so you know what to apply for now, prepare for, or watch for next cycle.",
     Icon: Sparkles,
   },
 ] as const;
@@ -75,8 +75,8 @@ export const scoringFactors = [
 
 export const trustPoints = [
   {
-    title: "Transparent eligibility scoring",
-    body: "Every match score is built from weighted factors you can see—not a black box.",
+    title: "Verified against official sources",
+    body: "We show when listings were last checked and link you to the provider's site so you can confirm details yourself.",
     Icon: ShieldCheck,
   },
   {
@@ -85,8 +85,8 @@ export const trustPoints = [
     Icon: UserCircle,
   },
   {
-    title: "Always links to the official source",
-    body: "Every program links back to the provider's site. Confirm deadlines and requirements there before applying.",
+    title: "Closed programs still help you plan",
+    body: "Past cycles stay visible so you can learn requirements and prepare early for the next opening.",
     Icon: Globe,
   },
 ] as const;
@@ -98,13 +98,13 @@ export const benefitItems = [
     Icon: Sparkles,
   },
   {
-    title: "One profile, hundreds of opportunities",
-    body: "Build your profile once and reuse it across government, university, LGU, and private programs—no re-entering the same details.",
+    title: "Prepare before deadlines arrive",
+    body: "See future eligibility, document checklists, and upcoming openings—so you're ready when applications open.",
     Icon: ClipboardList,
   },
   {
-    title: "Never miss another deadline",
-    body: "Keep saved programs, reminders, and next steps in one place, always linked back to the official source.",
+    title: "One profile, your whole scholarship plan",
+    body: "Build your profile once and reuse it across government, university, LGU, and private programs—matches, saves, and reminders in one place.",
     Icon: CalendarX,
   },
 ] as const;
@@ -113,12 +113,32 @@ export type FaqItem = { q: string; a: ReactNode };
 
 export const faqItems: FaqItem[] = [
   {
+    q: "Is ISKONNECT free?",
+    a: "Yes. ISKONNECT is free for students. Create an account, build your profile, and use matching, search, and planning tools at no cost.",
+  },
+  {
+    q: "Where does scholarship information come from?",
+    a: "From publicly available official sources—CHED, DOST-SEI, TESDA, LGUs, universities, and private foundations. Every listing links to the provider's site.",
+  },
+  {
+    q: "Why show closed or past-cycle scholarships?",
+    a: "So you can learn typical requirements, compare benefits, and prepare early for the next cycle. Closed listings are labeled clearly—you won't be misled into thinking you can apply today.",
+  },
+  {
+    q: "What is future eligibility?",
+    a: "Some scholarships you don't qualify for yet—maybe you need a higher grade level or GWA. ISKONNECT flags these so you can plan ahead instead of discovering them too late.",
+  },
+  {
+    q: "How do I report a problem with a listing?",
+    a: "Open the scholarship page and tap \"Report an issue.\" Tell us about broken links, wrong deadlines, or outdated info. Our team reviews every report.",
+  },
+  {
     q: "Why might my matches change over time?",
-    a: "Your matches update when you update your profile, when program rules change, or when administrators adjust scoring weights for a new funding cycle.",
+    a: "Your plan updates when you update your profile, when program rules change, or when new scholarships are added. Completing your profile gives you more accurate results.",
   },
   {
     q: "Could I be missing scholarships I qualify for?",
-    a: "Hard eligibility filters only remove programs where your profile clearly fails a required rule (like a region restriction). If data is missing from your profile, you may see fewer results—which is why completing your profile matters.",
+    a: "If your profile is incomplete—missing income, GWA, or field of study—you may see fewer results. We only remove programs where you clearly fail a required rule, like a region restriction.",
   },
   {
     q: "How is my personal data used?",

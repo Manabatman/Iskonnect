@@ -106,12 +106,15 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
     filters.education_level ||
     filters.provider ||
     filters.school ||
+    filters.timing ||
+    filters.life_stage ||
+    filters.include_closed ||
     (filters.max_income != null && filters.max_income >= 0);
 
   const selectClassName =
-    "mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
+    "mt-1 w-full min-h-[44px] rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-3 text-base sm:text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
   const inputClassName =
-    "mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
+    "mt-1 w-full min-h-[44px] rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-3 text-base sm:text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
 
   return (
     <aside className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-md">
@@ -170,8 +173,54 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
         </div>
 
         <div>
+          <label htmlFor="filter-life-stage" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            Life stage
+          </label>
+          <select
+            id="filter-life-stage"
+            value={filters.life_stage ?? ""}
+            onChange={(e) => updateFilter("life_stage", e.target.value || undefined)}
+            className={selectClassName}
+          >
+            <option value="">Any stage</option>
+            <option value="high_school">High school</option>
+            <option value="college">College</option>
+            <option value="graduate">Graduate</option>
+            <option value="tvet">TVET</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="filter-timing" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            When to apply
+          </label>
+          <select
+            id="filter-timing"
+            value={filters.timing ?? ""}
+            onChange={(e) => updateFilter("timing", e.target.value || undefined)}
+            className={selectClassName}
+          >
+            <option value="">Any timing</option>
+            <option value="open_now">Open now</option>
+            <option value="opening_soon">Opening soon</option>
+            <option value="expected_reopen">Expected to reopen</option>
+            <option value="closed">Closed (reference)</option>
+          </select>
+        </div>
+
+        <label className="flex min-h-[44px] items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+          <input
+            type="checkbox"
+            checked={!!filters.include_closed}
+            onChange={(e) => updateFilter("include_closed", e.target.checked || undefined)}
+            className="h-5 w-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+          />
+          Include closed scholarships
+        </label>
+
+        <div>
           <label htmlFor="filter-field" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Field of Study
+            Study area
           </label>
           <input
             id="filter-field"
