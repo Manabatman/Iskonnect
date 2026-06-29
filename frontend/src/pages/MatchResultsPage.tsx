@@ -266,7 +266,7 @@ export function MatchResultsPage() {
         ) : matches.length > 0 ? (
           <div className="space-y-10">
             {activeMatches.length > 0 ? (
-              <div className="grid grid-cols-1 items-stretch gap-6">
+              <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {activeMatches.map((match) => (
                   <ErrorBoundary key={match.id}>
                     <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />

@@ -171,7 +171,7 @@ export function ScholarshipSearchPage() {
 
   return (
     <section id="scholarship-search" className="py-8">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto w-full max-w-none px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Search Scholarships</h1>
           <div className="flex flex-wrap items-center gap-3">
@@ -321,7 +321,7 @@ export function ScholarshipSearchPage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 items-stretch gap-6">
+                    <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
                       {results.map((s) => (
                         <ScholarshipCardV2
                           key={s.id}

@@ -139,7 +139,7 @@ export function ScholarshipCardV2({
 
   return (
     <article
-      className={`group flex h-full min-h-[520px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
       aria-labelledby={`scholarship-card-title-${base.id}`}
       role={cardInteractive ? "button" : undefined}
       tabIndex={cardInteractive ? 0 : undefined}
@@ -156,7 +156,7 @@ export function ScholarshipCardV2({
       }
     >
       {/* Visual header */}
-      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-t-2xl">
+      <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-t-2xl">
         {displayImageUrl ? (
           <>
             {!imageLoaded ? (
@@ -233,7 +233,23 @@ export function ScholarshipCardV2({
       </div>
 
       <div className="flex flex-1 flex-col px-5 pt-3">
-        <div className="flex flex-wrap gap-1.5">
+        <h3
+          id={`scholarship-card-title-${base.id}`}
+          className="line-clamp-2 text-lg font-bold leading-snug text-slate-900 dark:text-slate-50"
+        >
+          {base.title}
+        </h3>
+
+        <div className="mt-1 flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+          <IconBuilding className="h-4 w-4 shrink-0 opacity-80" />
+          <span className="min-w-0 truncate">{base.provider ?? "—"}</span>
+        </div>
+
+        {likelihood ? (
+          <p className="mt-1 text-xs font-medium text-primary-700 dark:text-primary-300">{likelihood}</p>
+        ) : null}
+
+        <div className="mt-2 flex flex-wrap gap-1.5">
           {match?.ui_state ? (
             <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
               {formatUiStateLabel(match.ui_state)}
@@ -269,29 +285,13 @@ export function ScholarshipCardV2({
           ) : null}
         </div>
 
-        <h3
-          id={`scholarship-card-title-${base.id}`}
-          className="mt-2 line-clamp-2 text-lg font-bold leading-snug text-slate-900 dark:text-slate-50"
-        >
-          {base.title}
-        </h3>
-
-        <div className="mt-1 flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
-          <IconBuilding className="h-4 w-4 shrink-0 opacity-80" />
-          <span className="min-w-0 truncate">{base.provider ?? "—"}</span>
-        </div>
-
-        {likelihood ? (
-          <p className="mt-1 text-xs font-medium text-primary-700 dark:text-primary-300">{likelihood}</p>
-        ) : null}
-
         {match?.deadline_passed ? (
           <p className="mt-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs leading-relaxed text-rose-900 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-100">
             You satisfy the eligibility requirements but the application deadline has already passed.
           </p>
         ) : null}
 
-        <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
           {base.description || "No description available."}
         </p>
 
