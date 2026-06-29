@@ -228,11 +228,11 @@ def test_live_matches_include_card_fields(api_with_db):
     client, Session = api_with_db
     _seed_scholarship(Session())
     _user, profile, headers = _student_with_profile(Session, email="matches_serial@example.com")
-    r = client.get(f"/api/v1/matches/{profile.id}", headers=headers)
+    r = client.get(f"/api/v1/plan/{profile.id}", headers=headers)
     assert r.status_code == 200
     matches = r.json()["matches"]
     assert matches
-    _assert_card_display_keys(matches[0], endpoint="GET /matches/{profile_id}")
+    _assert_card_display_keys(matches[0], endpoint="GET /plan/{profile_id}")
 
 
 def test_match_run_get_includes_image_fields(api_with_db):

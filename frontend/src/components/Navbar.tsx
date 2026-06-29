@@ -48,6 +48,9 @@ export function Navbar() {
       <Link to="/scholarships/search" className={navLinkClass(path.startsWith("/scholarships"))}>
         Scholarships
       </Link>
+      <Link to="/how-we-verify" className={navLinkClass(isActive("/how-we-verify"))}>
+        How we verify
+      </Link>
       <Link to="/transparency" className={navLinkClass(isActive("/transparency"))}>
         Transparency
       </Link>

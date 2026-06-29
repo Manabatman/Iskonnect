@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 const productLinks = [
   { to: "/how-it-works", label: "How it works" },
   { to: "/scholarships/search", label: "Scholarships" },
+  { to: "/how-we-verify", label: "How we verify" },
+  { to: "/scholarship-status", label: "Scholarship status" },
   { to: "/transparency", label: "Transparency" },
+  { to: "/faq", label: "FAQ" },
 ] as const;
 
 const companyLinks = [
   { to: "/about", label: "About" },
+  { to: "/why-iskonnect", label: "Why ISKONNECT" },
   { to: "/terms", label: "Terms" },
   { to: "/privacy", label: "Privacy" },
   { to: "/settings", label: "Settings" },

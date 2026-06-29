@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import type { MatchResult, ProfileCompleteness, UpcomingScholarship } from "../types";
+import type { MatchResult, ProfileCompleteness, OpportunityTimeline } from "../types";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
-import { UpcomingScholarshipCard } from "../components/UpcomingScholarshipCard";
+import { OpportunityTimelineView } from "../components/OpportunityTimeline";
 import { useAuth } from "../contexts/AuthContext";
 import { NetworkError, apiFetch } from "../api/client";
 
@@ -38,7 +38,7 @@ export function MatchResultsPage() {
   const { authHeaders } = useAuth();
   const navigate = useNavigate();
   const [matches, setMatches] = useState<MatchResult[]>([]);
-  const [upcomingScholarships, setUpcomingScholarships] = useState<UpcomingScholarship[]>([]);
+  const [opportunityTimeline, setOpportunityTimeline] = useState<OpportunityTimeline | null>(null);
   const [profileCompleteness, setProfileCompleteness] = useState<ProfileCompleteness | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export function MatchResultsPage() {
         .then((data) => {
           if (!cancelled) {
             setMatches(data.results ?? []);
-            setUpcomingScholarships([]);
+            setOpportunityTimeline(null);
             setProfileCompleteness(null);
             setDiagnostics(null);
           }
@@ -86,7 +86,7 @@ export function MatchResultsPage() {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    apiFetch(`/api/v1/matches/${profileId}`, {
+    apiFetch(`/api/v1/plan/${profileId}`, {
       headers: authHeaders(),
     })
       .then((res) => {
@@ -99,7 +99,7 @@ export function MatchResultsPage() {
         .then((data) => {
           if (!cancelled) {
             setMatches(data.matches ?? []);
-            setUpcomingScholarships(data.upcoming_scholarships ?? []);
+            setOpportunityTimeline(data.timeline ?? null);
             setProfileCompleteness(data.profile_completeness ?? null);
             setDiagnostics((data as { diagnostics?: MatchDiagnostics }).diagnostics ?? null);
           }
@@ -128,7 +128,8 @@ export function MatchResultsPage() {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="animate-pulse rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12">
+          <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">Building your scholarship plan…</p>
+          <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-12 dark:border-slate-700 dark:bg-slate-800">
             <div className="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700" />
             <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
@@ -145,14 +146,15 @@ export function MatchResultsPage() {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center">
-            <p className="text-red-700">{error}</p>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center dark:border-red-800 dark:bg-red-950/40">
+            <p className="font-medium text-red-800 dark:text-red-200">We couldn&apos;t load your scholarship plan</p>
+            <p className="mt-2 text-sm text-red-700 dark:text-red-300">{error}</p>
             <button
               type="button"
               onClick={handleReset}
               className="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-white hover:bg-primary-700"
             >
-              Update Your Profile
+              Update your profile
             </button>
           </div>
         </div>
@@ -168,20 +170,19 @@ export function MatchResultsPage() {
             className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100"
             role="status"
           >
-            <p className="font-medium">Limited profile data</p>
+            <p className="font-medium">A few more details will sharpen your plan</p>
             <p className="mt-1 text-amber-800 dark:text-amber-200">
               Only {profileCompleteness.filled_fields} of {profileCompleteness.total_fields} key fields are filled.
-              Matches may be broad or less accurate — add income, GWA, field of study, and school type for better
-              results.
+              Add income, GWA, field of study, and school type to unlock more accurate matches and preparation tips.
             </p>
           </div>
         ) : null}
 
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-            Your Top Matches
+            Your Scholarship Plan
             <span className="ml-2 rounded-full bg-primary-100 dark:bg-primary-900 px-2.5 py-0.5 text-sm font-medium text-primary-800 dark:text-primary-300">
-              {activeMatches.length}
+              {opportunityTimeline?.summary.total_actionable ?? activeMatches.length}
             </span>
           </h2>
           <button
@@ -194,42 +195,14 @@ export function MatchResultsPage() {
           </button>
         </div>
 
-        {matches.length === 0 ? (
-          upcomingScholarships.length > 0 ? (
-            <div className="space-y-6">
-              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-md">
-                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
-                  No scholarships match your profile right now.
-                </p>
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  However, these scholarships typically reopen on a cycle. Based on last year&apos;s dates, here&apos;s when they&apos;re expected to open:
-                </p>
-                {diagnostics?.top_blockers && diagnostics.top_blockers.length > 0 ? (
-                  <ul className="mt-4 list-inside list-disc text-left text-sm text-slate-600 dark:text-slate-300">
-                    {diagnostics.top_blockers.map((b) => (
-                      <li key={b}>{b}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </div>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {upcomingScholarships.map((sch) => (
-                  <UpcomingScholarshipCard key={sch.id} scholarship={sch} />
-                ))}
-              </div>
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                  aria-label="Update your profile"
-                >
-                  Update Your Profile
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12 text-center shadow-md">
+        {opportunityTimeline ? (
+          <div className="mb-10">
+            <OpportunityTimelineView timeline={opportunityTimeline} onShowAnalysis={setAnalysisMatch} compact />
+          </div>
+        ) : null}
+
+        {matches.length === 0 && !opportunityTimeline ? (
+          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12 text-center shadow-md">
               <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700">
                 <svg
                   className="h-12 w-12 text-slate-400"
@@ -246,9 +219,10 @@ export function MatchResultsPage() {
                   />
                 </svg>
               </div>
-              <p className="text-lg font-medium text-slate-700 dark:text-slate-300">No matches found yet</p>
+              <p className="text-lg font-medium text-slate-700 dark:text-slate-300">Your plan is still taking shape</p>
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                Try adjusting your age, region, or needs and run the matching again.
+                No scholarships matched your profile yet—but you can unlock more. Complete missing profile fields, broaden
+                your region or course interests, or browse the catalog while we add new programs.
               </p>
               {diagnostics?.total_checked != null ? (
                 <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
@@ -289,11 +263,10 @@ export function MatchResultsPage() {
                 Update Your Profile
               </button>
             </div>
-          )
-        ) : (
+        ) : matches.length > 0 ? (
           <div className="space-y-10">
             {activeMatches.length > 0 ? (
-              <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 items-stretch gap-6">
                 {activeMatches.map((match) => (
                   <ErrorBoundary key={match.id}>
                     <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
@@ -323,7 +296,7 @@ export function MatchResultsPage() {
               </div>
             ) : null}
           </div>
-        )}
+        ) : null}
       </div>
 
       <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />

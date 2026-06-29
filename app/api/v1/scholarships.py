@@ -3,7 +3,7 @@ import logging
 import time
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -14,10 +14,11 @@ from app.limiter import limiter
 from app.utils.sanitize import strip_tags
 from app.utils.json_helpers import parse_json
 from app.utils.audit import log_action
-from app.utils.scholarship_versioning import (
-    diff_snapshots,
-    record_scholarship_version,
-    snapshot_scholarship_row,
+from app.utils.scholarship_persist import (
+    PersistResult,
+    apply_schema_to_row,
+    find_existing_scholarship,
+    persist_scholarship_from_schema as _persist_scholarship_from_schema,
 )
 from app.scholarship_cache import get_cached_scholarship_dicts as _cache_fetch_dicts
 from app.scholarship_cache import invalidate_scholarship_cache
@@ -29,6 +30,12 @@ from app.storage.supabase_storage import (
 )
 from app.utils.dedupe import scholarship_dedupe_key
 from app.utils.image_processing import compress_scholarship_image
+from app.utils.scholarship_versioning import (
+    diff_snapshots,
+    record_scholarship_version,
+    snapshot_scholarship_row,
+)
+from app.utils.quality_score import compute_confidence_score
 from app.utils.timezone import utc_now_naive
 
 logger = logging.getLogger(__name__)
@@ -62,6 +69,18 @@ from app.serialization.scholarship import (
     scholarship_to_api_payload as _scholarship_to_response,
     scholarship_to_catalog_dict as _scholarship_to_dict,
 )
+from app.auth import assert_can_read_profile, get_optional_user_id, get_profile_access_token
+from app.api.v1.profiles import get_profile_dict
+from app.matching.preparation import compute_application_readiness
+from app.utils.freshness_chips import build_freshness_chips
+
+
+def _public_scholarship_payload(row) -> dict:
+    """Student-facing scholarship payload without internal completeness score."""
+    data = dict(_scholarship_to_response(row))
+    data.pop("confidence_score", None)
+    data["freshness_chips"] = build_freshness_chips(data)
+    return data
 
 
 def persist_scholarship_from_schema(
@@ -71,84 +90,21 @@ def persist_scholarship_from_schema(
     version_changed_by: int | None = None,
     auto_commit: bool = True,
     verification_source: str | None = None,
+    allow_upsert: bool = False,
 ) -> models.Scholarship:
-    """Insert a Scholarship row from a validated schema (used by POST and staging approval).
-
-    When auto_commit is False, caller must commit (e.g. single transaction with staging row update).
-    """
-    dedupe = scholarship_dedupe_key(scholarship.title, scholarship.provider, scholarship.link)
-    dup = (
-        db.query(models.Scholarship)
-        .filter(models.Scholarship.dedupe_key == dedupe)
-        .first()
-    )
-    if dup:
-        raise HTTPException(status_code=409, detail="Scholarship with same title, provider, and link already exists")
-
-    db_scholarship = models.Scholarship(
-        title=strip_tags(scholarship.title) or scholarship.title,
-        provider=strip_tags(scholarship.provider) or scholarship.provider if scholarship.provider else None,
-        source=strip_tags(scholarship.source) or scholarship.source if scholarship.source else None,
-        dedupe_key=dedupe,
-        countries=",".join(scholarship.countries or []),
-        regions=",".join(scholarship.regions or []),
-        min_age=scholarship.min_age,
-        max_age=scholarship.max_age,
-        needs_tags=json.dumps(scholarship.needs_tags or []),
-        level=scholarship.level,
-        link=scholarship.link,
-        description=strip_tags(scholarship.description) or scholarship.description if scholarship.description else None,
-        image_url=scholarship.image_url,
-        image_alt=strip_tags(scholarship.image_alt) or scholarship.image_alt if scholarship.image_alt else None,
-        provider_type=scholarship.provider_type,
-        scholarship_type=scholarship.scholarship_type,
-        eligible_levels=json.dumps(scholarship.eligible_levels or []),
-        eligible_regions=json.dumps(scholarship.eligible_regions or scholarship.regions or []),
-        eligible_cities=json.dumps(scholarship.eligible_cities or []),
-        residency_required=scholarship.residency_required or False,
-        eligible_school_types=json.dumps(scholarship.eligible_school_types or ["Public", "Private"]),
-        eligible_courses_psced=json.dumps(scholarship.eligible_courses_psced or []),
-        eligible_courses_specific=json.dumps(scholarship.eligible_courses_specific or []),
-        preferred_extracurriculars=json.dumps(scholarship.preferred_extracurriculars or []),
-        preferred_awards=json.dumps(scholarship.preferred_awards or []),
-        max_income_threshold=scholarship.max_income_threshold,
-        min_gwa_normalized=scholarship.min_gwa_normalized,
-        priority_groups=json.dumps(scholarship.priority_groups or []),
-        members_only=scholarship.members_only or False,
-        benefit_tuition=scholarship.benefit_tuition or False,
-        benefit_allowance_monthly=scholarship.benefit_allowance_monthly,
-        benefit_books=scholarship.benefit_books or False,
-        benefit_total_value=scholarship.benefit_total_value,
-        required_documents=json.dumps(scholarship.required_documents or []),
-        has_qualifying_exam=scholarship.has_qualifying_exam or False,
-        has_interview=scholarship.has_interview or False,
-        has_essay_requirement=scholarship.has_essay_requirement or False,
-        has_return_service=scholarship.has_return_service or False,
-        application_deadline=scholarship.application_deadline,
-        application_open_date=scholarship.application_open_date,
-        academic_year_target=scholarship.academic_year_target,
-        is_active=scholarship.is_active if scholarship.is_active is not None else True,
-        last_verified_at=utc_now_naive(),
-        verification_source=verification_source,
-        data_status="active",
-    )
-    db.add(db_scholarship)
-    db.flush()
-    snap = snapshot_scholarship_row(db_scholarship)
-    record_scholarship_version(
+    """Insert or update a Scholarship row; returns the ORM row."""
+    result = _persist_scholarship_from_schema(
         db,
-        scholarship_id=db_scholarship.id,
-        changes={"action": "create", "snapshot": snap},
-        changed_by=version_changed_by,
+        scholarship,
+        version_changed_by=version_changed_by,
+        auto_commit=auto_commit,
+        verification_source=verification_source,
+        allow_upsert=allow_upsert,
     )
     if auto_commit:
-        db.commit()
-        db.refresh(db_scholarship)
         invalidate_scholarship_cache()
-    else:
-        db.flush()
-        db.refresh(db_scholarship)
-    return db_scholarship
+    return result.row
+
 
 
 @router.post("/scholarships", response_model=schemas.ScholarshipResponse)
@@ -195,18 +151,28 @@ def list_scholarships(
     return get_cached_scholarship_dicts(db)
 
 
-@router.get("/scholarships/{scholarship_id}", response_model=schemas.ScholarshipResponse)
+@router.get("/scholarships/{scholarship_id}")
 @limiter.limit("120/minute")
 def get_scholarship(
     request: Request,
     scholarship_id: int,
+    profile_id: int | None = Query(None),
     db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_optional_user_id)] = None,
+    profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
 ):
     s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
     if not s:
         logger.warning("scholarships_get_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
-    return _scholarship_to_response(s)
+    payload = _public_scholarship_payload(s)
+    if profile_id is not None:
+        assert_can_read_profile(profile_id, db, user_id, profile_token)
+        profile = get_profile_dict(profile_id, db)
+        if profile:
+            sch_dict = _scholarship_to_dict(s)
+            payload["preparation"] = compute_application_readiness(sch_dict, profile)
+    return payload
 
 
 @router.put("/scholarships/{scholarship_id}", response_model=schemas.ScholarshipResponse)
@@ -223,50 +189,15 @@ def update_scholarship(
         logger.warning("scholarships_update_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
     old_snap = snapshot_scholarship_row(s)
-    s.title = strip_tags(scholarship.title) or scholarship.title
-    s.provider = strip_tags(scholarship.provider) or scholarship.provider if scholarship.provider else None
-    s.source = strip_tags(scholarship.source) or scholarship.source if scholarship.source else None
-    s.countries = ",".join(scholarship.countries or [])
-    s.regions = ",".join(scholarship.regions or [])
-    s.min_age = scholarship.min_age
-    s.max_age = scholarship.max_age
-    s.needs_tags = json.dumps(scholarship.needs_tags or [])
-    s.level = scholarship.level
-    s.link = scholarship.link
-    s.description = strip_tags(scholarship.description) or scholarship.description if scholarship.description else None
-    if scholarship.image_url is not None:
-        s.image_url = scholarship.image_url
-    if scholarship.image_alt is not None:
-        s.image_alt = strip_tags(scholarship.image_alt) or scholarship.image_alt
-    s.provider_type = scholarship.provider_type
-    s.scholarship_type = scholarship.scholarship_type
-    s.eligible_levels = json.dumps(scholarship.eligible_levels or [])
-    s.eligible_regions = json.dumps(scholarship.eligible_regions or scholarship.regions or [])
-    s.eligible_cities = json.dumps(scholarship.eligible_cities or [])
-    s.residency_required = scholarship.residency_required or False
-    s.eligible_school_types = json.dumps(scholarship.eligible_school_types or ["Public", "Private"])
-    s.eligible_courses_psced = json.dumps(scholarship.eligible_courses_psced or [])
-    s.eligible_courses_specific = json.dumps(scholarship.eligible_courses_specific or [])
-    s.preferred_extracurriculars = json.dumps(scholarship.preferred_extracurriculars or [])
-    s.preferred_awards = json.dumps(scholarship.preferred_awards or [])
-    s.max_income_threshold = scholarship.max_income_threshold
-    s.min_gwa_normalized = scholarship.min_gwa_normalized
-    s.priority_groups = json.dumps(scholarship.priority_groups or [])
-    s.members_only = scholarship.members_only or False
-    s.benefit_tuition = scholarship.benefit_tuition or False
-    s.benefit_allowance_monthly = scholarship.benefit_allowance_monthly
-    s.benefit_books = scholarship.benefit_books or False
-    s.benefit_total_value = scholarship.benefit_total_value
-    s.required_documents = json.dumps(scholarship.required_documents or [])
-    s.has_qualifying_exam = scholarship.has_qualifying_exam or False
-    s.has_interview = scholarship.has_interview or False
-    s.has_essay_requirement = scholarship.has_essay_requirement or False
-    s.has_return_service = scholarship.has_return_service or False
-    s.application_deadline = scholarship.application_deadline
-    s.application_open_date = scholarship.application_open_date
-    s.academic_year_target = scholarship.academic_year_target
-    if scholarship.is_active is not None:
-        s.is_active = scholarship.is_active
+    apply_schema_to_row(
+        s,
+        scholarship,
+        preserve_images=True,
+        verification_source=s.verification_source,
+        is_import=False,
+    )
+    s.last_verified_at = utc_now_naive()
+    s.confidence_score = compute_confidence_score(s)
     new_snap = snapshot_scholarship_row(s)
     diff = diff_snapshots(old_snap, new_snap)
     if diff:

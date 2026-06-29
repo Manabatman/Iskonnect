@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { BackNavLink } from "../components/BackNavLink";
 const factors = [
   {
@@ -163,6 +164,23 @@ export function TransparencyPage() {
             Document readiness (uploaded vs. required documents) is shown on your scholarship and documents pages — it is{" "}
             <strong className="font-semibold">not</strong> part of this match score, so your fit rank reflects program rules,
             not how many files you have uploaded yet.
+          </p>
+        </div>
+
+        <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Scholarship data you can trust</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            Match scores tell you how well you fit a program&apos;s rules. Freshness labels tell you how current the listing
+            is. Read{" "}
+            <Link to="/how-we-verify" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              how we verify scholarships
+            </Link>{" "}
+            and the{" "}
+            <Link to="/scholarship-status" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              scholarship status guide
+            </Link>{" "}
+            to understand what each label means—and always confirm details on the official provider&apos;s site before
+            applying.
           </p>
         </div>
 

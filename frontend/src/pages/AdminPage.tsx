@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
 
-type Tab = "scholarships" | "staging" | "users" | "matches" | "feedback" | "reports" | "system";
+type Tab = "scholarships" | "staging" | "reviews" | "users" | "matches" | "feedback" | "reports" | "system";
 
 type AdminUser = { id: number; email: string; role: string; email_verified: boolean };
 type AdminMatchRun = {
@@ -52,7 +52,17 @@ type StagingRow = {
   status: string;
   dedupe_key: string | null;
   created_at: string;
+  duplicate_candidates?: { scholarship_id: number; title: string; confidence: number }[];
 };
+
+const SCH_PAGE_SIZE = 50;
+const REVIEW_QUEUES = [
+  { id: "needs_review", label: "Needs review" },
+  { id: "missing_image", label: "Missing image" },
+  { id: "low_quality", label: "Low quality" },
+  { id: "stale", label: "Stale verification" },
+  { id: "duplicates", label: "Duplicates" },
+] as const;
 
 export function AdminPage() {
   const { authHeaders } = useAuth();
@@ -68,9 +78,23 @@ export function AdminPage() {
   const [scraperRuns, setScraperRuns] = useState<ScraperRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
   const [dataQuality, setDataQuality] = useState<Record<string, number> | null>(null);
+  const [catalogHealth, setCatalogHealth] = useState<Record<string, number> | null>(null);
+  const [importDashboard, setImportDashboard] = useState<{
+    staging_pending?: number;
+    staging_total?: number;
+    recent_scraper_runs?: ScraperRunRow[];
+  } | null>(null);
   const [uploadingImageId, setUploadingImageId] = useState<number | null>(null);
   const [stagingRows, setStagingRows] = useState<StagingRow[]>([]);
   const [stagingActionId, setStagingActionId] = useState<number | null>(null);
+  const [schPage, setSchPage] = useState(1);
+  const [reviewQueue, setReviewQueue] = useState<(typeof REVIEW_QUEUES)[number]["id"]>("needs_review");
+  const [reviewItems, setReviewItems] = useState<Record<string, unknown>[]>([]);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editProvider, setEditProvider] = useState("");
+  const [editLink, setEditLink] = useState("");
+  const [showCreate, setShowCreate] = useState(false);
 
   const headers = useCallback(() => authHeaders(), [authHeaders]);
 
@@ -163,16 +187,28 @@ export function AdminPage() {
         if (!r.ok) throw new Error("data quality");
         return r.json();
       }),
+      apiFetch("/api/v1/admin/dashboard/health", { headers: headers() }).then((r) => {
+        if (!r.ok) throw new Error("catalog health");
+        return r.json();
+      }),
+      apiFetch("/api/v1/admin/dashboard/import", { headers: headers() }).then((r) => {
+        if (!r.ok) throw new Error("import dashboard");
+        return r.json();
+      }),
     ])
-      .then(([h, s, dq]) => {
+      .then(([h, s, dq, ch, imp]) => {
         setHealthJson(JSON.stringify(h, null, 2));
         setScraperRuns(Array.isArray(s) ? s : []);
         setDataQuality(dq && typeof dq === "object" ? dq : null);
+        setCatalogHealth(ch && typeof ch === "object" ? ch : null);
+        setImportDashboard(imp && typeof imp === "object" ? imp : null);
       })
       .catch(() => {
         setHealthJson(null);
         setScraperRuns([]);
         setDataQuality(null);
+        setCatalogHealth(null);
+        setImportDashboard(null);
         setError("Could not load system health (check admin role and API URL).");
       });
   }, [tab, headers]);
@@ -234,13 +270,28 @@ export function AdminPage() {
     }
   };
 
-  const handleStagingApprove = async (stagingId: number) => {
+  useEffect(() => {
+    if (tab !== "reviews") return;
+    setError(null);
+    apiFetch(`/api/v1/admin/queues/${reviewQueue}?limit=50`, { headers: headers() })
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load review queue");
+        return r.json();
+      })
+      .then((d: { items?: Record<string, unknown>[] }) =>
+        setReviewItems(Array.isArray(d.items) ? d.items : [])
+      )
+      .catch((e) => setError(e instanceof Error ? e.message : "Error"));
+  }, [tab, reviewQueue, headers]);
+
+  const handleStagingApprove = async (stagingId: number, action: "create" | "update" = "create") => {
     setStagingActionId(stagingId);
     setError(null);
     try {
       const res = await apiFetch(`/api/v1/scholarships/staging/${stagingId}/approve`, {
         method: "POST",
-        headers: headers(),
+        headers: { ...headers(), "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
@@ -276,9 +327,53 @@ export function AdminPage() {
     }
   };
 
+  const handleReportAction = async (reportId: number, action: "resolve" | "dismiss") => {
+    const res = await apiFetch(`/api/v1/reports/${reportId}/${action}`, {
+      method: "POST",
+      headers: headers(),
+    });
+    if (!res.ok) throw new Error(`Failed to ${action} report`);
+    setReports((prev) => prev.filter((r) => r.id !== reportId));
+  };
+
+  const handleSaveScholarship = async (scholarshipId?: number) => {
+    const payload = {
+      title: editTitle.trim(),
+      provider: editProvider.trim() || null,
+      link: editLink.trim() || null,
+      source: "manual",
+    };
+    if (!payload.title) {
+      setError("Title is required");
+      return;
+    }
+    const res = await apiFetch(
+      scholarshipId ? `/api/v1/scholarships/${scholarshipId}` : "/api/v1/scholarships",
+      {
+        method: scholarshipId ? "PUT" : "POST",
+        headers: { ...headers(), "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.detail ?? "Save failed");
+    }
+    setEditingId(null);
+    setShowCreate(false);
+    fetchScholarships();
+  };
+
+  const pagedScholarships = scholarships.slice(
+    (schPage - 1) * SCH_PAGE_SIZE,
+    schPage * SCH_PAGE_SIZE
+  );
+  const schTotalPages = Math.max(1, Math.ceil(scholarships.length / SCH_PAGE_SIZE));
+
   const tabs: { id: Tab; label: string }[] = [
     { id: "scholarships", label: "Scholarships" },
     { id: "staging", label: "Pending" },
+    { id: "reviews", label: "Review queues" },
     { id: "users", label: "Users" },
     { id: "matches", label: "Matches" },
     { id: "feedback", label: "Feedback" },
@@ -357,9 +452,67 @@ export function AdminPage() {
 
         {tab === "scholarships" && (
           <>
-            <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
-              {scholarships.length} scholarships. Upload banner images below or use API POST/PUT for other fields.
-            </p>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {scholarships.length} scholarships (page {schPage} of {schTotalPages})
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCreate(true);
+                  setEditTitle("");
+                  setEditProvider("");
+                  setEditLink("");
+                }}
+                className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white"
+              >
+                Create scholarship
+              </button>
+            </div>
+            {(showCreate || editingId !== null) && (
+              <div className="mb-4 rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+                <h3 className="mb-2 font-medium">{editingId ? "Edit scholarship" : "New scholarship"}</h3>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  <input
+                    className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
+                    placeholder="Title"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                  />
+                  <input
+                    className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
+                    placeholder="Provider"
+                    value={editProvider}
+                    onChange={(e) => setEditProvider(e.target.value)}
+                  />
+                  <input
+                    className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
+                    placeholder="Application link"
+                    value={editLink}
+                    onChange={(e) => setEditLink(e.target.value)}
+                  />
+                </div>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    className="rounded bg-primary-600 px-3 py-1 text-sm text-white"
+                    onClick={() => void handleSaveScholarship(editingId ?? undefined).catch((e) => setError(String(e)))}
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded border px-3 py-1 text-sm"
+                    onClick={() => {
+                      setEditingId(null);
+                      setShowCreate(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
               <table className="min-w-full text-sm">
                 <thead className="bg-slate-50 dark:bg-slate-800">
@@ -374,7 +527,7 @@ export function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {scholarships.map((s) => (
+                  {pagedScholarships.map((s) => (
                     <tr key={s.id} className="border-t border-slate-100 dark:border-slate-700">
                       <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{s.id}</td>
                       <td className="px-4 py-2 font-medium text-slate-900 dark:text-slate-100">{s.title}</td>
@@ -432,20 +585,93 @@ export function AdminPage() {
                         </span>
                       </td>
                       <td className="px-4 py-2">
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(s.id)}
-                          className="text-red-600 hover:text-red-700 disabled:opacity-50"
-                          disabled={s.is_active === false}
-                        >
-                          Deactivate
-                        </button>
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingId(s.id);
+                              setEditTitle(s.title);
+                              setEditProvider(s.provider ?? "");
+                              setEditLink(s.link ?? "");
+                              setShowCreate(false);
+                            }}
+                            className="text-primary-600 hover:underline"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(s.id)}
+                            className="text-red-600 hover:text-red-700 disabled:opacity-50"
+                            disabled={s.is_active === false}
+                          >
+                            Deactivate
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            <div className="mt-4 flex gap-2">
+              <button
+                type="button"
+                disabled={schPage <= 1}
+                onClick={() => setSchPage((p) => Math.max(1, p - 1))}
+                className="rounded border px-3 py-1 text-sm disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                disabled={schPage >= schTotalPages}
+                onClick={() => setSchPage((p) => p + 1)}
+                className="rounded border px-3 py-1 text-sm disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+
+        {tab === "reviews" && (
+          <>
+            <div className="mb-4 flex flex-wrap gap-2">
+              {REVIEW_QUEUES.map((q) => (
+                <button
+                  key={q.id}
+                  type="button"
+                  onClick={() => setReviewQueue(q.id)}
+                  className={[
+                    "rounded-lg px-3 py-1 text-sm",
+                    reviewQueue === q.id ? "bg-primary-600 text-white" : "border",
+                  ].join(" ")}
+                >
+                  {q.label}
+                </button>
+              ))}
+            </div>
+            <ul className="space-y-2">
+              {reviewItems.length === 0 ? (
+                <p className="text-slate-600 dark:text-slate-400">Queue empty.</p>
+              ) : (
+                reviewItems.map((item) => (
+                  <li
+                    key={String(item.id)}
+                    className="rounded-lg border border-slate-200 p-3 text-sm dark:border-slate-700"
+                  >
+                    <p className="font-medium">{String(item.title ?? "—")}</p>
+                    <p className="text-slate-500">
+                      #{String(item.id)} · score {String(item.confidence_score ?? "—")}
+                    </p>
+                    <Link to={`/scholarship/${item.id}`} className="text-primary-600 hover:underline">
+                      View
+                    </Link>
+                  </li>
+                ))
+              )}
+            </ul>
           </>
         )}
 
@@ -483,10 +709,19 @@ export function AdminPage() {
                             <button
                               type="button"
                               disabled={stagingActionId === r.id}
-                              onClick={() => void handleStagingApprove(r.id)}
+                              onClick={() =>
+                                void handleStagingApprove(
+                                  r.id,
+                                  (r.duplicate_candidates?.length ?? 0) > 0 ? "update" : "create"
+                                )
+                              }
                               className="rounded bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50"
                             >
-                              {stagingActionId === r.id ? "…" : "Approve"}
+                              {stagingActionId === r.id
+                                ? "…"
+                                : (r.duplicate_candidates?.length ?? 0) > 0
+                                  ? "Update live"
+                                  : "Approve"}
                             </button>
                             <button
                               type="button"
@@ -587,6 +822,30 @@ export function AdminPage() {
                   </p>
                   <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{r.description}</p>
                   <p className="mt-1 text-xs text-slate-500">{r.created_at}</p>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      type="button"
+                      className="rounded bg-green-600 px-2 py-1 text-xs text-white"
+                      onClick={() =>
+                        void handleReportAction(r.id, "resolve").catch((e) =>
+                          setError(e instanceof Error ? e.message : "Error")
+                        )
+                      }
+                    >
+                      Resolve
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded border border-slate-300 px-2 py-1 text-xs"
+                      onClick={() =>
+                        void handleReportAction(r.id, "dismiss").catch((e) =>
+                          setError(e instanceof Error ? e.message : "Error")
+                        )
+                      }
+                    >
+                      Dismiss
+                    </button>
+                  </div>
                 </li>
               ))
             )}
@@ -595,6 +854,37 @@ export function AdminPage() {
 
         {tab === "system" && (
           <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Scholarship health</h3>
+              {catalogHealth ? (
+                <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                  {Object.entries(catalogHealth).map(([k, v]) => (
+                    <li
+                      key={k}
+                      className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                    >
+                      <span className="text-slate-600 dark:text-slate-400">{k.replace(/_/g, " ")}</span>
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">{String(v)}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-sm text-slate-500">—</p>
+              )}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Import pipeline</h3>
+              {importDashboard ? (
+                <div className="mt-2 space-y-2 text-sm">
+                  <p>
+                    Staging pending: <strong>{importDashboard.staging_pending ?? 0}</strong> /{" "}
+                    {importDashboard.staging_total ?? 0}
+                  </p>
+                </div>
+              ) : (
+                <p className="mt-2 text-sm text-slate-500">—</p>
+              )}
+            </div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">GET /health</h3>
               <pre className="mt-2 max-h-64 overflow-auto rounded-lg bg-slate-900 p-4 text-xs text-green-200">

@@ -5,12 +5,18 @@ Match service - orchestrates hard filtering, scoring, and result assembly.
 import logging
 
 logger = logging.getLogger(__name__)
-from app.matching.hard_filters import DEADLINE_PASSED_MESSAGE, filter_scholarships, is_application_deadline_passed
+from app.matching.hard_filters import (
+    DEADLINE_PASSED_MESSAGE,
+    filter_scholarships,
+    is_application_deadline_passed,
+)
 from app.matching.scoring_port import ScoringEnginePort, ScoringPayload, ScoringResult
 from app.scoring import WeightedDeterministicScorer
 from app.taxonomy.regions import normalize_region
 from app.taxonomy.income_brackets import get_income_bracket
 from app.serialization.scholarship import build_match_result_payload
+from app.matching.temporal_state import attach_temporal_fields
+from app.utils.freshness_chips import attach_freshness_fields
 from app.utils.json_helpers import parse_json
 
 
@@ -135,7 +141,7 @@ class MatchService:
     def __init__(self, scoring_engine: ScoringEnginePort | None = None):
         self.scoring_engine = scoring_engine or WeightedDeterministicScorer()
 
-    def get_matches(self, profile: dict, scholarships: list) -> tuple[list[dict], dict]:
+    def get_matches(self, profile: dict, scholarships: list, *, attach_temporal: bool = True) -> tuple[list[dict], dict]:
         """
         Return ranked match results with breakdown and explanation, plus filter/scoring diagnostics.
         profile and scholarships are dicts (from API/DB).
@@ -154,11 +160,24 @@ class MatchService:
             payload = self._build_scoring_payload(profile, sch)
             scoring_result = self.scoring_engine.score(payload)
             match_result = self._build_match_result(sch, scoring_result)
+            ds = sch.get("data_status")
+            if ds == "needs_review":
+                penalty = 0.65
+                match_result["final_score"] = round(match_result.get("final_score", 0) * penalty, 2)
+                match_result["score"] = match_result["final_score"]
+                match_result["reliability_warning"] = "This scholarship needs admin review — verify details before applying."
+                expl = match_result.get("explanation") or []
+                if match_result["reliability_warning"] not in expl:
+                    match_result["explanation"] = [match_result["reliability_warning"]] + list(expl)
+            if attach_temporal:
+                match_result = attach_temporal_fields(match_result, profile)
+                match_result = attach_freshness_fields(match_result)
             results.append(match_result)
 
         results.sort(
             key=lambda m: (
                 1 if m.get("deadline_passed") else 0,
+                1 if m.get("reliability_warning") else 0,
                 -m.get("final_score", 0),
             ),
         )

@@ -81,6 +81,47 @@ export interface UpcomingScholarship {
   benefit_total_value?: number | null;
 }
 
+export interface FreshnessChip {
+  label: string;
+  tone: "success" | "warning" | "danger" | "neutral" | string;
+}
+
+export type EligibilityState =
+  | "eligible_now"
+  | "eligible_soon"
+  | "missing_one_requirement"
+  | "prepare_now"
+  | "requires_future_grade_level"
+  | "requires_future_enrollment"
+  | "requires_better_academic_standing"
+  | "expected_next_cycle"
+  | "past_opportunity"
+  | "potential_match"
+  | "not_eligible";
+
+export interface OpportunityTimelineSummary {
+  available_now: number;
+  opening_soon: number;
+  prepare_for: number;
+  expected_reopening: number;
+  future_eligibility: number;
+  past_reference: number;
+  total_actionable: number;
+}
+
+export interface OpportunityTimeline {
+  summary: OpportunityTimelineSummary;
+  lanes: {
+    available_now: MatchResult[];
+    opening_soon: MatchResult[];
+    prepare_for: MatchResult[];
+    expected_reopening: MatchResult[];
+    future_eligibility: MatchResult[];
+    past_reference: MatchResult[];
+  };
+  headline: string;
+}
+
 export interface MatchResult {
   id: number;
   title: string;
@@ -120,6 +161,15 @@ export interface MatchResult {
   data_status?: string | null;
   link_status?: string | null;
   verification_source?: string | null;
+  last_verified_at?: string | null;
+  confidence_score?: number | null;
+  eligibility_state?: EligibilityState | string;
+  ui_state?: "eligible_now" | "opening_soon" | "prepare_ahead" | "future_eligibility" | string;
+  gap_reason?: string | null;
+  predicted_open?: string | null;
+  next_action?: string | null;
+  lifecycle_hint?: string | null;
+  freshness_chips?: FreshnessChip[];
 }
 
 export interface MatchRunSummary {
@@ -199,6 +249,11 @@ export interface ScholarshipSearchFilters {
   /** University / institution keyword (matches title, provider, description, school types) */
   school?: string;
   max_income?: number;
+  /** When to apply: open_now | opening_soon | closed | expected_reopen */
+  timing?: string;
+  /** Life stage: high_school | college | graduate | tvet */
+  life_stage?: string;
+  include_closed?: boolean;
 }
 
 export interface SavedScholarship {

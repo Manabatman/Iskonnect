@@ -12,13 +12,19 @@ export function FinalCtaSection() {
             Your next opportunity is one profile away.
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg">
-            Create a free account in minutes. Your matches and saved programs stay in one place.
+            Create a free account in minutes. Your scholarship plan, saved programs, and preparation tools stay in one
+            place.
           </p>
           <Link to="/register" className={`${primaryButtonClass} mt-8`}>
             Create your free account
             <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">No cost • Takes ~3 minutes</p>
+          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
+            No cost • Takes ~3 minutes •{" "}
+            <Link to="/why-iskonnect" className="underline hover:text-slate-700 dark:hover:text-slate-300">
+              Why ISKONNECT exists
+            </Link>
+          </p>
         </Reveal>
       </div>
     </section>

@@ -47,7 +47,7 @@ def _data_status_passes_for_matching(data_status: str | None) -> bool:
     """Exclude expired / broken_link from matching when feature flag is on."""
     if not data_status:
         return True
-    return data_status not in ("expired", "broken_link")
+    return data_status not in ("expired", "broken_link", "past_deadline")
 
 
 def _level_matches(profile_level: str | None, eligible_levels: list, legacy_level: str | None) -> bool:

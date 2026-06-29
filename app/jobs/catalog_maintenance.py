@@ -30,12 +30,11 @@ def run_catalog_maintenance() -> dict[str, int]:
     Returns counts: expired_rows_updated, needs_review_rows_updated.
     """
     today = date.today()
-    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     db = SessionLocal()
     expired_count = 0
     review_count = 0
     try:
-        # All rows with a past deadline: inactive + expired (handles NULL data_status safely).
         stmt = (
             update(models.Scholarship)
             .where(
@@ -47,13 +46,24 @@ def run_catalog_maintenance() -> dict[str, int]:
         result = db.execute(stmt)
         expired_count = result.rowcount or 0
 
+        legacy = (
+            db.query(models.Scholarship)
+            .filter(models.Scholarship.data_status == "past_deadline")
+            .all()
+        )
+        for s in legacy:
+            s.data_status = "expired"
+            if s.application_deadline and s.application_deadline < today:
+                s.is_active = False
+            expired_count += 1
+
         stale = (
             db.query(models.Scholarship)
             .filter(
                 models.Scholarship.data_status == "active",
                 or_(
                     models.Scholarship.last_verified_at.is_(None),
-                    models.Scholarship.last_verified_at < cutoff,
+                    models.Scholarship.last_verified_at < stale_cutoff,
                 ),
             )
             .all()

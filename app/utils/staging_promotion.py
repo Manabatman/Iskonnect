@@ -57,6 +57,7 @@ def promote_staging_row(
             version_changed_by=version_changed_by,
             auto_commit=False,
             verification_source=verification_source_for(row.source),
+            allow_upsert=True,
         )
         row.status = "approved"
         row.reviewed_at = datetime.now(timezone.utc)

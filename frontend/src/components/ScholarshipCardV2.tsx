@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
+import { FreshnessChipRow, freshnessFromMatch } from "./FreshnessChip";
 import { MatchScoreRing } from "./MatchScoreRing";
+import { getUrgencyBadgeClasses, getUrgencyLevel } from "./scholarshipMatchDisplay";
 import { getCardVisualClasses } from "../utils/cardImages";
 import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
 import { formatScholarshipLocation } from "../utils/normalizeLocation";
-import { getUrgencyBadgeClasses, getUrgencyLevel } from "./scholarshipMatchDisplay";
+import { formatUiStateLabel } from "../utils/scholarshipStatus";
 
 function isMatchResult(s: ScholarshipInfo | MatchResult): s is MatchResult {
   return "score" in s && typeof (s as MatchResult).score === "number";
@@ -232,6 +234,16 @@ export function ScholarshipCardV2({
 
       <div className="flex flex-1 flex-col px-5 pt-3">
         <div className="flex flex-wrap gap-1.5">
+          {match?.ui_state ? (
+            <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
+              {formatUiStateLabel(match.ui_state)}
+            </span>
+          ) : match?.eligibility_state ? (
+            <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
+              {String(match.eligibility_state).replaceAll("_", " ")}
+            </span>
+          ) : null}
+          {match ? <FreshnessChipRow chips={freshnessFromMatch(match)} /> : null}
           {base.provider_type ? (
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-700 dark:text-slate-200">
               {base.provider_type}

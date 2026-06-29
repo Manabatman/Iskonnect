@@ -11,10 +11,13 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
+from datetime import date
+
 from app import models, schemas
 from app.api.v1.scholarships import _scholarship_to_response, get_cached_scholarship_dicts
 from app.db import get_db
 from app.limiter import limiter
+from app.utils.jsonb_filters import json_list_contains
 
 router = APIRouter(prefix="/scholarships", tags=["scholarship-search"])
 logger = logging.getLogger(__name__)
@@ -62,7 +65,95 @@ def apply_region_browse_filter(query, region: str):
 
 def apply_education_level_browse_filter(query, education_level: str):
     val = education_level.strip()
-    return query.filter(models.Scholarship.eligible_levels.ilike(f'%"{val}"%'))
+    return query.filter(
+        or_(
+            models.Scholarship.eligible_levels.is_(None),
+            models.Scholarship.eligible_levels == "",
+            models.Scholarship.eligible_levels == "[]",
+            json_list_contains(models.Scholarship.eligible_levels, val),
+        )
+    )
+
+
+def _scholarship_timing_bucket(row: models.Scholarship, today: date | None = None) -> str:
+    """Classify scholarship into browse timing bucket."""
+    today = today or date.today()
+    ds = (row.data_status or "").strip().lower()
+    if ds in ("expired", "past_deadline", "broken_link"):
+        if row.cycle_type and row.last_open_date:
+            return "expected_reopen"
+        return "closed"
+    open_d = row.application_open_date
+    deadline = row.application_deadline
+    if open_d and open_d > today:
+        return "opening_soon"
+    if deadline and deadline < today:
+        if row.cycle_type and row.last_open_date:
+            return "expected_reopen"
+        return "closed"
+    return "open_now"
+
+
+LIFE_STAGE_LEVELS = {
+    "high_school": ["Senior High School", "Grade 11", "Grade 12"],
+    "college": ["College", "Undergraduate"],
+    "graduate": ["Graduate", "Masters", "Doctorate"],
+    "tvet": ["TVET", "Technical-Vocational"],
+}
+
+
+def apply_timing_filter(query, timing: str, today: date | None = None):
+    """Post-filter is expensive; apply coarse SQL then refine in Python if needed."""
+    today = today or date.today()
+    t = timing.strip().lower()
+    if t in ("", "any"):
+        return query
+    if t == "open_now":
+        return query.filter(
+            or_(
+                models.Scholarship.application_deadline.is_(None),
+                models.Scholarship.application_deadline >= today,
+            )
+        )
+    if t == "opening_soon":
+        return query.filter(models.Scholarship.application_open_date > today)
+    if t == "closed":
+        return query.filter(
+            or_(
+                models.Scholarship.data_status.in_(["expired", "past_deadline"]),
+                models.Scholarship.application_deadline < today,
+            )
+        )
+    if t == "expected_reopen":
+        return query.filter(
+            models.Scholarship.cycle_type.isnot(None),
+            models.Scholarship.last_open_date.isnot(None),
+        )
+    return query
+
+
+def apply_life_stage_filter(query, life_stage: str):
+    stage = life_stage.strip().lower()
+    levels = LIFE_STAGE_LEVELS.get(stage)
+    if not levels:
+        return query
+    clauses = []
+    for lit in levels:
+        clauses.append(models.Scholarship.eligible_levels.ilike(f'%"{lit}"%'))
+        clauses.append(models.Scholarship.level.ilike(f"%{lit}%"))
+    return query.filter(or_(*clauses))
+
+
+def _base_search_query(db: Session, *, include_closed: bool = False):
+    q = db.query(models.Scholarship).filter(models.Scholarship.is_active != False)  # noqa: E712
+    if not include_closed:
+        q = q.filter(
+            or_(
+                models.Scholarship.data_status.is_(None),
+                models.Scholarship.data_status.notin_(["broken_link", "needs_review"]),
+            )
+        )
+    return q
 
 
 def _parse_json(val, default=None):
@@ -112,6 +203,8 @@ def get_search_filter_options(
         education_levels=sorted(education_levels),
         regions=sorted(regions),
         fields_of_study=sorted(fields_of_study),
+        timing_options=["any", "open_now", "opening_soon", "closed", "expected_reopen"],
+        life_stages=list(LIFE_STAGE_LEVELS.keys()),
     )
 
 
@@ -126,6 +219,9 @@ def search_scholarships(
     provider: str = "",
     school: str = "",
     max_income: int | None = None,
+    timing: str = "",
+    life_stage: str = "",
+    include_closed: bool = False,
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -146,10 +242,12 @@ def search_scholarships(
     page = max(1, page)
     offset = (page - 1) * limit
 
-    q = (
-        db.query(models.Scholarship)
-        .filter(models.Scholarship.is_active != False)  # noqa: E712
-    )
+    q = _base_search_query(db, include_closed=include_closed)
+
+    if timing and timing.strip():
+        q = apply_timing_filter(q, timing)
+    if life_stage and life_stage.strip():
+        q = apply_life_stage_filter(q, life_stage)
 
     if query and query.strip():
         pattern = f"%{query.strip()}%"
@@ -218,6 +316,9 @@ def search_scholarships_semantic(
     provider: str = "",
     school: str = "",
     max_income: int | None = None,
+    timing: str = "",
+    life_stage: str = "",
+    include_closed: bool = False,
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -231,10 +332,12 @@ def search_scholarships_semantic(
     page = max(1, page)
     offset = (page - 1) * limit
 
-    q = (
-        db.query(models.Scholarship)
-        .filter(models.Scholarship.is_active != False)  # noqa: E712
-    )
+    q = _base_search_query(db, include_closed=include_closed)
+
+    if timing and timing.strip():
+        q = apply_timing_filter(q, timing)
+    if life_stage and life_stage.strip():
+        q = apply_life_stage_filter(q, life_stage)
 
     if query and query.strip():
         pattern = f"%{query.strip()}%"

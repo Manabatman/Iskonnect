@@ -5,6 +5,7 @@ import { useSavedScholarships } from "../../contexts/SavedScholarshipsContext";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
+import { BottomNav } from "./BottomNav";
 import { FeedbackButton } from "../FeedbackButton";
 
 function SavedScholarshipsErrorBanner() {
@@ -87,12 +88,13 @@ export function DashboardLayout() {
           ].join(" ")}
         >
           <DashboardTopbar onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 overflow-auto pb-20 lg:pb-0">
             <ErrorBoundary>
               <Outlet />
             </ErrorBoundary>
           </div>
         </div>
+        <BottomNav />
         <FeedbackButton />
       </ErrorBoundary>
     </div>

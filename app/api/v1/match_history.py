@@ -8,7 +8,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import models, schemas
-from app.auth import get_current_user_id, require_profile_owner
+from app.auth import get_current_user_id, get_profile_access_token, require_profile_owner
 from app.db import get_db
 from app.limiter import limiter
 from app.api.v1.matches import _match_service_for_db
@@ -94,10 +94,11 @@ def create_match_run(
     body: schemas.CreateMatchRunRequest,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+    profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
 ):
     """Run matching for a profile, save results, return run + matches. Requires auth."""
     uid = _require_user_id(user_id)
-    require_profile_owner(body.profile_id, uid, db)
+    require_profile_owner(body.profile_id, uid, db, profile_access_token=profile_token)
 
     profile = get_profile_dict(body.profile_id, db)
     if not profile:
@@ -157,7 +158,9 @@ def create_match_run(
 
 
 @router.get("/match-runs/compare", response_model=schemas.MatchComparisonResponse)
+@limiter.limit("30/minute")
 def compare_match_runs(
+    request: Request,
     run_a: int,
     run_b: int,
     db: Session = Depends(get_db),
@@ -223,7 +226,9 @@ def compare_match_runs(
 
 
 @router.get("/match-runs", response_model=list[schemas.MatchRunSummary])
+@limiter.limit("60/minute")
 def list_match_runs(
+    request: Request,
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
 ):
@@ -256,7 +261,9 @@ def list_match_runs(
 
 
 @router.get("/match-runs/{run_id}", response_model=schemas.MatchRunDetail)
+@limiter.limit("60/minute")
 def get_match_run(
+    request: Request,
     run_id: int,
     fields: str = Query("full", pattern="^(minimal|full)$"),
     db: Session = Depends(get_db),
