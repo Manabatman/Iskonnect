@@ -1,181 +1,207 @@
-Iskonnect – Scholarship Matcher Philippines
+# Iskonnect
 
-A policy-aware scholarship matching platform that helps Filipino students discover scholarships they are eligible for.
+**Policy-aware scholarship matching for Filipino students.**
 
-The system evaluates student profiles against scholarship requirements using eligibility filters, Philippine policy thresholds, and structured scoring logic. It aims to reduce the time students spend searching across scattered scholarship listings.
+Iskonnect helps students discover scholarships they can realistically apply for—not just browse listings. Students build a structured profile; the platform applies **hard eligibility filters**, **Philippine policy-aware priority groups**, and a **transparent scoring engine**, then explains *why* each program matched.
 
-This project is currently being developed as an early prototype.
+> **Status:** Active beta / early production. Core flows work end-to-end; catalog and matching logic are still being expanded.
 
-**Deploy (Vercel + Render + Supabase):** see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The repo includes `.python-version` (3.11.x) so Render does not default to Python 3.14.
+**Live stack:** Vercel (frontend) · Render (API) · Supabase (Postgres) · Redis (rate limits & cache)  
+**Deploy guide:** [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)  
+**Python on Render:** `.python-version` pins **3.11.x** (avoids Render defaulting to 3.14).
 
-Overview
+---
 
-Many Filipino students struggle to find scholarships because information is fragmented across different websites and institutions.
+## Why Iskonnect?
 
-Iskonnect attempts to solve this by:
+Scholarship information in the Philippines is scattered across government portals, LGU sites, university pages, and aggregators. Students often miss programs they qualify for—or waste time on ones they don’t.
 
-Collecting scholarship opportunities into a structured database
-Allowing students to create a detailed academic and socioeconomic profile
-Automatically matching students with scholarships they qualify for
-Explaining why each scholarship appears as a match
-The system integrates several Philippine policy references and standardized academic classifications to improve matching accuracy.
+Iskonnect centralizes opportunities in a **structured catalog** and matches them to a **rich student profile** (academics, location, income, priority groups, documents).
 
-Core Features
-Student Profile System
-Students create a structured profile through a guided multi-step form covering:
-Personal information
-Academic background
-Geographic location
+---
 
-Merit indicators
-Socioeconomic background
-Policy-Aware Eligibility Matching
-The platform incorporates eligibility thresholds commonly used by Philippine scholarship programs, including:
-Income bracket limits
-Academic grade requirements
-Geographic or regional restrictions
-Education level eligibility
+## What it does
 
-Several policy frameworks referenced include:
+| Capability | Description |
+|------------|-------------|
+| **Scholarship search** | Public browse/filter at `/scholarships/search` (no login required) |
+| **Student profiles** | Multi-step profile builder (personal, academic, geographic, socioeconomic data) |
+| **Hard eligibility filters** | Age, education level, income ceiling, GWA, region, and related gates applied *before* scoring |
+| **Match planning** | `GET /api/v1/plan/{profile_id}` returns ranked matches, timeline buckets, preparation hints, and completeness |
+| **Match explanations** | Per-scholarship breakdown: academic, income, geography, field fit, priority groups |
+| **Document readiness** | Tracks required vs. available documents for applications (separate from eligibility score) |
+| **PSCED alignment** | Course/field matching via Philippine Standard Classification of Education (PSCED) buckets |
+| **Saved scholarships & applications** | Bookmark programs and track application status (authenticated) |
+| **Admin & data pipeline** | Staging import, scraper ingest (PhilScholar), CSV research import, quality queues |
 
-RA 7277 – Magna Carta for Persons with Disabilities
-RA 7279 – Urban Development and Housing Act
-RA 8371 – Indigenous Peoples Rights Act
-RA 11861 – Expanded Solo Parents Welfare Act
+### Policy-aware priority groups
 
-These help identify priority groups often recognized in scholarship programs.
+Matching considers groups commonly recognized in Philippine scholarship policy, including references to:
 
-Hard Eligibility Filters
+- **RA 7277** — Magna Carta for Persons with Disabilities  
+- **RA 7279** — Urban Development and Housing Act  
+- **RA 8371** — Indigenous Peoples Rights Act  
+- **RA 11861** — Expanded Solo Parents Welfare Act  
 
-Before scoring occurs, impossible matches are removed using strict filters such as:
-Age requirements
-Education level
-Income ceilings
-Grade thresholds
-Regional restrictions
+### Modular scoring
 
-This ensures the scoring system only evaluates realistic scholarship options.
+The ranking engine is **pluggable**: a default rule-based scorer ships with the app; alternative scorers can be swapped without rewriting the API or frontend.
 
-Modular Scoring Engine
-The ranking system is designed to be replaceable.
-A default rule-based scorer is included, but new scoring algorithms can be plugged into the system without modifying the rest of the application.
-This allows experimentation with different matching approaches.
+---
 
-Match Explanation
+## Tech stack
 
-Each scholarship match includes a breakdown explaining why the student matched, such as:
-Academic requirement satisfied
-Income eligibility met (for need-sensitive programs)
-Location and field alignment
-Priority group alignment when applicable
-Document readiness is tracked separately for applications and is not part of the eligibility fit score.
-This transparency helps students understand how to improve their eligibility.
-Document Readiness Tracking
-The system compares required scholarship documents with documents already available to the student.
+| Layer | Technologies |
+|-------|----------------|
+| **Backend** | Python 3.11, FastAPI, SQLAlchemy, Alembic, Pydantic, JWT auth |
+| **Database** | SQLite (`dev.db`) locally · PostgreSQL (Supabase) in production |
+| **Cache / limits** | Redis (production) |
+| **Frontend** | React, TypeScript, Vite, Tailwind CSS |
+| **Ops** | GitHub Actions (CI, scraper, maintenance crons), Sentry (optional) |
 
-Examples include:
-Transcript of records
-Certificate of indigency
-Proof of enrollment
-Recommendation letters
-Students can quickly see what they still need before applying.
-PSCED Field-of-Study Matching
-Courses are categorized using the Philippine Standard Classification of Education (PSCED) taxonomy.
+---
 
-This improves matching accuracy between:
-Student degree programs
-Scholarship field-of-study requirements
 
-Technology Stack
-Backend
-Python
+---
 
-FastAPI
-SQLAlchemy
-SQLite
+## Quick start (local)
 
-Frontend
-React
-TypeScript
-Vite
-Tailwind CSS
+You need **two terminals**: API on `:8000`, UI on `:5173`.
 
-Quick Start
-1. Clone the repository
-git clone https://github.com/your-repo/scholarship-match.git
-cd scholarship-match
-2. Backend Setup
+### Prerequisites
 
-Install dependencies:
+- Python **3.11**
+- Node.js **18+** (CI uses Node 24)
+- Git
+
+### 1. Clone & backend
+
+git clone https://github.com/YOUR_ORG/YOUR_REPO.git
+cd scholarship-match   # or cd into the app folder if using a monorepo
+
+python -m venv venv
+# Windows:  .\venv\Scripts\Activate.ps1
+# macOS/Linux:  source venv/bin/activate
 
 pip install -r requirements.txt
+cp .env.example .env
+cp frontend/.env.example frontend/.env
 
-Copy `.env.example` to `.env` in the project root. For **local development**, keep `AUTH_DISABLED=true` and `RUN_MIGRATIONS_ON_STARTUP=true` so you can use the app without logging in and migrations apply on server start. For **production**, set `AUTH_DISABLED=false`, a strong `SECRET_KEY`, and run migrations via your host’s release command (see `docs/DEPLOYMENT.md`).
+Recommended local .env settings:
 
-Run database migrations (if not using startup migrations):
-
-alembic upgrade head
-
-Seed the database with scholarship data:
+ENVIRONMENT=development
+DATABASE_URL=sqlite:///./dev.db
+RUN_MIGRATIONS_ON_STARTUP=true
+REQUIRE_EMAIL_VERIFICATION=false
+AUTH_DISABLED=false
+Create DB tables and seed sample data:
 
 python seed_data.py
-
-### Demo (local) — full scraped catalog
-
-For localhost demos with hundreds of real scholarships (PhilScholar + SIKAP), place the scraped CSVs in `../.cursor/plans/data/` (`philscholar.csv`, `sikap.csv`, `scholarships.csv`) or pass custom paths, then:
-
-```bash
-python -m app.scripts.seed_demo_csvs
-```
-
-This merges CSV rows with the 24 curated seed scholarships. Past-deadline rows stay matchable (`data_status=past_deadline`) so scoring still works during demos.
-
-Run the backend server:
-
 uvicorn app.main:app --reload --port 8000
-
-Backend will run at:
-
-http://localhost:8000
-
-API documentation:
-
-http://localhost:8000/docs
-3. Frontend Setup
-
-Navigate to the frontend directory:
-
+API: http://localhost:8000
+Docs: http://localhost:8000/docs
+Health: http://localhost:8000/health
+2. Frontend
 cd frontend
-
-Install dependencies:
-
 npm install
-
-Start the development server:
-
 npm run dev
+App: http://localhost:5173
+Search: http://localhost:5173/scholarships/search
+frontend/.env should include:
 
-Frontend will run at:
-
-http://localhost:5173
-Running Both Services
-
-You can either:
-
-Run backend and frontend in separate terminals
-
-Use the included script:
+VITE_API_BASE_URL=http://localhost:8000
+3. Windows shortcut
+From the repo root (monorepo):
 
 START_BOTH.bat
+Runs backend + frontend in separate windows. Seed manually with python seed_data.py if the catalog is empty.
 
-(Windows only)
+Optional: larger demo catalog
+For hundreds of scraped rows (PhilScholar + SIKAP), place CSVs in ../.cursor/plans/data/ (philscholar.csv, sikap.csv, scholarships.csv), then:
 
-API Endpoints
+python -m app.scripts.seed_demo_csvs
+Past-deadline rows remain in the DB as past_deadline so matching demos still work.
+
+Authentication (local vs production)
+Setting	Local dev	Production
+AUTH_DISABLED
+false (recommended)
+false
+REQUIRE_EMAIL_VERIFICATION
+false for easy testing
+true + SMTP configured
+Accounts
+Register at /register (separate from production DB)
+Supabase Postgres
+Local SQLite is not the same database as production—create a test account locally.
+
+API overview
+Base path: /api/v1 · Auth: Bearer JWT on protected routes
+
 Method	Endpoint	Description
-GET	/health	Health check
-GET	/api/v1/profiles	List student profiles
-POST	/api/v1/profiles	Create or update a profile
-GET	/api/v1/profiles/{id}	Retrieve a profile
-GET	/api/v1/scholarships	List scholarships
-POST	/api/v1/scholarships	Add a scholarship
-GET	/api/v1/matches/{profile_id}	Get ranked scholarship matches
+GET
+/health
+Health check (DB, cache, scraper metadata)
+POST
+/auth/register
+Create account
+POST
+/auth/login
+Login → access + refresh tokens
+GET
+/auth/me
+Current user
+GET
+/profiles/me
+Current student profile
+POST
+/profiles
+Create or update profile
+GET
+/scholarships/search
+Browse & filter catalog (public)
+GET
+/plan/{profile_id}
+Matches + timeline + preparation + completeness
+POST
+/match-runs
+Run and persist a full match session
+GET
+/saved-scholarships
+User’s saved programs
+POST
+/scholarships/staging/import
+Admin: bulk import to staging
+Interactive reference (development only): http://localhost:8000/docs
+
+Data pipeline (high level)
+Scraper — PhilScholar → JSON → staging → admin approve
+CSV import — Research / Gemini CSV → csv_to_staging → admin approve
+Seed — seed_data.py for local demos
+Details: docs/operations-handbook/06-data-pipeline.md
+
+Documentation
+Doc	Purpose
+docs/DEPLOYMENT.md
+Vercel + Render + Supabase production setup
+docs/HANDBOOK.md
+Local dev, debugging, common errors
+docs/operations-handbook/00-index.md
+Full ops handbook
+../START_HERE.md
+Monorepo quick start (if applicable)
+Development
+# Backend tests
+python -m pytest app/tests/
+# Frontend tests
+cd frontend && npm test
+Roadmap / known limits
+Catalog coverage is growing (national programs first; LGU and institutional grants in progress)
+Matching is explainable and policy-aware but not a substitute for official provider verification
+Always confirm deadlines and requirements on the primary source link before applying
+License
+See LICENSE if present in the repository.
+
+Contributing
+Issues and PRs welcome. For large data imports, use the staging workflow rather than writing directly to production tables.
+
