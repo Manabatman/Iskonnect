@@ -73,7 +73,7 @@ export function RegisterPage() {
             }}
           />
           <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">
-            Hindi mo kailangang mangapa mag-isa.
+            Relationships may end, but your degree is forever.
           </p>
         </div>
       </div>

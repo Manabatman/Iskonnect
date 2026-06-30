@@ -109,6 +109,36 @@ export function TransparencyPage() {
 
         <div className="mt-10">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Trust &amp; status resources
+          </h2>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <Link
+              to="/how-we-verify"
+              className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-primary-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/80 dark:hover:border-primary-600"
+            >
+              <h3 className="font-semibold text-slate-900 group-hover:text-primary-700 dark:text-slate-100 dark:group-hover:text-primary-400">
+                How we verify
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Learn how ISKONNECT checks scholarship listings against official sources and what our freshness labels mean.
+              </p>
+            </Link>
+            <Link
+              to="/scholarship-status"
+              className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-primary-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/80 dark:hover:border-primary-600"
+            >
+              <h3 className="font-semibold text-slate-900 group-hover:text-primary-700 dark:text-slate-100 dark:group-hover:text-primary-400">
+                Scholarship status guide
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Understand labels like Open now, Closed, Past cycle, and Needs verification—and what to do next.
+              </p>
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             What the numbers mean
           </h2>
           <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -170,17 +200,9 @@ export function TransparencyPage() {
         <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Scholarship data you can trust</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            Match scores tell you how well you fit a program&apos;s rules. Freshness labels tell you how current the listing
-            is. Read{" "}
-            <Link to="/how-we-verify" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
-              how we verify scholarships
-            </Link>{" "}
-            and the{" "}
-            <Link to="/scholarship-status" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
-              scholarship status guide
-            </Link>{" "}
-            to understand what each label means—and always confirm details on the official provider&apos;s site before
-            applying.
+            Match scores tell you how well you fit a program&apos;s rules. Freshness and status labels tell you how current
+            the listing is. Use the trust resources above to learn what each label means—and always confirm details on the
+            official provider&apos;s site before applying.
           </p>
         </div>
 
