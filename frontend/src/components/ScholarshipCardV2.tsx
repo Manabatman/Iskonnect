@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
-import { FreshnessChipRow, freshnessFromMatch } from "./FreshnessChip";
+import { FreshnessChipRow, freshnessFromMatch, freshnessFromScholarship } from "./FreshnessChip";
+import { LifecycleStatusBadge } from "./LifecycleStatusBadge";
 import { MatchScoreRing } from "./MatchScoreRing";
 import { getUrgencyBadgeClasses, getUrgencyLevel } from "./scholarshipMatchDisplay";
 import { getCardVisualClasses } from "../utils/cardImages";
 import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
 import { formatScholarshipLocation } from "../utils/normalizeLocation";
-import { formatUiStateLabel } from "../utils/scholarshipStatus";
+import { formatUiStateLabel, resolveApplicationStatus } from "../utils/scholarshipStatus";
 
 function isMatchResult(s: ScholarshipInfo | MatchResult): s is MatchResult {
   return "score" in s && typeof (s as MatchResult).score === "number";
@@ -111,7 +112,16 @@ export function ScholarshipCardV2({
   const urgency = match
     ? getUrgencyLevel(match.application_deadline, match.application_open_date)
     : getUrgencyLevel(base.application_deadline, base.application_open_date);
+  const appStatus = resolveApplicationStatus({
+    application_status: "application_status" in base ? base.application_status : undefined,
+    data_status: "data_status" in base ? base.data_status : undefined,
+    is_active: "is_active" in base ? base.is_active : undefined,
+  });
+  const showDeadlineUrgency = appStatus === "open" || appStatus === "needs_verification";
   const urgencyBadgeClasses = getUrgencyBadgeClasses(urgency.level);
+  const predictedOpen =
+    match?.predicted_open ??
+    ("predicted_next_open" in base ? base.predicted_next_open : undefined);
 
   const likelihood =
     match?.confidence === "high"
@@ -211,22 +221,19 @@ export function ScholarshipCardV2({
         ) : null}
 
         <div className="absolute bottom-3 left-3 right-3 z-10 flex flex-wrap items-center gap-2">
-          <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold shadow-sm ${urgencyBadgeClasses}`}>
-            {urgency.label}
-          </span>
-          {"data_status" in base && base.data_status === "expired" ? (
-            <span className="rounded-full bg-red-600/90 px-2 py-0.5 text-xs font-medium text-white shadow-sm">
-              Expired
+          <LifecycleStatusBadge
+            application_status={"application_status" in base ? base.application_status : undefined}
+            data_status={"data_status" in base ? base.data_status : undefined}
+            is_active={"is_active" in base ? base.is_active : undefined}
+          />
+          {showDeadlineUrgency && urgency.level !== "closed" ? (
+            <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold shadow-sm ${urgencyBadgeClasses}`}>
+              {urgency.label}
             </span>
           ) : null}
           {"link_status" in base && base.link_status === "broken" ? (
             <span className="rounded-full bg-amber-600/90 px-2 py-0.5 text-xs font-medium text-white shadow-sm">
-              Broken link
-            </span>
-          ) : null}
-          {match?.deadline_passed ? (
-            <span className="rounded-full bg-rose-700/90 px-2 py-0.5 text-xs font-medium text-white shadow-sm">
-              Deadline passed
+              Link issue
             </span>
           ) : null}
         </div>
@@ -250,16 +257,14 @@ export function ScholarshipCardV2({
         ) : null}
 
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {match?.ui_state ? (
+          {match?.ui_state || match?.eligibility_state ? (
             <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
-              {formatUiStateLabel(match.ui_state)}
-            </span>
-          ) : match?.eligibility_state ? (
-            <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
-              {String(match.eligibility_state).replaceAll("_", " ")}
+              {formatUiStateLabel(match?.ui_state ?? match?.eligibility_state)}
             </span>
           ) : null}
-          {match ? <FreshnessChipRow chips={freshnessFromMatch(match)} /> : null}
+          <FreshnessChipRow
+            chips={match ? freshnessFromMatch(match) : freshnessFromScholarship(base)}
+          />
           {base.provider_type ? (
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-700 dark:text-slate-200">
               {base.provider_type}
@@ -275,7 +280,9 @@ export function ScholarshipCardV2({
               {base.level}
             </span>
           ) : null}
-          {"verification_source" in base && base.verification_source ? (
+          {"verification_source" in base &&
+          base.verification_source &&
+          appStatus !== "needs_verification" ? (
             <span
               className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300"
               title={`Source: ${base.verification_source}`}
@@ -284,6 +291,28 @@ export function ScholarshipCardV2({
             </span>
           ) : null}
         </div>
+
+        {match?.gap_reason ? (
+          <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+            <span className="font-medium text-slate-800 dark:text-slate-200">Why this status: </span>
+            {match.gap_reason}
+          </p>
+        ) : null}
+
+        {match?.next_action ? (
+          <p className="mt-1 text-xs font-medium text-primary-700 dark:text-primary-300">{match.next_action}</p>
+        ) : null}
+
+        {appStatus === "expected_reopen" && predictedOpen ? (
+          <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+            Likely to reopen around{" "}
+            {new Date(predictedOpen.slice(0, 10)).toLocaleDateString(undefined, {
+              month: "long",
+              year: "numeric",
+            })}
+            . Dates are estimates—confirm on the official site.
+          </p>
+        ) : null}
 
         {match?.deadline_passed ? (
           <p className="mt-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs leading-relaxed text-rose-900 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-100">
@@ -368,7 +397,7 @@ export function ScholarshipCardV2({
         ) : null}
 
         <div className={`flex flex-col gap-2 sm:flex-row sm:flex-wrap ${showSecondaryActionsRow ? "mt-3" : ""}`}>
-          {hasLink && !match?.deadline_passed ? (
+          {hasLink && appStatus === "open" && !match?.deadline_passed ? (
             <a
               href={link}
               target="_blank"
@@ -378,12 +407,16 @@ export function ScholarshipCardV2({
             >
               Apply Now
             </a>
-          ) : match?.deadline_passed ? (
+          ) : appStatus !== "open" || match?.deadline_passed ? (
             <span
               className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400"
-              title="Application deadline has passed"
+              title={
+                match?.deadline_passed
+                  ? "Application deadline has passed"
+                  : "Applications are not open for this cycle"
+              }
             >
-              Deadline passed
+              {appStatus === "expected_reopen" ? "Not open yet" : "Apply when open"}
             </span>
           ) : (
             <span className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400">

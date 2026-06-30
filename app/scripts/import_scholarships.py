@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from app.db import SessionLocal
 from app import models
 from app.utils.dedupe import scholarship_dedupe_key
+from app.utils.import_contract import normalize_header, validate_header
 from app.scholarship_cache import invalidate_scholarship_cache
 
 
@@ -81,6 +82,99 @@ def load_csv(filepath: str) -> list[dict]:
             rows.append(cleaned)
 
     return rows
+
+
+def load_csv_strict(filepath: str) -> tuple[list[dict], dict]:
+    """
+    Load CSV with strict structural validation.
+
+    Rejects rows whose field count does not match the header (fail fast, no silent
+    left-shift). Returns (valid_row_dicts, structural_report).
+
+    structural_report keys:
+        header_valid (bool)
+        header_errors (list[str])
+        unknown_columns, missing_columns, missing_recommended, duplicate_columns
+        rejected_rows (list of {line, status, reason})
+        valid_row_count (int)
+    """
+    path = Path(filepath)
+    if not path.exists():
+        raise FileNotFoundError(f"CSV file not found: {filepath}")
+
+    structural_report: dict = {
+        "header_valid": True,
+        "header_errors": [],
+        "unknown_columns": [],
+        "missing_columns": [],
+        "missing_recommended": [],
+        "duplicate_columns": [],
+        "rejected_rows": [],
+        "valid_row_count": 0,
+    }
+    rows: list[dict] = []
+
+    with open(path, "r", encoding="utf-8", errors="replace") as f:
+        reader = csv.reader(f)
+        try:
+            raw_header = next(reader)
+        except StopIteration:
+            structural_report["header_valid"] = False
+            structural_report["header_errors"].append("empty_file: CSV has no header row")
+            return [], structural_report
+
+        normalized_headers = [normalize_header(h) for h in raw_header]
+        header_check = validate_header(normalized_headers)
+        structural_report["unknown_columns"] = header_check["unknown"]
+        structural_report["missing_columns"] = header_check["missing_required"]
+        structural_report["missing_recommended"] = header_check["missing_recommended"]
+        structural_report["duplicate_columns"] = header_check["duplicate"]
+
+        if header_check["duplicate"]:
+            structural_report["header_valid"] = False
+            structural_report["header_errors"].append(
+                f"duplicate_columns: {', '.join(header_check['duplicate'])}"
+            )
+        if header_check["unknown"]:
+            structural_report["header_valid"] = False
+            structural_report["header_errors"].append(
+                f"unknown_columns: {', '.join(header_check['unknown'])}"
+            )
+        if header_check["missing_required"]:
+            structural_report["header_valid"] = False
+            structural_report["header_errors"].append(
+                f"missing_required_columns: {', '.join(header_check['missing_required'])}"
+            )
+
+        if not structural_report["header_valid"]:
+            return [], structural_report
+
+        expected_count = len(normalized_headers)
+        line_num = 1
+        for raw_row in reader:
+            line_num += 1
+            if not raw_row or all(not str(cell).strip() for cell in raw_row):
+                continue
+            actual_count = len(raw_row)
+            if actual_count != expected_count:
+                structural_report["rejected_rows"].append(
+                    {
+                        "line": line_num,
+                        "status": "rejected_structural",
+                        "reason": (
+                            f"column_count_mismatch (expected {expected_count}, got {actual_count})"
+                        ),
+                    }
+                )
+                continue
+            cleaned: dict = {}
+            for norm_key, raw_val in zip(normalized_headers, raw_row):
+                val = raw_val.strip() if isinstance(raw_val, str) else raw_val
+                cleaned[norm_key] = val if val else None
+            rows.append(cleaned)
+            structural_report["valid_row_count"] += 1
+
+    return rows, structural_report
 
 
 # --- Parsers ---

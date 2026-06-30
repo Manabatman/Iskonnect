@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
 import { formatDate } from "../utils/formatDate";
 import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
+import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -51,6 +52,7 @@ interface ScholarshipDetail {
   image_url?: string | null;
   image_alt?: string | null;
   data_status?: string | null;
+  application_status?: string | null;
   link_status?: string | null;
   verification_source?: string | null;
   confidence_score?: number | null;
@@ -196,6 +198,10 @@ export function ScholarshipDetailPage() {
 
           <div className="mb-6">
             <div className="flex flex-wrap gap-2">
+              <LifecycleStatusBadge
+                application_status={scholarship.application_status}
+                data_status={scholarship.data_status}
+              />
               {scholarship.provider_type && (
                 <span className="rounded bg-slate-100 dark:bg-slate-700 px-2 py-0.5 text-xs font-medium text-slate-600 dark:text-slate-400">
                   {scholarship.provider_type}
@@ -206,19 +212,9 @@ export function ScholarshipDetailPage() {
                   {scholarship.scholarship_type}
                 </span>
               )}
-              {scholarship.verification_source ? (
-                <span className="rounded bg-emerald-100 dark:bg-emerald-900/50 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
-                  Verified data
-                </span>
-              ) : null}
-              {scholarship.data_status === "expired" ? (
-                <span className="rounded bg-red-100 dark:bg-red-900/50 px-2 py-0.5 text-xs font-medium text-red-800 dark:text-red-300">
-                  Expired
-                </span>
-              ) : null}
               {scholarship.link_status === "broken" ? (
                 <span className="rounded bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 text-xs font-medium text-amber-900 dark:text-amber-200">
-                  Broken link
+                  Link issue
                 </span>
               ) : null}
               <FreshnessChipRow chips={freshnessFromScholarship(scholarship)} />

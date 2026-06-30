@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
+import { StatusGuideLink } from "../components/LifecycleStatusBadge";
 import { ScholarshipSearchFilters } from "../components/ScholarshipSearchFilters";
 import { ScholarshipDetailPanel } from "../components/ScholarshipDetailPanel";
 import { useAuth } from "../contexts/AuthContext";
@@ -203,7 +204,8 @@ export function ScholarshipSearchPage() {
 
         <p className="mb-4 text-xs text-slate-500 dark:text-slate-400">
           <strong>Find My Matches</strong> runs a full match and saves it to your dashboard history.{" "}
-          <strong>Check my match</strong> on a card previews your score without creating a new saved run.
+          <strong>Check my match</strong> on a card previews your score without creating a new saved run.{" "}
+          <StatusGuideLink />
         </p>
 
         <form onSubmit={handleSearchSubmit} className="relative mb-6">

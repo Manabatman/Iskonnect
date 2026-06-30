@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from app.db import SessionLocal
 from app import models
-from app.scripts.import_scholarships import load_csv  # reuse normalized CSV loader
+from app.scripts.import_scholarships import load_csv_strict
 from app.utils.dedupe import scholarship_dedupe_key
 from app.utils.import_validation import summarize_import_report, validate_import_row
 
@@ -50,12 +50,28 @@ def main() -> None:
     parser.add_argument("--report", default=None, help="Optional path to write JSON import report")
     args = parser.parse_args()
 
-    rows = load_csv(args.csv)
+    rows, structural = load_csv_strict(args.csv)
+    report_rows: list[dict] = []
+
+    if not structural.get("header_valid", True):
+        report = summarize_import_report(report_rows, structural=structural)
+        report["created"] = 0
+        report["skipped"] = 0
+        report["invalid"] = 0
+        report["aborted"] = True
+        report["abort_reason"] = "; ".join(structural.get("header_errors") or ["invalid_header"])
+        print(json.dumps(report, indent=2, default=str))
+        if args.report:
+            Path(args.report).write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+        sys.exit(1)
+
+    for rejection in structural.get("rejected_rows") or []:
+        report_rows.append(rejection)
+
     db = SessionLocal()
     created = 0
     skipped = 0
     invalid = 0
-    report_rows: list[dict] = []
     try:
         live_keys = _live_dedupe_keys(db)
         pending_keys = _pending_dedupe_keys(db)
@@ -91,7 +107,7 @@ def main() -> None:
             result["status"] = "created"
             report_rows.append(result)
         db.commit()
-        report = summarize_import_report(report_rows)
+        report = summarize_import_report(report_rows, structural=structural)
         report["created"] = created
         report["skipped"] = skipped
         report["invalid"] = invalid

@@ -6,7 +6,7 @@ const LANE_META: Record<
   { title: string; description: string; accent: string }
 > = {
   available_now: {
-    title: "Available now",
+    title: "Open now",
     description: "Open applications you can pursue today.",
     accent: "border-emerald-200 bg-emerald-50/60 dark:border-emerald-800 dark:bg-emerald-950/30",
   },
@@ -16,7 +16,7 @@ const LANE_META: Record<
     accent: "border-sky-200 bg-sky-50/60 dark:border-sky-800 dark:bg-sky-950/30",
   },
   prepare_for: {
-    title: "Prepare for",
+    title: "Prepare ahead",
     description: "Start gathering requirements before deadlines.",
     accent: "border-violet-200 bg-violet-50/60 dark:border-violet-800 dark:bg-violet-950/30",
   },
@@ -31,7 +31,7 @@ const LANE_META: Record<
     accent: "border-slate-200 bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/50",
   },
   past_reference: {
-    title: "Past reference",
+    title: "Past cycle",
     description: "Closed cycles kept for planning.",
     accent: "border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-900/40",
   },

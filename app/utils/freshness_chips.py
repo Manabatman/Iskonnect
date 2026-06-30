@@ -5,6 +5,12 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
+from app.utils.application_status import (
+    NEEDS_VERIFICATION,
+    application_status_label,
+    humanize_verification_source,
+)
+
 
 def _parse_dt(val: Any) -> datetime | None:
     if val is None:
@@ -29,23 +35,23 @@ def _format_verified_date(val: Any) -> str | None:
 def build_freshness_chips(scholarship: dict) -> list[dict[str, str]]:
     """Return UI chips from verifiable facts only (no completeness/confidence score)."""
     chips: list[dict[str, str]] = []
+    app_status = (scholarship.get("application_status") or "").strip().lower()
     ds = (scholarship.get("data_status") or "").strip().lower()
-    if ds == "needs_review":
+
+    if app_status == NEEDS_VERIFICATION or ds == "needs_review":
         chips.append({"label": "Needs verification", "tone": "warning"})
-    elif ds in ("expired", "past_deadline"):
-        chips.append({"label": "Closed cycle", "tone": "neutral"})
-    elif ds == "broken_link":
+    elif ds == "broken_link" or (scholarship.get("link_status") or "").strip().lower() == "broken":
         chips.append({"label": "Link issue", "tone": "danger"})
 
     verified_label = _format_verified_date(scholarship.get("last_verified_at"))
-    if verified_label:
-        chips.append({"label": f"Verified {verified_label}", "tone": "success"})
-    else:
+    if verified_label and app_status != NEEDS_VERIFICATION and ds != "needs_review":
+        chips.append({"label": f"Last verified {verified_label}", "tone": "success"})
+    elif app_status != NEEDS_VERIFICATION and ds != "needs_review":
         chips.append({"label": "Not yet verified", "tone": "warning"})
 
-    source = (scholarship.get("verification_source") or "").strip()
+    source = humanize_verification_source(scholarship.get("verification_source"))
     if source:
-        chips.append({"label": f"Source: {source[:32]}", "tone": "neutral"})
+        chips.append({"label": source, "tone": "neutral"})
 
     return chips
 

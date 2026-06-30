@@ -13,6 +13,7 @@ from app.db import get_db
 from app.limiter import limiter
 from app.utils.sanitize import strip_tags
 from app.utils.json_helpers import parse_json
+from app.utils.application_status import sync_application_status
 from app.utils.audit import log_action
 from app.utils.scholarship_persist import (
     PersistResult,
@@ -236,6 +237,7 @@ def delete_scholarship(
         logger.warning("scholarships_delete_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
     s.is_active = False
+    sync_application_status(s)
     db.commit()
     invalidate_scholarship_cache()
     log_action(

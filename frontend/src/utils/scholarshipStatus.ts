@@ -1,4 +1,4 @@
-/** Shared scholarship status and eligibility labels for consistent student-facing copy. */
+/** Shared scholarship status and eligibility labels — single source of truth for student-facing copy. */
 
 export type ScholarshipLifecycleStatus =
   | "open"
@@ -6,7 +6,7 @@ export type ScholarshipLifecycleStatus =
   | "previous_cycle"
   | "expected_reopen"
   | "archived"
-  | "needs_review";
+  | "needs_verification";
 
 export type UiEligibilityState = "eligible_now" | "opening_soon" | "prepare_ahead" | "future_eligibility";
 
@@ -20,37 +20,43 @@ export interface StatusGuideEntry {
 export const LIFECYCLE_STATUS_GUIDE: Record<ScholarshipLifecycleStatus, StatusGuideEntry> = {
   open: {
     label: "Open now",
-    shortDescription: "Applications are currently accepted or the window is active.",
+    shortDescription:
+      "Applications are currently being accepted according to the latest official information available.",
     whatToDo: "Review requirements, gather documents, and apply through the official provider link.",
     tone: "success",
   },
   closed: {
     label: "Closed",
-    shortDescription: "The application window for this cycle has ended.",
+    shortDescription:
+      "The application window for this cycle has ended. The program may still run again in a future cycle.",
     whatToDo: "Save it for reference or watch for the next cycle if the program runs again.",
     tone: "neutral",
   },
   previous_cycle: {
-    label: "Previous cycle",
-    shortDescription: "This listing reflects a past application period we keep for planning.",
+    label: "Past cycle",
+    shortDescription:
+      "This listing reflects a past application period we keep so you can plan for the next opening.",
     whatToDo: "Use it to learn typical requirements and deadlines—not to apply right now.",
     tone: "neutral",
   },
   expected_reopen: {
     label: "Expected to reopen",
-    shortDescription: "Based on past cycles, this scholarship may open again around a similar time.",
+    shortDescription:
+      "Based on past cycles, this scholarship is likely to open again around a similar time of year.",
     whatToDo: "Save it, start preparing documents early, and confirm dates on the official site when it reopens.",
     tone: "info",
   },
   archived: {
-    label: "Archived",
-    shortDescription: "This program is no longer actively offered or has been retired from the catalog.",
+    label: "No longer offered",
+    shortDescription:
+      "This program is no longer actively offered or has been retired from our active catalog.",
     whatToDo: "Browse similar scholarships or search for updated programs from the same provider.",
     tone: "neutral",
   },
-  needs_review: {
+  needs_verification: {
     label: "Needs verification",
-    shortDescription: "We're double-checking some details before treating this listing as fully current.",
+    shortDescription:
+      "We are still confirming some details against official sources before treating this listing as fully current.",
     whatToDo: "Use it as a lead, but confirm all requirements and deadlines on the official provider website.",
     tone: "warning",
   },
@@ -83,16 +89,89 @@ export const UI_ELIGIBILITY_GUIDE: Record<UiEligibilityState, StatusGuideEntry> 
   },
 };
 
+const LIFECYCLE_TONE_CLASSES: Record<StatusGuideEntry["tone"], string> = {
+  success:
+    "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200",
+  warning: "bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-200",
+  neutral: "bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200",
+  info: "bg-primary-100 text-primary-800 dark:bg-primary-900/60 dark:text-primary-200",
+};
+
+/** Map legacy data_status values to canonical application_status keys. */
+export function legacyDataStatusToApplicationStatus(status: string | null | undefined): ScholarshipLifecycleStatus | null {
+  const s = (status || "").toLowerCase();
+  if (s === "needs_review") return "needs_verification";
+  if (s === "broken_link") return null;
+  if (s === "expired" || s === "past_deadline") return "closed";
+  if (s === "active") return "open";
+  return null;
+}
+
+export function resolveApplicationStatus(sch: {
+  application_status?: string | null;
+  data_status?: string | null;
+  is_active?: boolean | null;
+}): ScholarshipLifecycleStatus {
+  if (sch.is_active === false) return "archived";
+  const app = (sch.application_status || "").toLowerCase();
+  if (app && app in LIFECYCLE_STATUS_GUIDE) return app as ScholarshipLifecycleStatus;
+  const legacy = legacyDataStatusToApplicationStatus(sch.data_status);
+  if (legacy) return legacy;
+  return "open";
+}
+
+export function lifecycleStatusLabel(status: string | null | undefined): string {
+  if (!status) return "";
+  const key = status as ScholarshipLifecycleStatus;
+  return LIFECYCLE_STATUS_GUIDE[key]?.label ?? status.replaceAll("_", " ");
+}
+
+export function lifecycleStatusTone(status: string | null | undefined): StatusGuideEntry["tone"] {
+  const key = (status || "") as ScholarshipLifecycleStatus;
+  return LIFECYCLE_STATUS_GUIDE[key]?.tone ?? "neutral";
+}
+
+export function lifecycleStatusBadgeClasses(status: string | null | undefined): string {
+  const tone = lifecycleStatusTone(status);
+  return LIFECYCLE_TONE_CLASSES[tone];
+}
+
+const ELIGIBILITY_STATE_TO_UI: Record<string, UiEligibilityState> = {
+  eligible_now: "eligible_now",
+  eligible_soon: "opening_soon",
+  prepare_now: "prepare_ahead",
+  missing_one_requirement: "prepare_ahead",
+  expected_next_cycle: "opening_soon",
+  past_opportunity: "opening_soon",
+  potential_match: "prepare_ahead",
+  requires_future_grade_level: "future_eligibility",
+  requires_future_enrollment: "future_eligibility",
+  requires_better_academic_standing: "future_eligibility",
+  not_eligible: "future_eligibility",
+};
+
 export function formatUiStateLabel(state: string | null | undefined): string {
   if (!state) return "";
   const key = state as UiEligibilityState;
-  return UI_ELIGIBILITY_GUIDE[key]?.label ?? state.replaceAll("_", " ");
+  if (UI_ELIGIBILITY_GUIDE[key]) return UI_ELIGIBILITY_GUIDE[key].label;
+  const mapped = ELIGIBILITY_STATE_TO_UI[state];
+  if (mapped) return UI_ELIGIBILITY_GUIDE[mapped].label;
+  return state.replaceAll("_", " ");
 }
 
+export function humanizeVerificationSource(source: string | null | undefined): string | null {
+  if (!source?.trim()) return null;
+  const mapping: Record<string, string> = {
+    manual: "Verified by ISKONNECT team",
+    scraper: "Official website",
+    partner: "Partner organization",
+    csv_import: "Imported record",
+  };
+  const key = source.trim().toLowerCase();
+  return mapping[key] ?? source.replaceAll("_", " ");
+}
+
+/** @deprecated Use resolveApplicationStatus */
 export function dataStatusToLifecycle(status: string | null | undefined): ScholarshipLifecycleStatus | null {
-  const s = (status || "").toLowerCase();
-  if (s === "expired" || s === "past_deadline") return "closed";
-  if (s === "needs_review") return "needs_review";
-  if (s === "broken_link") return "needs_review";
-  return null;
+  return legacyDataStatusToApplicationStatus(status);
 }

@@ -16,6 +16,7 @@ from typing import Any
 from app.config import settings
 from app.db import SessionLocal
 from app import models
+from app.utils.application_status import sync_application_status
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ def run_link_check() -> dict[str, Any]:
                 if (s.link_failure_count or 0) >= 3:
                     s.data_status = "broken_link"
                     stats["broken"] += 1
-            db.add(s)
+            sync_application_status(s)
         db.commit()
         try:
             from app.scholarship_cache import invalidate_scholarship_cache

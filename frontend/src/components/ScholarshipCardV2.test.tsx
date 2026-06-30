@@ -48,3 +48,24 @@ describe("ScholarshipCardV2 image", () => {
     expect(screen.getByRole("img", { name: "Test Scholarship" })).toBeInTheDocument();
   });
 });
+
+describe("ScholarshipCardV2 lifecycle badge", () => {
+  it("shows canonical Closed label for expired application_status", () => {
+    renderCard({
+      ...baseScholarship,
+      application_status: "closed",
+      data_status: "expired",
+    });
+    expect(screen.getByText("Closed")).toBeInTheDocument();
+    expect(screen.queryByText("Expired")).not.toBeInTheDocument();
+  });
+
+  it("shows Needs verification for needs_verification status", () => {
+    renderCard({
+      ...baseScholarship,
+      application_status: "needs_verification",
+      data_status: "needs_review",
+    });
+    expect(screen.getAllByText("Needs verification").length).toBeGreaterThan(0);
+  });
+});

@@ -4,6 +4,7 @@ import { API_BASE_URL, apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
+import { lifecycleStatusLabel, resolveApplicationStatus } from "../utils/scholarshipStatus";
 
 type Tab = "scholarships" | "staging" | "reviews" | "users" | "matches" | "feedback" | "reports" | "system";
 
@@ -57,7 +58,7 @@ type StagingRow = {
 
 const SCH_PAGE_SIZE = 50;
 const REVIEW_QUEUES = [
-  { id: "needs_review", label: "Needs review" },
+  { id: "needs_review", label: "Needs verification" },
   { id: "missing_image", label: "Missing image" },
   { id: "low_quality", label: "Low quality" },
   { id: "stale", label: "Stale verification" },
@@ -522,7 +523,7 @@ export function AdminPage() {
                     <th className="px-4 py-2 text-left font-semibold">Provider</th>
                     <th className="px-4 py-2 text-left font-semibold">Level</th>
                     <th className="px-4 py-2 text-left font-semibold">Image</th>
-                    <th className="px-4 py-2 text-left font-semibold">Active</th>
+                    <th className="px-4 py-2 text-left font-semibold">Status</th>
                     <th className="px-4 py-2 text-left font-semibold">Actions</th>
                   </tr>
                 </thead>
@@ -576,12 +577,12 @@ export function AdminPage() {
                       <td className="px-4 py-2">
                         <span
                           className={`rounded px-2 py-0.5 text-xs font-medium ${
-                            s.is_active !== false
-                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                              : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
+                            resolveApplicationStatus(s) === "archived"
+                              ? "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
+                              : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                           }`}
                         >
-                          {s.is_active !== false ? "Active" : "Inactive"}
+                          {lifecycleStatusLabel(resolveApplicationStatus(s))}
                         </span>
                       </td>
                       <td className="px-4 py-2">

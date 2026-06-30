@@ -225,6 +225,7 @@ class Scholarship(Base):
     verification_source = Column(String, nullable=True)  # manual | scraper | partner | csv_import
     confidence_score = Column(Float, nullable=True)
     data_status = Column(String, nullable=True)  # active | expiring_soon | expired | needs_review | broken_link
+    application_status = Column(String, nullable=True, index=True)  # open | closed | previous_cycle | expected_reopen | archived | needs_verification
     link_status = Column(String, nullable=True)  # ok | broken | timeout | unchecked
     link_last_checked_at = Column(DateTime, nullable=True)
     link_failure_count = Column(Integer, nullable=True)

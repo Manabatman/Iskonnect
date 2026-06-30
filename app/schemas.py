@@ -405,6 +405,7 @@ class ScholarshipResponse(BaseModel):
     verification_source: Optional[str] = None
     confidence_score: Optional[float] = None
     data_status: Optional[str] = None
+    application_status: Optional[str] = None
     link_status: Optional[str] = None
     link_last_checked_at: Optional[datetime] = None
     link_failure_count: Optional[int] = None
@@ -514,6 +515,7 @@ class MatchResponse(BaseModel):
     needs_tags: Optional[List[str]] = []
     deadline_passed: Optional[bool] = None
     data_status: Optional[str] = None
+    application_status: Optional[str] = None
     link_status: Optional[str] = None
     verification_source: Optional[str] = None
     required_documents: Optional[List[str]] = []

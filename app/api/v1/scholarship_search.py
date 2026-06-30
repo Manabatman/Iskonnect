@@ -17,10 +17,26 @@ from app import models, schemas
 from app.api.v1.scholarships import _scholarship_to_response, get_cached_scholarship_dicts
 from app.db import get_db
 from app.limiter import limiter
+from app.utils.application_status import (
+    ARCHIVED,
+    OPEN,
+    TIMING_FILTER_MAP,
+)
 from app.utils.jsonb_filters import json_list_contains
 
 router = APIRouter(prefix="/scholarships", tags=["scholarship-search"])
 logger = logging.getLogger(__name__)
+
+TIMING_OPTIONS = [
+    "any",
+    "open_now",
+    "opening_soon",
+    "closed",
+    "previous_cycle",
+    "expected_reopen",
+    "needs_verification",
+    "archived",
+]
 
 
 def _column_empty_json_list(col):
@@ -75,25 +91,6 @@ def apply_education_level_browse_filter(query, education_level: str):
     )
 
 
-def _scholarship_timing_bucket(row: models.Scholarship, today: date | None = None) -> str:
-    """Classify scholarship into browse timing bucket."""
-    today = today or date.today()
-    ds = (row.data_status or "").strip().lower()
-    if ds in ("expired", "past_deadline", "broken_link"):
-        if row.cycle_type and row.last_open_date:
-            return "expected_reopen"
-        return "closed"
-    open_d = row.application_open_date
-    deadline = row.application_deadline
-    if open_d and open_d > today:
-        return "opening_soon"
-    if deadline and deadline < today:
-        if row.cycle_type and row.last_open_date:
-            return "expected_reopen"
-        return "closed"
-    return "open_now"
-
-
 LIFE_STAGE_LEVELS = {
     "high_school": ["Senior High School", "Grade 11", "Grade 12"],
     "college": ["College", "Undergraduate"],
@@ -103,32 +100,25 @@ LIFE_STAGE_LEVELS = {
 
 
 def apply_timing_filter(query, timing: str, today: date | None = None):
-    """Post-filter is expensive; apply coarse SQL then refine in Python if needed."""
+    """Filter by authoritative application_status (with date fallback for unmigrated rows)."""
     today = today or date.today()
     t = timing.strip().lower()
     if t in ("", "any"):
         return query
-    if t == "open_now":
-        return query.filter(
-            or_(
-                models.Scholarship.application_deadline.is_(None),
-                models.Scholarship.application_deadline >= today,
-            )
-        )
+
     if t == "opening_soon":
-        return query.filter(models.Scholarship.application_open_date > today)
-    if t == "closed":
         return query.filter(
+            models.Scholarship.application_open_date > today,
             or_(
-                models.Scholarship.data_status.in_(["expired", "past_deadline"]),
-                models.Scholarship.application_deadline < today,
-            )
+                models.Scholarship.application_status == OPEN,
+                models.Scholarship.application_status.is_(None),
+            ),
         )
-    if t == "expected_reopen":
-        return query.filter(
-            models.Scholarship.cycle_type.isnot(None),
-            models.Scholarship.last_open_date.isnot(None),
-        )
+
+    status_set = TIMING_FILTER_MAP.get(t)
+    if status_set:
+        return query.filter(models.Scholarship.application_status.in_(sorted(status_set)))
+
     return query
 
 
@@ -144,14 +134,16 @@ def apply_life_stage_filter(query, life_stage: str):
     return query.filter(or_(*clauses))
 
 
-def _base_search_query(db: Session, *, include_closed: bool = False):
-    q = db.query(models.Scholarship).filter(models.Scholarship.is_active != False)  # noqa: E712
-    if not include_closed:
+def _base_search_query(db: Session, *, include_archived: bool = False):
+    """Default catalog: all non-archived scholarships, including needs_verification."""
+    q = db.query(models.Scholarship)
+    if not include_archived:
         q = q.filter(
+            models.Scholarship.is_active != False,  # noqa: E712
             or_(
-                models.Scholarship.data_status.is_(None),
-                models.Scholarship.data_status.notin_(["broken_link", "needs_review"]),
-            )
+                models.Scholarship.application_status.is_(None),
+                models.Scholarship.application_status != ARCHIVED,
+            ),
         )
     return q
 
@@ -179,7 +171,6 @@ def get_search_filter_options(
 ):
     """Return distinct filter values for search UI dropdowns."""
     logger.info("scholarship_search_filters")
-    # Reuse cached active scholarship dicts (same path as list/match) instead of a full-table ORM load.
     scholarship_dicts = get_cached_scholarship_dicts(db)
     providers = set()
     education_levels = set()
@@ -203,7 +194,7 @@ def get_search_filter_options(
         education_levels=sorted(education_levels),
         regions=sorted(regions),
         fields_of_study=sorted(fields_of_study),
-        timing_options=["any", "open_now", "opening_soon", "closed", "expected_reopen"],
+        timing_options=TIMING_OPTIONS,
         life_stages=list(LIFE_STAGE_LEVELS.keys()),
     )
 
@@ -221,6 +212,7 @@ def search_scholarships(
     max_income: int | None = None,
     timing: str = "",
     life_stage: str = "",
+    include_archived: bool = False,
     include_closed: bool = False,
     page: int = 1,
     limit: int = 20,
@@ -229,7 +221,7 @@ def search_scholarships(
     """
     Search scholarships with optional filters and pagination.
     Does not run the matching algorithm - browse-only.
-    ``school`` matches title, provider, description, or eligible_school_types JSON (university / program context).
+    ``include_closed`` is deprecated; use ``timing=closed`` or ``include_archived``.
     """
     logger.info(
         "scholarship_search query=%s region=%s field=%s page=%s",
@@ -242,10 +234,14 @@ def search_scholarships(
     page = max(1, page)
     offset = (page - 1) * limit
 
-    q = _base_search_query(db, include_closed=include_closed)
+    show_archived = include_archived or (timing.strip().lower() == "archived")
+    q = _base_search_query(db, include_archived=show_archived)
 
     if timing and timing.strip():
         q = apply_timing_filter(q, timing)
+    elif include_closed:
+        q = apply_timing_filter(q, "closed")
+
     if life_stage and life_stage.strip():
         q = apply_life_stage_filter(q, life_stage)
 
@@ -318,24 +314,26 @@ def search_scholarships_semantic(
     max_income: int | None = None,
     timing: str = "",
     life_stage: str = "",
+    include_archived: bool = False,
     include_closed: bool = False,
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
 ):
-    """
-    Same filters as ``/search``, but the text ``query`` matches title, description, or provider (OR).
-    Deterministic ILIKE — not an embedding model; useful for broader keyword discovery.
-    """
+    """Same filters as ``/search``, but text ``query`` matches title, description, or provider."""
     logger.info("scholarship_search_semantic query=%s page=%s", query[:50] if query else "", page)
     limit = min(max(1, limit), 50)
     page = max(1, page)
     offset = (page - 1) * limit
 
-    q = _base_search_query(db, include_closed=include_closed)
+    show_archived = include_archived or (timing.strip().lower() == "archived")
+    q = _base_search_query(db, include_archived=show_archived)
 
     if timing and timing.strip():
         q = apply_timing_filter(q, timing)
+    elif include_closed:
+        q = apply_timing_filter(q, "closed")
+
     if life_stage and life_stage.strip():
         q = apply_life_stage_filter(q, life_stage)
 
