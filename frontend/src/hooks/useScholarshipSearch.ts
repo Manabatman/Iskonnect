@@ -65,6 +65,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
       }
       if (searchFilters.timing) params.set("timing", searchFilters.timing);
       if (searchFilters.life_stage) params.set("life_stage", searchFilters.life_stage);
+      if (searchFilters.include_archived) params.set("include_archived", "true");
       if (searchFilters.include_closed) params.set("include_closed", "true");
       params.set("page", String(pageNum));
       params.set("limit", String(limit));

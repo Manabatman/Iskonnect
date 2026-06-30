@@ -204,18 +204,21 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             <option value="open_now">Open now</option>
             <option value="opening_soon">Opening soon</option>
             <option value="expected_reopen">Expected to reopen</option>
-            <option value="closed">Closed (reference)</option>
+            <option value="closed">Closed</option>
+            <option value="previous_cycle">Past cycle</option>
+            <option value="needs_verification">Needs verification</option>
+            <option value="archived">No longer offered</option>
           </select>
         </div>
 
         <label className="flex min-h-[44px] items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
           <input
             type="checkbox"
-            checked={!!filters.include_closed}
-            onChange={(e) => updateFilter("include_closed", e.target.checked || undefined)}
+            checked={!!filters.include_archived}
+            onChange={(e) => updateFilter("include_archived", e.target.checked || undefined)}
             className="h-5 w-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
           />
-          Include closed scholarships
+          Include archived programs
         </label>
 
         <div>

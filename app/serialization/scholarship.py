@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Any, Mapping
 
+from app.utils.application_status import compute_application_status
 from app.utils.json_helpers import parse_json
 
 # Keys ScholarshipCardV2 / MatchResult UI expect on scholarship-bearing payloads.
@@ -38,6 +39,7 @@ SCHOLARSHIP_CARD_DISPLAY_KEYS: tuple[str, ...] = (
     "application_open_date",
     "required_documents",
     "data_status",
+    "application_status",
     "verification_source",
     "link_status",
 )
@@ -176,6 +178,8 @@ def scholarship_row_to_payload(row: Any, *, dates_as_iso: bool = False) -> dict[
         "verification_source": _get_attr(row, "verification_source"),
         "confidence_score": _get_attr(row, "confidence_score"),
         "data_status": _get_attr(row, "data_status"),
+        "application_status": _get_attr(row, "application_status")
+        or compute_application_status(row),
         "link_status": _get_attr(row, "link_status"),
         "link_last_checked_at": format_field_value(llc, dates_as_iso=dates_as_iso),
         "link_failure_count": _get_attr(row, "link_failure_count"),

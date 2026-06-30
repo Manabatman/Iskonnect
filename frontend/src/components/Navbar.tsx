@@ -54,6 +54,9 @@ export function Navbar() {
       <Link to="/transparency" className={navLinkClass(isActive("/transparency"))}>
         Transparency
       </Link>
+      <Link to="/scholarship-status" className={navLinkClass(isActive("/scholarship-status"))}>
+        Status guide
+      </Link>
     </>
   );
 

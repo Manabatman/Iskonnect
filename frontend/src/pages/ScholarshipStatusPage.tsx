@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { BackNavLink } from "../components/BackNavLink";
+import { LifecycleStatusExample } from "../components/LifecycleStatusBadge";
 import { LIFECYCLE_STATUS_GUIDE, UI_ELIGIBILITY_GUIDE } from "../utils/scholarshipStatus";
 
 const toneClasses = {
@@ -10,11 +11,13 @@ const toneClasses = {
 } as const;
 
 function StatusCard({
+  statusKey,
   label,
   shortDescription,
   whatToDo,
   tone,
 }: {
+  statusKey?: string;
   label: string;
   shortDescription: string;
   whatToDo: string;
@@ -22,7 +25,10 @@ function StatusCard({
 }) {
   return (
     <article className={`rounded-xl border p-5 ${toneClasses[tone]}`}>
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{label}</h3>
+      <div className="flex flex-wrap items-center gap-3">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{label}</h3>
+        {statusKey ? <LifecycleStatusExample statusKey={statusKey} /> : null}
+      </div>
       <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{shortDescription}</p>
       <p className="mt-3 text-sm font-medium text-slate-800 dark:text-slate-200">
         What to do: <span className="font-normal text-slate-700 dark:text-slate-300">{whatToDo}</span>
@@ -41,14 +47,24 @@ export function ScholarshipStatusPage() {
           reference. Here&apos;s what each label means and what we suggest you do next.
         </p>
 
+        <div className="mt-6 rounded-xl border border-primary-200 bg-primary-50/80 p-5 dark:border-primary-800 dark:bg-primary-950/30">
+          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Our approach</p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            <li>Closed scholarships stay visible so you can plan for the next cycle—they are not silently removed.</li>
+            <li>“Needs verification” means we are still confirming details; always check the official provider site.</li>
+            <li>Labels tell you what to do next, not just how our database is organized.</li>
+          </ul>
+          <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">Last updated: June 2026</p>
+        </div>
+
         <div className="mt-10">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Application cycle status</h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
             These describe whether a scholarship is currently accepting applications.
           </p>
           <div className="mt-6 space-y-4">
-            {Object.values(LIFECYCLE_STATUS_GUIDE).map((entry) => (
-              <StatusCard key={entry.label} {...entry} />
+            {Object.entries(LIFECYCLE_STATUS_GUIDE).map(([key, entry]) => (
+              <StatusCard key={key} statusKey={key} {...entry} />
             ))}
           </div>
         </div>

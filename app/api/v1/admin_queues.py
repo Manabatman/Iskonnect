@@ -14,6 +14,7 @@ from app.api.v1.scholarships import _scholarship_to_response
 from app.auth import require_admin
 from app.db import get_db
 from app.limiter import limiter
+from app.utils.application_status import sync_application_status
 from app.utils.quality_score import compute_confidence_score, needs_review_reasons
 from app.utils.scholarship_persist import utc_now_naive
 
@@ -169,6 +170,7 @@ def verify_refresh_scholarship(
     if s.data_status in (None, "", "needs_review"):
         s.data_status = "active"
     s.confidence_score = compute_confidence_score(s)
+    sync_application_status(s)
     db.commit()
     from app.scholarship_cache import invalidate_scholarship_cache
 
@@ -178,6 +180,7 @@ def verify_refresh_scholarship(
         "last_verified_at": s.last_verified_at.isoformat() if s.last_verified_at else None,
         "confidence_score": s.confidence_score,
         "data_status": s.data_status,
+        "application_status": s.application_status,
     }
 
 

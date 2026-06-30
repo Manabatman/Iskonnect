@@ -16,6 +16,7 @@ from app.utils.scholarship_versioning import (
     record_scholarship_version,
     snapshot_scholarship_row,
 )
+from app.utils.application_status import sync_application_status
 from app.utils.quality_score import compute_confidence_score
 from app.utils.timezone import utc_now_naive
 
@@ -138,12 +139,11 @@ def apply_schema_to_row(
         row.last_close_date = scholarship.last_close_date
     if scholarship.is_active is not None:
         row.is_active = scholarship.is_active
-    elif is_import and scholarship.application_deadline and scholarship.application_deadline < date.today():
-        row.is_active = False
     row.last_verified_at = utc_now_naive()
     if verification_source:
         row.verification_source = verification_source
     row.data_status = _normalize_data_status_on_import(scholarship, row if hasattr(row, "id") and row.id else None)
+    sync_application_status(row)
 
 
 def persist_scholarship_from_schema(

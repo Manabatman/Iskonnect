@@ -11,6 +11,7 @@ import {
   startOfTodayManila,
 } from "../utils/formatDate";
 import { MatchScoreRing } from "../components/MatchScoreRing";
+import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
 import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
 import { ReviewCenterFinderCard } from "../components/dashboard/ReviewCenterFinderCard";
 import { CareerRoadmapCard } from "../components/dashboard/CareerRoadmapCard";
@@ -566,6 +567,14 @@ export function ProfileDashboard() {
                                 <span className="inline-flex rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
                                   {typeLabel}
                                 </span>
+                                {sch ? (
+                                  <LifecycleStatusBadge
+                                    application_status={sch.application_status}
+                                    data_status={sch.data_status}
+                                    is_active={sch.is_active}
+                                    className="!text-[10px]"
+                                  />
+                                ) : null}
                                 {urgency === "soon" ? (
                                   <span className="inline-flex rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-semibold text-red-800 dark:bg-red-900/40 dark:text-red-200">
                                     Deadline soon

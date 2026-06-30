@@ -159,6 +159,7 @@ export interface MatchResult {
   /** Policy rubric version used to compute this score */
   scoring_policy_version?: string | null;
   data_status?: string | null;
+  application_status?: string | null;
   link_status?: string | null;
   verification_source?: string | null;
   last_verified_at?: string | null;
@@ -230,6 +231,13 @@ export interface ScholarshipInfo {
   application_deadline?: string | null;
   application_open_date?: string | null;
   is_active?: boolean;
+  application_status?: string | null;
+  data_status?: string | null;
+  link_status?: string | null;
+  verification_source?: string | null;
+  last_verified_at?: string | null;
+  predicted_next_open?: string | null;
+  cycle_type?: string | null;
   required_documents?: string[];
 }
 
@@ -249,11 +257,13 @@ export interface ScholarshipSearchFilters {
   /** University / institution keyword (matches title, provider, description, school types) */
   school?: string;
   max_income?: number;
-  /** When to apply: open_now | opening_soon | closed | expected_reopen */
+  /** When to apply: open_now | opening_soon | closed | previous_cycle | expected_reopen | needs_verification | archived */
   timing?: string;
   /** Life stage: high_school | college | graduate | tvet */
   life_stage?: string;
+  /** @deprecated Use timing filters instead */
   include_closed?: boolean;
+  include_archived?: boolean;
 }
 
 export interface SavedScholarship {

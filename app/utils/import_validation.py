@@ -119,22 +119,58 @@ def validate_import_row(
     }
 
 
-def summarize_import_report(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def summarize_import_report(
+    rows: list[dict[str, Any]],
+    *,
+    structural: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Aggregate per-row results into an import report."""
     summary = {
         "new": 0,
         "updated_candidate": 0,
         "skipped": 0,
         "invalid": 0,
+        "rejected_structural": 0,
     }
+    invalid_urls = 0
+    invalid_dates = 0
+    auto_normalizations: list[str] = []
+
     for r in rows:
         status = r.get("status", "invalid")
         if status in summary:
             summary[status] += 1
         elif status == "created":
             summary["new"] += 1
-    return {
+
+        for warning in r.get("warnings") or []:
+            w = str(warning)
+            if "invalid_" in w and "_url" in w:
+                invalid_urls += 1
+            if w in ("open_date_after_deadline", "deadline_in_past") or "invalid_date" in w:
+                invalid_dates += 1
+            if w.startswith("normalized_"):
+                if w not in auto_normalizations:
+                    auto_normalizations.append(w)
+
+    report: dict[str, Any] = {
         "imported": summary,
         "rows": rows,
         "total": len(rows),
+        "invalid_urls": invalid_urls,
+        "invalid_dates": invalid_dates,
+        "auto_normalizations": auto_normalizations,
     }
+
+    if structural:
+        report["rejected_structural"] = len(structural.get("rejected_rows") or [])
+        report["unknown_columns"] = structural.get("unknown_columns") or []
+        report["missing_columns"] = structural.get("missing_columns") or []
+        report["missing_recommended"] = structural.get("missing_recommended") or []
+        report["duplicate_columns"] = structural.get("duplicate_columns") or []
+        report["header_errors"] = structural.get("header_errors") or []
+        report["header_valid"] = structural.get("header_valid", True)
+        if structural.get("rejected_rows"):
+            report["structural_rejections"] = structural["rejected_rows"]
+
+    return report

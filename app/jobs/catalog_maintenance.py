@@ -10,21 +10,22 @@ from __future__ import annotations
 import logging
 from datetime import date, datetime, timedelta, timezone
 
-from sqlalchemy import or_, update
+from sqlalchemy import and_, or_, update
 
 from app import models
 from app.db import SessionLocal
 from app.jobs.data_quality import run_data_quality_checks
 from app.scrapers.run_logging import log_scraper_run
 from app.scholarship_cache import invalidate_scholarship_cache
+from app.utils.application_status import sync_application_status
 
 logger = logging.getLogger(__name__)
 
 
 def run_catalog_maintenance() -> dict[str, int]:
     """
-    - Past application_deadline: set is_active=False and data_status='expired'.
-    - Active rows with stale last_verified_at: set data_status='needs_review'.
+    - Past application_deadline: set data_status='expired' and sync application_status (keep searchable).
+    - Active rows with stale last_verified_at: set data_status='needs_review' and sync application_status.
     - Invalidate scholarship list cache (Redis + in-process).
 
     Returns counts: expired_rows_updated, needs_review_rows_updated.
@@ -41,7 +42,7 @@ def run_catalog_maintenance() -> dict[str, int]:
                 models.Scholarship.application_deadline.isnot(None),
                 models.Scholarship.application_deadline < today,
             )
-            .values(is_active=False, data_status="expired")
+            .values(data_status="expired")
         )
         result = db.execute(stmt)
         expired_count = result.rowcount or 0
@@ -53,8 +54,7 @@ def run_catalog_maintenance() -> dict[str, int]:
         )
         for s in legacy:
             s.data_status = "expired"
-            if s.application_deadline and s.application_deadline < today:
-                s.is_active = False
+            sync_application_status(s, today=today)
             expired_count += 1
 
         stale = (
@@ -70,7 +70,25 @@ def run_catalog_maintenance() -> dict[str, int]:
         )
         for s in stale:
             s.data_status = "needs_review"
+            sync_application_status(s, today=today)
             review_count += 1
+
+        # Sync application_status for deadline-expired rows and any stale values
+        expired_rows = (
+            db.query(models.Scholarship)
+            .filter(
+                or_(
+                    models.Scholarship.data_status.in_(["expired", "past_deadline"]),
+                    and_(
+                        models.Scholarship.application_deadline.isnot(None),
+                        models.Scholarship.application_deadline < today,
+                    ),
+                )
+            )
+            .all()
+        )
+        for s in expired_rows:
+            sync_application_status(s, today=today)
 
         db.commit()
         logger.info(

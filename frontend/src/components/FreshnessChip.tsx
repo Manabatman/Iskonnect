@@ -1,4 +1,8 @@
 import type { FreshnessChip, MatchResult } from "../types";
+import {
+  humanizeVerificationSource,
+  resolveApplicationStatus,
+} from "../utils/scholarshipStatus";
 
 const TONE_CLASSES: Record<string, string> = {
   success: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200",
@@ -40,22 +44,35 @@ export function FreshnessChipRow({ chips }: { chips?: FreshnessChip[] }) {
 }
 
 export function freshnessFromScholarship(sch: {
+  application_status?: string | null;
   data_status?: string | null;
+  is_active?: boolean | null;
+  link_status?: string | null;
   last_verified_at?: string | null;
   verification_source?: string | null;
   freshness_chips?: FreshnessChip[];
 }): FreshnessChip[] {
   if (sch.freshness_chips?.length) return sch.freshness_chips;
   const chips: FreshnessChip[] = [];
-  if (sch.data_status === "needs_review") chips.push({ label: "Needs verification", tone: "warning" });
-  if (sch.data_status === "expired" || sch.data_status === "past_deadline") {
-    chips.push({ label: "Closed cycle", tone: "neutral" });
+  const appStatus = resolveApplicationStatus(sch);
+
+  if (appStatus === "needs_verification") {
+    chips.push({ label: "Needs verification", tone: "warning" });
   }
+  if ((sch.link_status || "").toLowerCase() === "broken") {
+    chips.push({ label: "Link issue", tone: "danger" });
+  }
+
   const verified = formatVerifiedDate(sch.last_verified_at);
-  if (verified) chips.push({ label: `Last verified ${verified}`, tone: "success" });
-  else chips.push({ label: "Not yet verified", tone: "warning" });
-  if (sch.verification_source) {
-    chips.push({ label: `Source: ${sch.verification_source.slice(0, 32)}`, tone: "neutral" });
+  if (verified && appStatus !== "needs_verification") {
+    chips.push({ label: `Last verified ${verified}`, tone: "success" });
+  } else if (appStatus !== "needs_verification") {
+    chips.push({ label: "Not yet verified", tone: "warning" });
+  }
+
+  const source = humanizeVerificationSource(sch.verification_source);
+  if (source) {
+    chips.push({ label: source, tone: "neutral" });
   }
   return chips;
 }
