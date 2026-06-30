@@ -4,7 +4,7 @@ from alembic import op
 import sqlalchemy as sa
 
 revision = "030_add_application_status"
-down_revision = "029_jsonb_eligibility_gin"
+down_revision = "029"
 branch_labels = None
 depends_on = None
 
