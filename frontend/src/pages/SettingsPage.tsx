@@ -4,7 +4,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
 import { FEEDBACK_CATEGORIES, useFeedback } from "../components/FeedbackModal";
 import { DeleteAccountModal } from "../components/DeleteAccountModal";
-import { APP_VERSION } from "../data/changelog";
+import { APP_RELEASE_DATE, APP_RELEASE_LABEL, APP_VERSION } from "../data/changelog";
 
 function emailToDisplayName(email: string): string {
   const local = email.split("@")[0] ?? "";
@@ -255,7 +255,9 @@ export function SettingsPage() {
 
         <Card>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">About</h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Iskonnect v{APP_VERSION}</p>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            Iskonnect {APP_RELEASE_LABEL} · v{APP_VERSION} · {APP_RELEASE_DATE}
+          </p>
           <ul className="mt-4 flex flex-col gap-2 text-sm">
             <li>
               <Link to="/changelog" className="font-medium text-primary-600 hover:underline dark:text-primary-400">

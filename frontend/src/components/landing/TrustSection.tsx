@@ -59,6 +59,16 @@ export function TrustSection() {
       <Reveal delay={0.32}>
         <p className="mt-10 text-center">
           <Link
+            to="/match-methodology"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-primary-400 dark:hover:text-primary-300 dark:focus-visible:ring-offset-slate-900"
+          >
+            Why these weights exist
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+          <span className="mx-2 text-slate-400" aria-hidden>
+            ·
+          </span>
+          <Link
             to="/transparency"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-primary-400 dark:hover:text-primary-300 dark:focus-visible:ring-offset-slate-900"
           >

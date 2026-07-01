@@ -1,9 +1,11 @@
 """Regression tests for browse search filters (nationwide geo + combined filters)."""
 
 import json
+from datetime import date, timedelta
 
 from app import models
 from app.api.v1.scholarship_search import (
+    _apply_search_ordering,
     apply_education_level_browse_filter,
     apply_region_browse_filter,
 )
@@ -75,3 +77,37 @@ def test_base_query_returns_active_rows(db_session):
     db_session.add(_sch("Open to all"))
     db_session.commit()
     assert _base_query(db_session).count() >= 1
+
+
+def test_search_ordering_prioritizes_open_then_deadline_then_title(db_session):
+    today = date.today()
+    db_session.add_all(
+        [
+            models.Scholarship(
+                title="Zeta Closed",
+                provider="Test",
+                is_active=True,
+                application_status="closed",
+            ),
+            models.Scholarship(
+                title="Alpha Open",
+                provider="Test",
+                is_active=True,
+                application_status="open",
+                application_deadline=today + timedelta(days=30),
+            ),
+            models.Scholarship(
+                title="Beta Open",
+                provider="Test",
+                is_active=True,
+                application_status="open",
+                application_deadline=today + timedelta(days=5),
+            ),
+        ]
+    )
+    db_session.commit()
+
+    rows = _apply_search_ordering(_base_query(db_session), today=today).all()
+    titles = [r.title for r in rows]
+    assert titles.index("Beta Open") < titles.index("Alpha Open")
+    assert titles.index("Alpha Open") < titles.index("Zeta Closed")

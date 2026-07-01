@@ -16,6 +16,7 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
 import { TransparencyPage } from "./pages/TransparencyPage";
+import { MatchMethodologyPage } from "./pages/MatchMethodologyPage";
 import { WhyIskonnectPage } from "./pages/WhyIskonnectPage";
 import { VerificationPage } from "./pages/VerificationPage";
 import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
@@ -86,6 +87,7 @@ function AppRoutes() {
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/transparency" element={<TransparencyPage />} />
+          <Route path="/match-methodology" element={<MatchMethodologyPage />} />
           <Route path="/why-iskonnect" element={<WhyIskonnectPage />} />
           <Route path="/how-we-verify" element={<VerificationPage />} />
           <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />

@@ -17,7 +17,7 @@ const INCOME_OPTIONS: { label: string; value: number }[] = [
   { label: "Below ₱250K", value: 250_000 },
   { label: "₱250K - ₱400K", value: 400_000 },
   { label: "₱400K - ₱500K", value: 500_000 },
-  { label: "Above ₱500K", value: 999_999_999 },
+  { label: "Above ₱500K", value: 500_001 },
 ];
 
 interface ScholarshipFilterOptions {
@@ -30,6 +30,40 @@ interface ScholarshipFilterOptions {
 interface ScholarshipSearchFiltersProps {
   filters: ScholarshipSearchFilters;
   onChange: (filters: ScholarshipSearchFilters) => void;
+}
+
+const TIMING_LABELS: Record<string, string> = {
+  open_now: "Open now",
+  opening_soon: "Opening soon",
+  expected_reopen: "Expected to reopen",
+  closed: "Closed",
+  previous_cycle: "Past cycle",
+  needs_verification: "Needs verification",
+  archived: "No longer offered",
+};
+
+const LIFE_STAGE_LABELS: Record<string, string> = {
+  high_school: "High school",
+  college: "College",
+  graduate: "Graduate",
+  tvet: "TVET",
+};
+
+export function describeActiveFilters(filters: ScholarshipSearchFilters): string[] {
+  const labels: string[] = [];
+  if (filters.region) labels.push(`Region: ${filters.region}`);
+  if (filters.education_level) labels.push(`Level: ${filters.education_level}`);
+  if (filters.life_stage) labels.push(`Stage: ${LIFE_STAGE_LABELS[filters.life_stage] ?? filters.life_stage}`);
+  if (filters.timing) labels.push(`Timing: ${TIMING_LABELS[filters.timing] ?? filters.timing}`);
+  if (filters.field) labels.push(`Study area: ${filters.field}`);
+  if (filters.school) labels.push(`School: ${filters.school}`);
+  if (filters.provider) labels.push(`Provider: ${filters.provider}`);
+  if (filters.max_income != null && filters.max_income >= 0) {
+    const incomeLabel = INCOME_OPTIONS.find((o) => o.value === filters.max_income)?.label;
+    labels.push(`Income: ${incomeLabel ?? `≤ ₱${filters.max_income.toLocaleString()}`}`);
+  }
+  if (filters.include_archived) labels.push("Including archived");
+  return labels;
 }
 
 export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearchFiltersProps) {
@@ -87,6 +121,12 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
     setProviderSuggestions(matches.slice(0, 10));
     setProviderOpen(true);
   }, [debouncedProvider, filterOptions.providers]);
+
+  useEffect(() => {
+    const trimmed = debouncedProvider.trim() || undefined;
+    if (trimmed === (filters.provider ?? undefined)) return;
+    onChange({ ...filters, provider: trimmed });
+  }, [debouncedProvider, filters, onChange]);
 
   const updateFilter = useCallback(
     <K extends keyof ScholarshipSearchFilters>(key: K, value: ScholarshipSearchFilters[K]) => {
@@ -285,12 +325,8 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             value={providerInput}
             onChange={(e) => setProviderInput(e.target.value)}
             onFocus={() => providerInput && setProviderOpen(true)}
-            onBlur={(e) => {
-              const val = (e.target as HTMLInputElement).value.trim() || undefined;
-              setTimeout(() => {
-                setProviderOpen(false);
-                updateFilter("provider", val);
-              }, 150);
+            onBlur={() => {
+              setTimeout(() => setProviderOpen(false), 150);
             }}
             placeholder="e.g. DOST, CHED"
             className={inputClassName}

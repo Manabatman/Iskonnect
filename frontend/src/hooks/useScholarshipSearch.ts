@@ -78,6 +78,10 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
   );
 
   useEffect(() => {
+    setPage(1);
+  }, [debouncedQuery]);
+
+  useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(null);

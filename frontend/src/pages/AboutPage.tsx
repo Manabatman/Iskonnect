@@ -13,6 +13,20 @@ export function AboutPage() {
 
         <div className="mt-8 space-y-8 text-slate-700 dark:text-slate-300">
           <section>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Our story</h2>
+            <p className="mt-2 leading-relaxed">
+              ISKONNECT began as a personal effort to learn backend development while addressing how hard it is for
+              Filipino students to discover scholarships—including ones I could have benefited from when I was eligible.
+              What started as a learning project in late 2025 grew into a full platform through months of continuous
+              iteration, guided by user feedback and a focus on trustworthy scholarship information.
+            </p>
+            <p className="mt-3 leading-relaxed">
+              ISKONNECT is currently in <strong>Public Beta</strong>. The core flows work today, and we are improving
+              the catalog, matching, and experience every week.
+            </p>
+          </section>
+
+          <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Our mission</h2>
             <p className="mt-2 leading-relaxed">
               Too many qualified students miss scholarships because programs are scattered, deadlines pass quickly, and

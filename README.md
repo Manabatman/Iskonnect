@@ -4,7 +4,7 @@
 
 Iskonnect helps students discover scholarships they can realistically apply for—not just browse listings. Students build a structured profile; the platform applies **hard eligibility filters**, **Philippine policy-aware priority groups**, and a **transparent scoring engine**, then explains *why* each program matched.
 
-> **Status:** Active beta / early production. Core flows work end-to-end; catalog and matching logic are still being expanded.
+> **Status:** Public Beta (v1.0 Beta) — July 2026. Core flows work end-to-end; catalog and matching logic are still being expanded.
 
 **Live stack:** Vercel (frontend) · Render (API) · Supabase (Postgres) · Redis (rate limits & cache)  
 **Deploy guide:** [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)  

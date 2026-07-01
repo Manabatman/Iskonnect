@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API_BASE_URL, apiFetch } from "../api/client";
+import { API_BASE_URL, apiFetch, NetworkError } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
@@ -275,14 +275,27 @@ export function AdminPage() {
     if (tab !== "reviews") return;
     setError(null);
     apiFetch(`/api/v1/admin/queues/${reviewQueue}?limit=50`, { headers: headers() })
-      .then((r) => {
-        if (!r.ok) throw new Error("Failed to load review queue");
+      .then(async (r) => {
+        if (!r.ok) {
+          const body = await r.text().catch(() => "");
+          throw new Error(
+            `Failed to load review queue (HTTP ${r.status})${body ? `: ${body.slice(0, 160)}` : ""}`
+          );
+        }
         return r.json();
       })
       .then((d: { items?: Record<string, unknown>[] }) =>
         setReviewItems(Array.isArray(d.items) ? d.items : [])
       )
-      .catch((e) => setError(e instanceof Error ? e.message : "Error"));
+      .catch((e) => {
+        if (e instanceof NetworkError) {
+          setError(
+            `Unable to reach the API at ${API_BASE_URL}. Confirm the backend is running, VITE_API_BASE_URL is set, and CORS allows this site.`
+          );
+          return;
+        }
+        setError(e instanceof Error ? e.message : "Error");
+      });
   }, [tab, reviewQueue, headers]);
 
   const handleStagingApprove = async (stagingId: number, action: "create" | "update" = "create") => {

@@ -86,6 +86,24 @@ export function ProfileBuilderPage() {
     };
   }, [user, authLoading, authHeaders]);
 
+  const emailPrefilledRef = useRef(false);
+  useEffect(() => {
+    const onAuthChange = () => {
+      emailPrefilledRef.current = false;
+    };
+    window.addEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
+    return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
+  }, []);
+
+  useEffect(() => {
+    if (authLoading || serverLoading || !user?.email) return;
+    if (emailPrefilledRef.current) return;
+    if (!state.email.trim()) {
+      dispatch({ type: "SET_FIELD", field: "email", value: user.email });
+      emailPrefilledRef.current = true;
+    }
+  }, [user?.email, authLoading, serverLoading, state.email]);
+
   useEffect(() => {
     if (currentStep < 2) return;
     if (!state.region?.trim() || !state.education_level?.trim()) {
