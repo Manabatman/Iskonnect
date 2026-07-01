@@ -66,6 +66,6 @@ describe("ScholarshipCardV2 lifecycle badge", () => {
       application_status: "needs_verification",
       data_status: "needs_review",
     });
-    expect(screen.getAllByText("Needs verification").length).toBeGreaterThan(0);
+    expect(screen.getByText("Needs verification")).toBeInTheDocument();
   });
 });

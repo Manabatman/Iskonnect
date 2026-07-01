@@ -23,4 +23,8 @@ describe("scholarshipStatus", () => {
   it("uses Past cycle label for previous_cycle", () => {
     expect(lifecycleStatusLabel("previous_cycle")).toBe("Past cycle");
   });
+
+  it("uses Expected to reopen label for expected_reopen", () => {
+    expect(lifecycleStatusLabel("expected_reopen")).toBe("Expected to reopen");
+  });
 });

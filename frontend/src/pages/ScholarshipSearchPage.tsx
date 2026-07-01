@@ -4,7 +4,7 @@ import { apiFetch } from "../api/client";
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
 import { StatusGuideLink } from "../components/LifecycleStatusBadge";
-import { ScholarshipSearchFilters } from "../components/ScholarshipSearchFilters";
+import { ScholarshipSearchFilters, describeActiveFilters } from "../components/ScholarshipSearchFilters";
 import { ScholarshipDetailPanel } from "../components/ScholarshipDetailPanel";
 import { useAuth } from "../contexts/AuthContext";
 import { useScholarshipSearch } from "../hooks/useScholarshipSearch";
@@ -50,6 +50,7 @@ export function ScholarshipSearchPage() {
   const [checkMatchError, setCheckMatchError] = useState<string | null>(null);
   const [findMatchesNavLoading, setFindMatchesNavLoading] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const activeFilterLabels = describeActiveFilters(filters);
 
   const inflightMatchMap = useRef<Promise<Map<number, MatchResult>> | null>(null);
 
@@ -313,6 +314,22 @@ export function ScholarshipSearchPage() {
                 <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
                   {total} scholarship{total !== 1 ? "s" : ""} found
                 </p>
+
+                {activeFilterLabels.length > 0 ? (
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Active filters:
+                    </span>
+                    {activeFilterLabels.map((label) => (
+                      <span
+                        key={label}
+                        className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/50 dark:text-primary-200"
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
 
                 {results.length === 0 ? (
                   <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12 text-center shadow-md">

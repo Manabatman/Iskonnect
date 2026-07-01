@@ -8,7 +8,7 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, case, func, or_
 from sqlalchemy.orm import Session
 
 from datetime import date
@@ -19,7 +19,11 @@ from app.db import get_db
 from app.limiter import limiter
 from app.utils.application_status import (
     ARCHIVED,
+    CLOSED,
+    EXPECTED_REOPEN,
+    NEEDS_VERIFICATION,
     OPEN,
+    PREVIOUS_CYCLE,
     TIMING_FILTER_MAP,
 )
 from app.utils.jsonb_filters import json_list_contains
@@ -117,7 +121,10 @@ def apply_timing_filter(query, timing: str, today: date | None = None):
 
     status_set = TIMING_FILTER_MAP.get(t)
     if status_set:
-        return query.filter(models.Scholarship.application_status.in_(sorted(status_set)))
+        clauses = [models.Scholarship.application_status.in_(sorted(status_set))]
+        if OPEN in status_set:
+            clauses.append(models.Scholarship.application_status.is_(None))
+        return query.filter(or_(*clauses))
 
     return query
 
@@ -146,6 +153,53 @@ def _base_search_query(db: Session, *, include_archived: bool = False):
             ),
         )
     return q
+
+
+def _status_priority_order(today: date | None = None):
+    """Canonical browse ordering: open → opening soon → expected reopen → past → closed → needs verification → archived."""
+    today = today or date.today()
+    open_status = or_(
+        models.Scholarship.application_status == OPEN,
+        models.Scholarship.application_status.is_(None),
+    )
+    return case(
+        (
+            and_(
+                open_status,
+                or_(
+                    models.Scholarship.application_open_date.is_(None),
+                    models.Scholarship.application_open_date <= today,
+                ),
+            ),
+            0,
+        ),
+        (
+            and_(open_status, models.Scholarship.application_open_date > today),
+            1,
+        ),
+        (models.Scholarship.application_status == EXPECTED_REOPEN, 2),
+        (models.Scholarship.application_status == PREVIOUS_CYCLE, 3),
+        (models.Scholarship.application_status == CLOSED, 4),
+        (models.Scholarship.application_status == NEEDS_VERIFICATION, 5),
+        (models.Scholarship.application_status == ARCHIVED, 6),
+        else_=7,
+    )
+
+
+def _apply_search_ordering(query, today: date | None = None):
+    today = today or date.today()
+    priority = _status_priority_order(today)
+    deadline_sort = case(
+        (models.Scholarship.application_deadline.is_(None), 1),
+        else_=0,
+    )
+    return query.order_by(
+        priority.asc(),
+        deadline_sort.asc(),
+        models.Scholarship.application_deadline.asc(),
+        models.Scholarship.title.asc(),
+        models.Scholarship.id.asc(),
+    )
 
 
 def _parse_json(val, default=None):
@@ -247,7 +301,13 @@ def search_scholarships(
 
     if query and query.strip():
         pattern = f"%{query.strip()}%"
-        q = q.filter(models.Scholarship.title.ilike(pattern))
+        q = q.filter(
+            or_(
+                models.Scholarship.title.ilike(pattern),
+                models.Scholarship.description.ilike(pattern),
+                models.Scholarship.provider.ilike(pattern),
+            )
+        )
 
     if region and region.strip():
         q = apply_region_browse_filter(q, region)
@@ -287,6 +347,7 @@ def search_scholarships(
             )
         )
 
+    q = _apply_search_ordering(q)
     total = q.count()
     scholarships = q.offset(offset).limit(limit).all()
     results = [_scholarship_to_response(s) for s in scholarships]
@@ -385,6 +446,7 @@ def search_scholarships_semantic(
             )
         )
 
+    q = _apply_search_ordering(q)
     total = q.count()
     scholarships = q.offset(offset).limit(limit).all()
     results = [_scholarship_to_response(s) for s in scholarships]

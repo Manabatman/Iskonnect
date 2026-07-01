@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { APP_RELEASE_DATE, APP_RELEASE_LABEL } from "../data/changelog";
 
 const productLinks = [
   { to: "/how-it-works", label: "How it works" },
@@ -29,6 +30,9 @@ export function Footer() {
             <p className="font-semibold text-white">Iskonnect</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
               Connecting Filipino students to scholarship opportunities they actually qualify for.
+            </p>
+            <p className="mt-2 text-xs font-medium text-primary-300">
+              {APP_RELEASE_LABEL} · {APP_RELEASE_DATE}
             </p>
           </div>
 

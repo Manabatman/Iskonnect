@@ -61,7 +61,13 @@ def admin_review_queue(
             or_(models.Scholarship.image_url.is_(None), models.Scholarship.image_url == ""),
         )
     elif queue_name == "low_quality":
-        q = db.query(models.Scholarship).filter(models.Scholarship.is_active == True)  # noqa: E712
+        q = db.query(models.Scholarship).filter(
+            models.Scholarship.is_active == True,  # noqa: E712
+            or_(
+                models.Scholarship.confidence_score.is_(None),
+                models.Scholarship.confidence_score < 0.5,
+            ),
+        )
     elif queue_name == "duplicates":
         dup_keys = (
             db.query(models.Scholarship.dedupe_key)
@@ -113,8 +119,6 @@ def admin_review_queue(
     items = []
     for s in rows:
         score = compute_confidence_score(s)
-        if queue_name == "low_quality" and score >= 0.5:
-            continue
         payload = _scholarship_to_response(s)
         if hasattr(payload, "model_dump"):
             data = payload.model_dump()
@@ -124,10 +128,7 @@ def admin_review_queue(
         data["review_reasons"] = needs_review_reasons(s)
         items.append(data)
 
-    if queue_name == "low_quality":
-        total = len(items)
-    else:
-        total = q.count()
+    total = q.count()
 
     return {
         "queue": queue_name,

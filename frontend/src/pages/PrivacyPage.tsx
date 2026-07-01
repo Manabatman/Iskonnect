@@ -5,7 +5,7 @@ export function PrivacyPage() {
     <section className="py-12">
       <div className="mx-auto max-w-3xl px-4">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Last updated: March 2025</p>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Last updated: July 2026</p>
 
         <div className="mt-8 space-y-6 text-slate-700 dark:text-slate-300">
           <section>

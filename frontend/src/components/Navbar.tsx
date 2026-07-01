@@ -42,6 +42,9 @@ export function Navbar() {
 
   const navLinks = (
     <>
+      <Link to="/" className={navLinkClass(isActive("/"))}>
+        Home
+      </Link>
       <Link to="/how-it-works" className={navLinkClass(isActive("/how-it-works"))}>
         How it works
       </Link>
@@ -94,11 +97,11 @@ export function Navbar() {
     <header
       className={`sticky top-0 z-40 border-b transition-colors duration-200 ${
         scrolled
-          ? "border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-900/80"
-          : "border-transparent bg-white/70 backdrop-blur-sm dark:bg-slate-900/70"
+          ? "border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
+          : "border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6 sm:py-2.5">
         <Link to="/" className="flex shrink-0 items-center gap-3">
           <img
             src={logoSrc}
@@ -111,7 +114,7 @@ export function Navbar() {
             }}
           />
           <span>
-            <span className="block font-sans text-xl font-black uppercase tracking-[0.06em] text-primary-700 dark:text-primary-400 sm:text-2xl">
+            <span className="block font-brand text-xl font-black tracking-tight text-primary-700 dark:text-primary-400 sm:text-2xl">
               Iskonnect
             </span>
             <span className="hidden text-xs font-medium text-slate-500 dark:text-slate-400 sm:block">
@@ -141,7 +144,7 @@ export function Navbar() {
       {mobileOpen ? (
         <div
           id="mobile-nav"
-          className="border-t border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-md md:hidden dark:border-slate-700 dark:bg-slate-900/95"
+          className="border-t border-slate-200 bg-white px-4 py-4 md:hidden dark:border-slate-700 dark:bg-slate-900"
         >
           <nav className="flex flex-col gap-3" aria-label="Mobile primary">
             {navLinks}

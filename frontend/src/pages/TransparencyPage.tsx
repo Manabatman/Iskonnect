@@ -134,6 +134,18 @@ export function TransparencyPage() {
                 Understand labels like Open now, Closed, Past cycle, and Needs verification—and what to do next.
               </p>
             </Link>
+            <Link
+              to="/match-methodology"
+              className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-primary-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/80 dark:hover:border-primary-600 sm:col-span-2"
+            >
+              <h3 className="font-semibold text-slate-900 group-hover:text-primary-700 dark:text-slate-100 dark:group-hover:text-primary-400">
+                Why match scores are weighted this way
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Research rationale, fairness principles, limitations, and planned improvements behind the 30/28/22/10/10
+                weighting.
+              </p>
+            </Link>
           </div>
         </div>
 
