@@ -4,9 +4,8 @@ import { APP_RELEASE_DATE, APP_RELEASE_LABEL } from "../data/changelog";
 const productLinks = [
   { to: "/how-it-works", label: "How it works" },
   { to: "/scholarships/search", label: "Scholarships" },
-  { to: "/how-we-verify", label: "How we verify" },
+  { to: "/how-it-works#verification", label: "Verification" },
   { to: "/scholarship-status", label: "Scholarship status" },
-  { to: "/transparency", label: "Transparency" },
   { to: "/faq", label: "FAQ" },
 ] as const;
 

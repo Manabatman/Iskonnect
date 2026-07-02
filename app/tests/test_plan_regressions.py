@@ -1,22 +1,19 @@
-"""Regression tests aligned with audit plan (ingest, deadlines, dedupe)."""
+"""Regression tests aligned with audit plan (deadlines, dedupe)."""
 
-import sys
 from datetime import date, timedelta
 
-import pytest
 from sqlalchemy import and_
 
 from app import models
-from app.scripts import ingest_scraped as ingest_mod
+from app.utils.dedupe import scholarship_dedupe_key
 
 
 def test_dedupe_key_stable():
     link = "https://example.com/same-program"
-    a = ingest_mod._dedupe_key("  ABC Scholarship ", "DOST ", link)
-    b = ingest_mod._dedupe_key("abc scholarship", "dost", link)
+    a = scholarship_dedupe_key("  ABC Scholarship ", "DOST ", link)
+    b = scholarship_dedupe_key("abc scholarship", "dost", link)
     assert a == b
-    # Same title/provider but different URL → different key
-    c = ingest_mod._dedupe_key("abc scholarship", "dost", "https://example.com/other")
+    c = scholarship_dedupe_key("abc scholarship", "dost", "https://example.com/other")
     assert c != a
 
 
@@ -67,22 +64,3 @@ def test_future_deadline_not_matched_by_expiry_query(db_session):
         )
     )
     assert q.count() == 0
-
-
-def test_ingest_requires_non_empty_database_url(monkeypatch):
-    import app.config as cfg
-
-    monkeypatch.setattr(cfg.settings, "database_url", "")
-    monkeypatch.setattr(sys, "argv", ["ingest_scraped", "--source", "data/raw/x.json"])
-    with pytest.raises(SystemExit, match="DATABASE_URL"):
-        ingest_mod.main()
-
-
-def test_ingest_rejects_non_postgres_on_github_actions(monkeypatch):
-    import app.config as cfg
-
-    monkeypatch.setenv("GITHUB_ACTIONS", "true")
-    monkeypatch.setattr(cfg.settings, "database_url", "sqlite:///./x.db")
-    monkeypatch.setattr(sys, "argv", ["ingest_scraped", "--source", "data/raw/x.json"])
-    with pytest.raises(SystemExit, match="postgresql"):
-        ingest_mod.main()

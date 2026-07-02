@@ -37,8 +37,8 @@ export function VerificationPage() {
             </p>
             <p className="mt-3 leading-relaxed">
               Before a scholarship appears in our catalog, we review its source, eligibility requirements,
-              application period, and official links. We also continue monitoring listings for updates whenever
-              possible.
+              application period, and official links. Our team re-reviews listings on a regular maintenance
+              schedule.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
               We still recommend confirming important details on the provider&apos;s official website before
@@ -65,9 +65,8 @@ export function VerificationPage() {
           <section className="rounded-xl border border-primary-200 bg-primary-50/60 p-5 dark:border-primary-800 dark:bg-primary-950/30">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">What &quot;Verified&quot; means</h2>
             <p className="mt-2 leading-relaxed">
-              A verified scholarship has been checked against an official source by our team or automated
-              verification process. Verification means the information matched the official source at the time it
-              was reviewed.
+              A verified scholarship has been checked against an official source by the ISKONNECT team.
+              Verification means the information matched the official source at the time it was reviewed.
             </p>
             <p className="mt-3 leading-relaxed">
               Because scholarship providers can update their requirements at any time, we still recommend checking

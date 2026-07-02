@@ -32,7 +32,7 @@ Iskonnect centralizes opportunities in a **structured catalog** and matches them
 | **Document readiness** | Tracks required vs. available documents for applications (separate from eligibility score) |
 | **PSCED alignment** | Course/field matching via Philippine Standard Classification of Education (PSCED) buckets |
 | **Saved scholarships & applications** | Bookmark programs and track application status (authenticated) |
-| **Admin & data pipeline** | Staging import, scraper ingest (PhilScholar), CSV research import, quality queues |
+| **Admin & data pipeline** | Admin-verified CSV/staging import, data-quality monitoring, link checking, deadline maintenance |
 
 ### Policy-aware priority groups
 
@@ -57,7 +57,7 @@ The ranking engine is **pluggable**: a default rule-based scorer ships with the 
 | **Database** | SQLite (`dev.db`) locally · PostgreSQL (Supabase) in production |
 | **Cache / limits** | Redis (production) |
 | **Frontend** | React, TypeScript, Vite, Tailwind CSS |
-| **Ops** | GitHub Actions (CI, scraper, maintenance crons), Sentry (optional) |
+| **Ops** | GitHub Actions (CI, maintenance crons), Sentry (optional) |
 
 ---
 
@@ -117,7 +117,7 @@ START_BOTH.bat
 Runs backend + frontend in separate windows. Seed manually with python seed_data.py if the catalog is empty.
 
 Optional: larger demo catalog
-For hundreds of scraped rows (PhilScholar + SIKAP), place CSVs in ../.cursor/plans/data/ (philscholar.csv, sikap.csv, scholarships.csv), then:
+For hundreds of verified CSV rows, place files in `../.cursor/plans/data/` (`philscholar.csv`, `sikap.csv`, `scholarships.csv`), then:
 
 python -m app.scripts.seed_demo_csvs
 Past-deadline rows remain in the DB as past_deadline so matching demos still work.
@@ -141,7 +141,7 @@ Base path: /api/v1 · Auth: Bearer JWT on protected routes
 Method	Endpoint	Description
 GET
 /health
-Health check (DB, cache, scraper metadata)
+Health check (DB, cache, maintenance job metadata)
 POST
 /auth/register
 Create account
@@ -175,9 +175,8 @@ Admin: bulk import to staging
 Interactive reference (development only): http://localhost:8000/docs
 
 Data pipeline (high level)
-Scraper — PhilScholar → JSON → staging → admin approve
-CSV import — Research / Gemini CSV → csv_to_staging → admin approve
-Seed — seed_data.py for local demos
+CSV / research import → staging → admin approve → live catalog
+Completeness scoring + publishability gate on every write and nightly maintenance
 Details: docs/operations-handbook/06-data-pipeline.md
 
 Documentation

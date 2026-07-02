@@ -65,6 +65,7 @@ def _result_to_match_response(
     scholarship: models.Scholarship,
     *,
     fields: str = "full",
+    profile: dict | None = None,
 ) -> dict:
     """Build match response dict from MatchResult + Scholarship for display."""
     catalog = scholarship_to_catalog_dict(scholarship)
@@ -76,6 +77,25 @@ def _result_to_match_response(
         why_not_higher=_json_list_from_db(r.why_not_higher),
     )
     scoring["deadline_passed"] = is_application_deadline_passed(catalog.get("application_deadline"))
+    if profile:
+        from app.matching.eligibility_result import evaluate_eligibility
+
+        elig = evaluate_eligibility(profile, catalog).to_dict()
+        for key in (
+            "qualification_status",
+            "qualifying_requirements",
+            "missing_requirements",
+            "eligibility_confidence",
+            "requirements",
+        ):
+            if key in elig:
+                scoring[key] = elig[key]
+        qual = elig.get("qualification_status")
+        scoring["eligibility_status"] = qual in (
+            "qualified",
+            "provisionally_qualified",
+            "almost_qualified",
+        ) and not scoring["deadline_passed"]
     payload = build_match_result_payload(catalog, scoring=scoring)
     if fields == "minimal":
         card = scholarship_card_fields(catalog)
@@ -280,12 +300,13 @@ def get_match_run(
     results = db.query(models.MatchResult).filter(models.MatchResult.run_id == run_id).order_by(models.MatchResult.score.desc()).all()
     scholarship_ids = [r.scholarship_id for r in results]
     scholarships = {s.id: s for s in db.query(models.Scholarship).filter(models.Scholarship.id.in_(scholarship_ids)).all()}
+    profile = get_profile_dict(run.profile_id, db)
 
     match_responses = []
     for r in results:
         s = scholarships.get(r.scholarship_id)
         if s:
-            match_responses.append(_result_to_match_response(r, s, fields=fields))
+            match_responses.append(_result_to_match_response(r, s, fields=fields, profile=profile))
 
     return schemas.MatchRunDetail(
         id=run.id,

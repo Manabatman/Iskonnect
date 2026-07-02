@@ -138,7 +138,8 @@ def humanize_verification_source(source: str | None) -> str | None:
         return None
     mapping = {
         "manual": "Verified by ISKONNECT team",
-        "scraper": "Official website",
+        "team_verified": "Verified by ISKONNECT team",
+        "scraper": "Verified by ISKONNECT team",
         "partner": "Partner organization",
         "csv_import": "Imported record",
     }

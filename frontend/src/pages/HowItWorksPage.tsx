@@ -118,6 +118,39 @@ export function HowItWorksPage() {
           </div>
         </div>
 
+        <div className="mt-12" id="matching">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How matching works</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            ISKONNECT uses a two-stage engine: hard eligibility filters remove programs you cannot apply for, then a
+            transparent scoring model ranks what remains. Every result includes a qualification status and a list of
+            requirements you meet or still need.
+          </p>
+        </div>
+
+        <div className="mt-10" id="scoring">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How scores are built</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Scores reflect fit across academics, financial need, field of study, location, and priority groups—not a
+            black-box AI guess. Higher scores mean stronger alignment with the program&apos;s stated criteria.
+          </p>
+        </div>
+
+        <div className="mt-10" id="verification">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How we verify scholarships</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Our catalog is built from official provider sources—CHED, DOST, TESDA, LGUs, universities, and foundations.
+            Each listing is reviewed by the ISKONNECT team before publication. We re-check listings on a regular
+            maintenance schedule and flag stale records for review. Verification means the data matched the official
+            source when we last checked—not a guarantee of funding or acceptance.
+          </p>
+          <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            Always confirm deadlines and requirements on the provider&apos;s website before applying.{" "}
+            <Link to="/scholarship-status" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              Scholarship status guide
+            </Link>
+          </p>
+        </div>
+
         <div className="mt-12">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Common questions</h2>
           <div className="mt-4 space-y-2">
@@ -155,10 +188,10 @@ export function HowItWorksPage() {
             View My Matches
           </Link>
           <Link
-            to="/transparency"
+            to="/how-it-works#verification"
             className="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
           >
-            See how scores are built →
+            How we verify listings →
           </Link>
         </div>
 

@@ -219,13 +219,11 @@ def health(db: Session = Depends(get_db)):
     else:
         checks["cache"] = "not_configured"
 
-    scraper_last = None
+    maintenance_last = None
     try:
-        from app import models
-
         row = db.query(models.ScraperRun).order_by(models.ScraperRun.started_at.desc()).first()
         if row:
-            scraper_last = {
+            maintenance_last = {
                 "source": row.source,
                 "status": row.status,
                 "started_at": row.started_at.isoformat() if row.started_at else None,
@@ -233,7 +231,7 @@ def health(db: Session = Depends(get_db)):
             }
     except Exception:
         pass
-    checks["scraper_last"] = scraper_last
+    checks["maintenance_last"] = maintenance_last
 
     core_ok = checks.get("db") is True
     overall = "ok" if core_ok else "degraded"

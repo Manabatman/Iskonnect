@@ -34,7 +34,7 @@ type AdminReport = {
   status: string;
   created_at: string;
 };
-type ScraperRunRow = {
+type MaintenanceRunRow = {
   id: number;
   source: string;
   started_at: string | null;
@@ -42,8 +42,28 @@ type ScraperRunRow = {
   status: string;
   records_found: number | null;
   records_ingested: number | null;
-  output_path: string | null;
+  output_path?: string | null;
   error_detail: string | null;
+};
+
+type DataQualitySummary = {
+  as_of?: string;
+  publishability_threshold?: number;
+  total_active?: number;
+  average_completeness?: number;
+  tier_distribution?: Record<string, number>;
+  below_publishable_threshold?: number;
+  needs_review?: number;
+  missing_residency_rules?: number;
+  missing_income_rules?: number;
+  missing_course_restrictions?: number;
+  expired_verification?: number;
+  high_priority_records?: {
+    id: number;
+    title: string;
+    completeness_score: number;
+    gaps: string[];
+  }[];
 };
 type StagingRow = {
   id: number;
@@ -76,14 +96,14 @@ export function AdminPage() {
   const [matchRuns, setMatchRuns] = useState<AdminMatchRun[]>([]);
   const [feedback, setFeedback] = useState<AdminFeedback[]>([]);
   const [reports, setReports] = useState<AdminReport[]>([]);
-  const [scraperRuns, setScraperRuns] = useState<ScraperRunRow[]>([]);
+  const [maintenanceRuns, setMaintenanceRuns] = useState<MaintenanceRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
-  const [dataQuality, setDataQuality] = useState<Record<string, number> | null>(null);
+  const [dataQuality, setDataQuality] = useState<DataQualitySummary | null>(null);
   const [catalogHealth, setCatalogHealth] = useState<Record<string, number> | null>(null);
   const [importDashboard, setImportDashboard] = useState<{
     staging_pending?: number;
     staging_total?: number;
-    recent_scraper_runs?: ScraperRunRow[];
+    recent_maintenance_runs?: MaintenanceRunRow[];
   } | null>(null);
   const [uploadingImageId, setUploadingImageId] = useState<number | null>(null);
   const [stagingRows, setStagingRows] = useState<StagingRow[]>([]);
@@ -179,9 +199,8 @@ export function AdminPage() {
     if (tab !== "system") return;
     setError(null);
     Promise.all([
-      fetch(`${API_BASE_URL}/health`).then((r) => r.json()),
-      apiFetch("/api/v1/admin/scraper-runs/latest?limit=15", { headers: headers() }).then((r) => {
-        if (!r.ok) throw new Error("scraper runs");
+      apiFetch("/health").then(async (r) => {
+        if (!r.ok) throw new Error(`health HTTP ${r.status}`);
         return r.json();
       }),
       apiFetch("/api/v1/admin/data-quality", { headers: headers() }).then((r) => {
@@ -197,19 +216,26 @@ export function AdminPage() {
         return r.json();
       }),
     ])
-      .then(([h, s, dq, ch, imp]) => {
+      .then(([h, dq, ch, imp]) => {
         setHealthJson(JSON.stringify(h, null, 2));
-        setScraperRuns(Array.isArray(s) ? s : []);
-        setDataQuality(dq && typeof dq === "object" ? dq : null);
+        setDataQuality(dq && typeof dq === "object" ? (dq as DataQualitySummary) : null);
         setCatalogHealth(ch && typeof ch === "object" ? ch : null);
         setImportDashboard(imp && typeof imp === "object" ? imp : null);
+        const runs = (imp as { recent_maintenance_runs?: MaintenanceRunRow[] })?.recent_maintenance_runs;
+        setMaintenanceRuns(Array.isArray(runs) ? runs : []);
       })
-      .catch(() => {
+      .catch((e) => {
         setHealthJson(null);
-        setScraperRuns([]);
+        setMaintenanceRuns([]);
         setDataQuality(null);
         setCatalogHealth(null);
         setImportDashboard(null);
+        if (e instanceof NetworkError) {
+          setError(
+            `Unable to reach the API at ${API_BASE_URL}. Confirm the backend is running, VITE_API_BASE_URL is set, and CORS allows this site.`
+          );
+          return;
+        }
         setError("Could not load system health (check admin role and API URL).");
       });
   }, [tab, headers]);
@@ -906,50 +932,102 @@ export function AdminPage() {
               </pre>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Data quality</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Data quality dashboard</h3>
               {dataQuality ? (
-                <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2">
-                  {Object.entries(dataQuality).map(([k, v]) => (
-                    <li
-                      key={k}
-                      className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
-                    >
-                      <span className="text-slate-600 dark:text-slate-400">{k.replace(/_/g, " ")}</span>
-                      <span className="font-semibold text-slate-900 dark:text-slate-100">{v}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="mt-3 space-y-4">
+                  <ul className="grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                    {[
+                      ["Active scholarships", dataQuality.total_active],
+                      ["Average completeness", `${dataQuality.average_completeness ?? 0}%`],
+                      ["Below publishable threshold", dataQuality.below_publishable_threshold],
+                      ["Needs review", dataQuality.needs_review],
+                      ["Missing residency rules", dataQuality.missing_residency_rules],
+                      ["Missing income rules", dataQuality.missing_income_rules],
+                      ["Missing course restrictions", dataQuality.missing_course_restrictions],
+                      ["Expired verification", dataQuality.expired_verification],
+                    ].map(([label, value]) => (
+                      <li
+                        key={String(label)}
+                        className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                      >
+                        <span className="text-slate-600 dark:text-slate-400">{label}</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{String(value ?? "—")}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {dataQuality.tier_distribution ? (
+                    <div>
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Completeness tiers</p>
+                      <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-3">
+                        {Object.entries(dataQuality.tier_distribution).map(([tier, count]) => (
+                          <li
+                            key={tier}
+                            className="rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                          >
+                            <span className="text-slate-600 dark:text-slate-400">{tier.replace(/_/g, " ")}</span>
+                            <span className="ml-2 font-semibold">{count}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {dataQuality.high_priority_records && dataQuality.high_priority_records.length > 0 ? (
+                    <div>
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">High-priority records</p>
+                      <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm">
+                        {dataQuality.high_priority_records.map((row) => (
+                          <li key={row.id} className="rounded border border-slate-200 px-2 py-1 dark:border-slate-700">
+                            <Link to={`/scholarship/${row.id}`} className="font-medium text-primary-600 hover:underline">
+                              {row.title}
+                            </Link>
+                            <span className="ml-2 text-xs text-slate-500">
+                              {row.completeness_score}% · {row.gaps?.slice(0, 2).join(", ")}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
               ) : (
                 <p className="mt-2 text-sm text-slate-500">—</p>
               )}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Recent scraper runs</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Recent maintenance runs</h3>
               <div className="mt-2 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
                 <table className="min-w-full text-sm">
                   <thead className="bg-slate-50 dark:bg-slate-800">
                     <tr>
                       <th className="px-3 py-2 text-left">ID</th>
-                      <th className="px-3 py-2 text-left">Source</th>
+                      <th className="px-3 py-2 text-left">Job</th>
                       <th className="px-3 py-2 text-left">Status</th>
-                      <th className="px-3 py-2 text-left">Found</th>
-                      <th className="px-3 py-2 text-left">Error / snapshot</th>
+                      <th className="px-3 py-2 text-left">Records</th>
+                      <th className="px-3 py-2 text-left">Error</th>
                       <th className="px-3 py-2 text-left">Started</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {scraperRuns.map((r) => (
-                      <tr key={r.id} className="border-t border-slate-100 dark:border-slate-700">
-                        <td className="px-3 py-2">{r.id}</td>
-                        <td className="px-3 py-2">{r.source}</td>
-                        <td className="px-3 py-2">{r.status}</td>
-                        <td className="px-3 py-2">{r.records_found ?? "—"}</td>
-                        <td className="max-w-xs truncate px-3 py-2 text-xs text-slate-600 dark:text-slate-400">
-                          {r.error_detail ?? r.output_path ?? "—"}
+                    {maintenanceRuns.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-3 py-4 text-center text-slate-500">
+                          No maintenance runs logged yet.
                         </td>
-                        <td className="px-3 py-2 text-xs">{r.started_at}</td>
                       </tr>
-                    ))}
+                    ) : (
+                      maintenanceRuns.map((r) => (
+                        <tr key={r.id} className="border-t border-slate-100 dark:border-slate-700">
+                          <td className="px-3 py-2">{r.id}</td>
+                          <td className="px-3 py-2">{r.source}</td>
+                          <td className="px-3 py-2">{r.status}</td>
+                          <td className="px-3 py-2">{r.records_ingested ?? r.records_found ?? "—"}</td>
+                          <td className="max-w-xs truncate px-3 py-2 text-xs text-slate-600 dark:text-slate-400">
+                            {r.error_detail ?? "—"}
+                          </td>
+                          <td className="px-3 py-2 text-xs">{r.started_at}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

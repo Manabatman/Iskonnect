@@ -1,26 +1,17 @@
-"""JSONB containment helpers for scholarship eligibility filters (PostgreSQL)."""
+"""JSON list containment helpers for scholarship eligibility filters."""
 
 from __future__ import annotations
 
-from sqlalchemy import cast, or_
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import or_
 
 from app import models
-from app.config import settings
-
-
-def _db_is_postgres() -> bool:
-    return not settings.database_url.strip().lower().startswith("sqlite")
-
 
 def json_list_contains(column, value: str):
     """
-    Match a value inside a JSON list column.
-    Uses @> on PostgreSQL jsonb; falls back to ILIKE on SQLite/text.
+    Match a value inside a JSON list column stored as text/jsonb.
+    Uses ILIKE for cross-dialect portability (SQLite tests + Postgres text/jsonb).
     """
     val = value.strip()
-    if _db_is_postgres():
-        return cast(column, JSONB).contains([val])
     pattern = f'%"{val}"%'
     return column.ilike(pattern)
 

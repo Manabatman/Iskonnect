@@ -1,1 +1,1 @@
-"""Source-specific scholarship scrapers (MVP: PhilScholar placeholder)."""
+"""Scraping removed — ISKONNECT uses admin-verified scholarship imports only."""

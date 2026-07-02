@@ -11,10 +11,8 @@ import {
   startOfTodayManila,
 } from "../utils/formatDate";
 import { MatchScoreRing } from "../components/MatchScoreRing";
+import { QualificationStatusBadge } from "../components/QualificationStatusBadge";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
-import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
-import { ReviewCenterFinderCard } from "../components/dashboard/ReviewCenterFinderCard";
-import { CareerRoadmapCard } from "../components/dashboard/CareerRoadmapCard";
 import {
   INITIAL_STATE,
   computeOverallCompletion,
@@ -441,19 +439,6 @@ export function ProfileDashboard() {
               </Link>
             </div>
 
-            {/* Row 1: planner full width; row 2: two columns (md+). Mobile: single column stack. */}
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-stretch">
-              <div className="min-w-0 md:col-span-2">
-                <FinancialPlannerCard saved={savedScholarships} />
-              </div>
-              <div className="min-w-0 flex">
-                <ReviewCenterFinderCard className="h-full w-full" defaultLocation={profile?.region ?? ""} />
-              </div>
-              <div className="min-w-0 flex">
-                <CareerRoadmapCard className="h-full w-full" defaultEducationLevel={profile?.education_level ?? ""} />
-              </div>
-            </div>
-
             {/* Recommended matches */}
             <div className="glass rounded-2xl p-6 shadow-md">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -500,6 +485,11 @@ export function ProfileDashboard() {
                                 <span className="inline-block rounded-full bg-primary-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
                                   Top match
                                 </span>
+                              ) : null}
+                              {m.qualification_status ? (
+                                <div className="mt-1">
+                                  <QualificationStatusBadge status={m.qualification_status} />
+                                </div>
                               ) : null}
                               <p className="font-semibold text-slate-900 line-clamp-2 dark:text-slate-100">{m.title}</p>
                               <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{m.provider}</p>

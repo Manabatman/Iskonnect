@@ -15,7 +15,7 @@ from sqlalchemy import and_, or_, update
 from app import models
 from app.db import SessionLocal
 from app.jobs.data_quality import run_data_quality_checks
-from app.scrapers.run_logging import log_scraper_run
+from app.utils.job_run_logging import log_job_run
 from app.scholarship_cache import invalidate_scholarship_cache
 from app.utils.application_status import sync_application_status
 
@@ -102,8 +102,12 @@ def run_catalog_maintenance() -> dict[str, int]:
             logger.warning("catalog_maintenance_cache_invalidate_failed: %s", cache_err)
 
         quality = run_data_quality_checks()
+        from app.jobs.data_quality import recompute_completeness_scores, count_structured_eligibility_gaps
 
-        log_scraper_run(
+        completeness_updated = recompute_completeness_scores()
+        structured_gaps = count_structured_eligibility_gaps()
+
+        log_job_run(
             "catalog_maintenance",
             "success",
             records_found=expired_count + review_count,
@@ -111,7 +115,13 @@ def run_catalog_maintenance() -> dict[str, int]:
             output_path=None,
             error_detail=None,
         )
-        return {"expired": expired_count, "needs_review": review_count, "data_quality": quality}
+        return {
+            "expired": expired_count,
+            "needs_review": review_count,
+            "data_quality": quality,
+            "completeness_updated": completeness_updated,
+            "structured_eligibility_gaps": structured_gaps,
+        }
     except Exception:
         db.rollback()
         logger.exception("catalog_maintenance_failed")

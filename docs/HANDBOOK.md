@@ -11,13 +11,13 @@ Browser  →  Vercel (static React app)
               ↓  SQL over DATABASE_URL
            Supabase (PostgreSQL)
 
-GitHub Actions → same Supabase (optional scheduled scrape → staging; daily catalog maintenance)
+GitHub Actions → same Supabase (scheduled catalog maintenance; CSV imports via admin)
 ```
 
 - **Vercel** only serves built HTML/JS/CSS. It does **not** run your Python code.
 - **Render** runs **FastAPI** via **gunicorn** + Uvicorn workers in production (see [Procfile](../Procfile)); locally you use `uvicorn app.main:app`. This is where `/api/v1/...` lives.
 - **Supabase** is **Postgres**. Your API talks to it with **SQLAlchemy** (see `app/db.py`, `app/models.py`) and **Alembic** migrations — not the Supabase JS client in this repo.
-- **GitHub Actions** run scripts that connect to the **same** `DATABASE_URL` (repository secret): optional PhilScholar scrape + ingest, and daily catalog maintenance.
+- **GitHub Actions** run scripts that connect to the **same** `DATABASE_URL` (repository secret): daily catalog maintenance, deadline reminders, link checks, and retention cleanup.
 
 ## 2. One request, end to end
 
@@ -50,7 +50,7 @@ Point **UptimeRobot** (or similar) at `/health` every few minutes to reduce Rend
 ## 5. Data: scholarships, staging, maintenance
 
 - **Live catalog:** `scholarships` table (what search and matching use).
-- **Staging queue:** `scholarships_staging` — scraper output lands here; **admin approves** before it becomes a live row.
+- **Staging queue:** `scholarships_staging` — CSV/research imports land here; **admin approves** before it becomes a live row.
 - **Catalog maintenance** (GitHub Action `Scholarship deadline maintenance`): runs `python -m app.scripts.expire_scholarship_deadlines`, which calls **`app.jobs.catalog_maintenance.run_catalog_maintenance()`** — past deadlines → `is_active=false` + `data_status=expired`, stale verification → `needs_review`, then **scholarship list cache invalidation** (Redis if set; always safe to call).
 
 ## 6. If X breaks, check Y
@@ -61,7 +61,7 @@ Point **UptimeRobot** (or similar) at `/health` every few minutes to reduce Rend
 | CORS error in console | `CORS_ORIGINS` on Render must include **exact** Vercel origin (`https://`, no typo). |
 | 401 on API | Log in again; token in `localStorage`. `AUTH_DISABLED` should be `false` in production. |
 | Empty search / no matches | Supabase **Table Editor** → `scholarships`: rows exist? `is_active`? |
-| Scraper not updating | Cron may be disabled in `.github/workflows/scraper.yml`; try **Run workflow** manually. Logs: **Scholarship scrape and ingest**; secret **`DATABASE_URL`** must match Render’s DB. |
+| Catalog not updating | Import via staging + admin approve; run `catalog_maintenance` workflow manually if deadlines/verification flags look stale. |
 | `/health` 503 | `DATABASE_URL`, Supabase project status, network. Render logs for traceback. |
 | Deployed frontend still calls old API | Rebuild Vercel after changing `VITE_*` env vars. |
 
@@ -122,7 +122,9 @@ Both features open **Google AI Mode** in a new tab: the app builds a detailed na
 
 ## 10. Scraping (PhilScholar)
 
-The workflow **Scholarship scrape and ingest** may have its **`schedule` block commented out** to pause automated scraping while keeping **manual** runs (`workflow_dispatch`). To turn scraping back on, uncomment `schedule` in `.github/workflows/scraper.yml` and commit.
+## Scheduled jobs
+
+GitHub Actions run **catalog maintenance** (deadlines, stale verification, completeness recompute), **deadline reminders**, **link checking**, and **retention cleanup**. The legacy `scraper.yml` workflow is disabled; ISKONNECT does not run automated web scraping.
 
 The app still works without new scrapes: **admin entry**, **CSV import**, and **staging approval** populate scholarships.
 

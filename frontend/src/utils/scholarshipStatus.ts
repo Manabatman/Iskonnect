@@ -163,7 +163,8 @@ export function humanizeVerificationSource(source: string | null | undefined): s
   if (!source?.trim()) return null;
   const mapping: Record<string, string> = {
     manual: "Verified by ISKONNECT team",
-    scraper: "Official website",
+    scraper: "Verified by ISKONNECT team",
+    team_verified: "Verified by ISKONNECT team",
     partner: "Partner organization",
     csv_import: "Imported record",
   };

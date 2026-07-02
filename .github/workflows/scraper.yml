@@ -1,47 +1,16 @@
-# Scrape → raw JSON → staging (requires DATABASE_URL: Supabase pooler URI with +psycopg2).
-# Listing change detection skips ingest when HTML hash matches last successful run.
-name: Scholarship scrape and ingest
+# Disabled — ISKONNECT maintains a verified scholarship database; external scraping is not used.
+# This workflow is retained only as documentation of the previous architecture.
+name: Scholarship scrape and ingest (disabled)
 
 on:
-  schedule:
-    - cron: "0 19 * * 1,4" # Mon & Thu ~03:00 PHT
   workflow_dispatch:
 
 jobs:
-  scrape:
+  disabled:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run PhilScholar scraper
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python -m app.scrapers.scrape_runner --source philscholar
-      - name: Ingest into staging
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: Scraping disabled
         run: |
-          set -e
-          if [ -z "${DATABASE_URL}" ]; then
-            echo "DATABASE_URL is empty. Add the repository secret in GitHub Settings → Secrets → Actions."
-            exit 1
-          fi
-          TODAY=$(date +%Y-%m-%d)
-          if [ -f "data/raw/philscholar_${TODAY}.skip" ]; then
-            echo "Listing unchanged (see .skip file); skipping ingest."
-            exit 0
-          fi
-          if [ ! -f "data/raw/philscholar_${TODAY}.json" ]; then
-            echo "Missing data/raw/philscholar_${TODAY}.json after scraper step."
-            exit 1
-          fi
-          python -m app.scripts.ingest_scraped --source "data/raw/philscholar_${TODAY}.json"
-      - name: Promote any backlog pending scraper staging rows
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python -m app.scripts.promote_pending_scraper_staging
+          echo "External scholarship scraping has been removed from ISKONNECT."
+          echo "Scholarships are maintained through admin-verified imports only."
+          exit 0

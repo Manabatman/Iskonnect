@@ -1,3 +1,9 @@
+export type QualificationStatus =
+  | "qualified"
+  | "provisionally_qualified"
+  | "almost_qualified"
+  | "not_eligible";
+
 export interface StudentProfile {
   full_name: string;
   email: string;
@@ -171,6 +177,15 @@ export interface MatchResult {
   next_action?: string | null;
   lifecycle_hint?: string | null;
   freshness_chips?: FreshnessChip[];
+  qualification_status?: QualificationStatus | string;
+  qualifying_requirements?: string[];
+  missing_requirements?: string[];
+  eligibility_confidence?: string;
+  verification_badge?: string | null;
+  verification_badge_label?: string | null;
+  verification_source_label?: string | null;
+  completeness_label?: string | null;
+  last_reviewed_label?: string | null;
 }
 
 export interface MatchRunSummary {
@@ -236,6 +251,11 @@ export interface ScholarshipInfo {
   link_status?: string | null;
   verification_source?: string | null;
   last_verified_at?: string | null;
+  verification_badge?: string | null;
+  verification_badge_label?: string | null;
+  verification_source_label?: string | null;
+  completeness_label?: string | null;
+  last_reviewed_label?: string | null;
   predicted_next_open?: string | null;
   cycle_type?: string | null;
   required_documents?: string[];

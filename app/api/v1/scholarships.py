@@ -46,7 +46,7 @@ def _derive_verification_source(scholarship: schemas.Scholarship) -> str:
     """Map schema source string to a small set of provenance labels."""
     src = (scholarship.source or "").strip().lower()
     if src in ("philscholar", "scraper") or "phil" in src:
-        return "scraper"
+        return "team_verified"
     if "csv" in src or src in ("import", "csv_import"):
         return "csv_import"
     return "manual"
@@ -54,16 +54,21 @@ def _derive_verification_source(scholarship: schemas.Scholarship) -> str:
 router = APIRouter()
 
 
-def _build_all_scholarship_dicts(db: Session) -> list[dict]:
+def _build_all_scholarship_dicts(db: Session, *, publishable_only: bool = False) -> list[dict]:
+    from app.utils.data_completeness import is_publishable
+
     scholarships = db.query(models.Scholarship).filter(
         models.Scholarship.is_active != False  # noqa: E712
     ).all()
-    return [_scholarship_to_dict(s) for s in scholarships]
+    dicts = [_scholarship_to_dict(s) for s in scholarships]
+    if publishable_only:
+        dicts = [d for d in dicts if is_publishable(d)]
+    return dicts
 
 
 def get_cached_scholarship_dicts(db: Session) -> list[dict]:
-    """Return scholarship dicts from Redis/process cache, or DB on miss."""
-    return _cache_fetch_dicts(db, _build_all_scholarship_dicts)
+    """Return publishable scholarship dicts for matching (completeness gate applied)."""
+    return _cache_fetch_dicts(db, lambda d: _build_all_scholarship_dicts(d, publishable_only=True))
 
 
 from app.serialization.scholarship import (
@@ -72,16 +77,19 @@ from app.serialization.scholarship import (
 )
 from app.auth import assert_can_read_profile, get_optional_user_id, get_profile_access_token
 from app.api.v1.profiles import get_profile_dict
+from app.matching.eligibility_result import evaluate_eligibility
 from app.matching.preparation import compute_application_readiness
 from app.utils.freshness_chips import build_freshness_chips
+from app.utils.verification_display import attach_verification_fields
 
 
 def _public_scholarship_payload(row) -> dict:
     """Student-facing scholarship payload without internal completeness score."""
     data = dict(_scholarship_to_response(row))
     data.pop("confidence_score", None)
+    data.pop("data_completeness_score", None)
     data["freshness_chips"] = build_freshness_chips(data)
-    return data
+    return attach_verification_fields(data)
 
 
 def persist_scholarship_from_schema(
@@ -173,6 +181,7 @@ def get_scholarship(
         if profile:
             sch_dict = _scholarship_to_dict(s)
             payload["preparation"] = compute_application_readiness(sch_dict, profile)
+            payload.update(evaluate_eligibility(profile, sch_dict).to_dict())
     return payload
 
 

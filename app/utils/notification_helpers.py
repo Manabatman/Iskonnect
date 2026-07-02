@@ -21,6 +21,18 @@ DEADLINE_NOTIFICATION_TYPE = "deadline_approaching"
 STALE_DATA_STATUSES = frozenset({"needs_review", "broken_link", "expired", "past_deadline"})
 
 
+def user_allows_notification(db: Session, user_id: int, kind: str) -> bool:
+    """Check per-user notification preference (deadline | new_match). Defaults to True."""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        return False
+    if kind == "deadline":
+        return bool(getattr(user, "notify_deadline_reminders", True))
+    if kind == "new_match":
+        return bool(getattr(user, "notify_new_matches", True))
+    return True
+
+
 def is_trustworthy_scholarship(scholarship: dict) -> bool:
     """Skip notifications for unreliable catalog rows."""
     ds = (scholarship.get("data_status") or "").strip().lower()
@@ -124,6 +136,8 @@ def maybe_notify_deadline_from_dict(
     horizon_days: int = DEADLINE_HORIZON_DAYS,
 ) -> bool:
     """Notify if scholarship dict has a deadline within horizon. Returns True if queued."""
+    if not user_allows_notification(db, user_id, "deadline"):
+        return False
     if not is_trustworthy_scholarship(scholarship):
         return False
     sid = scholarship.get("id")
@@ -173,8 +187,15 @@ def create_notifications_for_match_results(db: Session, user_id: int, results: l
         return
 
     try:
+        allow_new = user_allows_notification(db, user_id, "new_match")
+        allow_deadline = user_allows_notification(db, user_id, "deadline")
+
         strong = [r for r in results if _score_of(r) >= NEW_MATCH_SCORE_THRESHOLD and is_trustworthy_scholarship(r)]
-        if strong and not notification_exists_recently(db, user_id, "new_match", scholarship_id=strong[0].get("id")):
+        if (
+            allow_new
+            and strong
+            and not notification_exists_recently(db, user_id, "new_match", scholarship_id=strong[0].get("id"))
+        ):
             preview = "; ".join((r.get("title") or "")[:48] for r in strong[:3])
             if len(strong) > 3:
                 preview += f" (+{len(strong) - 3} more)"
@@ -190,12 +211,13 @@ def create_notifications_for_match_results(db: Session, user_id: int, results: l
             )
 
         seen_deadline_scholarships: set[int] = set()
-        for r in results:
-            sid = r.get("id")
-            if not sid or int(sid) in seen_deadline_scholarships:
-                continue
-            if maybe_notify_deadline_from_dict(db, user_id, r):
-                seen_deadline_scholarships.add(int(sid))
+        if allow_deadline:
+            for r in results:
+                sid = r.get("id")
+                if not sid or int(sid) in seen_deadline_scholarships:
+                    continue
+                if maybe_notify_deadline_from_dict(db, user_id, r):
+                    seen_deadline_scholarships.add(int(sid))
 
         db.commit()
     except Exception:

@@ -44,14 +44,61 @@ def _token_expiry_epoch(minutes: int) -> int:
 def create_access_token(user_id: int, role: str = "student") -> str:
     now = int(datetime.now(timezone.utc).timestamp())
     exp = _token_expiry_epoch(settings.access_token_expire_minutes)
+    jti = secrets.token_urlsafe(16)
     payload = {
         "sub": str(user_id),
         "role": role,
         "iat": now,
         "exp": exp,
         "typ": "access",
+        "jti": jti,
     }
     return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+
+
+def _redis_client():
+    if not settings.redis_url:
+        return None
+    try:
+        import redis
+
+        return redis.from_url(settings.redis_url, decode_responses=True)
+    except Exception:
+        return None
+
+
+def revoke_access_token(token: str) -> None:
+    """Add access token jti to denylist until natural expiry (logout / password reset)."""
+    try:
+        payload = jwt.decode(
+            token,
+            settings.secret_key,
+            algorithms=[settings.algorithm],
+            options={"verify_exp": False},
+        )
+        jti = payload.get("jti")
+        exp = payload.get("exp")
+        if not jti or not exp:
+            return
+        r = _redis_client()
+        if r is None:
+            return
+        ttl = max(int(exp) - int(datetime.now(timezone.utc).timestamp()), 1)
+        r.setex(f"auth:revoked:{jti}", ttl, "1")
+    except Exception as e:
+        logger.warning("revoke_access_token_failed: %s", e)
+
+
+def _access_token_revoked(jti: str | None) -> bool:
+    if not jti:
+        return False
+    r = _redis_client()
+    if r is None:
+        return False
+    try:
+        return bool(r.get(f"auth:revoked:{jti}"))
+    except Exception:
+        return False
 
 
 def create_email_verification_token(user_id: int) -> str:
@@ -79,7 +126,7 @@ def decode_email_verification_token(token: str) -> int | None:
 
 def create_profile_read_token(profile_id: int) -> str:
     """Short-lived token for anonymous profile read access (prevents IDOR on profile_id)."""
-    exp = _token_expiry_epoch(60 * 24 * 30)  # 30 days
+    exp = _token_expiry_epoch(60 * 24 * 7)  # 7 days
     now = int(datetime.now(timezone.utc).timestamp())
     payload = {
         "sub": str(profile_id),
@@ -182,6 +229,8 @@ def decode_token(token: str) -> int | None:
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         if payload.get("typ") not in (None, "access"):
+            return None
+        if _access_token_revoked(payload.get("jti")):
             return None
         sub = payload.get("sub")
         return int(sub) if sub else None

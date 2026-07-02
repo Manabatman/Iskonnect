@@ -2,23 +2,13 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
-import { useTheme } from "../contexts/ThemeContext";
-import {
-  brandLogoSrc,
-  BRAND_LOGO_AUTH_CLASS,
-  BRAND_LOGO_AUTH_HEIGHT,
-  BRAND_LOGO_AUTH_WIDTH,
-  LOGO_LIGHT_SRC,
-} from "../lib/brandLogo";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/register-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-2.svg";
 
 export function RegisterPage() {
   const { register, user, loading: authLoading } = useAuth();
-  const { resolvedTheme } = useTheme();
   const navigate = useNavigate();
-  const logoSrc = brandLogoSrc(resolvedTheme);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -62,16 +52,6 @@ export function RegisterPage() {
         />
         <AuthDirectionalOverlay />
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end p-8 lg:p-12">
-          <img
-            src={logoSrc}
-            alt="Iskonnect"
-            className={BRAND_LOGO_AUTH_CLASS}
-            width={BRAND_LOGO_AUTH_WIDTH}
-            height={BRAND_LOGO_AUTH_HEIGHT}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
-            }}
-          />
           <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">
             Relationships may end, but your degree is forever.
           </p>

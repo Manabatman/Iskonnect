@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
+import { apiFetch } from "../api/client";
 import { FEEDBACK_CATEGORIES, useFeedback } from "../components/FeedbackModal";
 import { DeleteAccountModal } from "../components/DeleteAccountModal";
 import { APP_RELEASE_DATE, APP_RELEASE_LABEL, APP_VERSION } from "../data/changelog";
@@ -57,6 +58,41 @@ const themeOptions = [
   { id: "system" as const, label: "System", Icon: IconMonitor },
 ];
 
+function Toggle({
+  checked,
+  disabled,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (next: boolean) => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      disabled={disabled}
+      onClick={() => onChange(!checked)}
+      className={[
+        "relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+        checked ? "bg-primary-600" : "bg-slate-200 dark:bg-slate-600",
+      ].join(" ")}
+    >
+      <span
+        className={[
+          "pointer-events-none inline-block h-5 w-5 translate-y-0.5 rounded-full bg-white shadow transition",
+          checked ? "translate-x-5" : "translate-x-0.5",
+        ].join(" ")}
+      />
+    </button>
+  );
+}
+
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <section
@@ -69,9 +105,74 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
 
 export function SettingsPage() {
   const { theme, setTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, authHeaders } = useAuth();
   const { openFeedback } = useFeedback();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [notifyDeadline, setNotifyDeadline] = useState(true);
+  const [notifyNewMatch, setNotifyNewMatch] = useState(true);
+  const [prefsLoading, setPrefsLoading] = useState(true);
+  const [prefsSaving, setPrefsSaving] = useState(false);
+  const [prefsError, setPrefsError] = useState<string | null>(null);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+
+  const savePref = useCallback(
+    async (patch: { notify_deadline_reminders?: boolean; notify_new_matches?: boolean }) => {
+      setPrefsSaving(true);
+      setPrefsError(null);
+      try {
+        const res = await apiFetch("/api/v1/settings/notifications", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          body: JSON.stringify(patch),
+        });
+        if (!res.ok) throw new Error("Could not save notification settings");
+        const data = (await res.json()) as {
+          notify_deadline_reminders: boolean;
+          notify_new_matches: boolean;
+          notifications_globally_enabled: boolean;
+        };
+        setNotifyDeadline(data.notify_deadline_reminders);
+        setNotifyNewMatch(data.notify_new_matches);
+        setNotificationsEnabled(data.notifications_globally_enabled);
+      } catch (e) {
+        setPrefsError(e instanceof Error ? e.message : "Could not save settings");
+      } finally {
+        setPrefsSaving(false);
+      }
+    },
+    [authHeaders]
+  );
+
+  useEffect(() => {
+    if (!user) {
+      setPrefsLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setPrefsLoading(true);
+    apiFetch("/api/v1/settings/notifications", { headers: authHeaders() })
+      .then(async (res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then((data) => {
+        if (cancelled || !data) return;
+        setNotifyDeadline(Boolean(data.notify_deadline_reminders));
+        setNotifyNewMatch(Boolean(data.notify_new_matches));
+        setNotificationsEnabled(Boolean(data.notifications_globally_enabled));
+      })
+      .catch(() => {
+        if (!cancelled) setPrefsError("Could not load notification settings");
+      })
+      .finally(() => {
+        if (!cancelled) setPrefsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authHeaders]);
+
+  const alertsActive = notifyDeadline || notifyNewMatch;
 
   const email = user?.email ?? "";
   const displayName = email ? emailToDisplayName(email) : "";
@@ -153,41 +254,68 @@ export function SettingsPage() {
           </div>
         </Card>
 
-        <Card className="opacity-60">
+        <Card>
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Alerts</h2>
-            <span className="rounded-full bg-highlight-100 px-2 py-0.5 text-xs font-semibold text-highlight-800 dark:bg-highlight-900/40 dark:text-highlight-200">
-              Coming soon
+            <span
+              className={[
+                "rounded-full px-2 py-0.5 text-xs font-semibold",
+                alertsActive
+                  ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200"
+                  : "bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300",
+              ].join(" ")}
+            >
+              {alertsActive ? "Active" : "Off"}
             </span>
+            {prefsSaving ? (
+              <span className="text-xs text-slate-500 dark:text-slate-400">Saving…</span>
+            ) : null}
           </div>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Notification preferences will be available in a future update.
+            Control in-app alerts for saved scholarships and strong new matches. Turning these off stops new
+            notifications; it does not delete past ones.
           </p>
-          <div className="pointer-events-none mt-5 space-y-4 cursor-not-allowed">
-            <label className="flex cursor-not-allowed items-start justify-between gap-4">
+          {!notificationsEnabled ? (
+            <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+              Notifications are disabled on this server (ENABLE_NOTIFICATIONS=false).
+            </p>
+          ) : null}
+          {prefsError ? <p className="mt-2 text-sm text-red-600 dark:text-red-400">{prefsError}</p> : null}
+          <div className="mt-5 space-y-4">
+            <label className="flex items-start justify-between gap-4">
               <span>
                 <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">
                   Scholarship deadline reminders
                 </span>
                 <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                  Get notified 2 weeks before a deadline closes
+                  In-app alert when a saved scholarship deadline is within 7 days
                 </span>
               </span>
-              <span
-                className="relative inline-flex h-6 w-11 shrink-0 rounded-full bg-slate-200 dark:bg-slate-600"
-                aria-hidden
+              <Toggle
+                label="Scholarship deadline reminders"
+                checked={notifyDeadline}
+                disabled={prefsLoading || prefsSaving || !notificationsEnabled}
+                onChange={(next) => {
+                  setNotifyDeadline(next);
+                  void savePref({ notify_deadline_reminders: next });
+                }}
               />
             </label>
-            <label className="flex cursor-not-allowed items-start justify-between gap-4">
+            <label className="flex items-start justify-between gap-4">
               <span>
                 <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">New match alerts</span>
                 <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                  When a new scholarship matches your profile
+                  In-app alert when a new strong match appears after you run matching
                 </span>
               </span>
-              <span
-                className="relative inline-flex h-6 w-11 shrink-0 rounded-full bg-slate-200 dark:bg-slate-600"
-                aria-hidden
+              <Toggle
+                label="New match alerts"
+                checked={notifyNewMatch}
+                disabled={prefsLoading || prefsSaving || !notificationsEnabled}
+                onChange={(next) => {
+                  setNotifyNewMatch(next);
+                  void savePref({ notify_new_matches: next });
+                }}
               />
             </label>
           </div>

@@ -88,6 +88,11 @@ MATCH_SCORING_KEYS: tuple[str, ...] = (
     "suggestions",
     "why_not_higher",
     "scoring_policy_version",
+    "qualification_status",
+    "qualifying_requirements",
+    "missing_requirements",
+    "eligibility_confidence",
+    "requirements",
 )
 
 MATCH_MINIMAL_EXTRA_KEYS: tuple[str, ...] = (
@@ -176,6 +181,7 @@ def scholarship_row_to_payload(row: Any, *, dates_as_iso: bool = False) -> dict[
         "is_active": _get_attr(row, "is_active", True),
         "last_verified_at": format_field_value(lva, dates_as_iso=dates_as_iso),
         "verification_source": _get_attr(row, "verification_source"),
+        "data_completeness_score": _get_attr(row, "data_completeness_score"),
         "confidence_score": _get_attr(row, "confidence_score"),
         "data_status": _get_attr(row, "data_status"),
         "application_status": _get_attr(row, "application_status")

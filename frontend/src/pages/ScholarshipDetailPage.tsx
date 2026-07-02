@@ -1,11 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
+import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
+import {
+  EligibilityRequirementsList,
+  QualificationStatusBadge,
+  VerificationBadge,
+} from "../components/QualificationStatusBadge";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
 import { formatDate } from "../utils/formatDate";
 import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
+import type { QualificationStatus, SavedScholarship } from "../types";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -57,6 +64,15 @@ interface ScholarshipDetail {
   verification_source?: string | null;
   confidence_score?: number | null;
   last_verified_at?: string | null;
+  verification_badge?: string | null;
+  verification_badge_label?: string | null;
+  verification_source_label?: string | null;
+  verification_date_label?: string | null;
+  completeness_signal?: string | null;
+  qualification_status?: QualificationStatus | string;
+  qualifying_requirements?: string[];
+  missing_requirements?: string[];
+  eligibility_confidence?: string | null;
 }
 
 const ISSUE_TYPES = [
@@ -70,7 +86,7 @@ export function ScholarshipDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { authHeaders } = useAuth();
+  const { authHeaders, user } = useAuth();
   const requirementsRef = useRef<HTMLDivElement>(null);
   const [requirementsHighlight, setRequirementsHighlight] = useState(false);
   const [scholarship, setScholarship] = useState<ScholarshipDetail | null>(null);
@@ -82,6 +98,26 @@ export function ScholarshipDetailPage() {
   const [reportSubmitting, setReportSubmitting] = useState(false);
   const [reportMsg, setReportMsg] = useState<string | null>(null);
   const [reportError, setReportError] = useState(false);
+  const [profileId, setProfileId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      setProfileId(null);
+      return;
+    }
+    let cancelled = false;
+    apiFetch("/api/v1/profiles/me", { headers: authHeaders() })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.id) setProfileId(Number(data.id));
+      })
+      .catch(() => {
+        if (!cancelled) setProfileId(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authHeaders]);
 
   useEffect(() => {
     if (!id) {
@@ -92,7 +128,8 @@ export function ScholarshipDetailPage() {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    apiFetch(`/api/v1/scholarships/${id}`)
+    const qs = profileId ? `?profile_id=${profileId}` : "";
+    apiFetch(`/api/v1/scholarships/${id}${qs}`, { headers: authHeaders() })
       .then((res) => {
         if (!res.ok) throw new Error("Scholarship not found");
         return res.json();
@@ -109,7 +146,23 @@ export function ScholarshipDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, profileId, authHeaders]);
+
+  const plannerSaved = useMemo((): SavedScholarship[] => {
+    if (!scholarship) return [];
+    return [
+      {
+        id: scholarship.id,
+        scholarship_id: scholarship.id,
+        created_at: new Date().toISOString(),
+        title: scholarship.title,
+        provider: scholarship.provider,
+        benefit_tuition: scholarship.benefit_tuition,
+        benefit_allowance_monthly: scholarship.benefit_allowance_monthly,
+        benefit_total_value: scholarship.benefit_total_value,
+      },
+    ];
+  }, [scholarship]);
 
   useEffect(() => {
     if (!scholarship || location.hash !== "#requirements") return;
@@ -183,7 +236,7 @@ export function ScholarshipDetailPage() {
             <p className="mt-1 text-primary-800/90 dark:text-primary-200/90">
               Deadlines, income ceilings, and document requirements can change without notice. Before you apply, verify
               every detail on the scholarship provider&apos;s website.{" "}
-              <Link to="/how-we-verify" className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300">
+              <Link to="/how-it-works#verification" className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300">
                 How we verify
               </Link>
               {" · "}
@@ -218,7 +271,48 @@ export function ScholarshipDetailPage() {
                 </span>
               ) : null}
               <FreshnessChipRow chips={freshnessFromScholarship(scholarship)} />
+              <VerificationBadge
+                badge={scholarship.verification_badge}
+                label={scholarship.verification_badge_label}
+              />
+              {scholarship.verification_date_label ? (
+                <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                  {scholarship.verification_date_label}
+                </span>
+              ) : null}
+              {scholarship.completeness_signal ? (
+                <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                  {scholarship.completeness_signal}
+                </span>
+              ) : null}
             </div>
+            {scholarship.qualification_status ? (
+              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-600 dark:bg-slate-900/40">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Your eligibility
+                  </h2>
+                  <QualificationStatusBadge status={scholarship.qualification_status} />
+                </div>
+                {scholarship.eligibility_confidence ? (
+                  <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
+                    Confidence: {scholarship.eligibility_confidence.replace(/_/g, " ")}
+                  </p>
+                ) : null}
+                <EligibilityRequirementsList
+                  qualifying={scholarship.qualifying_requirements}
+                  missing={scholarship.missing_requirements}
+                />
+                {!profileId ? (
+                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                    <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+                      Sign in
+                    </Link>{" "}
+                    and complete your profile to see personalized eligibility.
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
             {scholarship.image_url ? (
               <img
                 src={scholarship.image_url}
@@ -349,6 +443,22 @@ export function ScholarshipDetailPage() {
                 )}
             </ul>
           </div>
+
+          {(scholarship.benefit_tuition ||
+            (scholarship.benefit_allowance_monthly != null && scholarship.benefit_allowance_monthly > 0) ||
+            (scholarship.benefit_total_value != null && scholarship.benefit_total_value > 0)) && (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                Financial planning
+              </h2>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                Estimate how this scholarship could offset tuition and living costs.
+              </p>
+              <div className="mt-3">
+                <FinancialPlannerCard saved={plannerSaved} />
+              </div>
+            </div>
+          )}
 
           <div className="border-t border-slate-200 dark:border-slate-700 pt-6">
             <div className="mb-4 flex flex-wrap items-center gap-3">

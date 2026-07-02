@@ -28,16 +28,17 @@ export const SCHOLARSHIP_TYPE_GUIDE: Record<string, ScholarshipTypeGuideEntry> =
   "Merit-and-Need": {
     title: "Merit and need",
     summary:
-      "Combines academic performance with financial need. You typically need to meet both a grade threshold and an income ceiling.",
+      "Programs that may consider academic performance and/or financial need. Specific gates vary by provider — some use separate merit and need tracks, others combine criteria. Always check the official listing.",
     examples: [
-      "CHED priority programs with GWA and income requirements",
-      "University grants for high-achieving students from low-income families",
+      "University programs with both GWA and income guidelines",
+      "Government grants with academic and socioeconomic criteria",
+      "Institutional aid with multiple evaluation tracks",
     ],
   },
   Affiliation: {
     title: "Affiliation",
     summary:
-      "Limited to members of a specific group, organization, community, or institution. Extra membership or affiliation requirements apply.",
+      "Limited to members of a specific group, organization, community, or institution. Many affiliation programs also add merit, need, or residency requirements beyond membership.",
     examples: [
       "Cooperative member scholarships",
       "Organization or alumni association grants",

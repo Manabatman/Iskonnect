@@ -49,6 +49,8 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
 
   const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
 
+  const filtersCacheKey = JSON.stringify(filters);
+
   const fetchSearch = useCallback(
     async (searchQuery: string, searchFilters: ScholarshipSearchFilters, pageNum: number) => {
       const params = new URLSearchParams();
@@ -91,13 +93,13 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
           setResults(data.results ?? []);
           setTotal(data.total ?? 0);
           setTotalPages(data.total_pages ?? 0);
-          void cacheSearchResults(`search:${debouncedQuery}:${page}`, data);
+          void cacheSearchResults(`search:${debouncedQuery}:${filtersCacheKey}:${page}`, data);
         }
       })
       .catch(async (err) => {
         if (!cancelled) {
           const cached = await readCachedSearchResults<ScholarshipSearchResponse>(
-            `search:${debouncedQuery}:${page}`,
+            `search:${debouncedQuery}:${filtersCacheKey}:${page}`,
           );
           if (cached?.results) {
             setResults(cached.results);
@@ -115,7 +117,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, filters, page, fetchSearch]);
+  }, [debouncedQuery, filters, filtersCacheKey, page, fetchSearch]);
 
   useEffect(() => {
     if (!enableSuggestions) return;

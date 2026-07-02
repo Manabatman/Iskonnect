@@ -1,0 +1,292 @@
+{
+  "imported": {
+    "new": 31,
+    "updated_candidate": 0,
+    "skipped": 0,
+    "invalid": 0,
+    "rejected_structural": 0
+  },
+  "rows": [
+    {
+      "status": "created",
+      "title": "Aboitiz Future Leaders Scholarship Program",
+      "provider": "Aboitiz Foundation",
+      "dedupe_key": "5cf484eb13401735370c1a99d50099875af66010f68c0bc36c471336040eb52a",
+      "warnings": []
+    },
+    {
+      "status": "created",
+      "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - Higher Education Track",
+      "provider": "Commission on Higher Education",
+      "dedupe_key": "42b4110d947630d90a66f2516226584028bd6d3319ed2ac3e2a32ee054bdcb23",
+      "warnings": []
+    },
+    {
+      "status": "created",
+      "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - TVET Track",
+      "provider": "Technical Education and Skills Development Authority",
+      "dedupe_key": "42b75c071dcc82f1746c7fbd569c0c1ba990bc05ad9f44c2cc2ced4840c73aac",
+      "warnings": []
+    },
+    {
+      "status": "created",
+      "title": "GSIS Subsidy for STEM Program (GSSP)",
+      "provider": "Government Service Insurance System",
+      "dedupe_key": "5766819df7beb811120099cc1e4dea680671fefae2f6a119d0c9f58c015d52ff",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "CHED Merit Scholarship Program (CMSP)",
+      "provider": "Commission on Higher Education",
+      "dedupe_key": "1d3f4b5c554a0364286d89049633c52a0085a3d94ded82ffb59c47b98e7628d0",
+      "warnings": []
+    },
+    {
+      "status": "created",
+      "title": "DOST-SEI Undergraduate Scholarships (RA 7687 / Merit)",
+      "provider": "DOST-SEI",
+      "dedupe_key": "c4a49cc2d697a72593b01240f5b24767e0b44f1d0104c5b1deae413c2516c6f7",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "DOST-SEI Junior Level Science Scholarship (JLSS)",
+      "provider": "DOST-SEI",
+      "dedupe_key": "000076de633aa9d9c7da9c22f957cf4130c666ae325a19a5660c724ba561d96e",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "SM Foundation College Scholarship Program",
+      "provider": "SM Foundation",
+      "dedupe_key": "406af518060aac6cfb417a6863bc06f676c7619931138f046b6e972569e8e358",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "MEXT Scholarship - Research Category",
+      "provider": "JICC / Embassy of Japan",
+      "dedupe_key": "1fb7461dbe7c0e860edbe8d5a3a7d21782abd423114363c32be331b7d3e6c528",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "MEXT Scholarship - Undergraduate Track",
+      "provider": "JICC / Embassy of Japan",
+      "dedupe_key": "b98ce184251e07e9a4360cf960facb8451cb96c4f81f322288d39861e44e619c",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "MEXT Scholarship - Specialized Training Track",
+      "provider": "JICC / Embassy of Japan",
+      "dedupe_key": "dc045dea30a0609e70822fb1954b2945bd8e7f0a0ab3e3c2251a76bb793e4ce3",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "MEXT Scholarship - College of Technology (KOSEN)",
+      "provider": "JICC / Embassy of Japan",
+      "dedupe_key": "dda1cc980df4a923ac0fcefd92be8d8dc68380a4c0ef56f9dfa48776ccdc1ef4",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "GSIS Educational Subsidy Program (GESP)",
+      "provider": "Government Service Insurance System",
+      "dedupe_key": "50ac2af74ada56952b4e3876e13fa8f294e56b2e5a256b23d3d071bb8d4d9b3c",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "OWWA Education for Development Scholarship (EDSP)",
+      "provider": "Overseas Workers Welfare Administration",
+      "dedupe_key": "ddab3d74bb4b8e7805152a81ee949783e8eef86b318a64d3b826b1743894ed0b",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "OWWA OFW Dependent Scholarship Program (ODSP)",
+      "provider": "Overseas Workers Welfare Administration",
+      "dedupe_key": "aa883d1b665b54cb1263b26ac822847559806f2bd44e6e3718138298c70fd548",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "OWWA Congressional Migrant Workers Scholarship (CMWSP)",
+      "provider": "Overseas Workers Welfare Administration",
+      "dedupe_key": "faae3af9baaf7bd6aa26dd292eede4fe82dd91bfe6ebb30e79105fbe1b4f5eaf",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Quezon City Scholarship Program (QCSP)",
+      "provider": "Quezon City Government",
+      "dedupe_key": "7d84cc506551d7e1c2e7236ed4839e5873497d0da51320b6adddfec278234d80",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program",
+      "provider": "Quezon City Government",
+      "dedupe_key": "b4c4864d2d8a19bb22fd3b89cad298141cfc60cb0a6bbc3935dbfc47e5fc6766",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Australia Awards Scholarships (Philippines)",
+      "provider": "Australian Government",
+      "dedupe_key": "48d82cd1dbd4b4e6781e3f55aa42dbb3c3361ec47210d193eb5666e502f70aab",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Fulbright-PhilSA Graduate Program",
+      "provider": "PAEF / PhilSA",
+      "dedupe_key": "34ec18f401d2a178c9128f3546c509af797b6a14e12120834b26b0a0eb7a18bd",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Chevening Scholarship",
+      "provider": "FCDO / UK Government",
+      "dedupe_key": "120789cadb8a3913a82f123fb705bd5652df92c0f9971b709e4d05249eca89b7",
+      "warnings": []
+    },
+    {
+      "status": "created",
+      "title": "Global Korea Scholarship (GKS) Graduate",
+      "provider": "NIIED",
+      "dedupe_key": "3bc278ebc5f1971b03919104f088a246be3580933811ee68f95a69b15722f687",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Global Korea Scholarship (GKS) Undergraduate",
+      "provider": "NIIED",
+      "dedupe_key": "2890f9de6c04b8578931b08467b1232cdc33ba8e606cd5988aea80f390f7adf9",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "CHED-UniFAST Tertiary Education Subsidy (TES)",
+      "provider": "UniFAST / CHED",
+      "dedupe_key": "82a6f65124232111056368e46bedf3a7d580bf8c7a7e400d4d6809e4161405f7",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "TESDA Private Education Student Financial Assistance",
+      "provider": "TESDA",
+      "dedupe_key": "289e9f49bc958f9cc56f7daa18e02d4a74aeb23244259c060dcc1c9b36037daf",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "PUP Entrance Scholarship Program",
+      "provider": "PUP",
+      "dedupe_key": "6296f7c29c338d663114ce5201e5d32bb5e1c68a089c35ec609b218dcf30e7b8",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "PUP Student Assistantship Program",
+      "provider": "PUP",
+      "dedupe_key": "42abea73d1a1d9e4ab613aaf4c3cd27741c9bb61f567769334633c244ea233d3",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "UP College of Law Scholarship Program",
+      "provider": "UP College of Law",
+      "dedupe_key": "0b6d4c3088257647aaaaf919ec2eb53ecbc48c09cdc5e0cb67b524ad8f0303f2",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Security Bank External Scholarship Program",
+      "provider": "Security Bank Foundation",
+      "dedupe_key": "ae4a5ee0204f270a0b0c578eaa2bc02835958447f4781ff3ad83086f74228bcc",
+      "warnings": []
+    },
+    {
+      "status": "created",
+      "title": "Gokongwei Brothers Foundation STEM-College Scholarship",
+      "provider": "Gokongwei Brothers Foundation",
+      "dedupe_key": "dc2dd9ffa7323b6059d9ee5909068271bb323ccaa08ef475beaaa9f06b74a7a8",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Megaworld Foundation College Scholarship",
+      "provider": "Megaworld Foundation",
+      "dedupe_key": "b124f153d08f981d1cb4196c85f80d6ba1e7b2af17535c46273dd4b7e8aa819d",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    }
+  ],
+  "total": 31,
+  "invalid_urls": 0,
+  "invalid_dates": 18,
+  "auto_normalizations": [],
+  "rejected_structural": 0,
+  "unknown_columns": [],
+  "missing_columns": [],
+  "missing_recommended": [],
+  "duplicate_columns": [],
+  "header_errors": [],
+  "header_valid": true,
+  "created": 31,
+  "skipped": 0,
+  "invalid": 0
+}
