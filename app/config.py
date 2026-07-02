@@ -190,8 +190,10 @@ class Settings(BaseSettings):
                     "FRONTEND_URL must be a non-localhost URL in production (used in password reset / verify links)"
                 )
         else:
-            errors.append(
-                "REQUIRE_EMAIL_VERIFICATION must be true in production — unverified users must not sign in"
+            logger.warning(
+                "REQUIRE_EMAIL_VERIFICATION=false in %s — beta mode: users can sign in without verifying email. "
+                "Set REQUIRE_EMAIL_VERIFICATION=true and configure SMTP before public launch.",
+                env,
             )
         if self.run_migrations_on_startup:
             errors.append(
