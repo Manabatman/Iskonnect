@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 
 from app import models, schemas
-from app.api.v1.scholarships import _scholarship_to_response, get_cached_scholarship_dicts
+from app.api.v1.scholarships import _public_scholarship_payload, get_cached_scholarship_dicts
 from app.db import get_db
 from app.limiter import limiter
 from app.utils.application_status import (
@@ -350,7 +350,7 @@ def search_scholarships(
     q = _apply_search_ordering(q)
     total = q.count()
     scholarships = q.offset(offset).limit(limit).all()
-    results = [_scholarship_to_response(s) for s in scholarships]
+    results = [_public_scholarship_payload(s) for s in scholarships]
     total_pages = (total + limit - 1) // limit if total > 0 else 0
 
     return schemas.ScholarshipSearchResponse(
@@ -449,7 +449,7 @@ def search_scholarships_semantic(
     q = _apply_search_ordering(q)
     total = q.count()
     scholarships = q.offset(offset).limit(limit).all()
-    results = [_scholarship_to_response(s) for s in scholarships]
+    results = [_public_scholarship_payload(s) for s in scholarships]
     total_pages = (total + limit - 1) // limit if total > 0 else 0
 
     return schemas.ScholarshipSearchResponse(

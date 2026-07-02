@@ -5,12 +5,22 @@ from __future__ import annotations
 import logging
 from datetime import date, datetime, timedelta, timezone
 
-from sqlalchemy import func, or_
+from sqlalchemy import and_, cast, func, or_, String
 
 from app import models
 from app.db import SessionLocal
 
 logger = logging.getLogger(__name__)
+
+
+def _empty_json_list_col(col):
+    """NULL, blank, or JSON empty list — works on SQLite text and Postgres jsonb."""
+    as_text = func.trim(func.coalesce(cast(col, String), ""))
+    return or_(col.is_(None), as_text == "", as_text == "[]")
+
+
+def _empty_text_col(col):
+    return or_(col.is_(None), func.trim(func.coalesce(col, "")) == "")
 
 
 def run_data_quality_checks() -> dict[str, int]:
@@ -63,8 +73,8 @@ def run_data_quality_checks() -> dict[str, int]:
             db.query(func.count(models.Scholarship.id))
             .filter(
                 models.Scholarship.is_active == True,  # noqa: E712
-                or_(models.Scholarship.regions.is_(None), models.Scholarship.regions == ""),
-                or_(models.Scholarship.eligible_regions.is_(None), models.Scholarship.eligible_regions == ""),
+                _empty_text_col(models.Scholarship.regions),
+                _empty_json_list_col(models.Scholarship.eligible_regions),
             )
             .scalar()
             or 0
@@ -141,5 +151,55 @@ def run_data_quality_checks() -> dict[str, int]:
         }
         logger.info("data_quality_checks %s", result)
         return result
+    finally:
+        db.close()
+
+
+def recompute_completeness_scores() -> int:
+    """Recompute data_completeness_score for all active scholarships. Returns rows updated."""
+    from app.utils.data_completeness import compute_data_completeness_score
+
+    db = SessionLocal()
+    updated = 0
+    try:
+        rows = db.query(models.Scholarship).filter(models.Scholarship.is_active == True).all()  # noqa: E712
+        for row in rows:
+            score = compute_data_completeness_score(row)
+            if row.data_completeness_score != score:
+                row.data_completeness_score = score
+                updated += 1
+        db.commit()
+        logger.info("recompute_completeness_scores updated=%s", updated)
+        return updated
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+def count_structured_eligibility_gaps() -> int:
+    """
+    Count active scholarships with no structured eligibility dimensions encoded.
+    Used to size the structured-eligibility backfill program.
+    """
+    db = SessionLocal()
+    try:
+        rows = (
+            db.query(func.count(models.Scholarship.id))
+            .filter(
+                models.Scholarship.is_active == True,  # noqa: E712
+                _empty_json_list_col(models.Scholarship.eligible_levels),
+                _empty_json_list_col(models.Scholarship.eligible_regions),
+                _empty_json_list_col(models.Scholarship.eligible_cities),
+                models.Scholarship.max_income_threshold.is_(None),
+                models.Scholarship.min_gwa_normalized.is_(None),
+                _empty_json_list_col(models.Scholarship.eligible_courses_psced),
+                _empty_json_list_col(models.Scholarship.eligible_courses_specific),
+            )
+            .scalar()
+            or 0
+        )
+        return int(rows)
     finally:
         db.close()

@@ -23,17 +23,4 @@ services:
       - key: CORS_ORIGINS
         sync: false  # Set in dashboard to include frontend URL
 
-  # Daily catalog refresh: scrape → raw JSON → staging (admin still approves)
-  - type: cron
-    name: scholarship-scrape-ingest
-    runtime: python
-    schedule: "0 3 * * *"
-    buildCommand: pip install -r requirements.txt
-    startCommand: python -m app.scrapers.scrape_philscholar && python -m app.scripts.ingest_scraped --source data/raw/philscholar_$(date +%Y-%m-%d).json
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.11.12"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: iskonnect-db
-          property: connectionString
+  # Scraping removed — use GitHub Actions deadline-maintenance and link-checker crons instead.

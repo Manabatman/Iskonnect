@@ -1,4 +1,4 @@
-"""Promote scholarship staging rows to the live catalog."""
+"""Promote scholarship staging rows to the live catalog — all rows require admin approval."""
 
 from __future__ import annotations
 
@@ -14,17 +14,11 @@ from app.api.v1.scholarships import persist_scholarship_from_schema
 
 logger = logging.getLogger(__name__)
 
-TRUSTED_AUTO_APPROVE_SOURCES = frozenset({"philscholar", "scraper"})
-
-
-def is_trusted_scraper_source(source: str | None) -> bool:
-    return (source or "").strip().lower() in TRUSTED_AUTO_APPROVE_SOURCES
-
 
 def verification_source_for(source: str | None) -> str:
     src_lo = (source or "").strip().lower()
-    if src_lo in TRUSTED_AUTO_APPROVE_SOURCES:
-        return "scraper"
+    if src_lo in ("philscholar", "scraper"):
+        return "team_verified"
     if "csv" in src_lo:
         return "csv_import"
     return "manual"

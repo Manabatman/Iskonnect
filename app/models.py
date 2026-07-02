@@ -16,6 +16,8 @@ class User(Base):
     email_verified_at = Column(DateTime, nullable=True)
     password_reset_token_hash = Column(String(128), nullable=True)
     password_reset_expires_at = Column(DateTime, nullable=True)
+    notify_deadline_reminders = Column(Boolean, nullable=False, server_default="1")
+    notify_new_matches = Column(Boolean, nullable=False, server_default="1")
 
 
 class RefreshToken(Base):
@@ -224,6 +226,7 @@ class Scholarship(Base):
     last_verified_at = Column(DateTime, nullable=True)
     verification_source = Column(String, nullable=True)  # manual | scraper | partner | csv_import
     confidence_score = Column(Float, nullable=True)
+    data_completeness_score = Column(Integer, nullable=True)  # 0–100 weighted completeness
     data_status = Column(String, nullable=True)  # active | expiring_soon | expired | needs_review | broken_link
     application_status = Column(String, nullable=True, index=True)  # open | closed | previous_cycle | expected_reopen | archived | needs_verification
     link_status = Column(String, nullable=True)  # ok | broken | timeout | unchecked

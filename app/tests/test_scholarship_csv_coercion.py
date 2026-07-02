@@ -90,7 +90,7 @@ def test_research_metadata_columns_ignored():
 def test_gemini_research_maps_to_manual_verification_source():
     assert verification_source_for("gemini_research") == "manual"
     assert verification_source_for("csv_import") == "csv_import"
-    assert verification_source_for("philscholar") == "scraper"
+    assert verification_source_for("philscholar") == "team_verified"
 
 
 def test_staging_round_trip_csv_row(db_session):

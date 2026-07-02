@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
@@ -15,10 +15,7 @@ import { VerifyEmailPage } from "./pages/VerifyEmailPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
-import { TransparencyPage } from "./pages/TransparencyPage";
-import { MatchMethodologyPage } from "./pages/MatchMethodologyPage";
 import { WhyIskonnectPage } from "./pages/WhyIskonnectPage";
-import { VerificationPage } from "./pages/VerificationPage";
 import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
 import { FaqPage } from "./pages/FaqPage";
 import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
@@ -86,10 +83,10 @@ function AppRoutes() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
-          <Route path="/transparency" element={<TransparencyPage />} />
-          <Route path="/match-methodology" element={<MatchMethodologyPage />} />
+          <Route path="/transparency" element={<Navigate to="/how-it-works#scoring" replace />} />
+          <Route path="/match-methodology" element={<Navigate to="/how-it-works#matching" replace />} />
           <Route path="/why-iskonnect" element={<WhyIskonnectPage />} />
-          <Route path="/how-we-verify" element={<VerificationPage />} />
+          <Route path="/how-we-verify" element={<Navigate to="/how-it-works#verification" replace />} />
           <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/success-stories" element={<SuccessStoriesPage />} />

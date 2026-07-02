@@ -18,6 +18,7 @@ from app.utils.scholarship_versioning import (
 )
 from app.utils.application_status import sync_application_status
 from app.utils.quality_score import compute_confidence_score
+from app.utils.data_completeness import compute_data_completeness_score
 from app.utils.timezone import utc_now_naive
 
 
@@ -189,6 +190,7 @@ def persist_scholarship_from_schema(
                 changed_by=version_changed_by,
             )
         existing.confidence_score = compute_confidence_score(existing)
+        existing.data_completeness_score = compute_data_completeness_score(existing)
         if auto_commit:
             db.commit()
             db.refresh(existing)
@@ -212,6 +214,7 @@ def persist_scholarship_from_schema(
     db.add(db_scholarship)
     db.flush()
     db_scholarship.confidence_score = compute_confidence_score(db_scholarship)
+    db_scholarship.data_completeness_score = compute_data_completeness_score(db_scholarship)
     snap = snapshot_scholarship_row(db_scholarship)
     record_scholarship_version(
         db,

@@ -6,6 +6,7 @@ import { BenefitsSection } from "../components/landing/BenefitsSection";
 import { FaqSection } from "../components/landing/FaqSection";
 import { FinalCtaSection } from "../components/landing/FinalCtaSection";
 import { HeroSection } from "../components/landing/HeroSection";
+import { MiniProfileWizard } from "../components/landing/MiniProfileWizard";
 import { HowItWorksSection } from "../components/landing/HowItWorksSection";
 import { OfficialSourcesBar } from "../components/landing/OfficialSourcesBar";
 import { ProblemSection } from "../components/landing/ProblemSection";
@@ -40,6 +41,7 @@ export function LandingPage() {
     <LandingMotionProvider>
       <div className="overflow-hidden">
         <HeroSection />
+        <MiniProfileWizard />
         <OfficialSourcesBar />
         <ProblemSection />
         <HowItWorksSection />

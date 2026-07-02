@@ -151,14 +151,3 @@ def admin_latest_scraper_runs(
         for r in rows
     ]
 
-
-@router.get("/admin/data-quality")
-@limiter.limit("30/minute")
-def admin_data_quality(
-    request: Request,
-    db: Session = Depends(get_db),
-    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
-):
-    from app.jobs.data_quality import run_data_quality_checks
-
-    return run_data_quality_checks()

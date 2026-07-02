@@ -191,7 +191,9 @@ class Settings(BaseSettings):
                 )
         else:
             logger.warning(
-                "REQUIRE_EMAIL_VERIFICATION=false — unverified users may sign in; re-enable before public launch"
+                "REQUIRE_EMAIL_VERIFICATION=false in %s — beta mode: users can sign in without verifying email. "
+                "Set REQUIRE_EMAIL_VERIFICATION=true and configure SMTP before public launch.",
+                env,
             )
         if self.run_migrations_on_startup:
             errors.append(

@@ -2,14 +2,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
-import { useTheme } from "../contexts/ThemeContext";
-import {
-  brandLogoSrc,
-  BRAND_LOGO_AUTH_CLASS,
-  BRAND_LOGO_AUTH_HEIGHT,
-  BRAND_LOGO_AUTH_WIDTH,
-  LOGO_LIGHT_SRC,
-} from "../lib/brandLogo";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
@@ -22,7 +14,6 @@ function safeReturnPath(from: unknown): string | null {
 
 export function LoginPage() {
   const { login, user, loading: authLoading } = useAuth();
-  const { resolvedTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const returnTo = safeReturnPath((location.state as { from?: string } | null)?.from);
@@ -37,7 +28,6 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [authPanelSrc, setAuthPanelSrc] = useState(AUTH_PANEL_PRIMARY);
-  const logoSrc = brandLogoSrc(resolvedTheme);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -67,16 +57,6 @@ export function LoginPage() {
         />
         <AuthDirectionalOverlay />
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end p-8 lg:p-12">
-          <img
-            src={logoSrc}
-            alt="Iskonnect"
-            width={BRAND_LOGO_AUTH_WIDTH}
-            height={BRAND_LOGO_AUTH_HEIGHT}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
-            }}
-            className={BRAND_LOGO_AUTH_CLASS}
-          />
           <p className="max-w-md text-lg font-medium leading-relaxed text-white lg:text-xl">
             Welcome back, Iskolar. Let's pick up right where you left off on your journey.
           </p>

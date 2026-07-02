@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
 import { LifecycleStatusBadge } from "./LifecycleStatusBadge";
+import {
+  EligibilityRequirementsList,
+  QualificationStatusBadge,
+  VerificationBadge,
+} from "./QualificationStatusBadge";
 import { MatchScoreRing } from "./MatchScoreRing";
 import { ScholarshipTypeInfoModal } from "./ScholarshipTypeInfoModal";
 import { getCardVisualClasses } from "../utils/cardImages";
@@ -254,6 +259,9 @@ export function ScholarshipCardV2({
                 {base.scholarship_type}
               </button>
             ) : null}
+            {"verification_badge_label" in base && base.verification_badge_label ? (
+              <VerificationBadge badge={base.verification_badge} label={base.verification_badge_label} />
+            ) : null}
           </div>
 
           <h3
@@ -262,6 +270,17 @@ export function ScholarshipCardV2({
           >
             {base.title}
           </h3>
+
+          {match?.qualification_status ? (
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <QualificationStatusBadge status={match.qualification_status} className="text-xs" />
+              {match.eligibility_confidence ? (
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                  {String(match.eligibility_confidence).replace(/_/g, " ")}
+                </span>
+              ) : null}
+            </div>
+          ) : null}
 
           <p className="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-200">{deadlineLine}</p>
 
@@ -276,6 +295,14 @@ export function ScholarshipCardV2({
               <span className="text-xs text-amber-700 dark:text-amber-300">Not yet verified</span>
             ) : null}
           </div>
+
+          {match ? (
+            <EligibilityRequirementsList
+              qualifying={match.qualifying_requirements}
+              missing={match.missing_requirements}
+              compact
+            />
+          ) : null}
 
           {match?.gap_reason ? (
             <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">

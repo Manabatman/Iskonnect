@@ -38,10 +38,10 @@ def test_persist_scholarship_from_schema_sets_verification_source(db_session):
         db_session,
         sch,
         auto_commit=True,
-        verification_source="scraper",
+        verification_source="team_verified",
     )
     assert row.id is not None
-    assert row.verification_source == "scraper"
+    assert row.verification_source == "team_verified"
     assert row.title == "Persist Test Scholarship"
 
 
@@ -61,7 +61,7 @@ def test_create_scholarship_via_api(api_with_db):
     assert r.status_code == 200, r.text
     data = r.json()
     assert data["title"] == "API Create Scholarship"
-    assert data.get("verification_source") in (None, "csv_import", "manual", "scraper")
+    assert data.get("verification_source") in (None, "csv_import", "manual", "team_verified")
 
 
 def test_staging_approve_via_api(api_with_db):
@@ -94,4 +94,4 @@ def test_staging_approve_via_api(api_with_db):
     assert r.status_code == 200, r.text
     data = r.json()
     assert data["title"] == "Staging Approve Scholarship"
-    assert data.get("verification_source") == "scraper"
+    assert data.get("verification_source") == "team_verified"

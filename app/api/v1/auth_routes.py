@@ -19,6 +19,7 @@ from app.auth import (
     issue_refresh_token,
     new_refresh_token_plain,
     revoke_all_refresh_tokens_for_user,
+    revoke_access_token,
     revoke_refresh_token_plain,
     consume_refresh_token_rotation,
     verify_password,
@@ -148,7 +149,7 @@ def register(
     """Register a new user. Returns tokens for new accounts; generic 200 if email already exists."""
     existing = db.query(models.User).filter(models.User.email == register_req.email).first()
     if existing:
-        logger.warning("auth_register_failed email=%s reason=already_registered", register_req.email)
+        logger.warning("auth_register_failed user_hash=%s reason=already_registered", hash(register_req.email) % 10_000)
         return RegisterResponse(
             detail="If this email is not already registered, your account has been created. Check your email to verify.",
         )
@@ -164,7 +165,7 @@ def register(
         db.flush()
     except IntegrityError:
         db.rollback()
-        logger.warning("auth_register_race email=%s", register_req.email)
+        logger.warning("auth_register_race user_hash=%s", hash(register_req.email) % 10_000)
         return RegisterResponse(
             detail="If this email is not already registered, your account has been created. Check your email to verify.",
         )
@@ -202,13 +203,13 @@ def login(
     """Login with email and password."""
     user = db.query(models.User).filter(models.User.email == req.email).first()
     if not user or not verify_password(req.password, user.password_hash):
-        logger.warning("auth_login_failed email=%s reason=invalid_credentials", req.email)
+        logger.warning("auth_login_failed user_hash=%s reason=invalid_credentials", hash(req.email) % 10_000)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
     if settings.require_email_verification and not bool(getattr(user, "email_verified", False)):
-        logger.info("auth_login_blocked_unverified email=%s user_id=%s", req.email, user.id)
+        logger.info("auth_login_blocked_unverified user_id=%s", user.id)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Please verify your email before signing in. Check your inbox or request a new verification link.",
@@ -244,7 +245,10 @@ def logout(
     body: Annotated[LogoutRequest, Body()],
     db: Session = Depends(get_db),
 ):
-    """Revoke a refresh token."""
+    """Revoke refresh token and denylist access token when provided."""
+    auth = request.headers.get("authorization") or ""
+    if auth.lower().startswith("bearer "):
+        revoke_access_token(auth.split(" ", 1)[1].strip())
     if revoke_refresh_token_plain(db, body.refresh_token.strip()):
         db.commit()
         return {"status": "ok"}
@@ -312,6 +316,9 @@ def reset_password(
     user.password_hash = hash_password(body.new_password)
     user.password_reset_token_hash = None
     user.password_reset_expires_at = None
+    auth = request.headers.get("authorization") or ""
+    if auth.lower().startswith("bearer "):
+        revoke_access_token(auth.split(" ", 1)[1].strip())
     revoke_all_refresh_tokens_for_user(db, user.id)
     db.commit()
     return {"detail": "Password updated. You can sign in."}

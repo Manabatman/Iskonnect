@@ -1,24 +1,34 @@
 """
 Hard filter service - deal-breakers that exclude scholarships before scoring.
-If any hard filter fails, the scholarship is not shown.
+
+Uses EligibilityResult as the single eligibility authority. Scholarships with
+status not_eligible are excluded from scored matches; others may be scored and ranked.
 """
 
 import logging
 from datetime import date, datetime
 
 from app.config import settings
-
-logger = logging.getLogger(__name__)
-from app.taxonomy.regions import normalize_region
-from app.taxonomy.education_levels import education_levels_compatible
-from app.taxonomy.equity_groups import EQUITY_GROUPS
+from app.matching.eligibility_result import (
+    EligibilityResult,
+    QualificationStatus,
+    RequirementResult,
+    cities_match,
+    evaluate_eligibility,
+    normalize_city,
+)
 from app.matching.field_match import (
     broad_maps_to_specific_eligible,
     profile_fields_for_matching,
     psced_code_matches,
     specific_course_matches,
 )
+from app.taxonomy.education_levels import education_levels_compatible
+from app.taxonomy.equity_groups import EQUITY_GROUPS
+from app.taxonomy.regions import normalize_region
 from app.utils.json_helpers import parse_json_list
+
+logger = logging.getLogger(__name__)
 
 DEADLINE_PASSED_MESSAGE = (
     "You satisfy the eligibility requirements but the application deadline has already passed."
@@ -43,22 +53,32 @@ def is_application_deadline_passed(application_deadline) -> bool:
     return deadline_day < date.today()
 
 
+# Re-export for backward compatibility in tests and temporal_state
+__all__ = [
+    "DEADLINE_PASSED_MESSAGE",
+    "cities_match",
+    "evaluate_eligibility",
+    "filter_scholarships",
+    "is_application_deadline_passed",
+    "normalize_city",
+    "_hard_filter_failure_stage",
+    "_region_matches",
+    "_income_matches",
+]
+
+
 def _data_status_passes_for_matching(data_status: str | None) -> bool:
-    """Exclude expired / broken_link from matching when feature flag is on."""
     if not data_status:
         return True
     return data_status not in ("expired", "broken_link", "past_deadline")
 
 
 def _level_matches(profile_level: str | None, eligible_levels: list, legacy_level: str | None) -> bool:
-    """Check if profile education level matches scholarship eligibility."""
     if not profile_level or not profile_level.strip():
-        return True  # No filter if profile has no level
-
+        return True
     levels_to_check = eligible_levels if eligible_levels else ([legacy_level] if legacy_level else [])
     if not levels_to_check:
         return True
-
     for el in levels_to_check:
         if el and education_levels_compatible(profile_level, str(el)):
             return True
@@ -74,17 +94,10 @@ def _region_matches(
     legacy_regions: list,
     scholarship_id: int | None = None,
 ) -> bool:
-    """Check if profile location matches scholarship geographic eligibility."""
+    """Legacy boolean region check — prefer evaluate_eligibility for new code."""
     regions = eligible_regions if eligible_regions else legacy_regions
     if not regions and not eligible_cities:
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(
-                "region_match scholarship_id=%s nationwide=True",
-                scholarship_id,
-            )
-        return True  # Nationwide
-
-    # Residency-required programs with geographic lists: student must declare region or city
+        return True
     if residency_required:
         geo_restricted = bool(regions or eligible_cities)
         has_profile_location = bool(
@@ -92,103 +105,23 @@ def _region_matches(
             or (profile_city and str(profile_city).strip())
         )
         if geo_restricted and not has_profile_location:
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(
-                    "region_match scholarship_id=%s fail=residency_required_no_location "
-                    "eligible_regions=%s eligible_cities=%s",
-                    scholarship_id,
-                    regions,
-                    eligible_cities,
-                )
             return False
-
-    profile_region_norm = normalize_region(profile_region or "")
-    profile_city_lower = (profile_city or "").strip().lower()
-
-    # City-level match (LGU)
-    if eligible_cities:
+    if eligible_cities and profile_city:
         for ec in eligible_cities:
-            if ec and profile_city_lower and ec.strip().lower() in profile_city_lower:
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(
-                        "region_match scholarship_id=%s pass=city_substring profile_city=%s ec=%s",
-                        scholarship_id,
-                        profile_city_lower,
-                        ec,
-                    )
+            if ec and cities_match(profile_city, ec):
                 return True
-            if ec and profile_city_lower and profile_city_lower in ec.strip().lower():
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(
-                        "region_match scholarship_id=%s pass=city_reverse profile_city=%s ec=%s",
-                        scholarship_id,
-                        profile_city_lower,
-                        ec,
-                    )
-                return True
-
-    # Region-level match: use exact equality after normalization to avoid false positives
-    # (e.g. "Region VI" must not substring-match "Region VII")
+    profile_region_norm = normalize_region(profile_region or "")
     for r in regions:
         if not r:
             continue
         r_norm = normalize_region(r)
         if profile_region_norm and profile_region_norm == r_norm:
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(
-                    "region_match scholarship_id=%s pass=region_norm profile_norm=%s sch_region=%s",
-                    scholarship_id,
-                    profile_region_norm,
-                    r,
-                )
             return True
-        # Direct match when both normalize to same island group (e.g. NCR and Metro Manila)
         if profile_region and r and profile_region.strip().lower() == r.strip().lower():
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(
-                    "region_match scholarship_id=%s pass=region_direct profile=%s sch=%s",
-                    scholarship_id,
-                    profile_region,
-                    r,
-                )
             return True
-
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(
-            "region_match scholarship_id=%s fail=no_match profile_region=%s profile_city=%s "
-            "eligible_regions=%s eligible_cities=%s residency_required=%s",
-            scholarship_id,
-            profile_region,
-            profile_city,
-            regions,
-            eligible_cities,
-            residency_required,
-        )
-    return False
-
-
-def _age_matches(profile_age: int | None, min_age: int | None, max_age: int | None) -> bool:
-    """Check if profile age is within scholarship range."""
-    if profile_age is None:
-        return True
-    if min_age is not None and profile_age < min_age:
-        return False
-    if max_age is not None and profile_age > max_age:
+    if regions or eligible_cities:
         return False
     return True
-
-
-def _school_type_matches(profile_school_type: str | None, eligible_school_types: list) -> bool:
-    """Check if profile school type is eligible."""
-    if not eligible_school_types:
-        return True
-    if not profile_school_type or not profile_school_type.strip():
-        return True
-    profile_st = profile_school_type.strip().lower()
-    for st in eligible_school_types:
-        if st and st.strip().lower() == profile_st:
-            return True
-    return False  # Profile school type not in eligible list
 
 
 def _income_matches(
@@ -196,94 +129,38 @@ def _income_matches(
     profile_bracket: str | None,
     max_income_threshold: int | None,
 ) -> bool:
-    """Check if profile income is below scholarship ceiling."""
+    """Legacy boolean income check — uses conservative bracket lower bound."""
+    from app.matching.eligibility_result import _bracket_bounds
+
     if max_income_threshold is None:
         return True
-    if profile_income is not None and profile_income <= max_income_threshold:
-        return True
-    # Fallback: use bracket if income not provided
-    if profile_bracket == "below_250k" and max_income_threshold >= 250_000:
-        return True
-    if profile_bracket == "250k_400k" and max_income_threshold >= 400_000:
-        return True
-    if profile_bracket == "400k_500k" and max_income_threshold >= 500_000:
-        return True
-    if profile_income is None:
-        return True  # Cannot disqualify without data
-    return False
-
-
-def _gwa_matches(profile_gwa: float | None, min_gwa_required: float | None) -> bool:
-    """Check if profile GWA meets minimum."""
-    if min_gwa_required is None:
-        return True
-    if profile_gwa is None:
-        return True  # Cannot disqualify without data
-    return profile_gwa >= min_gwa_required
-
-
-def _field_matches(
-    profile_field_broad: str | None,
-    profile_preferred_courses: list,
-    eligible_courses_psced: list,
-    eligible_courses_specific: list,
-) -> bool:
-    """Check if profile field of study matches scholarship course eligibility."""
-    if not eligible_courses_psced and not eligible_courses_specific:
-        return True
-    has_profile_data = (profile_field_broad and profile_field_broad.strip()) or (
-        profile_preferred_courses and any(p for p in profile_preferred_courses if p)
-    )
-    if not has_profile_data:
-        return True
-
-    profile_fields_to_check = profile_fields_for_matching(profile_field_broad)
-
-    for ec in eligible_courses_psced:
-        if not ec:
-            continue
-        for pf in profile_fields_to_check:
-            if psced_code_matches(pf, str(ec)):
-                return True
-
-    for pc in profile_preferred_courses or []:
-        if not pc:
-            continue
-        for ec in eligible_courses_specific or []:
-            if ec and specific_course_matches(str(pc), str(ec)):
-                return True
-
-    if broad_maps_to_specific_eligible(profile_field_broad, eligible_courses_specific):
-        return True
-
-    return False
-
-
-def _members_only_matches(profile: dict, scholarship: dict) -> bool:
-    """
-    When members_only is set, student must belong to at least one priority group.
-    Preferential (non-exclusive) priority scholarships are not gated here.
-    """
-    if not scholarship.get("members_only"):
-        return True
-    groups = parse_json_list(scholarship.get("priority_groups"))
-    if not groups:
-        return True
-    for group in groups:
-        if not group:
-            continue
-        info = EQUITY_GROUPS.get(group, {})
-        flag = info.get("profile_flag")
-        if not flag:
-            flag_key = str(group).lower().replace(" ", "_").replace("/", "_")
-            flag = f"is_{flag_key}"
-        if profile.get(flag):
+    if profile_income is not None:
+        return profile_income <= max_income_threshold
+    if profile_bracket:
+        lower, upper = _bracket_bounds(profile_bracket)
+        if lower is not None and lower > max_income_threshold:
+            return False
+        if upper is not None and upper <= max_income_threshold:
             return True
+        if lower is not None and lower <= max_income_threshold:
+            return True  # overlaps — legacy pass (evaluate_eligibility uses UNKNOWN)
+    if profile_income is None and not profile_bracket:
+        return True
     return False
+
+
+def _hard_filter_failure_stage(profile: dict, sch: dict) -> str | None:
+    """Return the first failed filter name, or None if passes. Uses EligibilityResult."""
+    result = evaluate_eligibility(profile, sch)
+    if result.status != QualificationStatus.NOT_ELIGIBLE:
+        return None
+    for req in result.requirements:
+        if req.result == RequirementResult.UNMET:
+            return req.key
+    return "unknown"
 
 
 def _missing_profile_fields(profile: dict) -> list[str]:
-    """Fields commonly needed for accurate hard filtering (informational for API clients)."""
     missing: list[str] = []
     if profile.get("age") is None:
         missing.append("age")
@@ -311,24 +188,15 @@ def _missing_profile_fields(profile: dict) -> list[str]:
 
 
 def _top_blockers(eliminated: dict[str, int], missing: list[str]) -> list[str]:
-    """Short human-readable hints when matches are empty or sparse."""
     blockers: list[str] = []
     if "gwa" in missing:
-        blockers.append(
-            "Your profile is missing GWA; merit thresholds could not be evaluated strictly."
-        )
+        blockers.append("Your profile is missing GWA; merit thresholds could not be evaluated strictly.")
     if "income" in missing:
-        blockers.append(
-            "Household income or bracket is missing; income ceilings may not filter accurately."
-        )
+        blockers.append("Household income or bracket is missing; income ceilings may not filter accurately.")
     if "field_of_study" in missing:
-        blockers.append(
-            "Add your field of study or preferred courses to match course-specific scholarships."
-        )
+        blockers.append("Add your field of study or preferred courses to match course-specific scholarships.")
     if "region_or_city" in missing:
-        blockers.append(
-            "Region or city helps LGU and location-restricted scholarships match accurately."
-        )
+        blockers.append("Region or city helps LGU and location-restricted scholarships match accurately.")
     labels = {
         "data_status": "expired or broken-link data status",
         "age": "age requirements",
@@ -349,74 +217,10 @@ def _top_blockers(eliminated: dict[str, int], missing: list[str]) -> list[str]:
     return blockers[:6]
 
 
-def _hard_filter_failure_stage(profile: dict, sch: dict) -> str | None:
-    """Return the first failed filter name, or None if the scholarship passes all hard filters."""
-    sid = sch.get("id")
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(
-            "hard_filter scholarship_id=%s profile_region=%s profile_city=%s",
-            sid,
-            profile.get("region"),
-            profile.get("city_municipality"),
-        )
-    if settings.filter_expired_from_matches:
-        ds = sch.get("data_status")
-        if not _data_status_passes_for_matching(ds):
-            return "data_status"
-    if not _age_matches(
-        profile.get("age"),
-        sch.get("min_age"),
-        sch.get("max_age"),
-    ):
-        return "age"
-    if not _level_matches(
-        profile.get("education_level") or profile.get("current_academic_stage"),
-        parse_json_list(sch.get("eligible_levels") or sch.get("level")),
-        sch.get("level"),
-    ):
-        return "education_level"
-    if not _region_matches(
-        profile.get("region"),
-        profile.get("city_municipality"),
-        parse_json_list(sch.get("eligible_regions")),
-        parse_json_list(sch.get("eligible_cities")),
-        sch.get("residency_required", False),
-        parse_json_list(sch.get("regions")),
-        scholarship_id=sid,
-    ):
-        return "region"
-    if not _school_type_matches(
-        profile.get("school_type"),
-        parse_json_list(sch.get("eligible_school_types")),
-    ):
-        return "school_type"
-    if not _income_matches(
-        profile.get("household_income_annual"),
-        profile.get("income_bracket"),
-        sch.get("max_income_threshold"),
-    ):
-        return "income"
-    if not _gwa_matches(
-        profile.get("gwa_normalized"),
-        sch.get("min_gwa_normalized"),
-    ):
-        return "gwa"
-    if not _field_matches(
-        profile.get("field_of_study_broad"),
-        parse_json_list(profile.get("preferred_courses")),
-        parse_json_list(sch.get("eligible_courses_psced")),
-        parse_json_list(sch.get("eligible_courses_specific")),
-    ):
-        return "field"
-    if not _members_only_matches(profile, sch):
-        return "members_only"
-    return None
-
-
 def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
     """
-    Return scholarships that pass all hard filters and a diagnostics dict.
-    profile and scholarships are dicts (from API/DB layer).
+    Return scholarships that pass eligibility (not not_eligible) and diagnostics.
+    Each candidate dict is annotated with _eligibility_result.
     """
     result: list = []
     eliminated: dict[str, int] = {
@@ -431,6 +235,7 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "members_only": 0,
     }
     eliminated_scholarships: list[dict] = []
+    eligibility_by_id: dict[int, dict] = {}
     filter_labels = {
         "data_status": "expired or broken-link data status",
         "age": "age requirements",
@@ -441,10 +246,22 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "gwa": "GWA / academic minimums",
         "field": "field of study or course alignment",
         "members_only": "members-only priority group",
+        "unknown": "eligibility requirements",
     }
+
     for sch in scholarships:
-        stage = _hard_filter_failure_stage(profile, sch)
-        if stage:
+        elig: EligibilityResult = evaluate_eligibility(profile, sch)
+        sid = sch.get("id")
+        if sid is not None:
+            eligibility_by_id[int(sid)] = elig.to_dict()
+
+        if not elig.passes_for_matching:
+            stage = None
+            for req in elig.requirements:
+                if req.result == RequirementResult.UNMET:
+                    stage = req.key
+                    break
+            stage = stage or "unknown"
             eliminated[stage] = eliminated.get(stage, 0) + 1
             if len(eliminated_scholarships) < 50:
                 eliminated_scholarships.append(
@@ -453,10 +270,13 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
                         "title": sch.get("title"),
                         "filter": stage,
                         "reason": filter_labels.get(stage, stage),
+                        "eligibility": elig.to_dict(),
                     }
                 )
             continue
-        result.append(sch)
+
+        annotated = {**sch, "_eligibility_result": elig.to_dict()}
+        result.append(annotated)
 
     missing = _missing_profile_fields(profile)
     diagnostics = {
@@ -470,5 +290,6 @@ def filter_scholarships(profile: dict, scholarships: list) -> tuple[list, dict]:
         "deadline_passed_count": sum(
             1 for sch in result if is_application_deadline_passed(sch.get("application_deadline"))
         ),
+        "eligibility_by_scholarship_id": eligibility_by_id,
     }
     return result, diagnostics

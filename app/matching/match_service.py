@@ -17,6 +17,7 @@ from app.taxonomy.income_brackets import get_income_bracket
 from app.serialization.scholarship import build_match_result_payload
 from app.matching.temporal_state import attach_temporal_fields
 from app.utils.freshness_chips import attach_freshness_fields
+from app.utils.verification_display import attach_verification_fields
 from app.utils.json_helpers import parse_json
 
 
@@ -159,7 +160,7 @@ class MatchService:
         for sch in candidates:
             payload = self._build_scoring_payload(profile, sch)
             scoring_result = self.scoring_engine.score(payload)
-            match_result = self._build_match_result(sch, scoring_result)
+            match_result = self._build_match_result(sch, scoring_result, profile)
             ds = sch.get("data_status")
             if ds == "needs_review":
                 penalty = 0.65
@@ -172,6 +173,7 @@ class MatchService:
             if attach_temporal:
                 match_result = attach_temporal_fields(match_result, profile)
                 match_result = attach_freshness_fields(match_result)
+            match_result = attach_verification_fields(match_result)
             results.append(match_result)
 
         results.sort(
@@ -179,6 +181,8 @@ class MatchService:
                 1 if m.get("deadline_passed") else 0,
                 1 if m.get("reliability_warning") else 0,
                 -m.get("final_score", 0),
+                m.get("id") or 0,
+                (m.get("title") or "").lower(),
             ),
         )
 
@@ -245,7 +249,7 @@ class MatchService:
             field_match_level=field_match,
             geographic_match_level=geo_match,
             equity_flags=_get_equity_flags(profile),
-            scholarship_type=scholarship.get("scholarship_type") or "Merit-and-Need",
+            scholarship_type=scholarship.get("scholarship_type") or "",
             min_gwa_required=scholarship.get("min_gwa_normalized"),
             max_income_threshold=scholarship.get("max_income_threshold"),
             priority_groups=parse_json(scholarship.get("priority_groups")),
@@ -257,13 +261,32 @@ class MatchService:
             has_field_restriction=has_field_restriction,
         )
 
-    def _build_match_result(self, scholarship: dict, scoring_result: ScoringResult) -> dict:
+    def _build_match_result(self, scholarship: dict, scoring_result: ScoringResult, profile: dict | None = None) -> dict:
         """Build API response dict from scholarship and scoring result."""
         deadline_passed = is_application_deadline_passed(scholarship.get("application_deadline"))
-        eligibility_status = scoring_result.eligibility_status and not deadline_passed
+        elig = scholarship.get("_eligibility_result") or {}
+        qual_status = elig.get("qualification_status", "qualified")
+        # Eligibility status derives from EligibilityResult, not scorer
+        eligibility_status = (
+            qual_status in ("qualified", "provisionally_qualified", "almost_qualified")
+            and not deadline_passed
+        )
         explanation = list(scoring_result.explanation)
         if deadline_passed and DEADLINE_PASSED_MESSAGE not in explanation:
             explanation.insert(0, DEADLINE_PASSED_MESSAGE)
+        # Prepend qualifying/missing requirements to explanation
+        qualifying = elig.get("qualifying_requirements") or []
+        missing = elig.get("missing_requirements") or []
+        if qualifying:
+            for q in qualifying[:5]:
+                line = f"✓ {q}"
+                if line not in explanation:
+                    explanation.append(line)
+        if missing and qual_status in ("provisionally_qualified", "almost_qualified"):
+            for m in missing[:5]:
+                line = f"✗ {m}"
+                if line not in explanation:
+                    explanation.append(line)
 
         scoring = {
             "score": scoring_result.final_score,
@@ -273,9 +296,14 @@ class MatchService:
             "readiness_score": scoring_result.readiness_score,
             "explanation": explanation,
             "breakdown": scoring_result.breakdown,
-            "confidence": scoring_result.confidence,
+            "confidence": elig.get("eligibility_confidence") or scoring_result.confidence,
             "suggestions": getattr(scoring_result, "suggestions", None) or [],
             "why_not_higher": getattr(scoring_result, "why_not_higher", None) or [],
             "scoring_policy_version": getattr(scoring_result, "scoring_policy_version", None) or "",
+            "qualification_status": qual_status,
+            "qualifying_requirements": qualifying,
+            "missing_requirements": missing,
+            "eligibility_confidence": elig.get("eligibility_confidence"),
+            "requirements": elig.get("requirements") or [],
         }
         return build_match_result_payload(scholarship, scoring=scoring)

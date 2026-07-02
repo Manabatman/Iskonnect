@@ -5,10 +5,8 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta
 from typing import Any
 
-from app.matching.hard_filters import (
-    _hard_filter_failure_stage,
-    is_application_deadline_passed,
-)
+from app.matching.eligibility_result import QualificationStatus, evaluate_eligibility
+from app.matching.hard_filters import _hard_filter_failure_stage, is_application_deadline_passed
 from app.matching.profile_completeness import profile_completeness_payload
 from app.prediction.cycle_predictor import predict_next_open, _parse_date as parse_cycle_date
 from app.utils.json_helpers import parse_json_list

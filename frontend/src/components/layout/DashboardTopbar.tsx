@@ -30,9 +30,8 @@ type NotificationItem = {
 
 function titleForPath(pathname: string): string {
   if (pathname === "/dashboard") return "Dashboard";
-  if (pathname.startsWith("/opportunities")) return "Opportunities";
   if (pathname.startsWith("/scholarships/search")) return "Scholarship search";
-  if (pathname.startsWith("/scholarships")) return "Scholarships";
+  if (pathname.startsWith("/scholarships")) return "Explore scholarships";
   if (pathname.startsWith("/scholarship/")) return "Scholarship";
   if (pathname.startsWith("/applications")) return "Applications";
   if (pathname.startsWith("/documents")) return "Documents";

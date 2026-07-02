@@ -101,13 +101,24 @@ def build_opportunity_timeline(
         sid = sch.get("id")
         if sid is not None and int(sid) in seen_ids:
             continue
+        elig = evaluate_eligibility(profile, sch)
+        # Hard-ineligible scholarships must not appear in actionable timeline lanes
+        if elig.status == QualificationStatus.NOT_ELIGIBLE:
+            continue
         temporal = classify_scholarship_temporal(profile, sch, today=today)
         state = temporal["eligibility_state"]
         card = {**scholarship_to_catalog_dict(sch), **_slim_card(sch, temporal)}
+        card["eligibility"] = elig.to_dict()
         _bucket_card(lanes, state, card)
 
     for key in ("available_now", "opening_soon", "prepare_for"):
-        lanes[key].sort(key=lambda x: -(x.get("final_score") or x.get("score") or 0))
+        lanes[key].sort(
+            key=lambda x: (
+                -(x.get("final_score") or x.get("score") or 0),
+                x.get("id") or 0,
+                (x.get("title") or "").lower(),
+            )
+        )
     lanes["expected_reopening"].sort(key=lambda x: x.get("predicted_open") or "")
     lanes["future_eligibility"].sort(key=lambda x: x.get("title") or "")
 

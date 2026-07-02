@@ -16,6 +16,12 @@ from app.db import get_db
 from app.limiter import limiter
 from app.utils.application_status import sync_application_status
 from app.utils.quality_score import compute_confidence_score, needs_review_reasons
+from app.utils.data_completeness import (
+    PUBLISHABILITY_THRESHOLD,
+    completeness_gaps,
+    completeness_tier,
+    compute_data_completeness_score,
+)
 from app.utils.scholarship_persist import utc_now_naive
 
 router = APIRouter(tags=["admin-queues"])
@@ -260,7 +266,7 @@ def admin_import_dashboard(
     db: Session = Depends(get_db),
     _admin: Annotated[models.User | None, Depends(require_admin)] = None,
 ):
-    """Import pipeline summary: staging queue and recent scraper runs."""
+    """Import pipeline summary: staging queue and recent maintenance job runs."""
     staging_pending = (
         db.query(func.count(models.ScholarshipStaging.id))
         .filter(models.ScholarshipStaging.status == "pending")
@@ -277,7 +283,7 @@ def admin_import_dashboard(
     return {
         "staging_pending": int(staging_pending),
         "staging_total": int(staging_total),
-        "recent_scraper_runs": [
+        "recent_maintenance_runs": [
             {
                 "id": r.id,
                 "source": r.source,
@@ -290,4 +296,75 @@ def admin_import_dashboard(
             }
             for r in recent_runs
         ],
+    }
+
+
+@router.get("/admin/data-quality")
+@limiter.limit("30/minute")
+def admin_data_quality_dashboard(
+    request: Request,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Scholarship data quality health metrics for admin operations."""
+    today = date.today()
+    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=90)
+    rows = db.query(models.Scholarship).filter(models.Scholarship.is_active == True).all()  # noqa: E712
+
+    scores: list[int] = []
+    tier_counts = {"verified_ready": 0, "usable": 0, "needs_work": 0}
+    gap_counts: dict[str, int] = {}
+    missing_residency = 0
+    missing_income = 0
+    missing_courses = 0
+    expired_verification = 0
+    below_publishable = 0
+    priority_queue: list[dict] = []
+
+    for row in rows:
+        score = row.data_completeness_score
+        if score is None:
+            score = compute_data_completeness_score(row)
+        scores.append(int(score))
+        tier = completeness_tier(int(score))
+        tier_counts[tier] = tier_counts.get(tier, 0) + 1
+        if int(score) < PUBLISHABILITY_THRESHOLD:
+            below_publishable += 1
+        for gap in completeness_gaps(row):
+            gap_counts[gap] = gap_counts.get(gap, 0) + 1
+            if gap == "missing_residency_rules":
+                missing_residency += 1
+            elif gap == "missing_income_rules":
+                missing_income += 1
+            elif gap == "missing_course_restrictions":
+                missing_courses += 1
+        if row.last_verified_at is None or row.last_verified_at < stale_cutoff:
+            expired_verification += 1
+        if int(score) < 70:
+            priority_queue.append(
+                {
+                    "id": row.id,
+                    "title": row.title,
+                    "completeness_score": int(score),
+                    "gaps": completeness_gaps(row)[:5],
+                }
+            )
+
+    priority_queue.sort(key=lambda x: x["completeness_score"])
+    avg = round(sum(scores) / len(scores), 1) if scores else 0.0
+
+    return {
+        "as_of": today.isoformat(),
+        "publishability_threshold": PUBLISHABILITY_THRESHOLD,
+        "total_active": len(rows),
+        "average_completeness": avg,
+        "tier_distribution": tier_counts,
+        "below_publishable_threshold": below_publishable,
+        "needs_review": sum(1 for r in rows if r.data_status == "needs_review"),
+        "missing_residency_rules": missing_residency,
+        "missing_income_rules": missing_income,
+        "missing_course_restrictions": missing_courses,
+        "expired_verification": expired_verification,
+        "gap_counts": gap_counts,
+        "high_priority_records": priority_queue[:25],
     }
