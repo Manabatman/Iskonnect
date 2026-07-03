@@ -23,6 +23,8 @@ from app.serialization.scholarship import (
     scholarship_to_catalog_dict,
 )
 from app.utils.notification_helpers import create_notifications_for_match_results
+from app.utils.freshness_chips import attach_freshness_fields
+from app.utils.verification_display import attach_verification_fields
 from app.utils.timezone import to_philippine_iso
 
 router = APIRouter()
@@ -104,6 +106,8 @@ def _result_to_match_response(
             if key in payload:
                 minimal[key] = payload[key]
         return minimal
+    payload = attach_verification_fields(payload)
+    payload = attach_freshness_fields(payload)
     return payload
 
 

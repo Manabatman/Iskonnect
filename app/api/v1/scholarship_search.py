@@ -26,7 +26,7 @@ from app.utils.application_status import (
     PREVIOUS_CYCLE,
     TIMING_FILTER_MAP,
 )
-from app.utils.jsonb_filters import json_list_contains
+from app.utils.jsonb_filters import json_list_contains, json_list_empty, json_list_pattern
 
 router = APIRouter(prefix="/scholarships", tags=["scholarship-search"])
 logger = logging.getLogger(__name__)
@@ -44,13 +44,8 @@ TIMING_OPTIONS = [
 
 
 def _column_empty_json_list(col):
-    """SQL expression: NULL, blank, or JSON empty list [] (stored as text)."""
-    trimmed = func.trim(func.coalesce(col, ""))
-    return or_(
-        col.is_(None),
-        trimmed == "",
-        trimmed == "[]",
-    )
+    """SQL expression: NULL, blank, or JSON empty list [] (text or jsonb)."""
+    return json_list_empty(col)
 
 
 def _column_empty_legacy_regions(col):
@@ -76,7 +71,7 @@ def apply_region_browse_filter(query, region: str):
     val = region.strip()
     return query.filter(
         or_(
-            models.Scholarship.eligible_regions.ilike(f'%"{val}"%'),
+            json_list_contains(models.Scholarship.eligible_regions, val),
             models.Scholarship.regions.ilike(f"%{val}%"),
             _nationwide_geo_sql(),
         )
@@ -87,9 +82,7 @@ def apply_education_level_browse_filter(query, education_level: str):
     val = education_level.strip()
     return query.filter(
         or_(
-            models.Scholarship.eligible_levels.is_(None),
-            models.Scholarship.eligible_levels == "",
-            models.Scholarship.eligible_levels == "[]",
+            json_list_empty(models.Scholarship.eligible_levels),
             json_list_contains(models.Scholarship.eligible_levels, val),
         )
     )
@@ -136,7 +129,7 @@ def apply_life_stage_filter(query, life_stage: str):
         return query
     clauses = []
     for lit in levels:
-        clauses.append(models.Scholarship.eligible_levels.ilike(f'%"{lit}"%'))
+        clauses.append(json_list_contains(models.Scholarship.eligible_levels, lit))
         clauses.append(models.Scholarship.level.ilike(f"%{lit}%"))
     return query.filter(or_(*clauses))
 
@@ -316,8 +309,8 @@ def search_scholarships(
         val = field.strip()
         q = q.filter(
             or_(
-                models.Scholarship.eligible_courses_psced.ilike(f'%"{val}"%'),
-                models.Scholarship.eligible_courses_psced.ilike(f"%{val}%"),
+                json_list_contains(models.Scholarship.eligible_courses_psced, val),
+                json_list_pattern(models.Scholarship.eligible_courses_psced, f"%{val}%"),
             )
         )
 
@@ -335,7 +328,7 @@ def search_scholarships(
                 models.Scholarship.title.ilike(pattern),
                 models.Scholarship.provider.ilike(pattern),
                 models.Scholarship.description.ilike(pattern),
-                models.Scholarship.eligible_school_types.ilike(pattern),
+                json_list_pattern(models.Scholarship.eligible_school_types, pattern),
             )
         )
 
@@ -415,8 +408,8 @@ def search_scholarships_semantic(
         val = field.strip()
         q = q.filter(
             or_(
-                models.Scholarship.eligible_courses_psced.ilike(f'%"{val}"%'),
-                models.Scholarship.eligible_courses_psced.ilike(f"%{val}%"),
+                json_list_contains(models.Scholarship.eligible_courses_psced, val),
+                json_list_pattern(models.Scholarship.eligible_courses_psced, f"%{val}%"),
             )
         )
 
@@ -434,7 +427,7 @@ def search_scholarships_semantic(
                 models.Scholarship.title.ilike(pattern),
                 models.Scholarship.provider.ilike(pattern),
                 models.Scholarship.description.ilike(pattern),
-                models.Scholarship.eligible_school_types.ilike(pattern),
+                json_list_pattern(models.Scholarship.eligible_school_types, pattern),
             )
         )
 
