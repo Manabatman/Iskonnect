@@ -485,6 +485,8 @@ class NotificationResponse(BaseModel):
 
 # === Match Response (Expanded) ===
 class MatchResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     id: int
     title: str
     provider: Optional[str] = None
@@ -522,6 +524,28 @@ class MatchResponse(BaseModel):
     suggestions: Optional[List[str]] = []
     why_not_higher: Optional[List[str]] = []
     scoring_policy_version: Optional[str] = None
+    # Explainability (eligibility contract)
+    qualification_status: Optional[str] = None
+    qualifying_requirements: Optional[List[str]] = None
+    missing_requirements: Optional[List[str]] = None
+    eligibility_confidence: Optional[str] = None
+    requirements: Optional[List[Any]] = None
+    # Verification / trust display
+    verification_badge: Optional[str] = None
+    verification_badge_label: Optional[str] = None
+    verification_source_label: Optional[str] = None
+    completeness_label: Optional[str] = None
+    completeness_tier: Optional[str] = None
+    last_reviewed_label: Optional[str] = None
+    freshness_chips: Optional[List[dict]] = None
+    # Temporal / timeline hints
+    eligibility_state: Optional[str] = None
+    ui_state: Optional[str] = None
+    gap_reason: Optional[str] = None
+    next_action: Optional[str] = None
+    predicted_open: Optional[str] = None
+    lifecycle_hint: Optional[str] = None
+    reliability_warning: Optional[str] = None
 
 
 class MatchResponseMinimal(BaseModel):

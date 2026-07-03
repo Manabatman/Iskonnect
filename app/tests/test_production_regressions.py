@@ -5,9 +5,12 @@ from __future__ import annotations
 import json
 from datetime import date, timedelta
 
+from sqlalchemy.dialects import postgresql
+
 from app import models
 from app.auth import create_access_token, hash_password
 from app.matching.opportunity_timeline import build_opportunity_timeline
+from app.utils.jsonb_filters import json_list_contains
 from app.utils.timezone import utc_now_naive
 
 
@@ -171,3 +174,73 @@ def test_admin_data_quality_with_last_verified_at(api_with_db):
     assert r.status_code == 200, r.text
     data = r.json()
     assert data["total_active"] >= 1
+
+
+def test_search_combined_jsonb_filters_returns_200(api_with_db):
+    """Region + education + life_stage must not 500 on JSONB eligibility columns."""
+    client, Session = api_with_db
+    _seed_publishable_scholarship(
+        Session(),
+        title="NCR College SHS Bridge",
+        eligible_levels=json.dumps(["Senior High School", "College"]),
+        eligible_regions=json.dumps(["NCR"]),
+    )
+    r = client.get(
+        "/api/v1/scholarships/search",
+        params={
+            "region": "NCR",
+            "education_level": "College",
+            "life_stage": "high_school",
+            "include_archived": "true",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert "results" in r.json()
+
+
+def test_jsonb_filter_sql_uses_cast_not_bare_ilike():
+    """Postgres compile must cast jsonb columns to text before ILIKE."""
+    expr = json_list_contains(models.Scholarship.eligible_levels, "Senior High School")
+    sql = str(expr.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
+    upper = sql.upper()
+    assert "CAST" in upper
+    assert "AS TEXT" in upper
+    assert "ILIKE" in upper
+
+
+def test_match_run_get_includes_qualification_status(api_with_db):
+    """GET /match-runs/{id} must serialize explainability fields (not stripped by Pydantic)."""
+    client, Session = api_with_db
+    sch = _seed_publishable_scholarship(Session())
+    user, profile, headers = _student_with_profile(Session, email="match_run_explain@example.com")
+
+    db = Session()
+    try:
+        run = models.MatchRun(user_id=user.id, profile_id=profile.id)
+        db.add(run)
+        db.flush()
+        db.add(
+            models.MatchResult(
+                run_id=run.id,
+                scholarship_id=sch.id,
+                score=0.82,
+                final_score=0.82,
+                explanation=json.dumps(["Strong fit"]),
+                confidence="high",
+            )
+        )
+        db.commit()
+        db.refresh(run)
+        run_id = run.id
+    finally:
+        db.close()
+
+    r = client.get(f"/api/v1/match-runs/{run_id}", headers=headers)
+    assert r.status_code == 200, r.text
+    results = r.json()["results"]
+    assert len(results) == 1
+    row = results[0]
+    assert "qualification_status" in row
+    assert row["qualification_status"] is not None
+    assert "qualifying_requirements" in row
+    assert isinstance(row.get("qualifying_requirements"), list)

@@ -128,7 +128,7 @@ export function MatchResultsPage() {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">Building your scholarship plan…</p>
+          <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">Loading your match results…</p>
           <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-12 dark:border-slate-700 dark:bg-slate-800">
             <div className="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700" />
             <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -147,7 +147,7 @@ export function MatchResultsPage() {
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center dark:border-red-800 dark:bg-red-950/40">
-            <p className="font-medium text-red-800 dark:text-red-200">We couldn&apos;t load your scholarship plan</p>
+            <p className="font-medium text-red-800 dark:text-red-200">We couldn&apos;t load your match results</p>
             <p className="mt-2 text-sm text-red-700 dark:text-red-300">{error}</p>
             <button
               type="button"
@@ -170,7 +170,7 @@ export function MatchResultsPage() {
             className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100"
             role="status"
           >
-            <p className="font-medium">A few more details will sharpen your plan</p>
+            <p className="font-medium">A few more details will sharpen your matches</p>
             <p className="mt-1 text-amber-800 dark:text-amber-200">
               Only {profileCompleteness.filled_fields} of {profileCompleteness.total_fields} key fields are filled.
               Add income, GWA, field of study, and school type to unlock more accurate matches and preparation tips.
@@ -180,7 +180,7 @@ export function MatchResultsPage() {
 
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-            Your Scholarship Plan
+            Your Match Results
             <span className="ml-2 rounded-full bg-primary-100 dark:bg-primary-900 px-2.5 py-0.5 text-sm font-medium text-primary-800 dark:text-primary-300">
               {opportunityTimeline?.summary.total_actionable ?? activeMatches.length}
             </span>
@@ -219,7 +219,7 @@ export function MatchResultsPage() {
                   />
                 </svg>
               </div>
-              <p className="text-lg font-medium text-slate-700 dark:text-slate-300">Your plan is still taking shape</p>
+              <p className="text-lg font-medium text-slate-700 dark:text-slate-300">No matches yet</p>
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                 No scholarships matched your profile yet—but you can unlock more. Complete missing profile fields, broaden
                 your region or course interests, or browse the catalog while we add new programs.
