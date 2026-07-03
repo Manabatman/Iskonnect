@@ -1,5 +1,5 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
@@ -69,6 +69,22 @@ function RouteFallback() {
       Loading…
     </div>
   );
+}
+
+/** Scroll to in-page anchors when navigating to /path#section (e.g. /how-it-works#verification). */
+function ScrollToHashElement() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+    const id = decodeURIComponent(hash.slice(1));
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [pathname, hash]);
+
+  return null;
 }
 
 function AppRoutes() {
@@ -176,6 +192,7 @@ export default function App() {
     <ThemeProvider>
       <ErrorBoundary>
         <BrowserRouter>
+          <ScrollToHashElement />
           <AuthProvider>
             <SavedScholarshipsProvider>
               <FeedbackProvider>

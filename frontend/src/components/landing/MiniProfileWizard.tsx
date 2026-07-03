@@ -46,10 +46,11 @@ export function MiniProfileWizard() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
-            Try personalized matching — no account needed
+            Preview scholarship matching
           </h2>
           <p className="mt-2 text-slate-600 dark:text-slate-400">
-            See real eligibility results from our verified scholarship database in seconds.
+            See how ISKONNECT evaluates eligibility from our verified scholarship database—create a free account
+            for full personalized matching.
           </p>
         </div>
 

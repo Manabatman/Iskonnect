@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Query, Request
@@ -22,7 +22,7 @@ from app.utils.data_completeness import (
     completeness_tier,
     compute_data_completeness_score,
 )
-from app.utils.scholarship_persist import utc_now_naive
+from app.utils.timezone import utc_now_naive
 
 router = APIRouter(tags=["admin-queues"])
 
@@ -49,7 +49,7 @@ def admin_review_queue(
     """Paginated admin review queues for scholarship maintenance."""
     offset = (page - 1) * limit
     today = date.today()
-    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    stale_cutoff = utc_now_naive() - timedelta(days=30)
 
     if queue_name == "needs_review":
         q = db.query(models.Scholarship).filter(models.Scholarship.data_status == "needs_review")
@@ -200,7 +200,7 @@ def admin_scholarship_health_dashboard(
 ):
     """Scholarship catalog health summary for admin dashboard."""
     today = date.today()
-    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    stale_cutoff = utc_now_naive() - timedelta(days=30)
     total = db.query(func.count(models.Scholarship.id)).scalar() or 0
     active = (
         db.query(func.count(models.Scholarship.id))
@@ -308,7 +308,7 @@ def admin_data_quality_dashboard(
 ):
     """Scholarship data quality health metrics for admin operations."""
     today = date.today()
-    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=90)
+    stale_cutoff = utc_now_naive() - timedelta(days=90)
     rows = db.query(models.Scholarship).filter(models.Scholarship.is_active == True).all()  # noqa: E712
 
     scores: list[int] = []
