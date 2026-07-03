@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
+from app.matching.eligibility_result import QualificationStatus, evaluate_eligibility
 from app.matching.temporal_state import (
     ELIGIBLE_NOW,
     ELIGIBLE_SOON,
