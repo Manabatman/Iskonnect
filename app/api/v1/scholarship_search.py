@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 
 from app import models, schemas
-from app.api.v1.scholarships import _public_scholarship_payload, get_cached_scholarship_dicts
+from app.api.v1.scholarships import _public_scholarship_payload
 from app.db import get_db
 from app.limiter import limiter
 from app.utils.application_status import (
@@ -27,6 +27,7 @@ from app.utils.application_status import (
     TIMING_FILTER_MAP,
 )
 from app.utils.jsonb_filters import json_list_contains, json_list_empty, json_list_pattern
+from app.taxonomy.regions import canonical_region_label, region_search_literals
 
 router = APIRouter(prefix="/scholarships", tags=["scholarship-search"])
 logger = logging.getLogger(__name__)
@@ -69,10 +70,15 @@ def _nationwide_geo_sql():
 def apply_region_browse_filter(query, region: str):
     """Restrict query to rows that list the region or have no geo restriction (nationwide)."""
     val = region.strip()
+    literals = region_search_literals(val)
+    region_clauses = [json_list_contains(models.Scholarship.eligible_regions, lit) for lit in literals]
+    region_clauses.append(models.Scholarship.regions.ilike(f"%{val}%"))
+    for lit in literals:
+        if lit != val:
+            region_clauses.append(models.Scholarship.regions.ilike(f"%{lit}%"))
     return query.filter(
         or_(
-            json_list_contains(models.Scholarship.eligible_regions, val),
-            models.Scholarship.regions.ilike(f"%{val}%"),
+            *region_clauses,
             _nationwide_geo_sql(),
         )
     )
@@ -218,22 +224,21 @@ def get_search_filter_options(
 ):
     """Return distinct filter values for search UI dropdowns."""
     logger.info("scholarship_search_filters")
-    scholarship_dicts = get_cached_scholarship_dicts(db)
+    rows = _base_search_query(db).all()
     providers = set()
     education_levels = set()
     regions = set()
     fields_of_study = set()
-    for d in scholarship_dicts:
-        prov = d.get("provider")
-        if prov and str(prov).strip():
-            providers.add(str(prov).strip())
-        for level in _parse_json(d.get("eligible_levels")):
+    for s in rows:
+        if s.provider and str(s.provider).strip():
+            providers.add(str(s.provider).strip())
+        for level in _parse_json(s.eligible_levels):
             if level and str(level).strip():
                 education_levels.add(str(level).strip())
-        for r in _parse_json(d.get("eligible_regions")) or _parse_json(d.get("regions")):
+        for r in _parse_json(s.eligible_regions) or _parse_json(s.regions):
             if r and str(r).strip():
-                regions.add(str(r).strip())
-        for f in _parse_json(d.get("eligible_courses_psced")):
+                regions.add(canonical_region_label(str(r)) or str(r).strip())
+        for f in _parse_json(s.eligible_courses_psced):
             if f and str(f).strip():
                 fields_of_study.add(str(f).strip())
     return schemas.ScholarshipFilterOptions(
@@ -260,7 +265,6 @@ def search_scholarships(
     timing: str = "",
     life_stage: str = "",
     include_archived: bool = False,
-    include_closed: bool = False,
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -268,7 +272,7 @@ def search_scholarships(
     """
     Search scholarships with optional filters and pagination.
     Does not run the matching algorithm - browse-only.
-    ``include_closed`` is deprecated; use ``timing=closed`` or ``include_archived``.
+    Use ``timing=closed`` or ``include_archived`` for lifecycle-specific views.
     """
     logger.info(
         "scholarship_search query=%s region=%s field=%s page=%s",
@@ -286,8 +290,6 @@ def search_scholarships(
 
     if timing and timing.strip():
         q = apply_timing_filter(q, timing)
-    elif include_closed:
-        q = apply_timing_filter(q, "closed")
 
     if life_stage and life_stage.strip():
         q = apply_life_stage_filter(q, life_stage)
@@ -369,7 +371,6 @@ def search_scholarships_semantic(
     timing: str = "",
     life_stage: str = "",
     include_archived: bool = False,
-    include_closed: bool = False,
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -385,8 +386,6 @@ def search_scholarships_semantic(
 
     if timing and timing.strip():
         q = apply_timing_filter(q, timing)
-    elif include_closed:
-        q = apply_timing_filter(q, "closed")
 
     if life_stage and life_stage.strip():
         q = apply_life_stage_filter(q, life_stage)

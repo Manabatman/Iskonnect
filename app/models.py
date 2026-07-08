@@ -132,6 +132,10 @@ class Student(Base):
     ofw_parent_type = Column(String)  # land_based | sea_based | null
     is_farmer_fisher_dependent = Column(Boolean, default=False)
     is_4ps_listahanan = Column(Boolean, default=False)
+    is_military_dependent = Column(Boolean, default=False)
+    is_uniformed_service_dependent = Column(Boolean, default=False)
+    is_gsis_dependent = Column(Boolean, default=False)
+    is_sss_dependent = Column(Boolean, default=False)
     parent_occupation = Column(String)
 
     # === DOCUMENT INVENTORY (readiness tracking) ===

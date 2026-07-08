@@ -115,6 +115,10 @@ class StudentProfile(BaseModel):
     ofw_parent_type: Optional[str] = None
     is_farmer_fisher_dependent: Optional[bool] = False
     is_4ps_listahanan: Optional[bool] = False
+    is_military_dependent: Optional[bool] = False
+    is_uniformed_service_dependent: Optional[bool] = False
+    is_gsis_dependent: Optional[bool] = False
+    is_sss_dependent: Optional[bool] = False
     parent_occupation: Optional[str] = None
     guardian_full_name: Optional[str] = Field(default=None, max_length=255)
     guardian_email: Optional[EmailStr] = None
@@ -232,6 +236,10 @@ class StudentProfileResponse(BaseModel):
     ofw_parent_type: Optional[str] = None
     is_farmer_fisher_dependent: Optional[bool] = False
     is_4ps_listahanan: Optional[bool] = False
+    is_military_dependent: Optional[bool] = False
+    is_uniformed_service_dependent: Optional[bool] = False
+    is_gsis_dependent: Optional[bool] = False
+    is_sss_dependent: Optional[bool] = False
     parent_occupation: Optional[str] = None
     documents: Optional[List[dict]] = []
     privacy_consent_at: Optional[datetime] = None

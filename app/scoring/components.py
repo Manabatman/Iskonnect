@@ -98,15 +98,24 @@ def score_equity(equity_flags: dict[str, bool], priority_groups: list[str]) -> f
     - 0 matches, no priority groups -> 0.5 (neutral)
     - 0 matches, scholarship has priority groups -> 0.0
     """
+    from app.taxonomy.equity_groups import EQUITY_GROUPS
+    from app.taxonomy.priority_groups import resolve_priority_group
+
     if not priority_groups:
         return 0.5
     match_count = 0
     for group in priority_groups:
         if not group:
             continue
-        flag_key = group.lower().replace(" ", "_").replace("/", "_")
+        canon = resolve_priority_group(str(group))
+        info = EQUITY_GROUPS.get(canon, {})
+        profile_flag = info.get("profile_flag")
+        if profile_flag and equity_flags.get(profile_flag):
+            match_count += 1
+            continue
+        flag_key = canon.lower().replace(" ", "_").replace("/", "_")
         is_flag = f"is_{flag_key}"
-        if equity_flags.get(flag_key) or equity_flags.get(is_flag) or equity_flags.get(group):
+        if equity_flags.get(flag_key) or equity_flags.get(is_flag) or equity_flags.get(canon):
             match_count += 1
     if match_count >= 2:
         return 1.0

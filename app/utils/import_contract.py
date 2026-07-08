@@ -25,6 +25,7 @@ CANONICAL_SCHEMA_COLUMNS: tuple[str, ...] = (
     "min_age",
     "max_age",
     "priority_groups",
+    "members_only",
     "benefit_tuition",
     "benefit_allowance_monthly",
     "benefit_books",

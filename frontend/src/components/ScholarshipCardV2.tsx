@@ -139,6 +139,12 @@ export function ScholarshipCardV2({
     data_status: "data_status" in base ? base.data_status : undefined,
     is_active: "is_active" in base ? base.is_active : undefined,
   });
+  const dataStatus = ("data_status" in base ? base.data_status : undefined)?.toLowerCase?.() ?? "";
+  const linkActionable =
+    appStatus === "open" &&
+    !match?.deadline_passed &&
+    dataStatus !== "broken_link" &&
+    dataStatus !== "needs_review";
   const deadlineLine = formatDeadlineLine(
     match?.application_deadline ?? base.application_deadline,
     match?.application_open_date ?? base.application_open_date
@@ -409,7 +415,7 @@ export function ScholarshipCardV2({
           ) : null}
 
           <div className={`flex flex-col gap-2 sm:flex-row sm:flex-wrap ${showSecondaryActionsRow ? "mt-3" : ""}`}>
-            {hasLink && appStatus === "open" && !match?.deadline_passed ? (
+            {hasLink && linkActionable ? (
               <a
                 href={link}
                 target="_blank"

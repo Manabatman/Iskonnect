@@ -40,6 +40,10 @@ export interface StudentProfile {
   ofw_parent_type?: string;
   is_farmer_fisher_dependent?: boolean;
   is_4ps_listahanan?: boolean;
+  is_military_dependent?: boolean;
+  is_uniformed_service_dependent?: boolean;
+  is_gsis_dependent?: boolean;
+  is_sss_dependent?: boolean;
   parent_occupation?: string;
   documents?: Array<{ type: string; status: string }>;
   privacy_consent?: boolean;
@@ -282,7 +286,6 @@ export interface ScholarshipSearchFilters {
   /** Life stage: high_school | college | graduate | tvet */
   life_stage?: string;
   /** @deprecated Use timing filters instead */
-  include_closed?: boolean;
   include_archived?: boolean;
 }
 
