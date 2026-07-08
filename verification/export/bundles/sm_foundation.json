@@ -1,0 +1,67 @@
+[
+  {
+    "id": 10,
+    "verification_bundle": "sm_foundation",
+    "title": "SM Foundation College Scholarship",
+    "provider": "SM Foundation",
+    "provider_type": "Private",
+    "scholarship_type": "Need",
+    "primary_link": "https://sm-foundation.org/scholarship",
+    "link_status": "broken",
+    "data_status": "broken_link",
+    "description": "Educational assistance for financially challenged students with good academics.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Business",
+      "Engineering",
+      "Education"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": 250000,
+    "min_gwa_normalized": 92.0,
+    "min_age": 16,
+    "max_age": 28,
+    "priority_groups": [
+      "4Ps/Listahanan",
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 5000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 100000,
+    "required_documents": [
+      "ITR",
+      "BIRTH_CERT",
+      "SKETCH_HOME",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-02-01",
+    "application_deadline": "2026-03-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": null,
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "previous_cycle",
+    "last_verified_at": "2026-07-08T14:45:16.659048",
+    "verification_source": "csv_import",
+    "is_active": true,
+    "verification_priority": "high"
+  }
+]

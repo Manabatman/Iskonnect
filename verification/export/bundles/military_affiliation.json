@@ -1,0 +1,139 @@
+[
+  {
+    "id": 56,
+    "verification_bundle": "military_affiliation",
+    "title": "AFPEBSO DND CHED PASUC Scholarship",
+    "provider": "Armed Forces of the Philippines (AFPEBSO)",
+    "provider_type": "Government",
+    "scholarship_type": "Affiliation",
+    "primary_link": "https://afpeebso.org",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "The AFPEBSO DND-CHED-PASUC Scholarship is a special sector-specific inter-agency government program managed by the Armed Forces of the Philippines Educational Benefit System Office. It extends 100% tuition and fee exemptions at any public State University or College (SUC) for the legitimate children and direct dependents of active-duty, retired, or deceased AFP military personnel. Academic requirements mandate a baseline GWA of 80% (2.5) with zero failures. Financial constraints are secondary to the parent's military service record. Portals accept applications annually from May to July.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All SUC undergraduate paths"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Military Dependents"
+    ],
+    "members_only": true,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 15000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-07-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-10",
+    "last_close_date": "2025-07-20",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:31:21.146367",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  },
+  {
+    "id": 62,
+    "verification_bundle": "military_affiliation",
+    "title": "AFPSLAI Educational Grant Program",
+    "provider": "Armed Forces of the Philippines (AFPSLAI)",
+    "provider_type": "Private",
+    "scholarship_type": "Affiliation",
+    "primary_link": "https://www.afpslai.com.ph",
+    "link_status": "timeout",
+    "data_status": "active",
+    "description": "The AFPSLAI Educational Grant Program (EGP) is an affiliation-based financial assistance platform run by the Armed Forces and Police Savings and Loan Association, Inc. It caters to the children and dependents of active or retired military personnel, PNP officers, and uniformed service members who are registered members of AFPSLAI. It delivers a comprehensive flat financial subsidy of 25,000 PHP per semester (50,000 PHP annually) directly to the student to offset undergraduate expenses. Candidates must post a minimum GWA of 85% and possess a clean disciplinary record. Submissions clear through AFPSLAI regional branch hubs.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate tracks"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 500000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Uniformed Service Dependents"
+    ],
+    "members_only": true,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 50000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-15",
+    "application_deadline": "2026-07-10",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-20",
+    "last_close_date": "2025-07-15",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:31:58.332736",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  }
+]
