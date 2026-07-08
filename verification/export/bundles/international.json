@@ -1,0 +1,128 @@
+[
+  {
+    "id": 63,
+    "verification_bundle": "international",
+    "title": "Erasmus Mundus Joint Masters Scholarship",
+    "provider": "European Union",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://erasmus-plus.ec.europa.eu",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "The Erasmus Mundus Joint Masters Scholarship is a highly prestigious international bilateral program funded by the European Union for outstanding Filipino college graduates. It covers 100% of international tuition fees, laboratory charges, global travel costs, visa fees, and delivers a premium monthly living allowance of 1,400 EUR (approximately 88,000 PHP) for the entire 2-year graduate duration. Recipients study in at least three distinct European universities across different EU nations. It requires an elite undergraduate academic record (GWA 90% or equivalent), a comprehensive statement of purpose, academic essays, and dual letters of recommendation. Portals open annually in October.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Private",
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All approved European joint master tracks"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 90.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Filipino Global Scholars"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 88000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 2200000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-10-01",
+    "application_deadline": "2027-01-15",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": "2025-10-05",
+    "last_close_date": "2026-01-20",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:32:00.383865",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 91,
+    "verification_bundle": "international",
+    "title": "Chevening Scholarship",
+    "provider": "FCDO / UK Government",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.chevening.org/apply",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "UK Government fully funded one-year master's program in the United Kingdom. Highly competitive global selection based on leadership, networking, career plan, and study proposal. Requires at least 2800 hours of post-graduation work experience and two-year return commitment to the Philippines after completion.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "ESSAY",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-08-05",
+    "application_deadline": "2026-10-07",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T13:53:24.921553",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  }
+]

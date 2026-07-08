@@ -1,0 +1,219 @@
+[
+  {
+    "id": 39,
+    "verification_bundle": "lgu_provincial",
+    "title": "Bislig City Collegiate Scholarship Program",
+    "provider": "Bislig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.bislig.gov.ph",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "The Bislig City Scholarship Program (BCSP) is a localized LGU mandate in Caraga Region enacted to finance undergraduate degrees for local youths. Applicants must confirm 3 consecutive years of residency in Bislig City, present a clean barangay record, and maintain a GWA of 82% throughout college. It provides a flat 12,000 PHP annual educational grant to assist with registration expenses. Submissions are queued physically at the Bislig City Higher Education Desk or via their primary LGU landing page.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "Region XIII - Caraga"
+    ],
+    "eligible_cities": [
+      "Bislig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate tracks"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 240000,
+    "min_gwa_normalized": 82.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Provincial Achievers"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 12000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-01",
+    "application_deadline": "2026-07-20",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-06-10",
+    "last_close_date": "2025-07-25",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:30:47.903521",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  },
+  {
+    "id": 49,
+    "verification_bundle": "lgu_provincial",
+    "title": "Cebu Province CP GIFTS Program",
+    "provider": "Cebu Provincial Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Need",
+    "primary_link": "https://www.cebu.gov.ph",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "The Cebu Province Grants Intended for Tertiary Students (CP-GIFTS) is a massive provincial scholarship initiative under the Office of the Governor. It funds 5,900 concurrent slots for poor but deserving students living across the municipalities and component cities of Cebu Province. Applicants must study at designated SUCs, LUCs, or partner private schools within Cebu and maintain a minimum GWA of 85%. Household income must not cross 200,000 PHP annually. It grants a definitive flat sum of 10,000 PHP per semester for school requirements. A mandatory return component requires executing 160 hours of verified community civic service within the student's home municipality.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "Region VII - Central Visayas"
+    ],
+    "eligible_cities": [],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All accredited degrees in Cebu"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 200000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Provincial Rural Youth"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 20000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": true,
+    "application_open_date": "2026-06-01",
+    "application_deadline": "2026-07-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-06-15",
+    "last_close_date": "2025-07-30",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:31:06.404111",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 51,
+    "verification_bundle": "lgu_provincial",
+    "title": "Tabuk City College Academic Scholarship",
+    "provider": "Tabuk City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Need",
+    "primary_link": "https://www.tabuk.gov.ph",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "Established under Tabuk City Ordinance No. 02 Series of 2018, this program supports tertiary students residing in Tabuk City, Kalinga Province (CAR). It targets low-income households with a maximum annual income cap of 120,000 PHP. Students must maintain a passing GWA of 75% with zero dropped classes to remain qualified. It awards a flat-rate cash assistance grant of 4,000 PHP per semester directly paid to students to handle living costs. Applications are reviewed by the Tabuk City Scholarship Committee at the City Youth and Sports Development Office.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "CAR"
+    ],
+    "eligible_cities": [
+      "Tabuk"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All standard tracks"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 120000,
+    "min_gwa_normalized": 75.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "IP"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 8000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-07-01",
+    "application_deadline": "2026-08-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2025-07-05",
+    "last_close_date": "2025-09-02",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:31:12.199169",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  }
+]

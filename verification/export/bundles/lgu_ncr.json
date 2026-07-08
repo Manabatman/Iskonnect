@@ -1,0 +1,855 @@
+[
+  {
+    "id": 21,
+    "verification_bundle": "lgu_ncr",
+    "title": "Pasig City Scholarship Program",
+    "provider": "Pasig City LGU",
+    "provider_type": "LGU",
+    "scholarship_type": "Need",
+    "primary_link": "https://pasigcity.gov.ph",
+    "link_status": "broken",
+    "data_status": "broken_link",
+    "description": "Local scholarship for Pasig City residents.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Pasig City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Business",
+      "Engineering",
+      "Education"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": 400000,
+    "min_gwa_normalized": 85.0,
+    "min_age": 16,
+    "max_age": 30,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 3000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 70000,
+    "required_documents": [
+      "ITR",
+      "BIRTH_CERT",
+      "BARANGAY_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-04-01",
+    "application_deadline": "2026-06-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": null,
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "previous_cycle",
+    "last_verified_at": "2026-07-08T14:45:16.659048",
+    "verification_source": "csv_import",
+    "is_active": true,
+    "verification_priority": "high"
+  },
+  {
+    "id": 22,
+    "verification_bundle": "lgu_ncr",
+    "title": "Quezon City Scholarship",
+    "provider": "Quezon City LGU",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://quezoncity.gov.ph",
+    "link_status": "ok",
+    "data_status": null,
+    "description": "Scholarship for QC residents pursuing higher education.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Quezon City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Business",
+      "Engineering",
+      "Education"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": 400000,
+    "min_gwa_normalized": 88.0,
+    "min_age": 16,
+    "max_age": 35,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 3500,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 75000,
+    "required_documents": [
+      "ITR",
+      "BIRTH_CERT",
+      "BARANGAY_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-04-01",
+    "application_deadline": "2026-07-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": null,
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "open",
+    "last_verified_at": "2026-07-08T14:45:16.659048",
+    "verification_source": "csv_import",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 25,
+    "verification_bundle": "lgu_ncr",
+    "title": "Pasig City Regular Academic Scholarship",
+    "provider": "Pasig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://scholars.pasigcity.gov.ph",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "The Pasig City Regular Academic Scholarship is designed for residents of Pasig City who demonstrate high academic performance and are enrolled in recognized higher education institutions. This program provides comprehensive tuition assistance and stipends to support college education for local youths. Applicants must maintain a minimum GWA of 85% or equivalent, with no grade lower than 85% in any subject. Eligibility requires presenting a valid Pasig City LGU ID or Barangay Certificate of Residency proving at least 3 years of residency, and registered voter status for parents or applicants of legal age. Application steps involve registering online via the official Pasig Scholarship portal, uploading scanned requirements, and attending an orientation once approved. Highly recurring cycle opening every first semester of the academic year. Financial need is factored via an annual family income cap of 300,000 PHP.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Pasig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All accredited undergraduate degrees"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 300000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "4Ps/Listahanan"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 1500,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 25000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "TOR"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-07-01",
+    "application_deadline": "2026-08-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-07-05",
+    "last_close_date": "2025-08-20",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:30:07.235980",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  },
+  {
+    "id": 26,
+    "verification_bundle": "lgu_ncr",
+    "title": "Pasig City Arts and Design Scholarship",
+    "provider": "Pasig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Affiliation",
+    "primary_link": "https://scholars.pasigcity.gov.ph",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "This dedicated track supports creative individuals residing in Pasig City who pursue fields in fine arts, digital design, music, performing arts, or literature. Eligible applicants must showcase a portfolio or pass a talent audition managed by the Pasig Cultural Affairs Office. Academic requirements are set at a minimum GWA of 80%. Benefits include school fees financial aid and materials allowances. Registration is completed through the online portal, followed by an in-person portfolio review.",
+    "eligible_levels": [
+      "College",
+      "Grade 11",
+      "Grade 12"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Pasig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "Fine Arts",
+      "Digital Design",
+      "Music",
+      "Performing Arts"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 350000,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Artists and Creatives"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 1500,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 28000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "FORM_137",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-08-01",
+    "application_deadline": "2026-09-10",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-08-05",
+    "last_close_date": "2025-09-15",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:30:09.994883",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  },
+  {
+    "id": 27,
+    "verification_bundle": "lgu_ncr",
+    "title": "Taguig LANI Premier Scholarship",
+    "provider": "Taguig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://tcu.edu.ph/lani-scholarship",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "The Lifeline Assistance for Neighbors in Need (LANI) Premier Scholarship is Taguig City's flagship merit track for top-tier residents studying in prestigious private universities or high-cost specialized institutions (e.g., UP, DLSU, ADMU, UST, Mapua). Applicants must be registered voters of Taguig for at least 3 years and have a minimum GWA of 90% (1.50 or better) with zero failing grades. It offers substantial financial aid up to 50,000 PHP per semester to directly cover tuition fees and modern learning tools. Applications are submitted via the Taguig LANI portal or at the Taguig Civic Center scholarship desk. Highly structured and strictly recurring every semester.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Taguig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "Top-tier institutional degrees"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 600000,
+    "min_gwa_normalized": 90.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Top 10 Percent Graduates"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 3000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 100000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "TOR"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-06-20",
+    "application_deadline": "2026-07-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2026-01-05",
+    "last_close_date": "2026-02-15",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:30:23.581976",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 28,
+    "verification_bundle": "lgu_ncr",
+    "title": "Taguig LANI Priority Scholarship",
+    "provider": "Taguig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://tcu.edu.ph/lani-scholarship",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "This specific LANI track directly targets priority fields of study essential for national development and city workforce planning, including STEM, digital engineering, data analytics, special education, and specialized medical courses. Eligible applicants need a minimum GWA of 82%. Financial benefits are elevated compared to basic tracks, supplying up to 30,000 PHP per semester. Priority status is also given to low-income applicants, PWDs, and dependents of solo parents.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Taguig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical"
+    ],
+    "eligible_courses_specific": [
+      "STEM and Allied Medical Courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 350000,
+    "min_gwa_normalized": 82.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "PWD",
+      "Solo Parent Dependent"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 2500,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 60000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "TOR",
+      "4PS_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-20",
+    "application_deadline": "2026-07-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2026-01-05",
+    "last_close_date": "2026-02-15",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:30:25.671506",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 29,
+    "verification_bundle": "lgu_ncr",
+    "title": "Taguig LANI LCU and SUC Assistance Scholarship",
+    "provider": "Taguig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://tcu.edu.ph/lani-scholarship",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "This scholarship is specially tailored for Taguig residents who are already utilizing the Free Higher Education law at State Universities and Colleges (SUCs) or Local Colleges and Universities (LCUs) like Taguig City University (TCU) or PUP. Since tuition is free, this track converts assistance into a pure monthly cash living stipend of 1,500 PHP plus 2,000 PHP per semester for books. Requires a GWA of 80% and zero failures. Online submission occurs via the unified TCU-LANI interface.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Taguig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "SUC and LCU courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 250000,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "LCU Students",
+      "SUC"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": 1500,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 19000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-20",
+    "application_deadline": "2026-07-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2026-01-05",
+    "last_close_date": "2026-02-15",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:30:26.941782",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 31,
+    "verification_bundle": "lgu_ncr",
+    "title": "Makati City SUC and Priority Courses Scholarship",
+    "provider": "Makati City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.makati.gov.ph",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "This LGU track caters to Makati residents enrolled in State Universities and Colleges (outside of UMak) pursuing priority industrial fields like IT, engineering, and digital science. It grants 20,000 PHP per semester to offset learning materials, transportation, and field training expenses. It requires 5 years of residency and an overall GWA of 82% (2.25) with no grades lower than 80%. Applications are handled through the Makati Education Department at City Hall.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Makati"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT"
+    ],
+    "eligible_courses_specific": [
+      "IT and Engineering courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 300000,
+    "min_gwa_normalized": 82.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Low to Middle Income"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": 2000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 40000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-01",
+    "application_deadline": "2026-07-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-06-02",
+    "last_close_date": "2025-07-20",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:30:29.154570",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 33,
+    "verification_bundle": "lgu_ncr",
+    "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program",
+    "provider": "Valenzuela City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://valenzuela.gov.ph/drpioscholarship",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "The Dr. Pio Valenzuela Scholarship Program is an intensive LGU merit-need initiative by the Valenzuela City Government. It targets financially challenged but academically elite student residents. Eligible individuals must have spent at least 4 consecutive years in Valenzuela City, graduated Senior High School with a GWA of 85% or higher, and hold zero grades lower than 85% in Grades 11 and 12. Crucially, the total annual household income must not exceed 120,000 PHP. The program awards a financial support grant of 30,000 PHP per year (15,000 PHP per semester) for tuition and school compliance. Portal submissions require uploading digital copies of ITR or Indigency certificates, Form 138/137, and Barangay clearance.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Valenzuela"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate degrees"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 120000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Indigent Achievers"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 2000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 30000,
+    "required_documents": [
+      "FORM_137",
+      "BARANGAY_CERT",
+      "ITR",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-15",
+    "application_deadline": "2026-07-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-06-20",
+    "last_close_date": "2025-08-05",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:30:39.207600",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 34,
+    "verification_bundle": "lgu_ncr",
+    "title": "NavotaAs Academic College Scholarship",
+    "provider": "Navotas City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.navotas.gov.ph",
+    "link_status": "ok",
+    "data_status": "active",
+    "description": "The NavotaAs Academic Scholarship Program is the baseline higher-education track for residents of Navotas City. It supports incoming first-year college students who graduated in the top 25% of their Senior High School class. Eligible applicants must have parents who are registered voters of Navotas. When utilized at the Navotas Polytechnic College (NPC), it yields full tuition exemption plus 22,000 PHP per year for allowances. If the student passes into other prominent universities outside Navotas, the grant upgrades to a merit value of 262,000 PHP per year to handle high tuition. Applications are manually screened by the Navotas Scholarship Secretariat.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Navotas"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All accredited college paths"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 400000,
+    "min_gwa_normalized": 88.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Top Academic Quartile"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 2200,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 262000,
+    "required_documents": [
+      "FORM_137",
+      "BARANGAY_CERT",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-01",
+    "application_deadline": "2026-07-10",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-06-05",
+    "last_close_date": "2025-07-15",
+    "application_status": "open",
+    "last_verified_at": "2026-06-30T12:30:41.191222",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 48,
+    "verification_bundle": "lgu_ncr",
+    "title": "Muntinlupa CARES Financial Assistance Program",
+    "provider": "Muntinlupa Scholarship Division",
+    "provider_type": "LGU",
+    "scholarship_type": "Need",
+    "primary_link": "https://www.muntinlupacity.gov.ph",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "The Continuing Assistance for Reintegrating Students (CARES) is a equity-driven financial assistance mechanism for general college residents of Muntinlupa who are enrolled in public SUCs or local community colleges. It requires a baseline GWA of 80% (2.5) with no incomplete or failing grades. It disburses a direct financial support grant of 5,000 PHP per semester to cover transport and digital connectivity needs. Financial status is verified via Barangay Certificate of Indigency or low-income ITR. Registration occurs semestrally via the MSD localized offices.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Muntinlupa"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All standard courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 200000,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Low Income Residents"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": 1000,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 10000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "4PS_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-06-01",
+    "application_deadline": "2026-07-20",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2026-01-10",
+    "last_close_date": "2026-02-25",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:31:03.985725",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  },
+  {
+    "id": 50,
+    "verification_bundle": "lgu_ncr",
+    "title": "Parañaque City Tertiary Education Financial Assistance Program",
+    "provider": "Parañaque City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.paranaquecity.gov.ph",
+    "link_status": "broken",
+    "data_status": "needs_review",
+    "description": "The Tertiary Education Financial Assistance Program (TEFAP) is an open-access equity grant run by the Parañaque LGU for resident college students. To fit varying academic profiles, the cash stipend scales directly with academic performance: students maintaining a GWA of 88% and above receive 6,000 PHP per semester, while those with a GWA between 80% and 87% receive 4,000 PHP per semester. Requirements demand 3 years of residency and a parent's voter registration record inside Parañaque. Online registrations are queued via the local city hall portal.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Parañaque"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate paths"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 300000,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "General College Residents"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 12000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "TOR",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-07-01",
+    "application_deadline": "2026-08-20",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2025-07-10",
+    "last_close_date": "2025-08-25",
+    "application_status": "needs_verification",
+    "last_verified_at": "2026-06-30T12:31:08.013145",
+    "verification_source": "manual",
+    "is_active": true,
+    "verification_priority": "high"
+  }
+]

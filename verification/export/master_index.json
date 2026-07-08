@@ -1,0 +1,222 @@
+{
+  "exported_at": "2026-07-08T15:17:47.429637+00:00",
+  "active_only_filter": false,
+  "total_exported": 91,
+  "active_count": 55,
+  "archived_count": 36,
+  "bundle_count": 15,
+  "bundles": {
+    "ched_unifast": {
+      "title": "CHED + UniFAST + BPMSP (Higher Education)",
+      "count": 5,
+      "high_priority_count": 4,
+      "scholarship_ids": [
+        1,
+        5,
+        6,
+        19,
+        76
+      ]
+    },
+    "dost": {
+      "title": "DOST-SEI",
+      "count": 2,
+      "high_priority_count": 2,
+      "scholarship_ids": [
+        2,
+        3
+      ]
+    },
+    "tesda": {
+      "title": "TESDA + BPMSP (TVET)",
+      "count": 2,
+      "high_priority_count": 1,
+      "scholarship_ids": [
+        4,
+        77
+      ]
+    },
+    "gsis_sss": {
+      "title": "GSIS + SSS",
+      "count": 3,
+      "high_priority_count": 3,
+      "scholarship_ids": [
+        7,
+        8,
+        78
+      ]
+    },
+    "owwa_dswd_ncip": {
+      "title": "OWWA + DSWD + NCIP",
+      "count": 4,
+      "high_priority_count": 3,
+      "scholarship_ids": [
+        9,
+        52,
+        53,
+        57
+      ]
+    },
+    "military_affiliation": {
+      "title": "Military / uniformed service affiliation",
+      "count": 2,
+      "high_priority_count": 1,
+      "scholarship_ids": [
+        56,
+        62
+      ]
+    },
+    "lgu_ncr": {
+      "title": "LGU — NCR",
+      "count": 12,
+      "high_priority_count": 5,
+      "scholarship_ids": [
+        21,
+        22,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31,
+        33,
+        34,
+        48,
+        50
+      ]
+    },
+    "universities": {
+      "title": "Universities and colleges",
+      "count": 7,
+      "high_priority_count": 4,
+      "scholarship_ids": [
+        18,
+        23,
+        24,
+        40,
+        41,
+        45,
+        69
+      ]
+    },
+    "private_foundations": {
+      "title": "Private foundations (corporate)",
+      "count": 8,
+      "high_priority_count": 5,
+      "scholarship_ids": [
+        11,
+        13,
+        14,
+        15,
+        16,
+        59,
+        71,
+        75
+      ]
+    },
+    "sm_foundation": {
+      "title": "SM Foundation",
+      "count": 1,
+      "high_priority_count": 1,
+      "scholarship_ids": [
+        10
+      ]
+    },
+    "megaworld_foundation": {
+      "title": "Megaworld Foundation",
+      "count": 1,
+      "high_priority_count": 0,
+      "scholarship_ids": [
+        61
+      ]
+    },
+    "other_government": {
+      "title": "Other national government programs",
+      "count": 3,
+      "high_priority_count": 2,
+      "scholarship_ids": [
+        17,
+        20,
+        55
+      ]
+    },
+    "lgu_provincial": {
+      "title": "LGU — provincial / outside NCR",
+      "count": 3,
+      "high_priority_count": 2,
+      "scholarship_ids": [
+        39,
+        49,
+        51
+      ]
+    },
+    "international": {
+      "title": "International scholarships",
+      "count": 2,
+      "high_priority_count": 0,
+      "scholarship_ids": [
+        63,
+        91
+      ]
+    },
+    "archived_reference": {
+      "title": "Archived / historical reference",
+      "count": 36,
+      "high_priority_count": 0,
+      "scholarship_ids": [
+        12,
+        30,
+        32,
+        35,
+        36,
+        37,
+        38,
+        42,
+        43,
+        44,
+        46,
+        47,
+        54,
+        58,
+        60,
+        64,
+        65,
+        66,
+        67,
+        68,
+        70,
+        72,
+        73,
+        74,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90
+      ]
+    }
+  },
+  "conversation_order": [
+    "ched_unifast",
+    "dost",
+    "tesda",
+    "gsis_sss",
+    "owwa_dswd_ncip",
+    "military_affiliation",
+    "lgu_ncr",
+    "universities",
+    "private_foundations",
+    "sm_foundation",
+    "megaworld_foundation",
+    "other_government",
+    "lgu_provincial",
+    "international"
+  ]
+}

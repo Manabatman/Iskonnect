@@ -1,0 +1,2289 @@
+[
+  {
+    "id": 12,
+    "verification_bundle": "archived_reference",
+    "title": "Gokongwei Brothers Foundation Scholarship",
+    "provider": "Gokongwei Brothers Foundation",
+    "provider_type": "Private",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://gokongweifoundation.org/scholarship",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Engineering and technology scholarship for underprivileged students.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "Luzon",
+      "NCR"
+    ],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": 400000,
+    "min_gwa_normalized": 92.0,
+    "min_age": 17,
+    "max_age": 24,
+    "priority_groups": [
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 5000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 100000,
+    "required_documents": [
+      "ITR",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "TOR",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-02-01",
+    "application_deadline": "2026-04-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": null,
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "archived",
+    "last_verified_at": "2026-07-08T14:45:16.659048",
+    "verification_source": "csv_import",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 30,
+    "verification_bundle": "archived_reference",
+    "title": "Taguig Lifeline Bar and Board Review Assistance",
+    "provider": "Taguig City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Affiliation",
+    "primary_link": "https://tcu.edu.ph/lani-scholarship",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "A specialized, one-time financial grant for Taguig residents who have completed their undergraduate degrees in Law, Engineering, Nursing, Accountancy, or Education and are preparing for professional licensure examinations (PRC Board Exams or Supreme Court Bar Exam). Provides a lump-sum financial grant of 15,000 PHP to 30,000 PHP to pay for review center enrollments and examination fees. Requires graduation proof, a certification from an official review center, and voter verification. No GWA check is enforced post-graduation.",
+    "eligible_levels": [
+      "Graduate",
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Taguig"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "Education",
+      "Medical",
+      "Business"
+    ],
+    "eligible_courses_specific": [
+      "Board or Bar review courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 600000,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Board Exam Takers"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 30000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "TOR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-04-01",
+    "application_deadline": "2026-05-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "rolling",
+    "last_open_date": "2025-04-05",
+    "last_close_date": "2025-05-28",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:28.369217",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 32,
+    "verification_bundle": "archived_reference",
+    "title": "University of Makati Token Fee Exemption Program",
+    "provider": "University of Makati (UMak)",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.umak.edu.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The University of Makati (UMak) Token Fee Exemption Program serves as an institutional academic scholarship that waives the remaining standard token fees for high-performing student residents of Makati. Administered by the UMak Scholarship Office, applicants must achieve a GWA of 1.75 (88%) or better during their semester and maintain a full academic load. The program converts academic excellence directly into fully zeroed tuition liabilities and offers priority enlistment. Application is processed entirely internally through the UMak student portal at the close of every grading period.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Makati"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All UMak college courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 250000,
+    "min_gwa_normalized": 88.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "UMak Internals"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 5000,
+    "required_documents": [
+      "TOR",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-10",
+    "application_deadline": "2026-06-25",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "semester",
+    "last_open_date": "2025-05-15",
+    "last_close_date": "2025-06-30",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:36.288053",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 35,
+    "verification_bundle": "archived_reference",
+    "title": "Marikina City Medical Scholarship Program",
+    "provider": "Marikina City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.marikina.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Marikina City Medical Scholarship Program is a localized government intervention to support aspiring medical doctors who reside in Marikina City. It covers full tuition and provides educational assistance up to 150,000 PHP per year for students accepted into partner Doctor of Medicine programs (including PLM, FEU-NRMF, UST, MCU, St. Luke's, Our Lady of Fatima University). Applicants must not exceed 30 years of age, must possess a clean record of good moral character, and maintain a household income below 600,000 PHP. Return service dictates that the recipient must practice medicine within the Marikina public healthcare network or city clinics for a duration matching the length of the scholarship.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Marikina"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Private",
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "Medical"
+    ],
+    "eligible_courses_specific": [
+      "Doctor of Medicine (MD)"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 600000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": 30,
+    "priority_groups": [
+      "Aspiring Physicians"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 4000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 150000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-10",
+    "last_close_date": "2025-06-20",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:42.275287",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 36,
+    "verification_bundle": "archived_reference",
+    "title": "Cebu City College Scholarship Program",
+    "provider": "Cebu City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.cebucity.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Cebu City College Scholarship Program (CCCSP) targets urban youth residents who graduated from public high schools located specifically within the north and south districts of Cebu City. It provides 10,000 PHP per semester for tuition if the recipient enrolls in accredited private universities, or 2,500 PHP per semester for books and uniform allowances if they enter tuition-free SUCs (like CTU or CNU). Requires a voter's certification from Cebu City and a minimum GWA of 80%. Applications are handled at the Cebu City Sports Complex scholarship secretariat.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "Region VII - Central Visayas"
+    ],
+    "eligible_cities": [
+      "Cebu City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate programs"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 350000,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Urban Public High Graduates"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 20000,
+    "required_documents": [
+      "FORM_137",
+      "BARANGAY_CERT",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-15",
+    "application_deadline": "2026-06-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-20",
+    "last_close_date": "2025-07-05",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:44.346999",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 37,
+    "verification_bundle": "archived_reference",
+    "title": "Davao City STEP FA Category B",
+    "provider": "Davao City Government (EBSU)",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://davaocity.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Administered by Davao City's EBSU, the STEP Category B serves as the mid-tier merit assistance channel. It requires a baseline GWA of 88% with zero grade deficiencies. It offers a flat grant of 20,000 PHP per semester (40,000 PHP annually) to help cover tuition and computing materials at any CHED-accredited college in Region XI. Candidates must verify local voter status and clear the household income check managed by the local social services office.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "Region XI - Davao"
+    ],
+    "eligible_cities": [
+      "Davao City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All accredited college courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 300000,
+    "min_gwa_normalized": 88.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Middle Class Achievers"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": 2000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 40000,
+    "required_documents": [
+      "FORM_137",
+      "BARANGAY_CERT",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-10",
+    "last_close_date": "2025-06-25",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:45.582214",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 38,
+    "verification_bundle": "archived_reference",
+    "title": "Davao City Special Educational Assistance Program for Lumad",
+    "provider": "Davao City Government (EBSU)",
+    "provider_type": "LGU",
+    "scholarship_type": "Need",
+    "primary_link": "https://davaocity.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Special Educational Assistance Program (SEAP) for Lumad is a targeted indigenous equity track run by Davao City EBSU. It is exclusively reserved for college students belonging to the recognized Indigenous Cultural Communities (IPs/Lumad) within ancestral domains of Davao City (such as the Ata, Matigsalug, Maranao, and Kagan tribes). It offers a full living subsidy of 15,000 PHP per semester alongside basic tuition assistance. The academic barrier requires a standard passing mark (75% GWA). Crucially, a formal Tribal Certification from the tribal chieftain and validation from the NCIP local office are mandatory documents.",
+    "eligible_levels": [
+      "College",
+      "TVET"
+    ],
+    "eligible_regions": [
+      "Region XI - Davao"
+    ],
+    "eligible_cities": [
+      "Davao City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 200000,
+    "min_gwa_normalized": 75.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "IP"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": 2000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 30000,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "TOR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-10",
+    "last_close_date": "2025-06-25",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:46.851646",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 42,
+    "verification_bundle": "archived_reference",
+    "title": "Ateneo Law School Financial Aid Program",
+    "provider": "Ateneo Law School",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.ateneo.edu",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Ateneo Law School Financial Aid Program provides tuition assistance grants ranging from 25% to 100% for students enrolled in the Juris Doctor (JD) program at the Rockwell campus. Managed by the ALS Scholarship Committee, awards are heavily based on exceptional undergraduate academic honors, high scores in the Philippine Law School Admission test, and certified financial need. Maintenance requires keeping a minimum yearly weighted average of 82 (passing) and fulfilling service hours within the ALS legal aid clinics or administrative units.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "Business"
+    ],
+    "eligible_courses_specific": [
+      "Juris Doctor (JD)"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 600000,
+    "min_gwa_normalized": 82.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Aspiring Lawyers"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 120000,
+    "required_documents": [
+      "TOR",
+      "ITR",
+      "GOOD_MORAL",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-04-01",
+    "application_deadline": "2026-05-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-04-10",
+    "last_close_date": "2025-06-02",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:51.928689",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 43,
+    "verification_bundle": "archived_reference",
+    "title": "DLSU Star Scholars Program",
+    "provider": "De La Salle University",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.dlsu.edu.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The DLSU Star Scholars Program is an elite academic recruitment track that signs the absolute top scorers of the DLSU College Admission Test (DCAT) nationwide. It waives 100% of all tuition, laboratory, and miscellaneous fees for the entire duration of the program, supplies a monthly cash living stipend of 8,000 PHP, a specialized laptop computer allowance upon entry, and guaranteed faculty mentorship for undergraduate research. Academic retention mandates a strict cumulative GWA of 3.0 out of 4.0 (90% normalized) with zero dropped courses.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate offerings"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 90.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Elite DCAT Performers"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 8000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 250000,
+    "required_documents": [
+      "TOR",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-15",
+    "last_close_date": "2025-07-05",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:52.997155",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 44,
+    "verification_bundle": "archived_reference",
+    "title": "DLSU Archer Achievers Scholarship",
+    "provider": "De La Salle University",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.dlsu.edu.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Archer Achievers Scholarship is automatically extended by DLSU to students who graduate as the absolute valedictorians and salutatorians of top-performing high schools accredited by the university. It automatically confers a 100% tuition waiver for the student's selected undergraduate curriculum. No separate financial files are required, but students must preserve a high semestral GWA of 2.50 out of 4.0 (83% normalized) to sustain the benefit across academic years.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate tracks"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 83.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "High School Valedictorians"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 140000,
+    "required_documents": [
+      "TOR",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-15",
+    "last_close_date": "2025-07-05",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:54.121773",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 46,
+    "verification_bundle": "archived_reference",
+    "title": "Mindanao State University SASE Academic Scholarship",
+    "provider": "Mindanao State University System",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.msumain.edu.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Mindanao State University System Academic Scholarship is awarded to incoming undergraduate freshmen who score in the top 5% of the annual MSU System Admission and Scholarship Examination (SASE) across Mindanao. Administered by the MSU Admissions Office, it offers full institutional tuition waivers, free dormitory lodging within the university campus, and a semestral book allowance. Grantees must maintain a GWA of 2.0 (85%) per semester to sustain benefits. This program forms a vital pipeline for students in conflict-affected regions.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "BARMM",
+      "Region IX - Zamboanga Peninsula",
+      "Region X - Northern Mindanao",
+      "Region XI - Davao",
+      "Region XII - Soccsksargen",
+      "Region XIII - Caraga"
+    ],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical",
+      "Business",
+      "Agriculture",
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "All undergraduate tracks"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Mindanao Youth"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 20000,
+    "required_documents": [
+      "TOR",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-03-01",
+    "application_deadline": "2026-05-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-03-10",
+    "last_close_date": "2025-05-20",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:30:56.069545",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 47,
+    "verification_bundle": "archived_reference",
+    "title": "Muntinlupa MOST Academic Scholarship",
+    "provider": "Muntinlupa Scholarship Division",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.muntinlupacity.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Muntinlupa Outstanding Students (MOST) Scholarship is an elite academic grant given to the top 10 highest-ranking graduating Senior High School students from every public and private high school operating in Muntinlupa City. Managed by the Muntinlupa Scholarship Division (MSD), it applies strictly to individuals who secure entry into premier State Universities (such as UP Diliman/Los Banos) or top-tier private institutions. It offers absolute tuition coverage up to 100,000 PHP annually, alongside a high monthly stipend of 5,000 PHP. Academic maintenance is strictly tied to a GWA of 1.50 (90%) with zero failures. Applications require certified high school ranking documents and automated validation.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Muntinlupa"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Education",
+      "Medical"
+    ],
+    "eligible_courses_specific": [
+      "Top tier national courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 500000,
+    "min_gwa_normalized": 90.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Top Valedictorians"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 5000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 130000,
+    "required_documents": [
+      "FORM_137",
+      "GOOD_MORAL",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-05",
+    "last_close_date": "2025-06-20",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:31:01.041045",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 54,
+    "verification_bundle": "archived_reference",
+    "title": "DOH Medical Scholarship and Return Service Program",
+    "provider": "Department of Health",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://doh.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The DOH Medical Scholarship and Return Service (MSRS) Program is a major sector-specific government intervention operating under the 'Doktor Para sa Bayan' Act (RA 11509) in partnership with CHED. It funds full medical education (Doctor of Medicine) for qualified Filipino students across certified state and partner private universities. It covers 100% of tuition, laboratory fees, provides a high monthly living allowance of 15,000 PHP, a specialized book/equipment allowance of 20,000 PHP per semester, and basic board exam review subsidies. Eligible applicants must hold a Bachelor's degree with a solid GWA, pass the medical school entrance and NMAT, and prioritize low-income roots or origin from underserved rural towns. Return service requires serving as a public health officer in a government hospital or rural health unit (RHU) for 1 year for every year of scholarship.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "Medical"
+    ],
+    "eligible_courses_specific": [
+      "Doctor of Medicine (MD)"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 600000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Rural Public Health"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 15000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 250000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ITR",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-05-01",
+    "application_deadline": "2026-06-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-05-15",
+    "last_close_date": "2025-07-05",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:31:17.780959",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 58,
+    "verification_bundle": "archived_reference",
+    "title": "Security Bank Foundation State Universities Scholarship",
+    "provider": "Security Bank Foundation",
+    "provider_type": "Private",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.securitybank.com",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Security Bank Foundation 'Scholars for Better Communities' State Universities Scholarship provides full educational stipends to low-income student leaders enrolled in partner public SUCs (such as UP Diliman, MSU, or regional centers). It provides a high flat allowance of 50,000 PHP per year to cover learning modules, laptops, and transit costs. Applicants must present a GWA of 85% or higher, zero failed subjects, and clear an interview with Security Bank HR personnel. No return service is mandated, but scholars receive priority onboarding for corporate internships.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Business",
+      "IT"
+    ],
+    "eligible_courses_specific": [
+      "Finance Accounting and IT courses"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": 350000,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Low Income Achievers"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 50000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-04-15",
+    "application_deadline": "2026-06-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-04-20",
+    "last_close_date": "2025-06-25",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:31:23.825216",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 60,
+    "verification_bundle": "archived_reference",
+    "title": "Taiwan ICDF Higher Education Scholarship Program",
+    "provider": "Taiwan International Cooperation and Development Fund",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.icdf.org.tw",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "The Taiwan ICDF Higher Education Scholarship Program is a full international bilateral grant offered to Filipino citizens for Master's or Doctoral programs at partner Taiwanese universities. It provides full tuition coverage, modern campus housing, comprehensive health insurance, and a monthly stipend of 18,000 TWD (Master's) or 20,000 TWD (PhD) (approximately 32,000 to 36,000 PHP). Focus areas are restricted to STEM, tropical agriculture, and electronic engineering. Requires an undergraduate GWA of 85% or better and an interview by the Taipei Economic and Cultural Office (TECO) in Manila.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "Agriculture"
+    ],
+    "eligible_courses_specific": [
+      "STEM and Tropical Agriculture fields"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 85.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Advanced Tech Researchers"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 35000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 900000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-01-01",
+    "application_deadline": "2026-03-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-01-05",
+    "last_close_date": "2025-03-15",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T12:31:33.743661",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 64,
+    "verification_bundle": "archived_reference",
+    "title": "Global Korea Scholarship (GKS) Graduate",
+    "provider": "NIIED",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.studyinkorea.go.kr",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "South Korean government scholarship for master's and doctoral degrees including mandatory one-year Korean language training. Provides round-trip airfare, tuition, living allowance, and health insurance. Embassy Track allows applying to up to three universities; applicants must be under 40.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": 40,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "ESSAY",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-02-12",
+    "application_deadline": "2026-02-25",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2026-02-12",
+    "last_close_date": "2026-02-25",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:48.552674",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 65,
+    "verification_bundle": "archived_reference",
+    "title": "Global Korea Scholarship (GKS) Undergraduate",
+    "provider": "NIIED",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.studyinkorea.go.kr",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "South Korean government scholarship for undergraduate bachelor's degrees in Korea. Fully funded including airfare, tuition, living allowance, and health insurance with mandatory Korean language training. Embassy Track application cycle typically opens in September.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2025-09-15",
+    "application_deadline": "2025-09-30",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-09-15",
+    "last_close_date": "2025-09-30",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:51.770088",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 66,
+    "verification_bundle": "archived_reference",
+    "title": "CHED-UniFAST Tertiary Education Subsidy (TES)",
+    "provider": "UniFAST / CHED",
+    "provider_type": "Government",
+    "scholarship_type": "Need",
+    "primary_link": "https://tes.unifast.gov.ph",
+    "link_status": null,
+    "data_status": "active",
+    "description": "National need-based tertiary education subsidy administered through HEIs via the UniFAST portal. Targets underprivileged and 4Ps/Listahanan students enrolled in CHED-recognized programs. Provides allowance for tuition gaps, books, and living expenses based on prioritization guidelines.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "4Ps/Listahanan",
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "4PS_CERT",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": null,
+    "application_deadline": null,
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:53.243308",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 67,
+    "verification_bundle": "archived_reference",
+    "title": "TESDA Private Education Student Financial Assistance",
+    "provider": "TESDA",
+    "provider_type": "Government",
+    "scholarship_type": "Need",
+    "primary_link": "https://www.tesda.gov.ph",
+    "link_status": null,
+    "data_status": "active",
+    "description": "TESDA-administered financial assistance for students in private TVET institutions. Rolling applications processed through regional and provincial TESDA offices. Targets underprivileged learners pursuing technical-vocational education and training programs.",
+    "eligible_levels": [
+      "TVET"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "BIRTH_CERT",
+      "FORM_137",
+      "BARANGAY_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": null,
+    "application_deadline": null,
+    "academic_year_target": "2026-2027",
+    "cycle_type": "rolling",
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:54.672890",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 68,
+    "verification_bundle": "archived_reference",
+    "title": "PUP Entrance Scholarship Program",
+    "provider": "PUP",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.pup.edu.ph/students/scholarships",
+    "link_status": null,
+    "data_status": "active",
+    "description": "Institutional merit scholarship for exemplary incoming PUP freshmen who qualify through the university entrance examination. Targets high-performing qualifiers with financial need considerations including PWD, IP, and solo parent dependents.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "IP",
+      "PWD",
+      "Solo Parent Dependent",
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": null,
+    "application_deadline": null,
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:55.918915",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 70,
+    "verification_bundle": "archived_reference",
+    "title": "UP College of Law Scholarship Program",
+    "provider": "UP College of Law",
+    "provider_type": "Institutional",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://law.upd.edu.ph/call-for-scholarship-applications-ay-2025-2026/",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Institutional merit-and-need scholarship for UP College of Law students. Targets underprivileged, PWD, and IP law students with demonstrated financial need and academic standing. Highly recurring annual grant administered by the law college.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [
+      "Law"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "IP",
+      "PWD",
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "ITR",
+      "ESSAY",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2025-06-30",
+    "application_deadline": "2025-07-20",
+    "academic_year_target": "2025-2026",
+    "cycle_type": "annual",
+    "last_open_date": "2025-06-30",
+    "last_close_date": "2025-07-20",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:57.289828",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 72,
+    "verification_bundle": "archived_reference",
+    "title": "Gokongwei Brothers Foundation STEM-College Scholarship",
+    "provider": "Gokongwei Brothers Foundation",
+    "provider_type": "Private",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://philscholar.com/gbf-stem-college-scholarship/",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Annual corporate STEM scholarship for college students in engineering, IT, and related science fields. Covers tuition and provides allowances for scholars demonstrating academic merit and financial need. Annual cycle closed May 31, 2026 for current intake.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-04-07",
+    "application_deadline": "2026-05-31",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2026-04-07",
+    "last_close_date": "2026-05-31",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:52:58.616590",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 73,
+    "verification_bundle": "archived_reference",
+    "title": "DOST-SEI Undergraduate Scholarships (RA 7687 / Merit)",
+    "provider": "DOST-SEI",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://www.science-scholarships.ph/",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Premier national science scholarship for four- or five-year baccalaureate degrees in science and technology. RA 7687 targets underprivileged students; Merit track is open regardless of income. Benefits include tuition up to 40000 PHP per year, 8000 PHP monthly living allowance, and 10000 PHP annual learning materials allowance.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Medical",
+      "Agriculture"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 8000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 106000,
+    "required_documents": [
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL",
+      "ITR"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": true,
+    "application_open_date": "2025-10-13",
+    "application_deadline": "2025-11-22",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-10-13",
+    "last_close_date": "2025-11-22",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:01.555298",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 74,
+    "verification_bundle": "archived_reference",
+    "title": "Australia Awards Scholarships (Philippines)",
+    "provider": "Australian Government",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.australiaawardsphilippines.org/scholarships",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Fully funded master's degrees at Australian universities for Filipino citizens with at least 12 months Philippine residency and two years cumulative work experience. Covers tuition, return air travel, establishment allowance, living expenses, and health insurance. Requires a Re-Entry Action Plan for development work upon return.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Agriculture",
+      "IT",
+      "Business",
+      "Education",
+      "Arts"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "ESSAY",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-02-01",
+    "application_deadline": "2026-04-30",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": "2026-02-01",
+    "last_close_date": "2026-04-30",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:03.614799",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 79,
+    "verification_bundle": "archived_reference",
+    "title": "DOST-SEI Junior Level Science Scholarship (JLSS)",
+    "provider": "DOST-SEI",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.science-scholarships.ph/",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Scholarship for incoming third-year college students pursuing science and technology degrees. Requires strong university GWA and completion of the first two years of a four- or five-year STEM program. Provides tuition, monthly living allowance, and learning materials support similar to the undergraduate program.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Medical",
+      "Agriculture"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": 8000,
+    "benefit_books": true,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 106000,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": true,
+    "has_essay_requirement": false,
+    "has_return_service": true,
+    "application_open_date": "2026-04-13",
+    "application_deadline": "2026-05-15",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2026-04-13",
+    "last_close_date": "2026-05-15",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:10.759543",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 80,
+    "verification_bundle": "archived_reference",
+    "title": "MEXT Scholarship - Research Category",
+    "provider": "JICC / Embassy of Japan",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Japanese Government MEXT scholarship for Filipino college graduates pursuing master's or doctoral degrees in Japan. Requires a feasible research proposal in humanities, social sciences, or natural sciences. Provides tuition, monthly stipend, regional allowance, and roundtrip airfare. Applicants must be under 35 years old.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": 35,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "BIRTH_CERT",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-04-22",
+    "application_deadline": "2026-05-29",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": "2026-04-22",
+    "last_close_date": "2026-05-29",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:12.132770",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 81,
+    "verification_bundle": "archived_reference",
+    "title": "MEXT Scholarship - Undergraduate Track",
+    "provider": "JICC / Embassy of Japan",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Japanese Government MEXT scholarship for high school graduates pursuing undergraduate degrees in Japan. Open to applicants under 25 with strong academic records. Covers tuition, monthly stipend, and roundtrip travel for full degree study in Japan.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": 25,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-04-22",
+    "application_deadline": "2026-05-29",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": "2026-04-22",
+    "last_close_date": "2026-05-29",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:13.639858",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 82,
+    "verification_bundle": "archived_reference",
+    "title": "MEXT Scholarship - Specialized Training Track",
+    "provider": "JICC / Embassy of Japan",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Japanese Government MEXT scholarship for vocational and specialized training programs in Japan. Targets high school graduates under 25 seeking technical skills development. Provides tuition, stipend, and travel support for designated training courses.",
+    "eligible_levels": [
+      "TVET"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": 25,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-04-22",
+    "application_deadline": "2026-05-29",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": "2026-04-22",
+    "last_close_date": "2026-05-29",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:14.735620",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 83,
+    "verification_bundle": "archived_reference",
+    "title": "MEXT Scholarship - College of Technology (KOSEN)",
+    "provider": "JICC / Embassy of Japan",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Japanese Government MEXT scholarship for the College of Technology (KOSEN) five-year engineering program in Japan. Combines college and TVET-level technical training for high school graduates under 25. Covers tuition, stipend, and roundtrip airfare.",
+    "eligible_levels": [
+      "College",
+      "TVET"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": 25,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "FORM_137",
+      "BIRTH_CERT",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": "2026-04-22",
+    "application_deadline": "2026-05-29",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": "2026-04-22",
+    "last_close_date": "2026-05-29",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:15.385160",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 84,
+    "verification_bundle": "archived_reference",
+    "title": "GSIS Educational Subsidy Program (GESP)",
+    "provider": "Government Service Insurance System",
+    "provider_type": "Government",
+    "scholarship_type": "Need",
+    "primary_link": "https://www.gsis.gov.ph",
+    "link_status": null,
+    "data_status": "active",
+    "description": "Flat-rate educational grant of 10000 PHP for dependents of active GSIS members and permanent total disability pensioners. Open to all college courses without STEM restriction. Historically offered as a broad welfare benefit before the launch of the STEM-specific GSSP.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 10000,
+    "required_documents": [
+      "BIRTH_CERT",
+      "TOR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": null,
+    "application_deadline": null,
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:16.011517",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 85,
+    "verification_bundle": "archived_reference",
+    "title": "OWWA Education for Development Scholarship (EDSP)",
+    "provider": "Overseas Workers Welfare Administration",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://scholarship.owwa.gov.ph/",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Competitive scholarship for high-performing dependents of active OWWA members. Freshmen must be single, under 21, with SHS GWA of at least 80% and must pass the DOST-SEI qualifying exam. Provides up to 60000 PHP per school year for any four- or five-year baccalaureate course.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": 21,
+    "priority_groups": [
+      "OFW Dependent"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 60000,
+    "required_documents": [
+      "BIRTH_CERT",
+      "FORM_137",
+      "TOR",
+      "GOOD_MORAL"
+    ],
+    "has_qualifying_exam": true,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2025-11-10",
+    "application_deadline": "2025-11-28",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-11-10",
+    "last_close_date": "2025-11-28",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:16.599127",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 86,
+    "verification_bundle": "archived_reference",
+    "title": "OWWA OFW Dependent Scholarship Program (ODSP)",
+    "provider": "Overseas Workers Welfare Administration",
+    "provider_type": "Government",
+    "scholarship_type": "Need",
+    "primary_link": "https://scholarship.owwa.gov.ph/",
+    "link_status": null,
+    "data_status": "active",
+    "description": "Need-based scholarship for dependents of active OWWA members whose monthly salary does not exceed USD 600. Provides 20000 PHP per school year for baccalaureate or associate courses. Requires minimum 80% GWA for continuing eligibility.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "OFW Dependent"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 20000,
+    "required_documents": [
+      "BIRTH_CERT",
+      "FORM_137",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": null,
+    "application_deadline": null,
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": null,
+    "last_close_date": null,
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:17.818034",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 87,
+    "verification_bundle": "archived_reference",
+    "title": "OWWA Congressional Migrant Workers Scholarship (CMWSP)",
+    "provider": "Overseas Workers Welfare Administration",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-and-Need",
+    "primary_link": "https://scholarship.owwa.gov.ph/",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Congressional-funded scholarship for active OWWA members or dependents with combined household income of USD 2400 or less per year. Restricted to prioritized science and technology courses. Provides up to 60000 PHP per academic year with minimum 80% GWA requirement.",
+    "eligible_levels": [
+      "College"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT",
+      "Medical",
+      "Agriculture"
+    ],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": 80.0,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "OFW Dependent"
+    ],
+    "members_only": false,
+    "benefit_tuition": false,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": 60000,
+    "required_documents": [
+      "BIRTH_CERT",
+      "FORM_137",
+      "TOR",
+      "ITR"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2025-11-10",
+    "application_deadline": "2025-11-28",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2025-11-10",
+    "last_close_date": "2025-11-28",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:18.749336",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 88,
+    "verification_bundle": "archived_reference",
+    "title": "Quezon City Scholarship Program (QCSP)",
+    "provider": "Quezon City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Need",
+    "primary_link": "https://qceservices.quezoncity.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "City-wide LGU scholarship covering senior high school, vocational, college, and postgraduate students who are Quezon City residents with verified QCitizen ID. Directs 70% of tertiary slots to low-income and marginalized sectors. Supported 9377 active scholars in the most recent cycle.",
+    "eligible_levels": [
+      "High School",
+      "College",
+      "TVET",
+      "Graduate"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Quezon City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [],
+    "eligible_courses_specific": [],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [
+      "4Ps/Listahanan",
+      "PWD",
+      "Underprivileged"
+    ],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "TOR",
+      "4PS_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": false,
+    "has_essay_requirement": false,
+    "has_return_service": false,
+    "application_open_date": "2026-05-25",
+    "application_deadline": "2026-06-05",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2026-05-25",
+    "last_close_date": "2026-06-05",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:19.760119",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 89,
+    "verification_bundle": "archived_reference",
+    "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program",
+    "provider": "Quezon City Government",
+    "provider_type": "LGU",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://qceservices.quezoncity.gov.ph",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Specialized Quezon City LGU humanities scholarship for college students, researchers, and educators pursuing Filipino language and literature. Requires QC residency and QCitizen verification. Counterpart to STEM-focused national programs, preserving cultural capital.",
+    "eligible_levels": [
+      "College",
+      "Graduate"
+    ],
+    "eligible_regions": [
+      "NCR"
+    ],
+    "eligible_cities": [
+      "Quezon City"
+    ],
+    "residency_required": true,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "Arts"
+    ],
+    "eligible_courses_specific": [
+      "Filipino Language and Literature"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "BARANGAY_CERT",
+      "BIRTH_CERT",
+      "TOR",
+      "ESSAY"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": false,
+    "application_open_date": "2026-05-25",
+    "application_deadline": "2026-06-05",
+    "academic_year_target": "2026-2027",
+    "cycle_type": "annual",
+    "last_open_date": "2026-05-25",
+    "last_close_date": "2026-06-05",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:21.949404",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  },
+  {
+    "id": 90,
+    "verification_bundle": "archived_reference",
+    "title": "Fulbright-PhilSA Graduate Program",
+    "provider": "PAEF / PhilSA",
+    "provider_type": "Government",
+    "scholarship_type": "Merit-based",
+    "primary_link": "https://apply.iie.org/ffsp2027",
+    "link_status": null,
+    "data_status": "expired",
+    "description": "Bi-national Fulbright-Philippine Space Agency program financing master's and doctoral degrees in the United States in space science and technology applications. Fully funded including tuition, travel, maintenance, and health insurance. Requires relevant college degree, two years post-college work experience, and return-to-Philippines service obligation.",
+    "eligible_levels": [
+      "Graduate"
+    ],
+    "eligible_regions": [],
+    "eligible_cities": [],
+    "residency_required": false,
+    "eligible_school_types": [
+      "Public",
+      "Private"
+    ],
+    "eligible_courses_psced": [
+      "STEM",
+      "Engineering",
+      "IT"
+    ],
+    "eligible_courses_specific": [
+      "Space Science and Technology Applications"
+    ],
+    "citizenship_required": null,
+    "max_income_threshold": null,
+    "min_gwa_normalized": null,
+    "min_age": null,
+    "max_age": null,
+    "priority_groups": [],
+    "members_only": false,
+    "benefit_tuition": true,
+    "benefit_allowance_monthly": null,
+    "benefit_books": false,
+    "benefit_miscellaneous": null,
+    "benefit_total_value": null,
+    "required_documents": [
+      "TOR",
+      "ESSAY",
+      "BIRTH_CERT"
+    ],
+    "has_qualifying_exam": false,
+    "has_interview": true,
+    "has_essay_requirement": true,
+    "has_return_service": true,
+    "application_open_date": null,
+    "application_deadline": "2026-06-19",
+    "academic_year_target": "2027-2028",
+    "cycle_type": "annual",
+    "last_open_date": null,
+    "last_close_date": "2026-06-19",
+    "application_status": "archived",
+    "last_verified_at": "2026-06-30T13:53:23.927551",
+    "verification_source": "manual",
+    "is_active": false,
+    "verification_priority": "normal"
+  }
+]
