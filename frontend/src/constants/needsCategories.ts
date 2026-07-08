@@ -25,6 +25,10 @@ export const EQUITY_GROUPS = [
       { id: "OFW Dependent", label: "OFW Dependent", ra: "OWWA" },
       { id: "Farmer/Fisher Dependent", label: "Farmer/Fisher Dependent", ra: "Landbank" },
       { id: "4Ps/Listahanan", label: "4Ps / Listahanan 2.0", ra: "Pantawid" },
+      { id: "Military Dependents", label: "Military Dependent", ra: "AFP family programs" },
+      { id: "Uniformed Service Dependents", label: "Uniformed Service Dependent", ra: "AFP / PNP / uniformed" },
+      { id: "GSIS Dependent", label: "GSIS Member Dependent", ra: "GSIS" },
+      { id: "SSS Dependent", label: "SSS Member Dependent", ra: "SSS" },
     ],
   },
 ] as const;

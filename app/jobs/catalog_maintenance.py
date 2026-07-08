@@ -73,6 +73,21 @@ def run_catalog_maintenance() -> dict[str, int]:
             sync_application_status(s, today=today)
             review_count += 1
 
+        broken_open = (
+            db.query(models.Scholarship)
+            .filter(
+                models.Scholarship.data_status == "broken_link",
+                models.Scholarship.application_status == "open",
+            )
+            .all()
+        )
+        broken_link_demoted = 0
+        for s in broken_open:
+            s.data_status = "needs_review"
+            sync_application_status(s, today=today)
+            broken_link_demoted += 1
+            review_count += 1
+
         # Sync application_status for deadline-expired rows and any stale values
         expired_rows = (
             db.query(models.Scholarship)

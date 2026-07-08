@@ -19,6 +19,7 @@ from app.matching.field_match import (
 )
 from app.taxonomy.education_levels import education_levels_compatible
 from app.taxonomy.equity_groups import EQUITY_GROUPS
+from app.taxonomy.priority_groups import resolve_priority_group
 from app.taxonomy.income_brackets import INCOME_BRACKETS
 from app.taxonomy.regions import normalize_region
 from app.utils.json_helpers import parse_json_list
@@ -563,21 +564,22 @@ def _evaluate_members_only(profile: dict, sch: dict) -> RequirementCheck:
     for group in groups:
         if not group:
             continue
-        info = EQUITY_GROUPS.get(group, {})
+        canon = resolve_priority_group(str(group))
+        info = EQUITY_GROUPS.get(canon, {})
         flag = info.get("profile_flag")
         if not flag:
-            flag_key = str(group).lower().replace(" ", "_").replace("/", "_")
+            flag_key = str(canon).lower().replace(" ", "_").replace("/", "_")
             flag = f"is_{flag_key}"
         if profile.get(flag):
             return RequirementCheck(
                 "members_only",
-                f"Membership ({group})",
+                f"Membership ({canon})",
                 "hard",
                 RequirementResult.MET,
                 RequirementVerification.VERIFIED,
-                f"You declared: {group}",
+                f"You declared: {canon}",
             )
-    labels = ", ".join(str(g) for g in groups if g)
+    labels = ", ".join(resolve_priority_group(str(g)) for g in groups if g)
     return RequirementCheck(
         "members_only",
         f"Membership ({labels})",

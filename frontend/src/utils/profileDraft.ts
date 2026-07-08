@@ -38,6 +38,10 @@ export function profileToInitialValues(p: { id?: number; [key: string]: unknown 
     is_ofw_dependent: (p as { is_ofw_dependent?: boolean }).is_ofw_dependent ? "on" : "",
     is_farmer_fisher_dependent: (p as { is_farmer_fisher_dependent?: boolean }).is_farmer_fisher_dependent ? "on" : "",
     is_4ps_listahanan: (p as { is_4ps_listahanan?: boolean }).is_4ps_listahanan ? "on" : "",
+    is_military_dependent: (p as { is_military_dependent?: boolean }).is_military_dependent ? "on" : "",
+    is_uniformed_service_dependent: (p as { is_uniformed_service_dependent?: boolean }).is_uniformed_service_dependent ? "on" : "",
+    is_gsis_dependent: (p as { is_gsis_dependent?: boolean }).is_gsis_dependent ? "on" : "",
+    is_sss_dependent: (p as { is_sss_dependent?: boolean }).is_sss_dependent ? "on" : "",
     privacy_consent: (p as { privacy_consent?: boolean }).privacy_consent ? "on" : "",
   };
 }

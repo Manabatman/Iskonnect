@@ -37,6 +37,10 @@ export interface ProfileBuilderState {
   is_ofw_dependent: string;
   is_farmer_fisher_dependent: string;
   is_4ps_listahanan: string;
+  is_military_dependent: string;
+  is_uniformed_service_dependent: string;
+  is_gsis_dependent: string;
+  is_sss_dependent: string;
   /** "on" when user accepts RA 10173 consent (required to save). */
   privacy_consent: string;
 }
@@ -72,6 +76,10 @@ export const PRIORITY_GROUP_FIELDS: (keyof ProfileBuilderState)[] = [
   "is_ofw_dependent",
   "is_farmer_fisher_dependent",
   "is_4ps_listahanan",
+  "is_military_dependent",
+  "is_uniformed_service_dependent",
+  "is_gsis_dependent",
+  "is_sss_dependent",
 ];
 
 export const INITIAL_STATE: ProfileBuilderState = {
@@ -113,6 +121,10 @@ export const INITIAL_STATE: ProfileBuilderState = {
   is_ofw_dependent: "",
   is_farmer_fisher_dependent: "",
   is_4ps_listahanan: "",
+  is_military_dependent: "",
+  is_uniformed_service_dependent: "",
+  is_gsis_dependent: "",
+  is_sss_dependent: "",
   privacy_consent: "",
 };
 

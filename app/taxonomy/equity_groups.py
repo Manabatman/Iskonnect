@@ -12,6 +12,10 @@ EQUITY_GROUP_IDS = [
     "OFW Dependent",         # OWWA mandate
     "Farmer/Fisher Dependent",
     "4Ps/Listahanan",        # Pantawid Pamilyang Pilipino Program
+    "Military Dependents",
+    "Uniformed Service Dependents",
+    "GSIS Dependent",
+    "SSS Dependent",
 ]
 
 EQUITY_GROUPS = {
@@ -49,5 +53,25 @@ EQUITY_GROUPS = {
         "label": "4Ps / Listahanan 2.0",
         "ra_reference": "Pantawid Pamilyang Pilipino Program",
         "profile_flag": "is_4ps_listahanan",
+    },
+    "Military Dependents": {
+        "label": "Military Dependent",
+        "ra_reference": "AFP / uniformed service family programs",
+        "profile_flag": "is_military_dependent",
+    },
+    "Uniformed Service Dependents": {
+        "label": "Uniformed Service Dependent",
+        "ra_reference": "AFP / PNP / BFP / PCG family programs",
+        "profile_flag": "is_uniformed_service_dependent",
+    },
+    "GSIS Dependent": {
+        "label": "GSIS Member Dependent",
+        "ra_reference": "GSIS membership programs",
+        "profile_flag": "is_gsis_dependent",
+    },
+    "SSS Dependent": {
+        "label": "SSS Member Dependent",
+        "ra_reference": "SSS membership programs",
+        "profile_flag": "is_sss_dependent",
     },
 }

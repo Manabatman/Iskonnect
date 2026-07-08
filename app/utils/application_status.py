@@ -120,6 +120,12 @@ def sync_application_status(row: Any, today: date | None = None) -> str:
     return status
 
 
+def is_recurring_scholarship(row: Any) -> bool:
+    """True when scholarship has a predictable recurring cycle (annual or semester)."""
+    cycle_type = (_get(row, "cycle_type") or "").strip().lower()
+    return cycle_type in ("annual", "semester")
+
+
 def application_status_label(status: str | None) -> str:
     """Student-facing labels (keep in sync with frontend scholarshipStatus.ts)."""
     labels = {

@@ -20,6 +20,8 @@ from app.utils.application_status import sync_application_status
 from app.utils.quality_score import compute_confidence_score
 from app.utils.data_completeness import compute_data_completeness_score
 from app.utils.timezone import utc_now_naive
+from app.taxonomy.regions import canonical_region_label
+from app.taxonomy.priority_groups import normalize_priority_groups
 
 
 class PersistResult:
@@ -89,7 +91,9 @@ def apply_schema_to_row(
     row.source = strip_tags(scholarship.source) or scholarship.source if scholarship.source else None
     row.dedupe_key = scholarship_dedupe_key(scholarship.title, scholarship.provider, scholarship.link)
     row.countries = ",".join(scholarship.countries or [])
-    row.regions = ",".join(scholarship.regions or [])
+    row.regions = ",".join(
+        canonical_region_label(r) or r for r in (scholarship.regions or []) if r
+    )
     row.min_age = scholarship.min_age
     row.max_age = scholarship.max_age
     row.needs_tags = json.dumps(scholarship.needs_tags or [])
@@ -107,7 +111,12 @@ def apply_schema_to_row(
     row.provider_type = scholarship.provider_type
     row.scholarship_type = scholarship.scholarship_type
     row.eligible_levels = json.dumps(scholarship.eligible_levels or [])
-    row.eligible_regions = json.dumps(scholarship.eligible_regions or scholarship.regions or [])
+    canon_regions = [
+        canonical_region_label(r) or r
+        for r in (scholarship.eligible_regions or scholarship.regions or [])
+        if r and str(r).strip()
+    ]
+    row.eligible_regions = json.dumps(list(dict.fromkeys(canon_regions)))
     row.eligible_cities = json.dumps(scholarship.eligible_cities or [])
     row.residency_required = scholarship.residency_required or False
     row.eligible_school_types = json.dumps(scholarship.eligible_school_types or ["Public", "Private"])
@@ -117,7 +126,7 @@ def apply_schema_to_row(
     row.preferred_awards = json.dumps(scholarship.preferred_awards or [])
     row.max_income_threshold = scholarship.max_income_threshold
     row.min_gwa_normalized = scholarship.min_gwa_normalized
-    row.priority_groups = json.dumps(scholarship.priority_groups or [])
+    row.priority_groups = json.dumps(normalize_priority_groups(scholarship.priority_groups or []))
     row.members_only = scholarship.members_only or False
     row.benefit_tuition = scholarship.benefit_tuition or False
     row.benefit_allowance_monthly = scholarship.benefit_allowance_monthly

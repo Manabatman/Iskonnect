@@ -41,4 +41,8 @@ export const EQUITY_FLAG_MAP: Record<string, string> = {
   "OFW Dependent": "is_ofw_dependent",
   "Farmer/Fisher Dependent": "is_farmer_fisher_dependent",
   "4Ps/Listahanan": "is_4ps_listahanan",
+  "Military Dependents": "is_military_dependent",
+  "Uniformed Service Dependents": "is_uniformed_service_dependent",
+  "GSIS Dependent": "is_gsis_dependent",
+  "SSS Dependent": "is_sss_dependent",
 };

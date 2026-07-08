@@ -92,3 +92,44 @@ def normalize_region(region: str | None) -> str:
         return ""
     key = str(region).strip().lower()
     return REGION_ALIASES.get(key, key)
+
+
+# Preferred storage labels keyed by normalized region token.
+_CANONICAL_REGION_LABELS: dict[str, str] = {
+    normalize_region(r): r for r in PHILIPPINE_REGIONS
+}
+_CANONICAL_REGION_LABELS["ncr"] = "NCR"
+_CANONICAL_REGION_LABELS["luzon"] = "Luzon"
+_CANONICAL_REGION_LABELS["visayas"] = "Visayas"
+_CANONICAL_REGION_LABELS["mindanao"] = "Mindanao"
+
+
+def canonical_region_label(region: str | None) -> str:
+    """Return preferred catalog label for a region (e.g. Metro Manila -> NCR)."""
+    if not region or not str(region).strip():
+        return ""
+    norm = normalize_region(region)
+    return _CANONICAL_REGION_LABELS.get(norm, str(region).strip())
+
+
+def region_search_literals(region: str) -> list[str]:
+    """All stored labels that should match a browse filter for ``region``."""
+    val = (region or "").strip()
+    if not val:
+        return []
+    norm = normalize_region(val)
+    literals: set[str] = {val}
+    if norm:
+        literals.add(canonical_region_label(val))
+        for alias, key in REGION_ALIASES.items():
+            if key == norm:
+                literals.add(alias.title() if alias.islower() else alias)
+                # preserve common uppercase forms
+                if alias == "metro manila":
+                    literals.add("Metro Manila")
+                if alias == "national capital region":
+                    literals.add("National Capital Region")
+        for r in PHILIPPINE_REGIONS:
+            if normalize_region(r) == norm:
+                literals.add(r)
+    return sorted(x for x in literals if x)

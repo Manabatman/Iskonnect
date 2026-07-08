@@ -148,7 +148,6 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
     filters.school ||
     filters.timing ||
     filters.life_stage ||
-    filters.include_closed ||
     (filters.max_income != null && filters.max_income >= 0);
 
   const selectClassName =
