@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 from app.limiter import limiter
 from app.taxonomy.income_brackets import get_income_bracket
 from app.taxonomy.gwa_normalizer import normalize_gwa
+from app.taxonomy.school_registry import resolve_school_id
 
 router = APIRouter()
 
@@ -41,6 +42,13 @@ def _profile_to_response(p, *, include_access_token: bool = False):
         "city_municipality": getattr(p, "city_municipality", None),
         "barangay": getattr(p, "barangay", None),
         "school_type": getattr(p, "school_type", None),
+        "school_id": getattr(p, "school_id", None),
+        "target_school_id": getattr(p, "target_school_id", None),
+        "enrollment_status": getattr(p, "enrollment_status", None),
+        "current_year_level": getattr(p, "current_year_level", None),
+        "next_year_level": getattr(p, "next_year_level", None),
+        "expected_graduation_date": p.expected_graduation_date.isoformat() if getattr(p, "expected_graduation_date", None) else None,
+        "citizenship": getattr(p, "citizenship", None) or "Filipino",
         "target_school": getattr(p, "target_school", None),
         "gwa_raw": getattr(p, "gwa_raw", None),
         "gwa_scale": getattr(p, "gwa_scale", None),
@@ -108,6 +116,13 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "barangay": profile.barangay,
         "psgc_code": profile.psgc_code,
         "school_type": profile.school_type,
+        "school_id": resolve_school_id(profile.school) or profile.school_id,
+        "target_school_id": resolve_school_id(profile.target_school) or profile.target_school_id,
+        "enrollment_status": profile.enrollment_status,
+        "current_year_level": profile.current_year_level,
+        "next_year_level": profile.next_year_level,
+        "expected_graduation_date": profile.expected_graduation_date,
+        "citizenship": profile.citizenship or "Filipino",
         "target_school": profile.target_school,
         "gwa_raw": profile.gwa_raw,
         "gwa_scale": profile.gwa_scale,
@@ -216,6 +231,49 @@ def put_my_profile(
         ip_address=request.client.host if request.client else None,
     )
     return _profile_to_response(existing)
+
+
+@router.get("/profiles/me/export")
+@limiter.limit("10/minute")
+def export_my_data(
+    request: Request,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    """RA 10173 data portability — JSON export of profile and associated student data."""
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    p = db.query(models.Student).filter(models.Student.user_id == user_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="No profile to export")
+    profile = _profile_to_response(p)
+    saved = (
+        db.query(models.SavedScholarship)
+        .filter(models.SavedScholarship.user_id == user_id)
+        .all()
+    )
+    apps = db.query(models.Application).filter(models.Application.user_id == user_id).all()
+    runs = db.query(models.MatchRun).filter(models.MatchRun.user_id == user_id).all()
+    log_action(
+        db,
+        actor_id=user_id,
+        actor_type="user",
+        action="profile.export",
+        resource_type="student",
+        resource_id=p.id,
+        details={},
+        ip_address=request.client.host if request.client else None,
+    )
+    return {
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "profile": profile,
+        "saved_scholarship_ids": [s.scholarship_id for s in saved],
+        "applications": [
+            {"scholarship_id": a.scholarship_id, "status": a.status, "created_at": a.created_at.isoformat() if a.created_at else None}
+            for a in apps
+        ],
+        "match_run_count": len(runs),
+    }
 
 
 @router.patch("/profiles/me/vault", response_model=schemas.StudentProfileResponse)

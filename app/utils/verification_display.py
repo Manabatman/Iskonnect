@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from typing import Any
 
 from app.utils.application_status import humanize_verification_source
+from app.utils.trust_constants import STALE_VERIFICATION_DAYS, VERIFICATION_FRESH_DAYS
 from app.utils.data_completeness import (
     completeness_tier,
     compute_data_completeness_score,
@@ -40,7 +41,7 @@ def verification_badge(row: Any) -> str:
     vsource = (_get(row, "verification_source") or "").strip().lower()
     if verified_at and vsource in ("manual", "team_verified", "partner", "csv_import"):
         age_days = (datetime.utcnow() - verified_at.replace(tzinfo=None)).days
-        if age_days <= 90 and score >= 60:
+        if age_days <= VERIFICATION_FRESH_DAYS and score >= 60:
             return "verified"
         if age_days <= 180:
             return "partially_verified"
@@ -89,7 +90,7 @@ def attach_verification_fields(payload: dict[str, Any]) -> dict[str, Any]:
                 payload["last_reviewed_label"] = "Verified today"
             elif days == 1:
                 payload["last_reviewed_label"] = "Verified yesterday"
-            elif days < 30:
+            elif days < STALE_VERIFICATION_DAYS:
                 payload["last_reviewed_label"] = f"Verified {days} days ago"
             else:
                 payload["last_reviewed_label"] = f"Last reviewed {days} days ago"

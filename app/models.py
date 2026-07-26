@@ -107,6 +107,13 @@ class Student(Base):
     city_municipality = Column(String)
     barangay = Column(String)
     school_type = Column(String)  # Public | Private
+    school_id = Column(String, nullable=True)
+    target_school_id = Column(String, nullable=True)
+    enrollment_status = Column(String, nullable=True)
+    current_year_level = Column(Integer, nullable=True)
+    next_year_level = Column(Integer, nullable=True)
+    expected_graduation_date = Column(Date, nullable=True)
+    citizenship = Column(String, nullable=True, server_default="Filipino")
 
     # === SCORING INPUT FIELDS (continuous/ranked signals) ===
     school = Column(String)
@@ -180,6 +187,11 @@ class Scholarship(Base):
     eligible_cities = Column(Text)  # JSON list for LGU-specific grants
     residency_required = Column(Boolean, default=False)
     eligible_school_types = Column(Text)  # JSON: ["Public", "Private"]
+    eligible_schools = Column(Text)  # JSON list of registry school ids
+    eligible_school_systems = Column(Text)  # JSON list of system ids
+    eligible_school_categories = Column(Text)  # JSON: SUC, LUC, private, etc.
+    eligible_year_levels = Column(Text)  # JSON list of integers
+    eligible_enrollment_status = Column(Text)  # JSON list of status codes
     eligible_courses_psced = Column(Text)  # JSON list of PSCED broad codes
     eligible_courses_specific = Column(Text)  # JSON list of specific course names
     citizenship_required = Column(String, default="Filipino")
@@ -212,6 +224,9 @@ class Scholarship(Base):
 
     # === TIMELINE ===
     application_deadline = Column(Date)
+    deadline_precision = Column(String, nullable=True)  # exact | estimated | rolling | not_announced
+    deadline_note = Column(Text, nullable=True)
+    deadline_source_url = Column(String, nullable=True)
     application_open_date = Column(Date)
     academic_year_target = Column(String)
 
@@ -225,9 +240,17 @@ class Scholarship(Base):
     level = Column(String)  # Legacy: High School, College, TVET, Graduate
     needs_tags = Column(Text)  # JSON-encoded list (legacy)
     sponsor_id = Column(Integer, ForeignKey("sponsors.id", ondelete="SET NULL"), nullable=True, index=True)
+    opportunity_type = Column(String, nullable=False, server_default="scholarship")
+    type_attributes = Column(Text, nullable=True)  # JSON per opportunity_type
+    organization_id = Column(
+        Integer, ForeignKey("organizations.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    editorial_state = Column(String, nullable=True)  # draft|imported|needs_review|verified|published|archived
 
     # === DATA RELIABILITY & LINK INTEGRITY ===
     last_verified_at = Column(DateTime, nullable=True)
+    verified_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    next_review_date = Column(DateTime, nullable=True)
     verification_source = Column(String, nullable=True)  # manual | scraper | partner | csv_import
     confidence_score = Column(Float, nullable=True)
     data_completeness_score = Column(Integer, nullable=True)  # 0–100 weighted completeness
@@ -236,6 +259,50 @@ class Scholarship(Base):
     link_status = Column(String, nullable=True)  # ok | broken | timeout | unchecked
     link_last_checked_at = Column(DateTime, nullable=True)
     link_failure_count = Column(Integer, nullable=True)
+
+
+class FieldEvidence(Base):
+    """Provenance record for a verified scholarship field value."""
+
+    __tablename__ = "field_evidence"
+
+    id = Column(Integer, primary_key=True, index=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
+    field_key = Column(String(128), nullable=False)
+    value_snapshot = Column(Text, nullable=True)
+    source_url = Column(String(2048), nullable=True)
+    source_type = Column(String(64), nullable=True)
+    evidence_snippet = Column(Text, nullable=True)
+    confidence = Column(Float, nullable=True)
+    retrieved_at = Column(DateTime, nullable=True)
+    reviewer_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    superseded_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+    @property
+    def is_active(self) -> bool:
+        return self.superseded_at is None
+
+
+class Organization(Base):
+    """Canonical provider organization for catalog grouping and branding."""
+
+    __tablename__ = "organizations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String, nullable=False, unique=True, index=True)
+    canonical_name = Column(String, nullable=False)
+    aliases = Column(Text, nullable=True)  # JSON list
+    org_type = Column(String, nullable=True)
+    official_domains = Column(Text, nullable=True)  # JSON list
+    logo_url = Column(String(2048), nullable=True)
+    website = Column(String(2048), nullable=True)
+    verification_status = Column(String, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+# Opportunity is the generic catalog entity; Scholarship is the first concrete type.
+Opportunity = Scholarship  # alias — scholarships table holds all opportunity_type values
 
 
 class ScholarshipStaging(Base):
@@ -309,6 +376,9 @@ class ScholarshipReport(Base):
     scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), nullable=False, index=True)
     issue_type = Column(String, nullable=False)
     description = Column(Text, nullable=True)
+    field_key = Column(String, nullable=True)
+    proposed_value = Column(Text, nullable=True)
+    evidence_url = Column(String(2048), nullable=True)
     status = Column(String, nullable=False, server_default="pending")
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     reviewed_at = Column(DateTime, nullable=True)

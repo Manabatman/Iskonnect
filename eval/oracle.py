@@ -163,6 +163,66 @@ def is_eligible(profile: dict, sch: dict) -> bool:
         if pst not in est:
             return False
 
+    # specific HEI / system
+    eligible_schools = [str(x).strip() for x in (sch.get("eligible_schools") or []) if x]
+    eligible_systems = [str(x).strip() for x in (sch.get("eligible_school_systems") or []) if x]
+    if eligible_schools or eligible_systems:
+        from app.taxonomy.school_registry import resolve_school_id
+        from app.taxonomy.schools import get_school_entry
+
+        school_id = profile.get("school_id") or resolve_school_id(profile.get("school"))
+        target_id = profile.get("target_school_id") or resolve_school_id(profile.get("target_school"))
+        profile_ids = [x for x in (school_id, target_id) if x]
+        if not profile_ids:
+            return True  # benefit of the doubt when school data missing
+        if eligible_schools and not any(pid in eligible_schools for pid in profile_ids):
+            return False
+        if eligible_systems:
+            matched_system = False
+            for pid in profile_ids:
+                entry = get_school_entry(pid)
+                if entry and entry.get("system_id") in eligible_systems:
+                    matched_system = True
+                    break
+            if not matched_system:
+                return False
+
+    # school category
+    eligible_categories = [str(x).strip().lower() for x in (sch.get("eligible_school_categories") or []) if x]
+    if eligible_categories:
+        from app.taxonomy.schools import school_category_for_profile
+
+        cat = school_category_for_profile(profile)
+        if cat and cat.strip().lower() not in eligible_categories:
+            return False
+
+    # year level
+    eligible_levels = []
+    for raw in sch.get("eligible_year_levels") or []:
+        try:
+            eligible_levels.append(int(raw))
+        except (TypeError, ValueError):
+            continue
+    if eligible_levels:
+        current = profile.get("current_year_level")
+        nxt = profile.get("next_year_level")
+        if current is not None or nxt is not None:
+            if not any(int(v) in eligible_levels for v in (current, nxt) if v is not None):
+                return False
+
+    # enrollment status
+    eligible_status = [str(x).strip().lower() for x in (sch.get("eligible_enrollment_status") or []) if x]
+    status = (profile.get("enrollment_status") or "").strip().lower()
+    if eligible_status and status and status not in eligible_status:
+        return False
+
+    # citizenship
+    required_cit = (sch.get("citizenship_required") or "Filipino").strip().lower()
+    if required_cit not in ("any", "none", "open", ""):
+        pcit = (profile.get("citizenship") or "Filipino").strip().lower()
+        if pcit != required_cit:
+            return False
+
     # income ceiling (a stated ceiling is a hard cap)
     ceil = sch.get("max_income_threshold")
     pinc = profile.get("household_income_annual")

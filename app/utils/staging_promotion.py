@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.api.v1.scholarships import persist_scholarship_from_schema
+from app.utils.field_evidence import promote_evidence_from_staging_payload
 
 logger = logging.getLogger(__name__)
 
@@ -44,14 +45,23 @@ def promote_staging_row(
     except Exception as e:
         logger.error("staging_promote_invalid_payload id=%s err=%s", row.id, e)
         raise ValueError(f"Invalid payload_json for staging id={row.id}") from e
+    raw_payload = data if isinstance(data, dict) else {}
+    vsource = verification_source_for(row.source)
     try:
         db_sch = persist_scholarship_from_schema(
             db,
             sch,
             version_changed_by=version_changed_by,
             auto_commit=False,
-            verification_source=verification_source_for(row.source),
+            verification_source=vsource,
             allow_upsert=True,
+        )
+        promote_evidence_from_staging_payload(
+            db,
+            db_sch,
+            raw_payload,
+            reviewer_id=version_changed_by,
+            verification_source=vsource,
         )
         row.status = "approved"
         row.reviewed_at = datetime.now(timezone.utc)

@@ -129,9 +129,14 @@ def generate_profiles() -> list[dict]:
                 "age": rng.choice([16, 17, 18, 19, 20, 21, 22]),
                 "education_level": level,
                 "current_academic_stage": stage,
+                "current_year_level": rng.choice([1, 2, 3, 4]) if level_group == "College" else rng.choice([11, 12]),
+                "enrollment_status": rng.choice(["enrolled", "incoming_freshman", "transferee"]),
+                "citizenship": "Filipino",
                 "region": variant,
                 "city_municipality": CITY_BY_REGION[region],
                 "school_type": school,
+                "school": rng.choice(["Polytechnic University of the Philippines", "University of Santo Tomas", "De La Salle University", "Ateneo de Manila University"]),
+                "school_id": None,
                 "household_income_annual": income,
                 "income_bracket": None,
                 "gwa_normalized": gwa,
@@ -341,6 +346,63 @@ def generate_scholarships() -> list[dict]:
                 "eligible_levels": ["College"],
                 "max_income_threshold": 500_000,
             })
+
+    # --- H2. Specific HEI restricted ---
+    for hei_id, label in [
+        ("polytechnic-university-of-the-philippines", "PUP"),
+        ("university-of-santo-tomas", "UST"),
+        ("de-la-salle-university", "DLSU"),
+    ]:
+        add({
+            "title": f"{label} Institutional Grant", "provider": label,
+            "scholarship_type": "Merit-and-Need",
+            "eligible_schools": [hei_id],
+            "eligible_levels": ["College"],
+        })
+
+    # --- H3. UP system-wide ---
+    add({
+        "title": "UP System Merit Grant", "provider": "UP System",
+        "scholarship_type": "Merit-based",
+        "eligible_school_systems": ["up-system"],
+        "eligible_levels": ["College"],
+        "min_gwa_normalized": 85.0,
+    })
+
+    # --- H4. SUC category only ---
+    for k in range(2):
+        add({
+            "title": f"SUC Category Grant {k+1}", "provider": "CHED",
+            "scholarship_type": "Need",
+            "eligible_school_categories": ["SUC"],
+            "eligible_levels": ["College"],
+            "max_income_threshold": 500_000,
+        })
+
+    # --- H5. Year level restricted ---
+    add({
+        "title": "College Freshmen Only", "provider": "Freshman Fund",
+        "scholarship_type": "Need",
+        "eligible_year_levels": [1],
+        "eligible_levels": ["College"],
+        "max_income_threshold": 500_000,
+    })
+    add({
+        "title": "Senior High Only Year 11", "provider": "K12 Bridge",
+        "scholarship_type": "Need",
+        "eligible_year_levels": [11],
+        "eligible_levels": ["Grade 11", "Grade 12"],
+        "max_income_threshold": 400_000,
+    })
+
+    # --- H6. Enrollment status restricted ---
+    add({
+        "title": "Incoming Freshmen Grant", "provider": "Enrollment Office",
+        "scholarship_type": "Need",
+        "eligible_enrollment_status": ["incoming_freshman"],
+        "eligible_levels": ["College"],
+        "max_income_threshold": 500_000,
+    })
 
     # --- I. Priority-group EXCLUSIVE (members-only) ---
     for grp in PRIORITY_GROUPS:

@@ -4,7 +4,9 @@ import { APP_RELEASE_DATE, APP_RELEASE_LABEL } from "../data/changelog";
 const productLinks = [
   { to: "/how-it-works", label: "How it works" },
   { to: "/scholarships/search", label: "Scholarships" },
-  { to: "/how-it-works#verification", label: "Verification" },
+  { to: "/how-we-verify", label: "How we verify" },
+  { to: "/transparency", label: "Transparency" },
+  { to: "/contact", label: "Contact" },
   { to: "/scholarship-status", label: "Scholarship status" },
   { to: "/faq", label: "FAQ" },
 ] as const;
@@ -29,6 +31,9 @@ export function Footer() {
             <p className="font-semibold text-white">Iskonnect</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
               Connecting Filipino students to scholarship opportunities they actually qualify for.
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              We don&apos;t publish student outcome stories yet — we focus on accurate listings and honest matching.
             </p>
             <p className="mt-2 text-xs font-medium text-primary-300">
               {APP_RELEASE_LABEL} · {APP_RELEASE_DATE}

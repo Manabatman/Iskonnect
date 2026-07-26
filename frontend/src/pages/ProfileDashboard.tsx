@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
-import type { MatchResult, MatchRunSummary, StudentProfileResponse } from "../types";
+import type { MatchResult, MatchRunSummary, ProfileCompleteness, StudentProfileResponse } from "../types";
 import { NetworkError, apiFetch } from "../api/client";
+import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import {
   formatDateMedium,
   formatDateTime,
@@ -91,6 +92,7 @@ export function ProfileDashboard() {
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
   const [latestMatches, setLatestMatches] = useState<MatchResult[]>([]);
   const [latestMatchesLoading, setLatestMatchesLoading] = useState(false);
+  const [matchProfileCompleteness, setMatchProfileCompleteness] = useState<ProfileCompleteness | null>(null);
   const [selectedRuns, setSelectedRuns] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
   const [runLoading, setRunLoading] = useState(false);
@@ -136,6 +138,27 @@ export function ProfileDashboard() {
         setLoading(false);
       });
   }, [user?.id, authHeaders]);
+
+  useEffect(() => {
+    if (!profile?.id) {
+      setMatchProfileCompleteness(null);
+      return;
+    }
+    let cancelled = false;
+    apiFetch(`/api/v1/plan/${profile.id}`, { headers: authHeaders() })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.profile_completeness) {
+          setMatchProfileCompleteness(data.profile_completeness);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setMatchProfileCompleteness(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [profile?.id, authHeaders]);
 
   useEffect(() => {
     const onAuthChange = () => {
@@ -389,9 +412,19 @@ export function ProfileDashboard() {
                   >
                     Browse scholarships
                   </Link>
+                  {profile?.id ? (
+                    <Link
+                      to={`/planner/${profile.id}`}
+                      className="inline-flex items-center justify-center rounded-2xl border border-primary-200 bg-primary-50 px-5 py-2.5 text-sm font-semibold text-primary-800 transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-200 dark:hover:bg-primary-900/50"
+                    >
+                      Opportunity planner
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </div>
+
+            <ProfileQualityCard completeness={matchProfileCompleteness} />
 
             {/* Next steps: applications + documents — 2-col when Profile card hidden to avoid empty third column */}
             <div

@@ -21,7 +21,7 @@ def test_canonical_schema_columns_exist_on_pydantic_model():
 
 def test_canonical_import_column_count():
     assert len(CANONICAL_IMPORT_COLUMNS) == len(CANONICAL_SCHEMA_COLUMNS) + len(KNOWN_METADATA_COLUMNS)
-    assert len(CANONICAL_IMPORT_COLUMNS) == 39
+    assert len(CANONICAL_IMPORT_COLUMNS) == 40
 
 
 def test_normalize_header_url_alias():

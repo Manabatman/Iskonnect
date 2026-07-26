@@ -207,6 +207,12 @@ class Settings(BaseSettings):
             errors.append(
                 "TRUST_PROXY_HEADERS must be true in production when deployed behind Render/Railway"
             )
+        if not self.enable_link_checker:
+            logger.warning(
+                "ENABLE_LINK_CHECKER=false in %s — scheduled link health checks are disabled. "
+                "Set ENABLE_LINK_CHECKER=true in production (GitHub Actions link-checker.yml also sets this).",
+                env,
+            )
         if errors:
             raise RuntimeError("Invalid production configuration: " + "; ".join(errors))
         if not (self.supabase_url and self.supabase_service_role_key):

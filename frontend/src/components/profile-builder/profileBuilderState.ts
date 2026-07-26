@@ -6,6 +6,8 @@ export interface ProfileBuilderState {
 
   education_level: string;
   current_academic_stage: string;
+  enrollment_status: string;
+  current_year_level: string;
   target_academic_year: string;
   school: string;
   school_type: string;
@@ -90,6 +92,8 @@ export const INITIAL_STATE: ProfileBuilderState = {
 
   education_level: "",
   current_academic_stage: "",
+  enrollment_status: "",
+  current_year_level: "",
   target_academic_year: "",
   school: "",
   school_type: "",
@@ -150,6 +154,8 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
       [
         "education_level",
         "current_academic_stage",
+        "enrollment_status",
+        "current_year_level",
         "target_academic_year",
         "school",
         "school_type",

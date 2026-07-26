@@ -2,155 +2,191 @@
   "core": {
     "path": "CORE",
     "confusion": {
-      "TP": 5447,
-      "FP": 4,
-      "FN": 3,
-      "TN": 14546
+      "TP": 6400,
+      "FP": 3,
+      "FN": 9,
+      "TN": 13588
     },
-    "recall": 0.9994495412844037,
-    "precision": 0.9992661896899652,
-    "macro_recall": 0.9997029702970298,
+    "recall": 0.9985957247620534,
+    "precision": 0.9995314696236139,
+    "macro_recall": 0.9982940993869158,
     "recall_by_region": {
       "BARMM": [
         1.0,
-        795
+        675
       ],
       "CAR": [
-        1.0,
-        488
+        0.996042216358839,
+        758
       ],
       "NCR": [
-        0.996969696969697,
-        990
+        1.0,
+        827
       ],
       "Region III - Central Luzon": [
         1.0,
-        776
+        787
       ],
       "Region IV-A - Calabarzon": [
         1.0,
-        642
+        845
       ],
       "Region VI - Western Visayas": [
-        1.0,
-        568
+        0.9950980392156863,
+        612
       ],
       "Region VII - Central Visayas": [
-        1.0,
-        697
+        0.9971617786187322,
+        1057
       ],
       "Region XI - Davao": [
         1.0,
-        494
+        848
       ]
     },
     "recall_by_field": {
       "Agriculture": [
         1.0,
-        601
+        452
       ],
       "Architecture": [
         1.0,
-        364
+        468
       ],
       "Arts": [
         1.0,
-        606
+        538
       ],
       "Business": [
         1.0,
-        361
+        500
       ],
       "Education": [
         1.0,
-        594
+        875
       ],
       "Engineering": [
         1.0,
-        470
+        578
       ],
       "HUMSS": [
-        0.986784140969163,
-        227
+        0.9794520547945206,
+        438
       ],
       "IT": [
         1.0,
-        413
+        571
       ],
       "Mathematics": [
         1.0,
-        515
+        512
       ],
       "Medical": [
         1.0,
-        614
+        760
       ],
       "Science": [
         1.0,
-        463
+        466
       ],
       "TVL": [
         1.0,
-        222
+        251
       ]
     },
     "recall_by_level": {
       "college": [
-        0.9993445488311121,
-        4577
+        0.9983960078417394,
+        5611
       ],
       "senior high": [
         1.0,
-        873
+        798
       ]
     },
     "recall_by_income": {
       "250k_400k": [
         1.0,
-        1190
+        1633
       ],
       "400k_500k": [
-        0.9978571428571429,
-        1400
+        0.9943609022556391,
+        1064
       ],
       "above_500k": [
-        1.0,
-        309
+        0.9895470383275261,
+        287
       ],
       "below_250k": [
         1.0,
-        2551
+        3425
       ]
     },
     "fn_causes": {
-      "other": 3
+      "other": 9
     },
     "fp_causes": {
-      "field_substring_overmatch (hard filter)": 4
+      "field_substring_overmatch (hard filter)": 3
     },
     "fn_examples": [
       [
-        11,
-        "NCR",
+        35,
+        "CAR",
         "Arts Excellence 1",
         "other"
       ],
       [
-        11,
-        "NCR",
+        35,
+        "CAR",
         "Arts Excellence 2",
         "other"
       ],
       [
-        11,
-        "NCR",
+        35,
+        "CAR",
+        "Arts Excellence 3",
+        "other"
+      ],
+      [
+        59,
+        "Region VII - Central Visayas",
+        "Arts Excellence 1",
+        "other"
+      ],
+      [
+        59,
+        "Region VII - Central Visayas",
+        "Arts Excellence 2",
+        "other"
+      ],
+      [
+        59,
+        "Region VII - Central Visayas",
+        "Arts Excellence 3",
+        "other"
+      ],
+      [
+        95,
+        "Region VI - Western Visayas",
+        "Arts Excellence 1",
+        "other"
+      ],
+      [
+        95,
+        "Region VI - Western Visayas",
+        "Arts Excellence 2",
+        "other"
+      ],
+      [
+        95,
+        "Region VI - Western Visayas",
         "Arts Excellence 3",
         "other"
       ]
     ],
     "fp_examples": [
       [
-        20,
+        44,
         "BS Civil Engineering Award",
         "field_substring_overmatch (hard filter)"
       ],
@@ -160,12 +196,7 @@
         "field_substring_overmatch (hard filter)"
       ],
       [
-        97,
-        "BS Civil Engineering Award",
-        "field_substring_overmatch (hard filter)"
-      ],
-      [
-        100,
+        80,
         "BS Civil Engineering Award",
         "field_substring_overmatch (hard filter)"
       ]
@@ -174,24 +205,60 @@
     "ndcg_at_20": 1.0,
     "deadline_order_ok_rate": 1.0,
     "explanation_coverage": 1.0,
-    "explanation_coherence": 0.9996533138578593,
-    "explanation_false_claim_rows": 4,
+    "explanation_coherence": 0.9997149886321217,
+    "explanation_false_claim_rows": 3,
     "other_pairs": [
       {
         "kind": "FN",
-        "profile_id": 11,
+        "profile_id": 35,
         "scholarship_id": 81,
         "scholarship_title": "Arts Excellence 1"
       },
       {
         "kind": "FN",
-        "profile_id": 11,
+        "profile_id": 35,
         "scholarship_id": 82,
         "scholarship_title": "Arts Excellence 2"
       },
       {
         "kind": "FN",
-        "profile_id": 11,
+        "profile_id": 35,
+        "scholarship_id": 83,
+        "scholarship_title": "Arts Excellence 3"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 59,
+        "scholarship_id": 81,
+        "scholarship_title": "Arts Excellence 1"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 59,
+        "scholarship_id": 82,
+        "scholarship_title": "Arts Excellence 2"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 59,
+        "scholarship_id": 83,
+        "scholarship_title": "Arts Excellence 3"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 95,
+        "scholarship_id": 81,
+        "scholarship_title": "Arts Excellence 1"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 95,
+        "scholarship_id": 82,
+        "scholarship_title": "Arts Excellence 2"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 95,
         "scholarship_id": 83,
         "scholarship_title": "Arts Excellence 3"
       }
@@ -200,155 +267,191 @@
   "prod": {
     "path": "PROD (SQL prefilter)",
     "confusion": {
-      "TP": 5447,
-      "FP": 4,
-      "FN": 3,
-      "TN": 14546
+      "TP": 6400,
+      "FP": 3,
+      "FN": 9,
+      "TN": 13588
     },
-    "recall": 0.9994495412844037,
-    "precision": 0.9992661896899652,
-    "macro_recall": 0.9997029702970298,
+    "recall": 0.9985957247620534,
+    "precision": 0.9995314696236139,
+    "macro_recall": 0.9982940993869158,
     "recall_by_region": {
       "BARMM": [
         1.0,
-        795
+        675
       ],
       "CAR": [
-        1.0,
-        488
+        0.996042216358839,
+        758
       ],
       "NCR": [
-        0.996969696969697,
-        990
+        1.0,
+        827
       ],
       "Region III - Central Luzon": [
         1.0,
-        776
+        787
       ],
       "Region IV-A - Calabarzon": [
         1.0,
-        642
+        845
       ],
       "Region VI - Western Visayas": [
-        1.0,
-        568
+        0.9950980392156863,
+        612
       ],
       "Region VII - Central Visayas": [
-        1.0,
-        697
+        0.9971617786187322,
+        1057
       ],
       "Region XI - Davao": [
         1.0,
-        494
+        848
       ]
     },
     "recall_by_field": {
       "Agriculture": [
         1.0,
-        601
+        452
       ],
       "Architecture": [
         1.0,
-        364
+        468
       ],
       "Arts": [
         1.0,
-        606
+        538
       ],
       "Business": [
         1.0,
-        361
+        500
       ],
       "Education": [
         1.0,
-        594
+        875
       ],
       "Engineering": [
         1.0,
-        470
+        578
       ],
       "HUMSS": [
-        0.986784140969163,
-        227
+        0.9794520547945206,
+        438
       ],
       "IT": [
         1.0,
-        413
+        571
       ],
       "Mathematics": [
         1.0,
-        515
+        512
       ],
       "Medical": [
         1.0,
-        614
+        760
       ],
       "Science": [
         1.0,
-        463
+        466
       ],
       "TVL": [
         1.0,
-        222
+        251
       ]
     },
     "recall_by_level": {
       "college": [
-        0.9993445488311121,
-        4577
+        0.9983960078417394,
+        5611
       ],
       "senior high": [
         1.0,
-        873
+        798
       ]
     },
     "recall_by_income": {
       "250k_400k": [
         1.0,
-        1190
+        1633
       ],
       "400k_500k": [
-        0.9978571428571429,
-        1400
+        0.9943609022556391,
+        1064
       ],
       "above_500k": [
-        1.0,
-        309
+        0.9895470383275261,
+        287
       ],
       "below_250k": [
         1.0,
-        2551
+        3425
       ]
     },
     "fn_causes": {
-      "other": 3
+      "other": 9
     },
     "fp_causes": {
-      "field_substring_overmatch (hard filter)": 4
+      "field_substring_overmatch (hard filter)": 3
     },
     "fn_examples": [
       [
-        11,
-        "NCR",
+        35,
+        "CAR",
         "Arts Excellence 1",
         "other"
       ],
       [
-        11,
-        "NCR",
+        35,
+        "CAR",
         "Arts Excellence 2",
         "other"
       ],
       [
-        11,
-        "NCR",
+        35,
+        "CAR",
+        "Arts Excellence 3",
+        "other"
+      ],
+      [
+        59,
+        "Region VII - Central Visayas",
+        "Arts Excellence 1",
+        "other"
+      ],
+      [
+        59,
+        "Region VII - Central Visayas",
+        "Arts Excellence 2",
+        "other"
+      ],
+      [
+        59,
+        "Region VII - Central Visayas",
+        "Arts Excellence 3",
+        "other"
+      ],
+      [
+        95,
+        "Region VI - Western Visayas",
+        "Arts Excellence 1",
+        "other"
+      ],
+      [
+        95,
+        "Region VI - Western Visayas",
+        "Arts Excellence 2",
+        "other"
+      ],
+      [
+        95,
+        "Region VI - Western Visayas",
         "Arts Excellence 3",
         "other"
       ]
     ],
     "fp_examples": [
       [
-        20,
+        44,
         "BS Civil Engineering Award",
         "field_substring_overmatch (hard filter)"
       ],
@@ -358,12 +461,7 @@
         "field_substring_overmatch (hard filter)"
       ],
       [
-        97,
-        "BS Civil Engineering Award",
-        "field_substring_overmatch (hard filter)"
-      ],
-      [
-        100,
+        80,
         "BS Civil Engineering Award",
         "field_substring_overmatch (hard filter)"
       ]
@@ -372,24 +470,60 @@
     "ndcg_at_20": 1.0,
     "deadline_order_ok_rate": 1.0,
     "explanation_coverage": 1.0,
-    "explanation_coherence": 0.9996533138578593,
-    "explanation_false_claim_rows": 4,
+    "explanation_coherence": 0.9997149886321217,
+    "explanation_false_claim_rows": 3,
     "other_pairs": [
       {
         "kind": "FN",
-        "profile_id": 11,
+        "profile_id": 35,
         "scholarship_id": 81,
         "scholarship_title": "Arts Excellence 1"
       },
       {
         "kind": "FN",
-        "profile_id": 11,
+        "profile_id": 35,
         "scholarship_id": 82,
         "scholarship_title": "Arts Excellence 2"
       },
       {
         "kind": "FN",
-        "profile_id": 11,
+        "profile_id": 35,
+        "scholarship_id": 83,
+        "scholarship_title": "Arts Excellence 3"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 59,
+        "scholarship_id": 81,
+        "scholarship_title": "Arts Excellence 1"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 59,
+        "scholarship_id": 82,
+        "scholarship_title": "Arts Excellence 2"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 59,
+        "scholarship_id": 83,
+        "scholarship_title": "Arts Excellence 3"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 95,
+        "scholarship_id": 81,
+        "scholarship_title": "Arts Excellence 1"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 95,
+        "scholarship_id": 82,
+        "scholarship_title": "Arts Excellence 2"
+      },
+      {
+        "kind": "FN",
+        "profile_id": 95,
         "scholarship_id": 83,
         "scholarship_title": "Arts Excellence 3"
       }

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Query, Request
@@ -15,13 +15,16 @@ from app.auth import require_admin
 from app.db import get_db
 from app.limiter import limiter
 from app.utils.application_status import sync_application_status
-from app.utils.quality_score import compute_confidence_score, needs_review_reasons
+from app.utils.editorial_state import PUBLISHED, apply_editorial_state
+from app.utils.quality_score import needs_review_reasons
+from app.utils.opportunity_quality import apply_quality_scores, compute_opportunity_quality
 from app.utils.data_completeness import (
     PUBLISHABILITY_THRESHOLD,
     completeness_gaps,
     completeness_tier,
     compute_data_completeness_score,
 )
+from app.utils.trust_constants import STALE_VERIFICATION_DAYS, VERIFICATION_FRESH_DAYS
 from app.utils.timezone import utc_now_naive
 
 router = APIRouter(tags=["admin-queues"])
@@ -49,7 +52,7 @@ def admin_review_queue(
     """Paginated admin review queues for scholarship maintenance."""
     offset = (page - 1) * limit
     today = date.today()
-    stale_cutoff = utc_now_naive() - timedelta(days=30)
+    stale_cutoff = utc_now_naive() - timedelta(days=STALE_VERIFICATION_DAYS)
 
     if queue_name == "needs_review":
         q = db.query(models.Scholarship).filter(models.Scholarship.data_status == "needs_review")
@@ -124,13 +127,14 @@ def admin_review_queue(
     rows = q.order_by(models.Scholarship.id.desc()).offset(offset).limit(limit).all()
     items = []
     for s in rows:
-        score = compute_confidence_score(s)
+        quality = compute_opportunity_quality(s, db)
         payload = _scholarship_to_response(s)
         if hasattr(payload, "model_dump"):
             data = payload.model_dump()
         else:
             data = dict(payload)
-        data["confidence_score"] = score
+        data["confidence_score"] = round(quality.score / 100.0, 3)
+        data["quality_score"] = quality.score
         data["review_reasons"] = needs_review_reasons(s)
         items.append(data)
 
@@ -156,9 +160,14 @@ def recompute_scholarship_quality(
     s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
     if not s:
         return {"detail": "not found"}
-    s.confidence_score = compute_confidence_score(s)
+    result = apply_quality_scores(s, db)
     db.commit()
-    return {"id": s.id, "confidence_score": s.confidence_score, "review_reasons": needs_review_reasons(s)}
+    return {
+        "id": s.id,
+        "confidence_score": s.confidence_score,
+        "quality_score": result.score,
+        "review_reasons": needs_review_reasons(s),
+    }
 
 
 @router.post("/admin/scholarships/{scholarship_id}/verify-refresh")
@@ -174,9 +183,8 @@ def verify_refresh_scholarship(
     if not s:
         return {"detail": "not found"}
     s.last_verified_at = utc_now_naive()
-    if s.data_status in (None, "", "needs_review"):
-        s.data_status = "active"
-    s.confidence_score = compute_confidence_score(s)
+    apply_editorial_state(s, PUBLISHED)
+    apply_quality_scores(s, db)
     sync_application_status(s)
     db.commit()
     from app.scholarship_cache import invalidate_scholarship_cache
@@ -200,7 +208,7 @@ def admin_scholarship_health_dashboard(
 ):
     """Scholarship catalog health summary for admin dashboard."""
     today = date.today()
-    stale_cutoff = utc_now_naive() - timedelta(days=30)
+    stale_cutoff = utc_now_naive() - timedelta(days=STALE_VERIFICATION_DAYS)
     total = db.query(func.count(models.Scholarship.id)).scalar() or 0
     active = (
         db.query(func.count(models.Scholarship.id))
@@ -308,7 +316,7 @@ def admin_data_quality_dashboard(
 ):
     """Scholarship data quality health metrics for admin operations."""
     today = date.today()
-    stale_cutoff = utc_now_naive() - timedelta(days=90)
+    stale_cutoff = utc_now_naive() - timedelta(days=VERIFICATION_FRESH_DAYS)
     rows = db.query(models.Scholarship).filter(models.Scholarship.is_active == True).all()  # noqa: E712
 
     scores: list[int] = []
@@ -325,7 +333,8 @@ def admin_data_quality_dashboard(
         score = row.data_completeness_score
         if score is None:
             score = compute_data_completeness_score(row)
-        scores.append(int(score))
+        quality = compute_opportunity_quality(row, db)
+        scores.append(int(quality.score))
         tier = completeness_tier(int(score))
         tier_counts[tier] = tier_counts.get(tier, 0) + 1
         if int(score) < PUBLISHABILITY_THRESHOLD:
@@ -340,24 +349,27 @@ def admin_data_quality_dashboard(
                 missing_courses += 1
         if row.last_verified_at is None or row.last_verified_at < stale_cutoff:
             expired_verification += 1
-        if int(score) < 70:
+        if int(quality.score) < 70:
             priority_queue.append(
                 {
                     "id": row.id,
                     "title": row.title,
                     "completeness_score": int(score),
+                    "quality_score": int(quality.score),
                     "gaps": completeness_gaps(row)[:5],
                 }
             )
 
-    priority_queue.sort(key=lambda x: x["completeness_score"])
-    avg = round(sum(scores) / len(scores), 1) if scores else 0.0
+    priority_queue.sort(key=lambda x: x.get("quality_score", x["completeness_score"]))
+    avg_completeness = round(sum(compute_data_completeness_score(r) if r.data_completeness_score is None else r.data_completeness_score for r in rows) / len(rows), 1) if rows else 0.0
+    avg_quality = round(sum(scores) / len(scores), 1) if scores else 0.0
 
     return {
         "as_of": today.isoformat(),
         "publishability_threshold": PUBLISHABILITY_THRESHOLD,
         "total_active": len(rows),
-        "average_completeness": avg,
+        "average_completeness": avg_completeness,
+        "average_quality_score": avg_quality,
         "tier_distribution": tier_counts,
         "below_publishable_threshold": below_publishable,
         "needs_review": sum(1 for r in rows if r.data_status == "needs_review"),
@@ -367,4 +379,59 @@ def admin_data_quality_dashboard(
         "expired_verification": expired_verification,
         "gap_counts": gap_counts,
         "high_priority_records": priority_queue[:25],
+    }
+
+
+@router.get("/admin/dashboard/catalog-health")
+@limiter.limit("30/minute")
+def admin_catalog_health_dashboard(
+    request: Request,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Consolidated catalog health: health, import, and data-quality metrics."""
+    health = admin_scholarship_health_dashboard(request, db, _admin)
+    import_stats = admin_import_dashboard(request, db, _admin)
+    quality = admin_data_quality_dashboard(request, db, _admin)
+
+    today = date.today()
+    month_start = today.replace(day=1)
+    institution_specific_count = (
+        db.query(func.count(models.Scholarship.id))
+        .filter(
+            models.Scholarship.is_active == True,  # noqa: E712
+            models.Scholarship.provider_type == "Institutional",
+        )
+        .scalar()
+        or 0
+    )
+    deadline_unknown_count = (
+        db.query(func.count(models.Scholarship.id))
+        .filter(
+            models.Scholarship.is_active == True,  # noqa: E712
+            models.Scholarship.application_deadline.is_(None),
+        )
+        .scalar()
+        or 0
+    )
+    month_start_dt = datetime.combine(month_start, datetime.min.time())
+    verified_this_month = (
+        db.query(func.count(models.Scholarship.id))
+        .filter(
+            models.Scholarship.last_verified_at.isnot(None),
+            models.Scholarship.last_verified_at >= month_start_dt,
+        )
+        .scalar()
+        or 0
+    )
+
+    return {
+        "as_of": today.isoformat(),
+        "health": health,
+        "import": import_stats,
+        "data_quality": quality,
+        "institution_specific_count": int(institution_specific_count),
+        "deadline_unknown_count": int(deadline_unknown_count),
+        "avg_quality_score": quality.get("average_quality_score", 0),
+        "verified_this_month": int(verified_this_month),
     }

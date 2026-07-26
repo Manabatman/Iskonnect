@@ -1,6 +1,8 @@
 import type { ReactElement } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { apiFetch } from "../../api/client";
 export interface DashboardSidebarProps {
   collapsed: boolean;
   onToggleCollapse: () => void;
@@ -123,6 +125,20 @@ function IconSettings({ className }: { className?: string }) {
   );
 }
 
+function IconCalendar({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M8 2v3M16 2v3M3 9h18M5 5h14a2 2 0 012 2v13a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+        stroke="currentColor"
+        strokeWidth={1.75}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function IconChevronLeft({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -139,7 +155,35 @@ export function DashboardSidebar({
 }: DashboardSidebarProps) {
   const location = useLocation();
   const path = location.pathname;
-  const { user } = useAuth();
+  const { user, authHeaders } = useAuth();
+  const [plannerHref, setPlannerHref] = useState("/profile-builder");
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    apiFetch("/api/v1/profiles/me", { headers: authHeaders() })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.id) setPlannerHref(`/planner/${data.id}`);
+      })
+      .catch(() => {
+        /* keep fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authHeaders]);
+
+  const dynamicNavItems: NavItem[] = [
+    ...navItems.slice(0, 3),
+    {
+      to: plannerHref,
+      label: "Opportunity planner",
+      match: (p: string) => p.startsWith("/planner/"),
+      icon: IconCalendar,
+    },
+    ...navItems.slice(3),
+  ];
 
   return (
     <>
@@ -197,7 +241,7 @@ export function DashboardSidebar({
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-2 pb-0" aria-label="Dashboard navigation">
-          {navItems.map((item) => {
+          {dynamicNavItems.map((item) => {
             const active = item.match(path);
             const Icon = item.icon;
             return (

@@ -12,6 +12,8 @@ def test_empty_profile_low_warning():
     assert filled == 0
     p = profile_completeness_payload({"email": "a@b.com"})
     assert p["low_data_warning"] is True
+    assert p["quality_percent"] == 0
+    assert len(p["missing_fields"]) == 10
 
 
 def test_full_profile_no_warning():

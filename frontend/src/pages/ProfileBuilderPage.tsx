@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { ConsentRequiredModal } from "../components/ConsentRequiredModal";
 import { SplitLayout } from "../components/layout/SplitLayout";
@@ -24,6 +24,14 @@ import { profileToInitialValues } from "../utils/profileDraft";
 const SAVE_DEBOUNCE_MS = 400;
 const TOTAL_STEPS = 5;
 
+const STEP_SLUG_TO_NUMBER: Record<string, number> = {
+  personal: 1,
+  education: 2,
+  location: 3,
+  field: 4,
+  goals: 5,
+};
+
 function initFromStorage(): ProfileBuilderState {
   try {
     const raw = localStorage.getItem(DRAFT_KEY);
@@ -40,6 +48,7 @@ function initFromStorage(): ProfileBuilderState {
 export function ProfileBuilderPage() {
   const { user, authHeaders, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [state, dispatch] = useReducer(profileBuilderReducer, INITIAL_STATE, initFromStorage);
   const [currentStep, setCurrentStep] = useState(1);
   const [serverLoading, setServerLoading] = useState(false);
@@ -85,6 +94,15 @@ export function ProfileBuilderPage() {
       cancelled = true;
     };
   }, [user, authLoading, authHeaders]);
+
+  useEffect(() => {
+    const stepSlug = searchParams.get("step");
+    if (!stepSlug) return;
+    const stepNum = STEP_SLUG_TO_NUMBER[stepSlug];
+    if (stepNum >= 1 && stepNum <= TOTAL_STEPS) {
+      setCurrentStep(stepNum);
+    }
+  }, [searchParams]);
 
   const emailPrefilledRef = useRef(false);
   useEffect(() => {

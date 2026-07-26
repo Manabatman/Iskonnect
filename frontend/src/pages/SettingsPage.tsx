@@ -114,6 +114,8 @@ export function SettingsPage() {
   const [prefsSaving, setPrefsSaving] = useState(false);
   const [prefsError, setPrefsError] = useState<string | null>(null);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [exportLoading, setExportLoading] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const savePref = useCallback(
     async (patch: { notify_deadline_reminders?: boolean; notify_new_matches?: boolean }) => {
@@ -338,13 +340,33 @@ export function SettingsPage() {
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <button
               type="button"
-              disabled
-              className="cursor-not-allowed rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-400 opacity-70 dark:border-slate-600"
+              disabled={!user || exportLoading}
+              onClick={async () => {
+                setExportLoading(true);
+                setExportError(null);
+                try {
+                  const res = await apiFetch("/api/v1/profiles/me/export", { headers: authHeaders() });
+                  if (!res.ok) throw new Error("Could not export your data");
+                  const data = await res.json();
+                  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `iskonnect-export-${new Date().toISOString().slice(0, 10)}.json`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                } catch (e) {
+                  setExportError(e instanceof Error ? e.message : "Export failed");
+                } finally {
+                  setExportLoading(false);
+                }
+              }}
+              className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700"
             >
-              Download my data
+              {exportLoading ? "Preparing download…" : "Download my data"}
             </button>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Coming soon</span>
           </div>
+          {exportError ? <p className="mt-2 text-sm text-red-600 dark:text-red-400">{exportError}</p> : null}
 
           <div className="mt-8 rounded-xl border border-danger-100 p-4 dark:border-danger-900/40">
             <h3 className="text-sm font-semibold text-danger-600 dark:text-danger-400">Delete account</h3>

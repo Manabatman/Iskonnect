@@ -16,6 +16,8 @@ export function profileToInitialValues(p: { id?: number; [key: string]: unknown 
     school_type: String(p.school_type ?? ""),
     target_school: String(p.target_school ?? ""),
     education_level: String(p.education_level ?? ""),
+    enrollment_status: String(p.enrollment_status ?? ""),
+    current_year_level: p.current_year_level != null ? String(p.current_year_level) : "",
     current_academic_stage: String(p.current_academic_stage ?? ""),
     target_academic_year: String(p.target_academic_year ?? ""),
     field_of_study_broad: String(p.field_of_study_broad ?? ""),

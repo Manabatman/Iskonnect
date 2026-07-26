@@ -35,6 +35,8 @@ from eval.oracle import is_eligible
 
 _JSON_LIST_FIELDS = [
     "eligible_levels", "eligible_regions", "eligible_cities", "eligible_school_types",
+    "eligible_schools", "eligible_school_systems", "eligible_school_categories",
+    "eligible_year_levels", "eligible_enrollment_status",
     "eligible_courses_psced", "eligible_courses_specific", "priority_groups",
     "needs_tags", "required_documents", "preferred_extracurriculars", "preferred_awards",
 ]

@@ -17,11 +17,12 @@ from app.utils.scholarship_versioning import (
     snapshot_scholarship_row,
 )
 from app.utils.application_status import sync_application_status
-from app.utils.quality_score import compute_confidence_score
-from app.utils.data_completeness import compute_data_completeness_score
+from app.utils.opportunity_quality import apply_quality_scores
+from app.utils.editorial_state import apply_editorial_state, sync_legacy_fields_from_editorial, PUBLISHED
 from app.utils.timezone import utc_now_naive
 from app.taxonomy.regions import canonical_region_label
 from app.taxonomy.priority_groups import normalize_priority_groups
+from app.taxonomy.school_registry import resolve_school_ids
 
 
 class PersistResult:
@@ -120,6 +121,11 @@ def apply_schema_to_row(
     row.eligible_cities = json.dumps(scholarship.eligible_cities or [])
     row.residency_required = scholarship.residency_required or False
     row.eligible_school_types = json.dumps(scholarship.eligible_school_types or ["Public", "Private"])
+    row.eligible_schools = json.dumps(resolve_school_ids(scholarship.eligible_schools or []))
+    row.eligible_school_systems = json.dumps(scholarship.eligible_school_systems or [])
+    row.eligible_school_categories = json.dumps(scholarship.eligible_school_categories or [])
+    row.eligible_year_levels = json.dumps(scholarship.eligible_year_levels or [])
+    row.eligible_enrollment_status = json.dumps(scholarship.eligible_enrollment_status or [])
     row.eligible_courses_psced = json.dumps(scholarship.eligible_courses_psced or [])
     row.eligible_courses_specific = json.dumps(scholarship.eligible_courses_specific or [])
     row.preferred_extracurriculars = json.dumps(scholarship.preferred_extracurriculars or [])
@@ -139,6 +145,9 @@ def apply_schema_to_row(
     row.has_essay_requirement = scholarship.has_essay_requirement or False
     row.has_return_service = scholarship.has_return_service or False
     row.application_deadline = scholarship.application_deadline
+    row.deadline_precision = scholarship.deadline_precision
+    row.deadline_note = scholarship.deadline_note
+    row.deadline_source_url = scholarship.deadline_source_url
     row.application_open_date = scholarship.application_open_date
     row.academic_year_target = scholarship.academic_year_target
     if scholarship.cycle_type is not None:
@@ -149,6 +158,18 @@ def apply_schema_to_row(
         row.last_close_date = scholarship.last_close_date
     if scholarship.is_active is not None:
         row.is_active = scholarship.is_active
+    if scholarship.opportunity_type is not None:
+        row.opportunity_type = scholarship.opportunity_type
+    if scholarship.type_attributes is not None:
+        row.type_attributes = json.dumps(scholarship.type_attributes)
+    if scholarship.organization_id is not None:
+        row.organization_id = scholarship.organization_id
+    if scholarship.editorial_state is not None:
+        apply_editorial_state(row, scholarship.editorial_state)
+    elif not getattr(row, "editorial_state", None):
+        apply_editorial_state(row, PUBLISHED if row.is_active else "archived")
+    else:
+        sync_legacy_fields_from_editorial(row)
     row.last_verified_at = utc_now_naive()
     if verification_source:
         row.verification_source = verification_source
@@ -198,8 +219,7 @@ def persist_scholarship_from_schema(
                 changes=diff,
                 changed_by=version_changed_by,
             )
-        existing.confidence_score = compute_confidence_score(existing)
-        existing.data_completeness_score = compute_data_completeness_score(existing)
+        apply_quality_scores(existing, db)
         if auto_commit:
             db.commit()
             db.refresh(existing)
@@ -222,8 +242,7 @@ def persist_scholarship_from_schema(
         db_scholarship.data_status = "active"
     db.add(db_scholarship)
     db.flush()
-    db_scholarship.confidence_score = compute_confidence_score(db_scholarship)
-    db_scholarship.data_completeness_score = compute_data_completeness_score(db_scholarship)
+    apply_quality_scores(db_scholarship, db)
     snap = snapshot_scholarship_row(db_scholarship)
     record_scholarship_version(
         db,

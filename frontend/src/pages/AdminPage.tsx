@@ -46,6 +46,17 @@ type MaintenanceRunRow = {
   error_detail: string | null;
 };
 
+type CatalogHealthDashboard = {
+  as_of?: string;
+  institution_specific_count?: number;
+  deadline_unknown_count?: number;
+  avg_quality_score?: number;
+  verified_this_month?: number;
+  health?: Record<string, number>;
+  import?: { staging_pending?: number; staging_total?: number; recent_maintenance_runs?: MaintenanceRunRow[] };
+  data_quality?: DataQualitySummary;
+};
+
 type DataQualitySummary = {
   as_of?: string;
   publishability_threshold?: number;
@@ -99,7 +110,7 @@ export function AdminPage() {
   const [maintenanceRuns, setMaintenanceRuns] = useState<MaintenanceRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
   const [dataQuality, setDataQuality] = useState<DataQualitySummary | null>(null);
-  const [catalogHealth, setCatalogHealth] = useState<Record<string, number> | null>(null);
+  const [catalogHealth, setCatalogHealth] = useState<CatalogHealthDashboard | null>(null);
   const [importDashboard, setImportDashboard] = useState<{
     staging_pending?: number;
     staging_total?: number;
@@ -203,25 +214,18 @@ export function AdminPage() {
         if (!r.ok) throw new Error(`health HTTP ${r.status}`);
         return r.json();
       }),
-      apiFetch("/api/v1/admin/data-quality", { headers: headers() }).then((r) => {
-        if (!r.ok) throw new Error("data quality");
-        return r.json();
-      }),
-      apiFetch("/api/v1/admin/dashboard/health", { headers: headers() }).then((r) => {
+      apiFetch("/api/v1/admin/dashboard/catalog-health", { headers: headers() }).then((r) => {
         if (!r.ok) throw new Error("catalog health");
         return r.json();
       }),
-      apiFetch("/api/v1/admin/dashboard/import", { headers: headers() }).then((r) => {
-        if (!r.ok) throw new Error("import dashboard");
-        return r.json();
-      }),
     ])
-      .then(([h, dq, ch, imp]) => {
+      .then(([h, ch]) => {
         setHealthJson(JSON.stringify(h, null, 2));
-        setDataQuality(dq && typeof dq === "object" ? (dq as DataQualitySummary) : null);
-        setCatalogHealth(ch && typeof ch === "object" ? ch : null);
-        setImportDashboard(imp && typeof imp === "object" ? imp : null);
-        const runs = (imp as { recent_maintenance_runs?: MaintenanceRunRow[] })?.recent_maintenance_runs;
+        const dash = ch && typeof ch === "object" ? (ch as CatalogHealthDashboard) : null;
+        setCatalogHealth(dash);
+        setDataQuality(dash?.data_quality ?? null);
+        setImportDashboard(dash?.import ?? null);
+        const runs = dash?.import?.recent_maintenance_runs;
         setMaintenanceRuns(Array.isArray(runs) ? runs : []);
       })
       .catch((e) => {
@@ -895,19 +899,29 @@ export function AdminPage() {
         {tab === "system" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Scholarship health</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Catalog control center</h3>
               {catalogHealth ? (
-                <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
-                  {Object.entries(catalogHealth).map(([k, v]) => (
-                    <li
-                      key={k}
-                      className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
-                    >
-                      <span className="text-slate-600 dark:text-slate-400">{k.replace(/_/g, " ")}</span>
-                      <span className="font-semibold text-slate-900 dark:text-slate-100">{String(v)}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="mt-3 space-y-4">
+                  <ul className="grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                    {[
+                      ["Open (approx.)", catalogHealth.health?.open ?? "—"],
+                      ["Needs verification", catalogHealth.health?.needs_verification ?? "—"],
+                      ["Broken links", catalogHealth.health?.broken_link ?? "—"],
+                      ["Institution-specific", catalogHealth.institution_specific_count ?? "—"],
+                      ["Deadline unknown", catalogHealth.deadline_unknown_count ?? "—"],
+                      ["Avg quality score", catalogHealth.avg_quality_score ?? "—"],
+                      ["Verified this month", catalogHealth.verified_this_month ?? "—"],
+                    ].map(([label, value]) => (
+                      <li
+                        key={String(label)}
+                        className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                      >
+                        <span className="text-slate-600 dark:text-slate-400">{label}</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{String(value)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ) : (
                 <p className="mt-2 text-sm text-slate-500">—</p>
               )}

@@ -14,6 +14,7 @@ import { getCardVisualClasses } from "../utils/cardImages";
 import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
 import { formatScholarshipLocation } from "../utils/normalizeLocation";
 import { resolveApplicationStatus } from "../utils/scholarshipStatus";
+import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 
 function isMatchResult(s: ScholarshipInfo | MatchResult): s is MatchResult {
   return "score" in s && typeof (s as MatchResult).score === "number";
@@ -52,15 +53,16 @@ function formatVerifiedCompact(iso: string | null | undefined): string | null {
 
 function formatDeadlineLine(
   deadline: string | null | undefined,
-  openDate: string | null | undefined
+  openDate: string | null | undefined,
+  precision?: string | null,
+  note?: string | null,
+  verifiedAt?: string | null
 ): string {
   if (deadline?.trim()) {
-    const d = new Date(deadline.slice(0, 10));
-    return `Deadline: ${d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}`;
+    return formatDeadlineDisplay(deadline, precision, note, verifiedAt);
   }
   if (openDate?.trim()) {
-    const d = new Date(openDate.slice(0, 10));
-    return `Opens: ${d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}`;
+    return formatOpenDateDisplay(openDate, precision, note);
   }
   return "No deadline listed";
 }
@@ -147,7 +149,11 @@ export function ScholarshipCardV2({
     dataStatus !== "needs_review";
   const deadlineLine = formatDeadlineLine(
     match?.application_deadline ?? base.application_deadline,
-    match?.application_open_date ?? base.application_open_date
+    match?.application_open_date ?? base.application_open_date,
+    ("deadline_precision" in base ? base.deadline_precision : undefined) ??
+      match?.deadline_precision,
+    ("deadline_note" in base ? base.deadline_note : undefined) ?? match?.deadline_note,
+    "last_verified_at" in base ? base.last_verified_at : undefined
   );
   const lastVerified = formatVerifiedCompact(
     "last_verified_at" in base ? base.last_verified_at : undefined
@@ -289,6 +295,16 @@ export function ScholarshipCardV2({
           ) : null}
 
           <p className="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-200">{deadlineLine}</p>
+
+          {"preparation" in base && base.preparation?.documents_total != null && base.preparation.documents_total > 0 ? (
+            <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+              Application prep: {base.preparation.documents_ready ?? 0}/{base.preparation.documents_total} documents
+              ready
+              {base.preparation.readiness_score != null
+                ? ` (${Math.round(base.preparation.readiness_score)}% readiness)`
+                : ""}
+            </p>
+          ) : null}
 
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600 dark:text-slate-400">
             <span className="inline-flex min-w-0 items-center gap-1.5">

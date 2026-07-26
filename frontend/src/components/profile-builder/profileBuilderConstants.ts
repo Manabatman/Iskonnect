@@ -1,9 +1,11 @@
 export {
   ACADEMIC_STAGES,
   EDUCATION_LEVELS,
+  ENROLLMENT_STATUSES,
   EQUITY_FLAG_MAP,
   GWA_SCALES,
   SCHOOL_TYPES,
+  YEAR_LEVELS,
 } from "../../constants/profileOptions";
 
 export const inputClass =

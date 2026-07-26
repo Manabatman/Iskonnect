@@ -22,6 +22,8 @@ from app.taxonomy.equity_groups import EQUITY_GROUPS
 from app.taxonomy.priority_groups import resolve_priority_group
 from app.taxonomy.income_brackets import INCOME_BRACKETS
 from app.taxonomy.regions import normalize_region
+from app.taxonomy.school_registry import resolve_school_id
+from app.taxonomy.schools import get_school_entry, school_category_for_profile
 from app.utils.json_helpers import parse_json_list
 
 
@@ -351,6 +353,235 @@ def _evaluate_region(profile: dict, sch: dict) -> RequirementCheck:
     return RequirementCheck("region", "Location / residency", "hard", RequirementResult.UNKNOWN, RequirementVerification.UNVERIFIED)
 
 
+def _profile_school_ids(profile: dict) -> tuple[str | None, str | None]:
+    school_id = profile.get("school_id") or resolve_school_id(profile.get("school"))
+    target_id = profile.get("target_school_id") or resolve_school_id(profile.get("target_school"))
+    return school_id, target_id
+
+
+def _evaluate_school(profile: dict, sch: dict) -> RequirementCheck:
+    eligible_schools = parse_json_list(sch.get("eligible_schools"))
+    eligible_systems = parse_json_list(sch.get("eligible_school_systems"))
+    if not eligible_schools and not eligible_systems:
+        return RequirementCheck("school", "School / HEI", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+
+    school_id, target_id = _profile_school_ids(profile)
+    profile_ids = [x for x in (school_id, target_id) if x]
+    sch_verified = _scholarship_data_verified(sch)
+
+    if eligible_schools:
+        if not profile_ids:
+            labels = ", ".join(str(x) for x in eligible_schools if x)
+            return RequirementCheck(
+                "school",
+                f"School ({labels})",
+                "hard",
+                RequirementResult.UNKNOWN,
+                RequirementVerification.UNVERIFIED,
+                "School not provided in profile",
+            )
+        for sid in profile_ids:
+            if sid in eligible_schools:
+                entry = get_school_entry(sid)
+                name = entry["canonical_name"] if entry else sid
+                return RequirementCheck(
+                    "school",
+                    f"School ({name})",
+                    "hard",
+                    RequirementResult.MET,
+                    RequirementVerification.VERIFIED,
+                    f"Your school: {profile.get('school') or name}",
+                )
+        labels = ", ".join(str(x) for x in eligible_schools if x)
+        return RequirementCheck(
+            "school",
+            f"School ({labels})",
+            "hard",
+            RequirementResult.UNMET,
+            sch_verified,
+            f"Your school: {profile.get('school') or school_id or '—'}",
+        )
+
+    if eligible_systems:
+        if not profile_ids:
+            labels = ", ".join(str(x) for x in eligible_systems if x)
+            return RequirementCheck(
+                "school",
+                f"School system ({labels})",
+                "hard",
+                RequirementResult.UNKNOWN,
+                RequirementVerification.UNVERIFIED,
+                "School not provided in profile",
+            )
+        for sid in profile_ids:
+            entry = get_school_entry(sid)
+            system_id = entry.get("system_id") if entry else None
+            if system_id and system_id in eligible_systems:
+                return RequirementCheck(
+                    "school",
+                    f"School system ({system_id})",
+                    "hard",
+                    RequirementResult.MET,
+                    RequirementVerification.VERIFIED,
+                    f"Your school system: {system_id}",
+                )
+        labels = ", ".join(str(x) for x in eligible_systems if x)
+        return RequirementCheck(
+            "school",
+            f"School system ({labels})",
+            "hard",
+            RequirementResult.UNMET,
+            sch_verified,
+            "Your school is outside the required system",
+        )
+
+    return RequirementCheck("school", "School / HEI", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+
+
+def _evaluate_school_category(profile: dict, sch: dict) -> RequirementCheck:
+    eligible = parse_json_list(sch.get("eligible_school_categories"))
+    if not eligible:
+        return RequirementCheck("school_category", "School category", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+    category = school_category_for_profile(profile)
+    if not category:
+        labels = ", ".join(str(x) for x in eligible if x)
+        return RequirementCheck(
+            "school_category",
+            f"School category ({labels})",
+            "hard",
+            RequirementResult.UNKNOWN,
+            RequirementVerification.UNVERIFIED,
+            "School category could not be determined — add your school",
+        )
+    cat_lower = category.strip().lower()
+    for ec in eligible:
+        if ec and str(ec).strip().lower() == cat_lower:
+            return RequirementCheck(
+                "school_category",
+                f"School category ({ec})",
+                "hard",
+                RequirementResult.MET,
+                RequirementVerification.VERIFIED,
+                f"Your school category: {category}",
+            )
+    labels = ", ".join(str(x) for x in eligible if x)
+    return RequirementCheck(
+        "school_category",
+        f"School category ({labels})",
+        "hard",
+        RequirementResult.UNMET,
+        RequirementVerification.VERIFIED,
+        f"Your school category: {category}",
+    )
+
+
+def _evaluate_year_level(profile: dict, sch: dict) -> RequirementCheck:
+    eligible = parse_json_list(sch.get("eligible_year_levels"))
+    if not eligible:
+        return RequirementCheck("year_level", "Year level", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+    current = profile.get("current_year_level")
+    nxt = profile.get("next_year_level")
+    levels: list[int] = []
+    for raw in eligible:
+        try:
+            levels.append(int(raw))
+        except (TypeError, ValueError):
+            continue
+    if not levels:
+        return RequirementCheck("year_level", "Year level", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+    if current is None and nxt is None:
+        label = ", ".join(str(x) for x in levels)
+        return RequirementCheck(
+            "year_level",
+            f"Year level ({label})",
+            "hard",
+            RequirementResult.UNKNOWN,
+            RequirementVerification.UNVERIFIED,
+            "Year level not provided in profile",
+        )
+    for val in (current, nxt):
+        if val is not None and int(val) in levels:
+            return RequirementCheck(
+                "year_level",
+                f"Year level ({val})",
+                "hard",
+                RequirementResult.MET,
+                RequirementVerification.VERIFIED,
+                f"Your year level: {val}",
+            )
+    label = ", ".join(str(x) for x in levels)
+    shown = current if current is not None else nxt
+    return RequirementCheck(
+        "year_level",
+        f"Year level ({label})",
+        "hard",
+        RequirementResult.UNMET,
+        RequirementVerification.VERIFIED,
+        f"Your year level: {shown}",
+    )
+
+
+def _evaluate_enrollment_status(profile: dict, sch: dict) -> RequirementCheck:
+    eligible = parse_json_list(sch.get("eligible_enrollment_status"))
+    if not eligible:
+        return RequirementCheck("enrollment_status", "Enrollment status", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+    status = (profile.get("enrollment_status") or "").strip()
+    if not status:
+        labels = ", ".join(str(x) for x in eligible if x)
+        return RequirementCheck(
+            "enrollment_status",
+            f"Enrollment status ({labels})",
+            "hard",
+            RequirementResult.UNKNOWN,
+            RequirementVerification.UNVERIFIED,
+            "Enrollment status not provided",
+        )
+    status_lower = status.lower()
+    for es in eligible:
+        if es and str(es).strip().lower() == status_lower:
+            return RequirementCheck(
+                "enrollment_status",
+                f"Enrollment status ({es})",
+                "hard",
+                RequirementResult.MET,
+                RequirementVerification.VERIFIED,
+                f"Your status: {status}",
+            )
+    labels = ", ".join(str(x) for x in eligible if x)
+    return RequirementCheck(
+        "enrollment_status",
+        f"Enrollment status ({labels})",
+        "hard",
+        RequirementResult.UNMET,
+        RequirementVerification.VERIFIED,
+        f"Your status: {status}",
+    )
+
+
+def _evaluate_citizenship(profile: dict, sch: dict) -> RequirementCheck:
+    required = (sch.get("citizenship_required") or "Filipino").strip()
+    if not required or required.lower() in ("any", "none", "open"):
+        return RequirementCheck("citizenship", "Citizenship", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+    citizenship = (profile.get("citizenship") or "Filipino").strip()
+    if citizenship.lower() == required.lower():
+        return RequirementCheck(
+            "citizenship",
+            f"Citizenship ({required})",
+            "hard",
+            RequirementResult.MET,
+            RequirementVerification.VERIFIED,
+            f"Your citizenship: {citizenship}",
+        )
+    return RequirementCheck(
+        "citizenship",
+        f"Citizenship ({required})",
+        "hard",
+        RequirementResult.UNMET,
+        RequirementVerification.VERIFIED,
+        f"Your citizenship: {citizenship}",
+    )
+
+
 def _evaluate_school_type(profile: dict, sch: dict) -> RequirementCheck:
     eligible = parse_json_list(sch.get("eligible_school_types"))
     if not eligible:
@@ -590,6 +821,35 @@ def _evaluate_members_only(profile: dict, sch: dict) -> RequirementCheck:
     )
 
 
+# Registry of evaluators keyed by opportunity_type. Default scholarship uses all current evaluators.
+_EVALUATOR_REGISTRY: dict[str, list] = {
+    "scholarship": [
+        _evaluate_data_status,
+        _evaluate_age,
+        _evaluate_education_level,
+        _evaluate_region,
+        _evaluate_school_type,
+        _evaluate_school,
+        _evaluate_school_category,
+        _evaluate_year_level,
+        _evaluate_enrollment_status,
+        _evaluate_citizenship,
+        _evaluate_income,
+        _evaluate_gwa,
+        _evaluate_field,
+        _evaluate_members_only,
+    ],
+}
+
+
+def _evaluators_for_opportunity(scholarship: dict) -> list:
+    opp_type = (scholarship.get("opportunity_type") or "scholarship").strip().lower()
+    evaluators = _EVALUATOR_REGISTRY.get(opp_type)
+    if evaluators is not None:
+        return evaluators
+    return _EVALUATOR_REGISTRY["scholarship"]
+
+
 def _derive_status(requirements: list[RequirementCheck], sch: dict) -> QualificationStatus:
     applicable = [r for r in requirements if r.result != RequirementResult.NOT_APPLICABLE]
     if any(r.result == RequirementResult.UNMET for r in applicable):
@@ -626,19 +886,13 @@ def _derive_confidence(requirements: list[RequirementCheck], sch: dict) -> str:
 def evaluate_eligibility(profile: dict, scholarship: dict) -> EligibilityResult:
     """Evaluate full eligibility for a profile-scholarship pair. Single authority for all surfaces."""
     requirements: list[RequirementCheck] = []
-    ds_check = _evaluate_data_status(scholarship)
-    if ds_check:
-        requirements.append(ds_check)
-    requirements.extend([
-        _evaluate_age(profile, scholarship),
-        _evaluate_education_level(profile, scholarship),
-        _evaluate_region(profile, scholarship),
-        _evaluate_school_type(profile, scholarship),
-        _evaluate_income(profile, scholarship),
-        _evaluate_gwa(profile, scholarship),
-        _evaluate_field(profile, scholarship),
-        _evaluate_members_only(profile, scholarship),
-    ])
+    for evaluator in _evaluators_for_opportunity(scholarship):
+        if evaluator is _evaluate_data_status:
+            ds_check = evaluator(scholarship)
+            if ds_check:
+                requirements.append(ds_check)
+        else:
+            requirements.append(evaluator(profile, scholarship))
 
     status = _derive_status(requirements, scholarship)
     confidence = _derive_confidence(requirements, scholarship)

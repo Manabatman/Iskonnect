@@ -17,6 +17,7 @@ from app.config import settings
 from app.db import SessionLocal
 from app import models
 from app.utils.application_status import sync_application_status
+from app.utils.editorial_state import NEEDS_REVIEW, apply_editorial_state
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,7 @@ def run_link_check() -> dict[str, Any]:
                 s.link_failure_count = (s.link_failure_count or 0) + 1
                 s.link_status = "broken" if (s.link_failure_count or 0) >= 3 else "timeout"
                 if (s.link_failure_count or 0) >= 3:
-                    s.data_status = "broken_link"
+                    apply_editorial_state(s, NEEDS_REVIEW)
                     stats["broken"] += 1
             sync_application_status(s)
         db.commit()

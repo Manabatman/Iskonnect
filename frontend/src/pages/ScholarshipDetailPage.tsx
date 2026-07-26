@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
@@ -9,10 +9,12 @@ import {
   VerificationBadge,
 } from "../components/QualificationStatusBadge";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
-import { formatDate } from "../utils/formatDate";
+import { formatDateMedium } from "../utils/formatDate";
+import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
-import type { QualificationStatus, SavedScholarship } from "../types";
+import { TrustCard } from "../components/TrustCard";
+import type { FieldEvidence, QualificationStatus, SavedScholarship, ScholarshipEligibilityDetail, ScholarshipVersionHistoryItem } from "../types";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -54,7 +56,12 @@ interface ScholarshipDetail {
   has_essay_requirement?: boolean;
   has_return_service?: boolean;
   application_deadline?: string | null;
+  deadline_precision?: string | null;
+  deadline_note?: string | null;
   application_open_date?: string | null;
+  next_review_date?: string | null;
+  field_evidence?: FieldEvidence[];
+  completeness_label?: string | null;
   academic_year_target?: string | null;
   image_url?: string | null;
   image_alt?: string | null;
@@ -86,10 +93,15 @@ export function ScholarshipDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const profileIdFromQuery = searchParams.get("profile_id");
   const { authHeaders, user } = useAuth();
   const requirementsRef = useRef<HTMLDivElement>(null);
+  const eligibilityRef = useRef<HTMLDivElement>(null);
   const [requirementsHighlight, setRequirementsHighlight] = useState(false);
   const [scholarship, setScholarship] = useState<ScholarshipDetail | null>(null);
+  const [eligibilityDetail, setEligibilityDetail] = useState<ScholarshipEligibilityDetail | null>(null);
+  const [history, setHistory] = useState<ScholarshipVersionHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showReport, setShowReport] = useState(false);
@@ -101,6 +113,10 @@ export function ScholarshipDetailPage() {
   const [profileId, setProfileId] = useState<number | null>(null);
 
   useEffect(() => {
+    if (profileIdFromQuery) {
+      setProfileId(Number(profileIdFromQuery));
+      return;
+    }
     if (!user) {
       setProfileId(null);
       return;
@@ -117,7 +133,7 @@ export function ScholarshipDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [user, authHeaders]);
+  }, [user, authHeaders, profileIdFromQuery]);
 
   useEffect(() => {
     if (!id) {
@@ -148,6 +164,41 @@ export function ScholarshipDetailPage() {
     };
   }, [id, profileId, authHeaders]);
 
+  useEffect(() => {
+    if (!id || !profileId) {
+      setEligibilityDetail(null);
+      return;
+    }
+    let cancelled = false;
+    apiFetch(`/api/v1/scholarships/${id}/eligibility?profile_id=${profileId}`, { headers: authHeaders() })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data) setEligibilityDetail(data as ScholarshipEligibilityDetail);
+      })
+      .catch(() => {
+        if (!cancelled) setEligibilityDetail(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, profileId, authHeaders]);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    apiFetch(`/api/v1/scholarships/${id}/history`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (!cancelled) setHistory(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (!cancelled) setHistory([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
   const plannerSaved = useMemo((): SavedScholarship[] => {
     if (!scholarship) return [];
     return [
@@ -165,17 +216,24 @@ export function ScholarshipDetailPage() {
   }, [scholarship]);
 
   useEffect(() => {
-    if (!scholarship || location.hash !== "#requirements") return;
-    const el = requirementsRef.current;
+    if (!scholarship) return;
+    const hash = location.hash.replace("#", "");
+    const el =
+      hash === "eligibility"
+        ? eligibilityRef.current
+        : hash === "requirements"
+          ? requirementsRef.current
+          : null;
     if (!el) return;
     const scrollTimer = window.setTimeout(() => {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
-      setRequirementsHighlight(true);
+      if (hash === "requirements") setRequirementsHighlight(true);
     }, 100);
-    const unhighlightTimer = window.setTimeout(() => setRequirementsHighlight(false), 2900);
+    const unhighlightTimer =
+      hash === "requirements" ? window.setTimeout(() => setRequirementsHighlight(false), 2900) : undefined;
     return () => {
       window.clearTimeout(scrollTimer);
-      window.clearTimeout(unhighlightTimer);
+      if (unhighlightTimer != null) window.clearTimeout(unhighlightTimer);
     };
   }, [scholarship, location.hash, id]);
 
@@ -215,6 +273,14 @@ export function ScholarshipDetailPage() {
   const regions = normalizeScholarshipRegions(scholarship.eligible_regions ?? [], scholarship.provider);
   const isNationwide = regions.length === 0 && !(scholarship.eligible_cities?.length);
   const hasLink = scholarship.link && scholarship.link.trim().startsWith("http");
+  const activeQualification =
+    eligibilityDetail?.qualification_status ?? scholarship.qualification_status;
+  const activeQualifying =
+    eligibilityDetail?.qualifying_requirements ?? scholarship.qualifying_requirements;
+  const activeMissing =
+    eligibilityDetail?.missing_requirements ?? scholarship.missing_requirements;
+  const activeConfidence =
+    eligibilityDetail?.eligibility_confidence ?? scholarship.eligibility_confidence;
 
   return (
     <section className="py-12">
@@ -286,23 +352,26 @@ export function ScholarshipDetailPage() {
                 </span>
               ) : null}
             </div>
-            {scholarship.qualification_status ? (
-              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-600 dark:bg-slate-900/40">
+            {activeQualification ? (
+              <div
+                ref={eligibilityRef}
+                id="eligibility"
+                className="mt-4 scroll-mt-24 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-600 dark:bg-slate-900/40 md:scroll-mt-28"
+              >
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                    Your eligibility
+                    {eligibilityDetail?.passes_for_matching === false
+                      ? "Why you don't match"
+                      : "Why you match"}
                   </h2>
-                  <QualificationStatusBadge status={scholarship.qualification_status} />
+                  <QualificationStatusBadge status={activeQualification} />
                 </div>
-                {scholarship.eligibility_confidence ? (
+                {activeConfidence ? (
                   <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
-                    Confidence: {scholarship.eligibility_confidence.replace(/_/g, " ")}
+                    Confidence: {String(activeConfidence).replace(/_/g, " ")}
                   </p>
                 ) : null}
-                <EligibilityRequirementsList
-                  qualifying={scholarship.qualifying_requirements}
-                  missing={scholarship.missing_requirements}
-                />
+                <EligibilityRequirementsList qualifying={activeQualifying} missing={activeMissing} />
                 {!profileId ? (
                   <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
                     <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
@@ -424,14 +493,38 @@ export function ScholarshipDetailPage() {
             )}
           </div>
 
+          <TrustCard
+            fieldEvidence={scholarship.field_evidence}
+            nextReviewDate={scholarship.next_review_date}
+            verificationBadge={scholarship.verification_badge}
+            verificationBadgeLabel={scholarship.verification_badge_label}
+            completenessLabel={scholarship.completeness_label}
+            lastReviewedLabel={scholarship.verification_date_label}
+            verificationSourceLabel={scholarship.verification_source_label}
+            className="mb-8"
+          />
+
           <div className="mb-8">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Timeline</h2>
             <ul className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300">
               {scholarship.application_open_date && (
-                <li>Opens: {formatDate(scholarship.application_open_date)}</li>
+                <li>
+                  {formatOpenDateDisplay(
+                    scholarship.application_open_date,
+                    scholarship.deadline_precision,
+                    scholarship.deadline_note
+                  )}
+                </li>
               )}
               {scholarship.application_deadline && (
-                <li>Deadline: {formatDate(scholarship.application_deadline)}</li>
+                <li>
+                  {formatDeadlineDisplay(
+                    scholarship.application_deadline,
+                    scholarship.deadline_precision,
+                    scholarship.deadline_note,
+                    scholarship.last_verified_at
+                  )}
+                </li>
               )}
               {scholarship.academic_year_target && (
                 <li>Academic year: {scholarship.academic_year_target}</li>
@@ -443,6 +536,41 @@ export function ScholarshipDetailPage() {
                 )}
             </ul>
           </div>
+
+          {history.length > 0 ? (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                Change history
+              </h2>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                Field-level updates we have recorded for this listing.
+              </p>
+              <ul className="mt-3 space-y-2 text-sm">
+                {history.slice(0, 8).map((item) => (
+                  <li
+                    key={item.version_number}
+                    className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-600 dark:bg-slate-900/40"
+                  >
+                    <p className="font-medium text-slate-800 dark:text-slate-200">
+                      Version {item.version_number}
+                      {item.changed_at ? (
+                        <span className="ml-2 font-normal text-slate-500 dark:text-slate-400">
+                          · {formatDateMedium(item.changed_at)}
+                        </span>
+                      ) : null}
+                    </p>
+                    <ul className="mt-1 list-inside list-disc text-xs text-slate-600 dark:text-slate-400">
+                      {Object.keys(item.changes)
+                        .slice(0, 5)
+                        .map((key) => (
+                          <li key={key}>{key.replace(/_/g, " ")}</li>
+                        ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           {(scholarship.benefit_tuition ||
             (scholarship.benefit_allowance_monthly != null && scholarship.benefit_allowance_monthly > 0) ||

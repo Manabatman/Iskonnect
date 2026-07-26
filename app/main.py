@@ -24,6 +24,7 @@ from app.api.v1 import (
     match_history,
     matches,
     notifications,
+    organizations,
     product_features,
     profiles,
     reports,
@@ -188,6 +189,7 @@ app.include_router(match_history.router, prefix="/api/v1")
 app.include_router(saved_scholarships.router, prefix="/api/v1")
 app.include_router(suggestions.router, prefix="/api/v1")
 app.include_router(reports.router, prefix="/api/v1")
+app.include_router(organizations.router, prefix="/api/v1")
 app.include_router(scoring_admin.router, prefix="/api/v1")
 app.include_router(audit_routes.router, prefix="/api/v1")
 app.include_router(notifications.router, prefix="/api/v1")

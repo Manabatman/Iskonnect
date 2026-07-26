@@ -81,6 +81,7 @@ from app.matching.eligibility_result import evaluate_eligibility
 from app.matching.preparation import compute_application_readiness
 from app.utils.freshness_chips import build_freshness_chips
 from app.utils.verification_display import attach_verification_fields
+from app.utils.field_evidence import list_public_field_evidence
 
 
 def _public_scholarship_payload(row) -> dict:
@@ -175,6 +176,7 @@ def get_scholarship(
         logger.warning("scholarships_get_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
     payload = _public_scholarship_payload(s)
+    payload["field_evidence"] = list_public_field_evidence(db, scholarship_id)
     if profile_id is not None:
         assert_can_read_profile(profile_id, db, user_id, profile_token)
         profile = get_profile_dict(profile_id, db)
@@ -183,6 +185,73 @@ def get_scholarship(
             payload["preparation"] = compute_application_readiness(sch_dict, profile)
             payload.update(evaluate_eligibility(profile, sch_dict).to_dict())
     return payload
+
+
+@router.get("/scholarships/{scholarship_id}/history", response_model=list[schemas.ScholarshipVersionHistoryItem])
+@limiter.limit("60/minute")
+def get_scholarship_history(
+    request: Request,
+    scholarship_id: int,
+    db: Session = Depends(get_db),
+):
+    """Public change history for a scholarship (field-level diffs)."""
+    s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    rows = (
+        db.query(models.ScholarshipVersion)
+        .filter(models.ScholarshipVersion.scholarship_id == scholarship_id)
+        .order_by(models.ScholarshipVersion.version_number.desc())
+        .limit(50)
+        .all()
+    )
+    out: list[dict] = []
+    for row in rows:
+        try:
+            changes = json.loads(row.changes) if isinstance(row.changes, str) else row.changes
+        except (json.JSONDecodeError, TypeError):
+            changes = {}
+        out.append(
+            {
+                "version_number": row.version_number,
+                "changed_at": row.changed_at.isoformat() if row.changed_at else None,
+                "changes": changes if isinstance(changes, dict) else {},
+            }
+        )
+    return out
+
+
+@router.get("/scholarships/{scholarship_id}/eligibility", response_model=schemas.ScholarshipEligibilityResponse)
+@limiter.limit("120/minute")
+def get_scholarship_eligibility(
+    request: Request,
+    scholarship_id: int,
+    profile_id: int = Query(...),
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_optional_user_id)] = None,
+    profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
+):
+    """Full eligibility evaluation for any scholarship — matched or not."""
+    s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    assert_can_read_profile(profile_id, db, user_id, profile_token)
+    profile = get_profile_dict(profile_id, db)
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    sch_dict = _scholarship_to_dict(s)
+    elig = evaluate_eligibility(profile, sch_dict)
+    data = elig.to_dict()
+    return {
+        "scholarship_id": scholarship_id,
+        "profile_id": profile_id,
+        "qualification_status": data.get("qualification_status", "not_eligible"),
+        "requirements": data.get("requirements") or [],
+        "missing_requirements": data.get("missing_requirements") or [],
+        "qualifying_requirements": data.get("qualifying_requirements") or [],
+        "eligibility_confidence": data.get("eligibility_confidence"),
+        "passes_for_matching": elig.passes_for_matching,
+    }
 
 
 @router.put("/scholarships/{scholarship_id}", response_model=schemas.ScholarshipResponse)

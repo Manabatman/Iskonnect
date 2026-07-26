@@ -18,6 +18,11 @@ _SCHOLARSHIP_LIST_FIELDS = (
     "eligible_regions",
     "eligible_cities",
     "eligible_school_types",
+    "eligible_schools",
+    "eligible_school_systems",
+    "eligible_school_categories",
+    "eligible_year_levels",
+    "eligible_enrollment_status",
     "eligible_courses_psced",
     "eligible_courses_specific",
     "priority_groups",
@@ -95,6 +100,13 @@ class StudentProfile(BaseModel):
     barangay: Optional[str] = None
     psgc_code: Optional[str] = Field(default=None, max_length=9)
     school_type: Optional[SchoolTypeOption] = None
+    school_id: Optional[str] = None
+    target_school_id: Optional[str] = None
+    enrollment_status: Optional[str] = None
+    current_year_level: Optional[int] = Field(default=None, ge=1, le=12)
+    next_year_level: Optional[int] = Field(default=None, ge=1, le=12)
+    expected_graduation_date: Optional[date] = None
+    citizenship: Optional[str] = "Filipino"
     target_school: Optional[str] = None
     gwa_raw: Optional[str] = None
     gwa_scale: Optional[str] = None
@@ -216,6 +228,13 @@ class StudentProfileResponse(BaseModel):
     city_municipality: Optional[str] = None
     barangay: Optional[str] = None
     school_type: Optional[str] = None
+    school_id: Optional[str] = None
+    target_school_id: Optional[str] = None
+    enrollment_status: Optional[str] = None
+    current_year_level: Optional[int] = None
+    next_year_level: Optional[int] = None
+    expected_graduation_date: Optional[date] = None
+    citizenship: Optional[str] = None
     target_school: Optional[str] = None
     gwa_raw: Optional[str] = None
     gwa_scale: Optional[str] = None
@@ -273,8 +292,14 @@ class Scholarship(BaseModel):
     eligible_cities: Optional[List[str]] = []
     residency_required: Optional[bool] = False
     eligible_school_types: Optional[List[str]] = []
+    eligible_schools: Optional[List[str]] = []
+    eligible_school_systems: Optional[List[str]] = []
+    eligible_school_categories: Optional[List[str]] = []
+    eligible_year_levels: Optional[List[int]] = []
+    eligible_enrollment_status: Optional[List[str]] = []
     eligible_courses_psced: Optional[List[str]] = []
     eligible_courses_specific: Optional[List[str]] = []
+    citizenship_required: Optional[str] = "Filipino"
     max_income_threshold: Optional[int] = Field(default=None, ge=0)
     min_gwa_normalized: Optional[float] = Field(default=None, ge=0, le=100)
     priority_groups: Optional[List[str]] = []
@@ -292,6 +317,9 @@ class Scholarship(BaseModel):
     has_essay_requirement: Optional[bool] = False
     has_return_service: Optional[bool] = False
     application_deadline: Optional[date] = None
+    deadline_precision: Optional[str] = None
+    deadline_note: Optional[str] = None
+    deadline_source_url: Optional[str] = None
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
     cycle_type: Optional[str] = None  # annual | semester | rolling
@@ -300,6 +328,10 @@ class Scholarship(BaseModel):
     is_active: Optional[bool] = True
     image_url: Optional[str] = Field(default=None, max_length=2048)
     image_alt: Optional[str] = Field(default=None, max_length=300)
+    opportunity_type: Optional[str] = "scholarship"
+    type_attributes: Optional[dict[str, Any]] = None
+    organization_id: Optional[int] = None
+    editorial_state: Optional[str] = None
 
     @field_validator(*_SCHOLARSHIP_LIST_FIELDS, mode="before")
     @classmethod
@@ -329,6 +361,26 @@ class Scholarship(BaseModel):
     @classmethod
     def scholarship_type_normalize(cls, v: Any) -> Any:
         return _normalize_scholarship_type(v)
+
+    @field_validator("eligible_year_levels", mode="before")
+    @classmethod
+    def coerce_year_levels(cls, v: Any) -> Any:
+        if v is None or v == "":
+            return []
+        if isinstance(v, list):
+            out = []
+            for item in v:
+                if item is None or item == "":
+                    continue
+                try:
+                    out.append(int(item))
+                except (TypeError, ValueError):
+                    continue
+            return out
+        if isinstance(v, str):
+            parts = [p.strip() for p in v.split("|") if p.strip()]
+            return [int(p) for p in parts if p.isdigit()]
+        return v
 
     @model_validator(mode="after")
     def check_age_range(self) -> "Scholarship":
@@ -381,8 +433,14 @@ class ScholarshipResponse(BaseModel):
     eligible_cities: Optional[List[str]] = []
     residency_required: Optional[bool] = False
     eligible_school_types: Optional[List[str]] = []
+    eligible_schools: Optional[List[str]] = []
+    eligible_school_systems: Optional[List[str]] = []
+    eligible_school_categories: Optional[List[str]] = []
+    eligible_year_levels: Optional[List[int]] = []
+    eligible_enrollment_status: Optional[List[str]] = []
     eligible_courses_psced: Optional[List[str]] = []
     eligible_courses_specific: Optional[List[str]] = []
+    citizenship_required: Optional[str] = None
     preferred_extracurriculars: Optional[List[str]] = []
     preferred_awards: Optional[List[str]] = []
     max_income_threshold: Optional[int] = None
@@ -399,6 +457,9 @@ class ScholarshipResponse(BaseModel):
     has_essay_requirement: Optional[bool] = False
     has_return_service: Optional[bool] = False
     application_deadline: Optional[date] = None
+    deadline_precision: Optional[str] = None
+    deadline_note: Optional[str] = None
+    deadline_source_url: Optional[str] = None
     application_open_date: Optional[date] = None
     academic_year_target: Optional[str] = None
     cycle_type: Optional[str] = None
@@ -408,6 +469,7 @@ class ScholarshipResponse(BaseModel):
     image_url: Optional[str] = None
     image_alt: Optional[str] = None
     provider_logo: Optional[str] = None
+    next_review_date: Optional[datetime] = None
     # Data reliability & link integrity (optional; backward compatible)
     last_verified_at: Optional[datetime] = None
     verification_source: Optional[str] = None
@@ -417,9 +479,42 @@ class ScholarshipResponse(BaseModel):
     link_status: Optional[str] = None
     link_last_checked_at: Optional[datetime] = None
     link_failure_count: Optional[int] = None
+    opportunity_type: Optional[str] = "scholarship"
+    type_attributes: Optional[dict[str, Any]] = None
+    organization_id: Optional[int] = None
+    editorial_state: Optional[str] = None
 
     class Config:
         from_attributes = True
+
+
+class FieldEvidencePublic(BaseModel):
+    id: int
+    field_key: str
+    value_snapshot: Optional[str] = None
+    source_url: Optional[str] = None
+    source_type: Optional[str] = None
+    evidence_snippet: Optional[str] = None
+    confidence: Optional[float] = None
+    retrieved_at: Optional[str] = None
+    created_at: Optional[str] = None
+
+
+class ScholarshipVersionHistoryItem(BaseModel):
+    version_number: int
+    changed_at: Optional[str] = None
+    changes: dict[str, Any]
+
+
+class ScholarshipEligibilityResponse(BaseModel):
+    scholarship_id: int
+    profile_id: int
+    qualification_status: str
+    requirements: list[dict[str, Any]] = Field(default_factory=list)
+    missing_requirements: list[str] = Field(default_factory=list)
+    qualifying_requirements: list[str] = Field(default_factory=list)
+    eligibility_confidence: Optional[str] = None
+    passes_for_matching: bool = False
 
 
 ReportIssueType = Literal["broken_link", "wrong_deadline", "outdated_info", "wrong_eligibility", "other"]
@@ -429,6 +524,9 @@ class ScholarshipReportCreate(BaseModel):
     scholarship_id: int
     issue_type: ReportIssueType
     description: Optional[str] = None
+    field_key: Optional[str] = None
+    proposed_value: Optional[str] = None
+    evidence_url: Optional[str] = None
 
 
 class ScholarshipReportResponse(BaseModel):
@@ -437,10 +535,28 @@ class ScholarshipReportResponse(BaseModel):
     user_id: Optional[int] = None
     issue_type: str
     description: Optional[str] = None
+    field_key: Optional[str] = None
+    proposed_value: Optional[str] = None
+    evidence_url: Optional[str] = None
     status: str
     created_at: datetime
     reviewed_at: Optional[datetime] = None
     reviewer_id: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+
+class OrganizationResponse(BaseModel):
+    slug: str
+    canonical_name: str
+    org_type: Optional[str] = None
+    logo_url: Optional[str] = None
+    website: Optional[str] = None
+    verification_status: Optional[str] = None
+    opportunity_count: int = 0
+    avg_freshness_days: Optional[float] = None
+    report_count: int = 0
 
     class Config:
         from_attributes = True

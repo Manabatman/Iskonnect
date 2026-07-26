@@ -33,6 +33,8 @@ export function buildStudentProfileFromBuilderState(state: ProfileBuilderState):
     needs: getList(state.needs),
     education_level: trim("education_level"),
     gender: trim("gender"),
+    enrollment_status: trim("enrollment_status"),
+    current_year_level: getNum("current_year_level"),
     current_academic_stage: trim("current_academic_stage"),
     target_academic_year: trim("target_academic_year"),
     province: trim("province"),

@@ -33,6 +33,27 @@ export const GWA_SCALES = [
   { value: "4.0_scale", label: "4.0 Scale (4.0 highest)" },
 ] as const;
 
+export const ENROLLMENT_STATUSES = [
+  { value: "", label: "Select enrollment status" },
+  { value: "enrolled", label: "Currently enrolled" },
+  { value: "incoming_freshman", label: "Incoming freshman" },
+  { value: "transferee", label: "Transferee" },
+  { value: "returning", label: "Returning student" },
+  { value: "graduating", label: "Graduating this year" },
+  { value: "on_leave", label: "On leave / LOA" },
+] as const;
+
+export const YEAR_LEVELS = [
+  { value: "", label: "Select year level" },
+  { value: "11", label: "Grade 11" },
+  { value: "12", label: "Grade 12" },
+  { value: "1", label: "College 1st Year" },
+  { value: "2", label: "College 2nd Year" },
+  { value: "3", label: "College 3rd Year" },
+  { value: "4", label: "College 4th Year" },
+  { value: "5", label: "College 5th Year+" },
+] as const;
+
 export const EQUITY_FLAG_MAP: Record<string, string> = {
   Underprivileged: "is_underprivileged",
   PWD: "is_pwd",

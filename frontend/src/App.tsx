@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
@@ -15,7 +15,11 @@ import { VerifyEmailPage } from "./pages/VerifyEmailPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
+import { TransparencyPage } from "./pages/TransparencyPage";
+import { VerificationPage } from "./pages/VerificationPage";
+import { MatchMethodologyPage } from "./pages/MatchMethodologyPage";
 import { WhyIskonnectPage } from "./pages/WhyIskonnectPage";
+import { ContactPage } from "./pages/ContactPage";
 import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
 import { FaqPage } from "./pages/FaqPage";
 import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
@@ -62,6 +66,12 @@ const SponsorPortalPage = lazy(() =>
 const SchoolPortalPage = lazy(() =>
   import("./pages/SchoolPortalPage").then((m) => ({ default: m.SchoolPortalPage }))
 );
+const OpportunityPlannerPage = lazy(() =>
+  import("./pages/OpportunityPlannerPage").then((m) => ({ default: m.OpportunityPlannerPage }))
+);
+const OrganizationPage = lazy(() =>
+  import("./pages/OrganizationPage").then((m) => ({ default: m.OrganizationPage }))
+);
 
 function RouteFallback() {
   return (
@@ -99,10 +109,11 @@ function AppRoutes() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
-          <Route path="/transparency" element={<Navigate to="/how-it-works#scoring" replace />} />
-          <Route path="/match-methodology" element={<Navigate to="/how-it-works#matching" replace />} />
+          <Route path="/transparency" element={<TransparencyPage />} />
+          <Route path="/match-methodology" element={<MatchMethodologyPage />} />
           <Route path="/why-iskonnect" element={<WhyIskonnectPage />} />
-          <Route path="/how-we-verify" element={<Navigate to="/how-it-works#verification" replace />} />
+          <Route path="/how-we-verify" element={<VerificationPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/success-stories" element={<SuccessStoriesPage />} />
@@ -110,6 +121,14 @@ function AppRoutes() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/changelog" element={<ChangelogPage />} />
+          <Route
+            path="/organizations/:slug"
+            element={
+              <Suspense fallback={<RouteFallback />}>
+                <OrganizationPage />
+              </Suspense>
+            }
+          />
         </Route>
 
         <Route
@@ -134,6 +153,7 @@ function AppRoutes() {
 
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<ProfileDashboard />} />
+          <Route path="/planner/:profileId" element={<OpportunityPlannerPage />} />
           <Route path="/match/:profileId" element={<MatchResultsPage />} />
           <Route path="/match-compare" element={<MatchComparisonPage />} />
           <Route path="/profile-builder" element={<ProfileBuilderPage />} />

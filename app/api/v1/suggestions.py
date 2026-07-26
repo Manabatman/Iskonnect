@@ -18,6 +18,15 @@ from app.taxonomy.provinces import ALL_PROVINCES, PROVINCES_BY_REGION
 from app.taxonomy.psced_fields import PSCED_SPECIFIC_COURSES
 from app.taxonomy.regions import PHILIPPINE_REGIONS
 from app.taxonomy.schools import PHILIPPINE_SCHOOLS
+from app.taxonomy.profile_constants import (
+    ACADEMIC_STAGES,
+    CITIZENSHIP_OPTIONS,
+    EDUCATION_LEVELS,
+    ENROLLMENT_STATUSES,
+    GWA_SCALES,
+    SCHOOL_TYPES,
+    YEAR_LEVELS,
+)
 from app.utils.fuzzy_search import fuzzy_search
 
 router = APIRouter(prefix="/suggestions", tags=["suggestions"])
@@ -29,6 +38,21 @@ for courses in PSCED_SPECIFIC_COURSES.values():
     for c in courses:
         if c not in ALL_COURSES:
             ALL_COURSES.append(c)
+
+
+@router.get("/profile-options")
+@limiter.limit("60/minute")
+def get_profile_options(request: Request):
+    """Profile builder constants shared with the frontend."""
+    return {
+        "education_levels": EDUCATION_LEVELS,
+        "academic_stages": ACADEMIC_STAGES,
+        "school_types": SCHOOL_TYPES,
+        "gwa_scales": GWA_SCALES,
+        "enrollment_statuses": ENROLLMENT_STATUSES,
+        "year_levels": YEAR_LEVELS,
+        "citizenship_options": CITIZENSHIP_OPTIONS,
+    }
 
 
 @router.get("/schools")

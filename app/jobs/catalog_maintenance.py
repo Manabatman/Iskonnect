@@ -18,6 +18,8 @@ from app.jobs.data_quality import run_data_quality_checks
 from app.utils.job_run_logging import log_job_run
 from app.scholarship_cache import invalidate_scholarship_cache
 from app.utils.application_status import sync_application_status
+from app.utils.editorial_state import NEEDS_REVIEW, apply_editorial_state, sync_legacy_fields_from_editorial
+from app.utils.trust_constants import STALE_VERIFICATION_DAYS
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +33,7 @@ def run_catalog_maintenance() -> dict[str, int]:
     Returns counts: expired_rows_updated, needs_review_rows_updated.
     """
     today = date.today()
-    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    stale_cutoff = datetime.now(timezone.utc) - timedelta(days=STALE_VERIFICATION_DAYS)
     db = SessionLocal()
     expired_count = 0
     review_count = 0
@@ -42,7 +44,7 @@ def run_catalog_maintenance() -> dict[str, int]:
                 models.Scholarship.application_deadline.isnot(None),
                 models.Scholarship.application_deadline < today,
             )
-            .values(data_status="expired")
+            .values(data_status="expired", editorial_state="archived", is_active=False)
         )
         result = db.execute(stmt)
         expired_count = result.rowcount or 0
@@ -53,7 +55,7 @@ def run_catalog_maintenance() -> dict[str, int]:
             .all()
         )
         for s in legacy:
-            s.data_status = "expired"
+            apply_editorial_state(s, "archived", today=today)
             sync_application_status(s, today=today)
             expired_count += 1
 
@@ -69,7 +71,7 @@ def run_catalog_maintenance() -> dict[str, int]:
             .all()
         )
         for s in stale:
-            s.data_status = "needs_review"
+            apply_editorial_state(s, NEEDS_REVIEW, today=today)
             sync_application_status(s, today=today)
             review_count += 1
 
@@ -83,7 +85,7 @@ def run_catalog_maintenance() -> dict[str, int]:
         )
         broken_link_demoted = 0
         for s in broken_open:
-            s.data_status = "needs_review"
+            apply_editorial_state(s, NEEDS_REVIEW, today=today)
             sync_application_status(s, today=today)
             broken_link_demoted += 1
             review_count += 1
@@ -103,6 +105,7 @@ def run_catalog_maintenance() -> dict[str, int]:
             .all()
         )
         for s in expired_rows:
+            sync_legacy_fields_from_editorial(s, today=today)
             sync_application_status(s, today=today)
 
         db.commit()
@@ -118,8 +121,12 @@ def run_catalog_maintenance() -> dict[str, int]:
 
         quality = run_data_quality_checks()
         from app.jobs.data_quality import recompute_completeness_scores, count_structured_eligibility_gaps
+        from app.utils.opportunity_quality import apply_quality_scores
 
         completeness_updated = recompute_completeness_scores()
+        for row in db.query(models.Scholarship).filter(models.Scholarship.is_active == True).all():  # noqa: E712
+            apply_quality_scores(row, db)
+        db.commit()
         structured_gaps = count_structured_eligibility_gaps()
 
         log_job_run(

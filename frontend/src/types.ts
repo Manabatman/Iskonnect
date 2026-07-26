@@ -8,6 +8,8 @@ export interface StudentProfile {
   full_name: string;
   email: string;
   age?: number;
+  enrollment_status?: string;
+  current_year_level?: number;
   region?: string;
   school?: string;
   needs?: string[];
@@ -69,10 +71,99 @@ export interface MatchBreakdown {
   priority_group?: MatchFactorBreakdown;
 }
 
+export interface ProfileMissingField {
+  key: string;
+  label: string;
+  profile_link: string;
+}
+
 export interface ProfileCompleteness {
   filled_fields: number;
   total_fields: number;
   low_data_warning: boolean;
+  quality_percent?: number;
+  quality_filled?: number;
+  quality_total?: number;
+  missing_fields?: ProfileMissingField[];
+  improvement_hints?: string[];
+}
+
+export interface EliminatedScholarship {
+  scholarship_id?: number;
+  title?: string;
+  filter?: string;
+  reason?: string;
+}
+
+export interface MatchDiagnostics {
+  total_checked?: number;
+  passed_hard_filters?: number;
+  eliminated_by_filter?: Record<string, number>;
+  eliminated_scholarships?: EliminatedScholarship[];
+  hard_exclusions?: EliminatedScholarship[];
+  missing_profile_fields?: string[];
+  top_blockers?: string[];
+}
+
+export interface FieldEvidence {
+  id: number;
+  field_key: string;
+  value_snapshot?: string | null;
+  source_url?: string | null;
+  source_type?: string | null;
+  evidence_snippet?: string | null;
+  confidence?: number | null;
+  retrieved_at?: string | null;
+  created_at?: string | null;
+}
+
+export interface ApplicationPreparation {
+  readiness_score?: number;
+  document_checklist?: Array<{ document: string; status: string }>;
+  documents_ready?: number;
+  documents_total?: number;
+  profile_fields_filled?: number;
+  profile_fields_total?: number;
+}
+
+export interface ScholarshipEligibilityDetail {
+  scholarship_id: number;
+  profile_id: number;
+  qualification_status: string;
+  requirements?: Array<{ key?: string; label?: string; result?: string; detail?: string }>;
+  missing_requirements?: string[];
+  qualifying_requirements?: string[];
+  eligibility_confidence?: string | null;
+  passes_for_matching?: boolean;
+}
+
+export interface ScholarshipVersionHistoryItem {
+  version_number: number;
+  changed_at?: string | null;
+  changes: Record<string, unknown>;
+}
+
+export interface OrganizationProfile {
+  slug: string;
+  canonical_name: string;
+  org_type?: string | null;
+  logo_url?: string | null;
+  website?: string | null;
+  verification_status?: string | null;
+  opportunity_count: number;
+  avg_freshness_days?: number | null;
+  report_count: number;
+}
+
+export interface PlanResponse {
+  matches: MatchResult[];
+  total: number;
+  limit: number;
+  offset: number;
+  timeline: OpportunityTimeline;
+  preparation?: { items?: unknown[]; count?: number };
+  profile_completeness?: ProfileCompleteness;
+  diagnostics?: MatchDiagnostics;
 }
 
 export interface UpcomingScholarship {
@@ -160,8 +251,12 @@ export interface MatchResult {
   benefit_books?: boolean;
   benefit_total_value?: number | null;
   application_deadline?: string | null;
+  deadline_precision?: string | null;
+  deadline_note?: string | null;
   application_open_date?: string | null;
+  predicted_open?: string | null;
   required_documents?: string[];
+  preparation?: ApplicationPreparation;
   /** Improvement tips from matching engine */
   suggestions?: string[];
   /** Top reasons the match score is not higher (gaps vs max contribution per factor) */
@@ -177,7 +272,6 @@ export interface MatchResult {
   eligibility_state?: EligibilityState | string;
   ui_state?: "eligible_now" | "opening_soon" | "prepare_ahead" | "future_eligibility" | string;
   gap_reason?: string | null;
-  predicted_open?: string | null;
   next_action?: string | null;
   lifecycle_hint?: string | null;
   freshness_chips?: FreshnessChip[];
@@ -248,7 +342,14 @@ export interface ScholarshipInfo {
   benefit_books?: boolean;
   benefit_total_value?: number | null;
   application_deadline?: string | null;
+  deadline_precision?: string | null;
+  deadline_note?: string | null;
   application_open_date?: string | null;
+  next_review_date?: string | null;
+  field_evidence?: FieldEvidence[];
+  completeness_label?: string | null;
+  completeness_tier?: string | null;
+  preparation?: ApplicationPreparation;
   is_active?: boolean;
   application_status?: string | null;
   data_status?: string | null;
@@ -258,7 +359,6 @@ export interface ScholarshipInfo {
   verification_badge?: string | null;
   verification_badge_label?: string | null;
   verification_source_label?: string | null;
-  completeness_label?: string | null;
   last_reviewed_label?: string | null;
   predicted_next_open?: string | null;
   cycle_type?: string | null;

@@ -11,6 +11,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+from app.utils.trust_constants import VERIFICATION_FRESH_DAYS
+
 # Weights sum to 100
 COMPLETENESS_WEIGHTS: dict[str, int] = {
     "title": 5,
@@ -81,7 +83,7 @@ def compute_data_completeness_score(row: dict[str, Any] | Any) -> int:
     vsource = _get(row, "verification_source")
     if verified and vsource in ("manual", "team_verified", "partner", "csv_import"):
         if isinstance(verified, datetime):
-            cutoff = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=90)
+            cutoff = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=VERIFICATION_FRESH_DAYS)
             if verified >= cutoff:
                 score += COMPLETENESS_WEIGHTS["verification"]
         else:

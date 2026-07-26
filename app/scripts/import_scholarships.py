@@ -503,12 +503,9 @@ def clean_row(row: dict) -> dict | None:
     if parsed_deadline and parsed_deadline < date.today():
         data_status = "past_deadline"
 
-    # Append school restrictions to description for transparency
-    if parsed_qual["eligible_schools"] and description:
-        schools_note = ", ".join(parsed_qual["eligible_schools"][:5])
-        if len(parsed_qual["eligible_schools"]) > 5:
-            schools_note += ", ..."
-        description = description + f"\n\nEligible universities: {schools_note}"
+    from app.taxonomy.school_registry import resolve_school_ids
+
+    eligible_school_ids = resolve_school_ids(parsed_qual["eligible_schools"])
 
     return {
         "title": title,
@@ -534,6 +531,7 @@ def clean_row(row: dict) -> dict | None:
         "eligible_cities": None,
         "residency_required": False,
         "eligible_school_types": json.dumps(["Public", "Private"]),
+        "eligible_schools": json.dumps(eligible_school_ids) if eligible_school_ids else None,
         "eligible_courses_psced": json.dumps(psced_codes) if psced_codes else None,
         "min_age": None,
         "max_age": None,
