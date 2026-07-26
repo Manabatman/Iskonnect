@@ -1,0 +1,51 @@
+[
+  {
+    "scholarship_id": 1,
+    "notes": [
+      "Applications submitted online to respective CHED Regional Office; regional portals may differ (e.g. stufaps.chedroxi.com for RO XI).",
+      "Full vs Half Merit packages differ: private Full PESFA up to PhP120,000/AY; SUC Full SSP up to PhP80,000/AY with free tuition under RA 10931.",
+      "Priority programs governed by CMO No. 7 s. 2023 (national) plus regional and GAD priority lists.",
+      "Financial documents: ITR, BIR non-filer cert, OFW income proof, or CSWD Social Case Study Report accepted."
+    ],
+    "source_url": "https://legacy.ched.gov.ph/merit-scholarship/"
+  },
+  {
+    "scholarship_id": 5,
+    "notes": [
+      "TDP is not a standalone CHED program; it is implemented by UniFAST as part of TES.",
+      "Applicants must not be beneficiaries of TES, CHED CSPs, or other national StuFAPs.",
+      "Certificate of Indigency from Punong Barangay required for new applicants.",
+      "Grant amount PhP7,500 per regular semester subject to prioritization and fund availability."
+    ],
+    "source_url": "https://unifast.gov.ph/tes.html"
+  },
+  {
+    "scholarship_id": 6,
+    "notes": [
+      "TES additional benefits: TES-3A PWD PhP10,000/AY; TES-3B board exam one-time PhP8,000 reimbursement.",
+      "Students must coordinate with HEI UniFAST focal person; no centralized national application portal for all HEIs.",
+      "Prioritization order per UniFAST Board Resolution No. 2024-019 for AY 2024-2025 onwards."
+    ],
+    "source_url": "https://unifast.gov.ph/tes.html"
+  },
+  {
+    "scholarship_id": 19,
+    "notes": [
+      "Record appears to conflate discontinued K-12 Transition graduate scholarships for HEI personnel with an unrelated active student program.",
+      "Graduate Studies (Local) nominations closed AY 2017-2018; transition period ended SY 2020-2021.",
+      "Recommend archive with closure type permanently_discontinued after human review."
+    ],
+    "source_url": "https://chedk12.wordpress.com/sgs/"
+  },
+  {
+    "scholarship_id": 76,
+    "notes": [
+      "No transferees/shiftees with credited units eligible.",
+      "NC holders and pre-K-12 graduates may apply if other eligibility met.",
+      "LGU/private school scholarships do not disqualify; national government StuFAPs do.",
+      "Applications via official BPMSP online portal at bpms.ched.gov.ph; HEI track administered solely by CHED.",
+      "Benefit packages vary by HEI type and location (Metro Manila private HEIs have higher published support per PIA)."
+    ],
+    "source_url": "https://caraga.ched.gov.ph/wp-content/uploads/2026/05/BPMSP_FAQ_0428.pdf"
+  }
+]

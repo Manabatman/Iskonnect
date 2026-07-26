@@ -20,6 +20,7 @@ import { VerificationPage } from "./pages/VerificationPage";
 import { MatchMethodologyPage } from "./pages/MatchMethodologyPage";
 import { WhyIskonnectPage } from "./pages/WhyIskonnectPage";
 import { ContactPage } from "./pages/ContactPage";
+import { OpportunityComingSoonPage } from "./pages/OpportunityComingSoonPage";
 import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
 import { FaqPage } from "./pages/FaqPage";
 import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
@@ -114,6 +115,7 @@ function AppRoutes() {
           <Route path="/why-iskonnect" element={<WhyIskonnectPage />} />
           <Route path="/how-we-verify" element={<VerificationPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/opportunities/:typeSlug" element={<OpportunityComingSoonPage />} />
           <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/success-stories" element={<SuccessStoriesPage />} />

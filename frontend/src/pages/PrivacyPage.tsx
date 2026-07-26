@@ -19,7 +19,8 @@ const SUBPROCESSORS = [
 ] as const;
 
 const VERSION_HISTORY = [
-  { version: "2026-07", summary: "Named DPO, field collection table, subprocessors, retention periods, export right" },
+  { version: "2026-07-public-beta", summary: "Honest solo-developer contact; removed formal DPO claim; student project disclosure" },
+  { version: "2026-07", summary: "Field collection table, subprocessors, retention periods, export right" },
   { version: "2026-01", summary: "Initial privacy policy — profile data for matching only" },
 ] as const;
 
@@ -28,19 +29,33 @@ export function PrivacyPage() {
     <section className="py-12">
       <div className="mx-auto max-w-3xl px-4">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Effective: July 2026 · Version 2026-07</p>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Effective: July 2026 · Version 2026-07-public-beta</p>
 
         <div className="mt-8 space-y-8 text-slate-700 dark:text-slate-300">
           <section>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Data Protection Officer</h2>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Who operates ISKONNECT</h2>
             <p className="mt-2">
-              For privacy requests, corrections, or complaints under the Data Privacy Act of 2012 (RA 10173), contact our
-              Data Protection Officer:
+              ISKONNECT is a student project built and maintained by Mark Justin S. Manabat (University of the
+              Philippines Diliman). It is not a registered company and does not have a formal Data Protection Officer.
             </p>
             <p className="mt-2">
-              <a href="mailto:privacy@iskonnect.ph" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
-                privacy@iskonnect.ph
+              For privacy requests, data access, correction, or erasure under the Data Privacy Act of 2012 (RA 10173),
+              contact:
+            </p>
+            <p className="mt-2">
+              <a
+                href="mailto:manabat.markjustin@gmail.com"
+                className="font-medium text-primary-600 hover:underline dark:text-primary-400"
+              >
+                manabat.markjustin@gmail.com
               </a>
+            </p>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              You can also export or delete your account data directly from{" "}
+              <Link to="/settings" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+                Account Settings
+              </Link>
+              .
             </p>
           </section>
 

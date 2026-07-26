@@ -1,0 +1,10 @@
+[
+  {
+    "observed_rule": "",
+    "example_scholarship_ids": [],
+    "frequency_in_bundle": 0,
+    "current_workaround": "description",
+    "recommendation": "keep_free_text",
+    "source_urls": []
+  }
+]

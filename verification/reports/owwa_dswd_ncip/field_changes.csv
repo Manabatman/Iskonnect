@@ -1,0 +1,5 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+9,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://owwa.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+52,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://ncip.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+53,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://ncip.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+57,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://www.dswd.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26

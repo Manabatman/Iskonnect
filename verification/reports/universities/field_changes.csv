@@ -1,0 +1,8 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+18,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://ateneo.edu,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+23,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://pnu.edu.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+24,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://up.edu.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+40,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.ateneo.edu,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+41,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.ateneo.edu,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+45,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://manila.ust.edu.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+69,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://www.pup.edu.ph/students/scholarships,HEAD check passed on 2026-07-26,,,2026-07-26

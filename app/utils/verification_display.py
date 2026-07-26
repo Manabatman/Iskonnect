@@ -31,20 +31,23 @@ def _parse_dt(val: Any) -> datetime | None:
 
 def verification_badge(row: Any) -> str:
     """
-    User-facing badge: verified | partially_verified | needs_review
+    User-facing badge: verified | partially_verified | imported_unverified | needs_review
     """
     ds = (_get(row, "data_status") or "").strip().lower()
-    if ds == "needs_review":
+    editorial = (_get(row, "editorial_state") or "").strip().lower()
+    if ds == "needs_review" or editorial == "needs_review":
         return "needs_review"
     score = _completeness(row)
     verified_at = _parse_dt(_get(row, "last_verified_at"))
     vsource = (_get(row, "verification_source") or "").strip().lower()
-    if verified_at and vsource in ("manual", "team_verified", "partner", "csv_import"):
+    if verified_at and vsource in ("manual", "team_verified", "partner"):
         age_days = (datetime.utcnow() - verified_at.replace(tzinfo=None)).days
         if age_days <= VERIFICATION_FRESH_DAYS and score >= 60:
             return "verified"
-        if age_days <= 180:
+        if age_days <= STALE_VERIFICATION_DAYS:
             return "partially_verified"
+    if vsource in ("csv_import", "csv_import_legacy", ""):
+        return "imported_unverified"
     if score >= 85:
         return "partially_verified"
     return "needs_review"
@@ -52,8 +55,9 @@ def verification_badge(row: Any) -> str:
 
 def verification_badge_label(badge: str) -> str:
     return {
-        "verified": "Verified",
+        "verified": "Verified against official source",
         "partially_verified": "Partially verified",
+        "imported_unverified": "Imported — not independently verified",
         "needs_review": "Needs review",
     }.get(badge, "Needs review")
 

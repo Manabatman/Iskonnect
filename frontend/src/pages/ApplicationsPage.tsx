@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import { apiFetch, NetworkError } from "../api/client";
-import { formatDateMedium, formatDateTimeLong } from "../utils/formatDate";
+import { formatDateTimeLong } from "../utils/formatDate";
+import { formatDeadlineDisplay } from "../utils/formatDeadline";
 
 const APPLICATION_STATUSES = [
   "preparing",
@@ -29,6 +30,9 @@ type ApiApplication = {
     title?: string;
     provider?: string;
     application_deadline?: string | null;
+    deadline_precision?: string | null;
+    deadline_note?: string | null;
+    last_verified_at?: string | null;
   } | null;
 };
 
@@ -296,8 +300,14 @@ export function ApplicationsPage() {
                         </Link>
                         <p className="text-xs text-slate-500 dark:text-slate-400">{sch?.provider ?? "—"}</p>
                         <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
-                          Deadline:{" "}
-                          {deadline ? formatDateMedium(deadline) : "—"}
+                          {deadline || sch?.deadline_precision
+                            ? formatDeadlineDisplay(
+                                deadline,
+                                sch?.deadline_precision,
+                                sch?.deadline_note,
+                                sch?.last_verified_at
+                              )
+                            : "Deadline not listed"}
                         </p>
                       </div>
                       <div className="flex flex-col gap-2 sm:items-end">

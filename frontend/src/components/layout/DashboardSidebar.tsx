@@ -15,6 +15,8 @@ type NavItem = {
   label: string;
   match: (path: string) => boolean;
   icon: (props: { className?: string }) => ReactElement;
+  disabled?: boolean;
+  disabledHint?: string;
 };
 
 const navItems: NavItem[] = [
@@ -26,7 +28,7 @@ const navItems: NavItem[] = [
   },
   {
     to: "/scholarships/search",
-    label: "Search scholarships",
+    label: "Search opportunities",
     match: (path: string) => path.startsWith("/scholarships/search"),
     icon: IconSearch,
   },
@@ -156,7 +158,7 @@ export function DashboardSidebar({
   const location = useLocation();
   const path = location.pathname;
   const { user, authHeaders } = useAuth();
-  const [plannerHref, setPlannerHref] = useState("/profile-builder");
+  const [profileId, setProfileId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -164,26 +166,33 @@ export function DashboardSidebar({
     apiFetch("/api/v1/profiles/me", { headers: authHeaders() })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (!cancelled && data?.id) setPlannerHref(`/planner/${data.id}`);
+        if (!cancelled && data?.id) setProfileId(Number(data.id));
       })
       .catch(() => {
-        /* keep fallback */
+        /* planner stays disabled until profile exists */
       });
     return () => {
       cancelled = true;
     };
   }, [user, authHeaders]);
 
-  const dynamicNavItems: NavItem[] = [
-    ...navItems.slice(0, 3),
-    {
-      to: plannerHref,
-      label: "Opportunity planner",
-      match: (p: string) => p.startsWith("/planner/"),
-      icon: IconCalendar,
-    },
-    ...navItems.slice(3),
-  ];
+  const plannerItem: NavItem = profileId
+    ? {
+        to: `/planner/${profileId}`,
+        label: "Opportunity planner",
+        match: (p: string) => p.startsWith("/planner/"),
+        icon: IconCalendar,
+      }
+    : {
+        to: "/profile-builder",
+        label: "Opportunity planner",
+        match: (p: string) => p.startsWith("/planner/"),
+        icon: IconCalendar,
+        disabled: true,
+        disabledHint: "Complete your profile first",
+      };
+
+  const dynamicNavItems: NavItem[] = [...navItems.slice(0, 3), plannerItem, ...navItems.slice(3)];
 
   return (
     <>
@@ -244,19 +253,35 @@ export function DashboardSidebar({
           {dynamicNavItems.map((item) => {
             const active = item.match(path);
             const Icon = item.icon;
+            const sharedClass = [
+              "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+              active
+                ? "bg-primary-50 text-primary-700 shadow-sm dark:bg-primary-900/30 dark:text-primary-300"
+                : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700/80",
+              collapsed ? "justify-center px-2" : "",
+            ].join(" ");
+
+            if (item.disabled) {
+              return (
+                <span
+                  key={item.label}
+                  className={`${sharedClass} cursor-not-allowed opacity-50`}
+                  title={item.disabledHint ?? item.label}
+                  aria-disabled="true"
+                >
+                  <Icon className="shrink-0 opacity-90" />
+                  {!collapsed ? <span className="truncate">{item.label}</span> : null}
+                </span>
+              );
+            }
+
             return (
               <Link
-                key={item.to}
+                key={item.label}
                 to={item.to}
                 onClick={onMobileClose}
                 aria-current={active ? "page" : undefined}
-                className={[
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
-                  active
-                    ? "bg-primary-50 text-primary-700 shadow-sm dark:bg-primary-900/30 dark:text-primary-300"
-                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700/80",
-                  collapsed ? "justify-center px-2" : "",
-                ].join(" ")}
+                className={sharedClass}
                 title={collapsed ? item.label : undefined}
               >
                 <Icon className="shrink-0 opacity-90" />

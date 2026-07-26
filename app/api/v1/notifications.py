@@ -135,3 +135,64 @@ def mark_read(
     row.is_read = True
     db.commit()
     return {"status": "read", "id": notification_id}
+
+
+@router.post("/notifications/read-all")
+@limiter.limit("30/minute")
+def mark_all_read(
+    request: Request,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    _require_notifications_enabled()
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    updated = (
+        db.query(models.Notification)
+        .filter(models.Notification.user_id == user_id, models.Notification.is_read == False)  # noqa: E712
+        .update({"is_read": True}, synchronize_session=False)
+    )
+    db.commit()
+    return {"status": "read_all", "updated": updated}
+
+
+@router.delete("/notifications/{notification_id}")
+@limiter.limit("60/minute")
+def delete_notification(
+    request: Request,
+    notification_id: int,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    _require_notifications_enabled()
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    row = (
+        db.query(models.Notification)
+        .filter(models.Notification.id == notification_id, models.Notification.user_id == user_id)
+        .first()
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    db.delete(row)
+    db.commit()
+    return {"status": "deleted", "id": notification_id}
+
+
+@router.delete("/notifications")
+@limiter.limit("30/minute")
+def clear_all_notifications(
+    request: Request,
+    db: Session = Depends(get_db),
+    user_id: Annotated[int | None, Depends(get_current_user_id)] = None,
+):
+    _require_notifications_enabled()
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    deleted = (
+        db.query(models.Notification)
+        .filter(models.Notification.user_id == user_id)
+        .delete(synchronize_session=False)
+    )
+    db.commit()
+    return {"status": "cleared", "deleted": deleted}

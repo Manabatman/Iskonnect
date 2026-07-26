@@ -1,0 +1,55 @@
+line,scholarship_id,field,action,result,detail
+2,1,title,confirm_unchanged,skipped_confirm_unchanged,
+3,1,provider,confirm_unchanged,skipped_confirm_unchanged,
+4,1,primary_link,update,applied,'https://ched.gov.ph/merit-scholarship' -> 'https://legacy.ched.gov.ph/merit-scholarship/'
+5,1,link_status,update,applied,'broken' -> 'ok'
+6,1,data_status,update,applied,'broken_link' -> 'verified'
+7,1,min_gwa_normalized,update,applied,90.0 -> 93.0
+8,1,max_income_threshold,update,applied,400000 -> 500000
+9,1,benefit_total_value,update,applied,80000 -> 120000
+10,1,benefit_allowance_monthly,update,applied,3000 -> None
+11,1,has_qualifying_exam,update,applied,True -> False
+12,1,has_interview,flag_review,skipped_idempotent,already needs_review
+13,1,has_essay_requirement,flag_review,skipped_idempotent,already needs_review
+14,1,application_status,confirm_unchanged,skipped_confirm_unchanged,
+15,1,application_open_date,flag_review,skipped_idempotent,already needs_review
+16,1,application_deadline,update,applied,'2026-06-30' -> '2025-06-20'
+17,1,scholarship_type,confirm_unchanged,skipped_confirm_unchanged,
+18,5,title,update,applied,'CHED-Tulong Dulong Program' -> 'Tulong Dunong Program (TDP)'
+19,5,provider,update,applied,'Commission on Higher Education' -> 'Unified Student Financial Assistance System (UniFAST)'
+20,5,primary_link,update,applied,'https://ched.gov.ph' -> 'https://unifast.gov.ph/tes.html'
+21,5,link_status,update,applied,'broken' -> 'ok'
+22,5,data_status,update,skipped_drift,DB='needs_review' expected iskconnect='broken_link'
+23,5,description,update,applied,"'Financial assistance for students from low-income families.' -> 'Subsidy under TES for first undergraduate degree; PhP7,500 per regular semester; income ceiling PhP400,000; cannot hold other national StuFAPs including TES and CHED CSPs.'"
+24,5,max_income_threshold,confirm_unchanged,skipped_confirm_unchanged,
+25,5,min_gwa_normalized,flag_review,skipped_idempotent,already needs_review
+26,5,benefit_total_value,update,applied,60000 -> 15000
+27,5,benefit_allowance_monthly,update,applied,2500 -> None
+28,5,application_status,update,skipped_drift,DB='needs_verification' expected iskconnect='open'
+29,5,required_documents,update,skipped_drift,"DB=""['ITR', 'BIRTH_CERT', 'GOOD_MORAL', '4PS_CERT']"" expected iskconnect='ITR|BIRTH_CERT|GOOD_MORAL|4PS_CERT'"
+30,6,title,confirm_unchanged,skipped_confirm_unchanged,
+31,6,primary_link,update,applied,'https://unifast.gov.ph' -> 'https://unifast.gov.ph/tes.html'
+32,6,description,update,applied,"'Tertiary education subsidy for eligible Filipino students.' -> 'Grant-in-aid under RA 10931 for priority students in SUCs, CHED-recognized LUCs, and eligible private HEIs; amounts vary by institution type and prioritization.'"
+33,6,benefit_total_value,update,skipped_unparseable_numeric,20000 (SUC/LUC) / 27000 (Private HEI) per AY
+34,6,benefit_allowance_monthly,update,applied,2000 -> None
+35,6,max_income_threshold,confirm_unchanged,skipped_confirm_unchanged,
+36,6,min_gwa_normalized,flag_review,applied,
+37,6,cycle_type,update,skipped_drift,DB='annual' expected iskconnect=None
+38,6,application_status,update,skipped_drift,DB='expected_reopen' expected iskconnect='open'
+39,19,title,update,applied,'CHED K-12 Transition Scholarship' -> 'CHED K to 12 Transition Program – Scholarships for Graduate Studies (Local)'
+40,19,description,update,applied,"'Graduate scholarship for educators and professionals.' -> ""Transition-era scholarship for deloaded HEI teaching/non-teaching personnel to pursue master's or doctorate degrees; nominations for AY 2017-2018 closed."""
+41,19,primary_link,update,applied,'https://ched.gov.ph' -> 'https://legacy.ched.gov.ph/k-12-project-management-unit/'
+42,19,is_active,archive,skipped_idempotent,already archived in DB
+43,19,application_status,archive,skipped_idempotent,already archived this run
+44,19,data_status,update,applied,'broken_link' -> 'verified'
+45,76,title,confirm_unchanged,skipped_confirm_unchanged,
+46,76,primary_link,confirm_unchanged,skipped_confirm_unchanged,
+47,76,link_status,update,applied,'broken' -> 'ok'
+48,76,data_status,update,applied,'broken_link' -> 'verified'
+49,76,min_gwa_normalized,confirm_unchanged,skipped_confirm_unchanged,
+50,76,max_income_threshold,confirm_unchanged,skipped_confirm_unchanged,
+51,76,benefit_total_value,confirm_unchanged,skipped_confirm_unchanged,
+52,76,has_return_service,confirm_unchanged,skipped_confirm_unchanged,
+53,76,application_status,update,skipped_drift,DB='expected_reopen' expected iskconnect='previous_cycle'
+54,76,application_open_date,flag_review,skipped_idempotent,already needs_review
+55,76,application_deadline,flag_review,skipped_idempotent,already needs_review

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import type { ScholarshipInfo } from "../types";
-import { formatDate } from "../utils/formatDate";
+import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
 import { BookmarkButton } from "./BookmarkButton";
 
@@ -200,12 +200,19 @@ export function ScholarshipDetailPanel({ scholarship, onClose, isOpen }: Scholar
               Timeline
             </h4>
             <ul className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300">
-              {s.application_open_date && (
-                <li>Opens: {formatDate(s.application_open_date)}</li>
-              )}
-              {s.application_deadline && (
-                <li>Deadline: {formatDate(s.application_deadline)}</li>
-              )}
+              {s.application_open_date ? (
+                <li>{formatOpenDateDisplay(s.application_open_date, s.deadline_precision, s.deadline_note)}</li>
+              ) : null}
+              {s.application_deadline || s.deadline_precision ? (
+                <li>
+                  {formatDeadlineDisplay(
+                    s.application_deadline,
+                    s.deadline_precision,
+                    s.deadline_note,
+                    s.last_verified_at
+                  )}
+                </li>
+              ) : null}
               {s.academic_year_target && (
                 <li>Academic year: {s.academic_year_target}</li>
               )}

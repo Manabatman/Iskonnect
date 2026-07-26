@@ -1,0 +1,9 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+11,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.ayalafoundation.org/program/u-go-scholar-grant/,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+13,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.mbfoundation.org.ph/grants/grants-education/about-the-metrogold-scholarship-program-msp/,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+14,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://www.bpifoundation.org/programs/special-projects/pagpupugay-scholarship,HEAD check passed on 2026-07-26,,,2026-07-26
+15,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://sanmiguel.com.ph/foundation,HEAD check failed (http_404) on 2026-07-26,,,2026-07-26
+16,link_status,broken,ok,update,automated_head_check,,partially_verified,https://www.gabayguro.com/about-us,HEAD check passed on 2026-07-26,,,2026-07-26
+59,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://www.caritasmanila.org.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+71,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.securitybank.com/agency-scholarships-program-dnd/,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+75,link_status,ok,broken,update,automated_head_check,,partially_verified,https://www.aboitizfoundation.org/what-we-do/education/aboitiz-future-leaders-scholarship-program/,HEAD check failed (url_error:[Errno 11001] getaddrinfo failed) on 2026-07-26,,,2026-07-26

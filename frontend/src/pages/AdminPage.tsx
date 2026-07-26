@@ -102,6 +102,8 @@ export function AdminPage() {
   const [scholarships, setScholarships] = useState<ScholarshipInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reviewQueueLoading, setReviewQueueLoading] = useState(false);
+  const [reviewQueueWaking, setReviewQueueWaking] = useState(false);
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [matchRuns, setMatchRuns] = useState<AdminMatchRun[]>([]);
@@ -303,29 +305,58 @@ export function AdminPage() {
 
   useEffect(() => {
     if (tab !== "reviews") return;
-    setError(null);
-    apiFetch(`/api/v1/admin/queues/${reviewQueue}?limit=50`, { headers: headers() })
-      .then(async (r) => {
-        if (!r.ok) {
-          const body = await r.text().catch(() => "");
-          throw new Error(
-            `Failed to load review queue (HTTP ${r.status})${body ? `: ${body.slice(0, 160)}` : ""}`
-          );
-        }
-        return r.json();
-      })
-      .then((d: { items?: Record<string, unknown>[] }) =>
-        setReviewItems(Array.isArray(d.items) ? d.items : [])
-      )
-      .catch((e) => {
-        if (e instanceof NetworkError) {
-          setError(
-            `Unable to reach the API at ${API_BASE_URL}. Confirm the backend is running, VITE_API_BASE_URL is set, and CORS allows this site.`
-          );
-          return;
-        }
-        setError(e instanceof Error ? e.message : "Error");
-      });
+
+    let cancelled = false;
+    let retried = false;
+
+    const loadQueue = () => {
+      setReviewQueueLoading(true);
+      setError(null);
+      if (!retried) setReviewQueueWaking(false);
+
+      return apiFetch(`/api/v1/admin/queues/${reviewQueue}?limit=50`, { headers: headers() })
+        .then(async (r) => {
+          if (!r.ok) {
+            const body = await r.text().catch(() => "");
+            throw new Error(
+              `Failed to load review queue (HTTP ${r.status})${body ? `: ${body.slice(0, 160)}` : ""}`
+            );
+          }
+          return r.json();
+        })
+        .then((d: { items?: Record<string, unknown>[] }) => {
+          if (cancelled) return;
+          setReviewItems(Array.isArray(d.items) ? d.items : []);
+          setReviewQueueWaking(false);
+        })
+        .catch((e) => {
+          if (cancelled) return;
+          if (e instanceof NetworkError && !retried) {
+            retried = true;
+            setReviewQueueWaking(true);
+            window.setTimeout(() => {
+              if (!cancelled) void loadQueue();
+            }, 3000);
+            return;
+          }
+          setReviewQueueWaking(false);
+          if (e instanceof NetworkError) {
+            setError(
+              `Unable to reach the API at ${API_BASE_URL}. The server may be waking up — wait a moment and switch tabs to retry. Confirm VITE_API_BASE_URL and CORS are configured.`
+            );
+            return;
+          }
+          setError(e instanceof Error ? e.message : "Error");
+        })
+        .finally(() => {
+          if (!cancelled) setReviewQueueLoading(false);
+        });
+    };
+
+    void loadQueue();
+    return () => {
+      cancelled = true;
+    };
   }, [tab, reviewQueue, headers]);
 
   const handleStagingApprove = async (stagingId: number, action: "create" | "update" = "create") => {
@@ -696,6 +727,14 @@ export function AdminPage() {
                 </button>
               ))}
             </div>
+            {reviewQueueWaking ? (
+              <p className="mb-4 text-sm text-amber-700 dark:text-amber-300" role="status">
+                Waking the server — this can take up to a minute on Render free tier…
+              </p>
+            ) : null}
+            {reviewQueueLoading && !reviewQueueWaking ? (
+              <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">Loading queue…</p>
+            ) : null}
             <ul className="space-y-2">
               {reviewItems.length === 0 ? (
                 <p className="text-slate-600 dark:text-slate-400">Queue empty.</p>

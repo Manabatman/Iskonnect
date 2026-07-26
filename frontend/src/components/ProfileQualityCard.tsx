@@ -38,33 +38,40 @@ export function ProfileQualityCard({ completeness, className = "" }: ProfileQual
       : 0);
   const missing = completeness.missing_fields ?? [];
   const hints = completeness.improvement_hints ?? [];
+  const topHint = hints[0];
+  const topMissing = missing[0];
 
   return (
     <div
       className={`rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 ${className}`}
       role="status"
     >
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-            Profile quality
-          </h3>
-          <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-100">{percent}%</p>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            {completeness.quality_filled != null && completeness.quality_total != null
-              ? `${completeness.quality_filled} of ${completeness.quality_total} matching fields filled`
-              : `${completeness.filled_fields} of ${completeness.total_fields} core fields filled`}
-          </p>
-        </div>
-        <div className="h-2 w-full min-w-[120px] max-w-[200px] overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 sm:mt-6">
-          <div
-            className={`h-full rounded-full transition-all ${
-              percent >= 80 ? "bg-emerald-500" : percent >= 50 ? "bg-amber-500" : "bg-rose-500"
-            }`}
-            style={{ width: `${Math.min(100, Math.max(0, percent))}%` }}
-          />
-        </div>
-      </div>
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        Improve your matches
+      </h3>
+
+      {topHint ? (
+        <p className="mt-2 text-base font-medium leading-snug text-slate-900 dark:text-slate-100">{topHint}</p>
+      ) : topMissing ? (
+        <p className="mt-2 text-base font-medium leading-snug text-slate-900 dark:text-slate-100">
+          Adding{" "}
+          <Link
+            to={profileLinkToPath(topMissing.profile_link)}
+            className="text-primary-600 underline hover:text-primary-700 dark:text-primary-400"
+          >
+            {topMissing.label.toLowerCase()}
+          </Link>{" "}
+          helps us check more scholarships accurately.
+        </p>
+      ) : percent >= 80 ? (
+        <p className="mt-2 text-base font-medium text-slate-900 dark:text-slate-100">
+          Your profile has enough detail for reliable matching on most programs.
+        </p>
+      ) : (
+        <p className="mt-2 text-base font-medium text-slate-900 dark:text-slate-100">
+          Complete a few more matching fields to unlock more accurate eligibility checks.
+        </p>
+      )}
 
       {completeness.low_data_warning ? (
         <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
@@ -73,9 +80,9 @@ export function ProfileQualityCard({ completeness, className = "" }: ProfileQual
         </p>
       ) : null}
 
-      {hints.length > 0 ? (
+      {hints.length > 1 ? (
         <ul className="mt-4 space-y-1 text-sm text-slate-700 dark:text-slate-300">
-          {hints.map((hint) => (
+          {hints.slice(1, 4).map((hint) => (
             <li key={hint} className="flex gap-2">
               <span className="text-primary-600 dark:text-primary-400" aria-hidden>
                 ·
@@ -89,7 +96,7 @@ export function ProfileQualityCard({ completeness, className = "" }: ProfileQual
       {missing.length > 0 ? (
         <div className="mt-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-            Still missing
+            Add these to improve matching
           </p>
           <ul className="mt-2 space-y-1">
             {missing.slice(0, 6).map((field) => (
@@ -108,6 +115,18 @@ export function ProfileQualityCard({ completeness, className = "" }: ProfileQual
           ) : null}
         </div>
       ) : null}
+
+      <div className="mt-4 flex items-center gap-3">
+        <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+          <div
+            className={`h-full rounded-full transition-all ${
+              percent >= 80 ? "bg-emerald-500" : percent >= 50 ? "bg-amber-500" : "bg-rose-500"
+            }`}
+            style={{ width: `${Math.min(100, Math.max(0, percent))}%` }}
+          />
+        </div>
+        <span className="shrink-0 text-xs text-slate-500 dark:text-slate-400">{percent}% matching fields</span>
+      </div>
     </div>
   );
 }

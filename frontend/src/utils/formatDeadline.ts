@@ -4,7 +4,7 @@ const PRECISION_LABELS: Record<string, string> = {
   exact: "exact date",
   estimated: "estimated — confirm on the official site",
   rolling: "rolling admissions",
-  not_announced: "deadline not announced",
+  institution_dependent: "set by your school — check with your registrar",
 };
 
 /**
@@ -22,8 +22,14 @@ export function formatDeadlineDisplay(
     return note?.trim() ? `Rolling admissions (${note.trim()})` : "Rolling admissions";
   }
 
-  if (p === "not_announced" || (!deadline?.trim() && p === "not_announced")) {
+  if (p === "not_announced") {
     return note?.trim() ? `Deadline not announced (${note.trim()})` : "Deadline not announced";
+  }
+
+  if (p === "institution_dependent") {
+    return note?.trim()
+      ? `Deadline set by your school (${note.trim()})`
+      : "Deadline set by your school — check with your registrar";
   }
 
   if (!deadline?.trim()) {

@@ -3,7 +3,7 @@ import { APP_RELEASE_DATE, APP_RELEASE_LABEL } from "../data/changelog";
 
 const productLinks = [
   { to: "/how-it-works", label: "How it works" },
-  { to: "/scholarships/search", label: "Scholarships" },
+  { to: "/scholarships/search", label: "Search opportunities" },
   { to: "/how-we-verify", label: "How we verify" },
   { to: "/transparency", label: "Transparency" },
   { to: "/contact", label: "Contact" },
@@ -76,7 +76,9 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 sm:flex-row">
-          <p className="text-sm text-slate-500">By Mark Justin S. Manabat.</p>
+          <Link to="/contact" className="text-sm text-slate-500 transition hover:text-white">
+            By Mark Justin S. Manabat.
+          </Link>
           <p className="text-xs text-slate-500">© {new Date().getFullYear()} Iskonnect. All rights reserved.</p>
         </div>
       </div>

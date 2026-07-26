@@ -1,0 +1,40 @@
+[
+  {
+    "title": "Free Higher Education (FHE) under RA 10931",
+    "provider": "Unified Student Financial Assistance System (UniFAST)",
+    "provider_type": "Government",
+    "scholarship_type": "Need",
+    "primary_link": "https://unifast.gov.ph/",
+    "application_portal_url": "",
+    "description": "Automatic tuition and other school fees subsidy for eligible students enrolled in SUCs and CHED-recognized LUCs under the Universal Access to Quality Tertiary Education Act (RA 10931). Distinct from TES cash grant.",
+    "eligible_levels": ["College"],
+    "eligible_regions": [],
+    "priority_groups": [],
+    "members_only": false,
+    "application_open_date": "",
+    "application_deadline": "",
+    "cycle_type": "annual",
+    "benefit_summary": "Free tuition and other school fees at SUCs/LUCs for eligible undergraduates per RA 10931 implementing guidelines",
+    "source_url": "https://unifast.gov.ph/",
+    "evidence_snippet": "Programs under R.A. 10931 include Free Higher Education alongside TES and Student Loan Program on official UniFAST site"
+  },
+  {
+    "title": "Student Loan Program for Tertiary Education – Short Term (SLPTE-ST)",
+    "provider": "Unified Student Financial Assistance System (UniFAST)",
+    "provider_type": "Government",
+    "scholarship_type": "Need",
+    "primary_link": "https://unifast.gov.ph/guidelines.html",
+    "application_portal_url": "",
+    "description": "Short-term student loan for tertiary education expenses at SUCs, CHED-recognized LUCs, and private HEIs. UniFAST materials note applications may be suspended while guidelines are under review.",
+    "eligible_levels": ["College", "Graduate"],
+    "eligible_regions": [],
+    "priority_groups": [],
+    "members_only": false,
+    "application_open_date": "",
+    "application_deadline": "",
+    "cycle_type": "annual",
+    "benefit_summary": "Short-term loan covering tuition and education-related expenses; repayment terms per UniFAST MC guidelines",
+    "source_url": "https://unifast.gov.ph/assets/pdf/infgrfx/uaqtea2025-trifold.pdf",
+    "evidence_snippet": "Applications are suspended while the SLP guidelines are under review (UAQTEA 2025 trifold)"
+  }
+]

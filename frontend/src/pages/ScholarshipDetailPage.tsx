@@ -302,7 +302,7 @@ export function ScholarshipDetailPage() {
             <p className="mt-1 text-primary-800/90 dark:text-primary-200/90">
               Deadlines, income ceilings, and document requirements can change without notice. Before you apply, verify
               every detail on the scholarship provider&apos;s website.{" "}
-              <Link to="/how-it-works#verification" className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300">
+              <Link to="/how-we-verify" className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300">
                 How we verify
               </Link>
               {" · "}
@@ -507,7 +507,7 @@ export function ScholarshipDetailPage() {
           <div className="mb-8">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Timeline</h2>
             <ul className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300">
-              {scholarship.application_open_date && (
+              {scholarship.application_open_date ? (
                 <li>
                   {formatOpenDateDisplay(
                     scholarship.application_open_date,
@@ -515,8 +515,8 @@ export function ScholarshipDetailPage() {
                     scholarship.deadline_note
                   )}
                 </li>
-              )}
-              {scholarship.application_deadline && (
+              ) : null}
+              {scholarship.application_deadline || scholarship.deadline_precision ? (
                 <li>
                   {formatDeadlineDisplay(
                     scholarship.application_deadline,
@@ -525,12 +525,13 @@ export function ScholarshipDetailPage() {
                     scholarship.last_verified_at
                   )}
                 </li>
-              )}
+              ) : null}
               {scholarship.academic_year_target && (
                 <li>Academic year: {scholarship.academic_year_target}</li>
               )}
               {!scholarship.application_open_date &&
                 !scholarship.application_deadline &&
+                !scholarship.deadline_precision &&
                 !scholarship.academic_year_target && (
                   <li className="text-slate-500 dark:text-slate-400">Check official website for dates</li>
                 )}

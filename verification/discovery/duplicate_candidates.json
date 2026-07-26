@@ -1,0 +1,62 @@
+[
+  {
+    "research_title": "Aboitiz Brights (Aboitiz Future Leaders Scholarship)",
+    "research_provider": "Aboitiz Foundation",
+    "matched_ids": [75],
+    "match_type": "variant_of_generic_parent",
+    "reasoning": "ISKONNECT id 75 is titled 'Aboitiz Future Leaders Scholarship Program' which appears to be the current official brand for Aboitiz Foundation college scholarships. The PDF's 'Aboitiz Brights' name could not be independently confirmed on aboitizfoundation.org (503 during verification). The foundation site historically uses Future Leaders branding for incoming sophomore support at partner universities.",
+    "recommended_resolution": "Do not create duplicate. Review id 75 metadata against latest Aboitiz Foundation education page when site is accessible. If 'Brights' is confirmed as a distinct sub-program, split then; otherwise treat as naming variant.",
+    "verification_confidence": "partially_verified",
+    "source_urls": ["https://www.aboitizfoundation.org/what-we-do/education/aboitiz-future-leaders-scholarship-program/"]
+  },
+  {
+    "research_title": "Ayala Foundation U-Go Scholar Grant",
+    "research_provider": "Ayala Foundation",
+    "matched_ids": [11],
+    "match_type": "variant_of_generic_parent",
+    "reasoning": "ISKONNECT id 11 'Ayala Foundation Scholarship Program' is a generic parent record. Official Ayala Foundation page documents U-Go as a distinct program implemented by Ayala Foundation for young women in public universities—not a general merit scholarship.",
+    "recommended_resolution": "Update id 11 to U-Go Scholar Grant specifics OR add U-Go as separate record after human review. U-Go has distinct eligibility (female, public HEI, need-based) vs generic Ayala scholarship.",
+    "verification_confidence": "verified",
+    "source_urls": ["https://www.ayalafoundation.org/program/u-go-scholar-grant/"]
+  },
+  {
+    "research_title": "Metrobank Foundation ACCESS Program",
+    "research_provider": "Metrobank Foundation",
+    "matched_ids": [13],
+    "match_type": "variant_of_generic_parent",
+    "reasoning": "ISKONNECT id 13 'Metrobank Foundation Scholarship' is generic. Official Metrobank Foundation site references MetroGold/MSP and education grants; ACCESS (Assistance for the Completion of College Education for Superior Students) is the flagship undergraduate program cited in research with distinct exam requirement and 50 slots annually.",
+    "recommended_resolution": "Rename and enrich id 13 to ACCESS Program with official primary_link to Metrobank Foundation education grants page. Do not add duplicate unless MSP and ACCESS are confirmed as separate active programs.",
+    "verification_confidence": "partially_verified",
+    "source_urls": ["https://www.mbfoundation.org.ph/grants/grants-education/about-the-metrogold-scholarship-program-msp/"]
+  },
+  {
+    "research_title": "BPI Foundation Pagpupugay Scholarship",
+    "research_provider": "BPI Foundation",
+    "matched_ids": [14],
+    "match_type": "variant_of_generic_parent",
+    "reasoning": "ISKONNECT id 14 'BPI Foundation Scholarship' is generic. Pagpupugay is a specialized COVID-19 frontliner next-of-kin program (RA-adjacent special project), not the foundation's general scholarship. Official bpifoundation.org documents distinct eligibility (medical frontliner kin, 85% GWA, partner HEI application).",
+    "recommended_resolution": "Either split Pagpupugay as separate record OR replace id 14 content if generic BPI scholarship does not exist as standalone program. Pagpupugay AY 2022-2023 deadline on page is stale—verify current cycle before import.",
+    "verification_confidence": "verified",
+    "source_urls": ["https://www.bpifoundation.org/programs/special-projects/pagpupugay-scholarship"]
+  },
+  {
+    "research_title": "PLDT-Smart Foundation Gabay Guro Scholarship",
+    "research_provider": "PLDT-Smart Foundation",
+    "matched_ids": [16],
+    "match_type": "variant_of_generic_parent",
+    "reasoning": "ISKONNECT id 16 'PLDT-Smart Foundation Scholarship' is generic. Gabay Guro is the official education arm with teacher-training scholarships at 35+ partner HEIs for BEED/BSED majors—distinct program with return-service teaching obligation per research.",
+    "recommended_resolution": "Update id 16 to Gabay Guro Program with education-specific metadata, partner HEI constraints, and teaching return-service. Do not add duplicate unless a separate non-Gabay PLDT scholarship is confirmed active.",
+    "verification_confidence": "partially_verified",
+    "source_urls": ["https://www.gabayguro.com/about-us"]
+  },
+  {
+    "research_title": "CHED Medical Scholarship and Return Service (MSRS)",
+    "research_provider": "Commission on Higher Education",
+    "matched_ids": [54],
+    "match_type": "misattributed_duplicate",
+    "reasoning": "Research and official CHED page confirm MSRS (RA 11509) is administered by CHED. ISKONNECT id 54 attributes the same program to DOH with title 'DOH Medical Scholarship and Return Service Program' and is archived.",
+    "recommended_resolution": "Correct id 54 provider to CHED, retitle to MSRS, un-archive, update all fields from legacy.ched.gov.ph/msrs. Do NOT create a second MSRS record.",
+    "verification_confidence": "verified",
+    "source_urls": ["https://legacy.ched.gov.ph/msrs/"]
+  }
+]

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { MatchResult, OpportunityTimeline } from "../types";
 import { formatDateShort, formatMonthYear } from "../utils/formatDate";
+import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 
 type CalendarEventKind = "open" | "deadline" | "predicted";
 
@@ -143,8 +144,20 @@ export function OpportunityCalendarView({ timeline, className = "" }: Opportunit
                   <div className="min-w-0">
                     <p className="font-medium">{ev.title}</p>
                     <p className="text-xs opacity-90">
-                      {KIND_LABELS[ev.kind]} · {formatDateShort(ev.date)}
-                      {ev.kind === "predicted" ? " (estimate)" : ""}
+                      {ev.kind === "deadline"
+                        ? formatDeadlineDisplay(
+                            ev.match.application_deadline,
+                            ev.match.deadline_precision,
+                            ev.match.deadline_note,
+                            ev.match.last_verified_at
+                          )
+                        : ev.kind === "open"
+                          ? formatOpenDateDisplay(
+                              ev.match.application_open_date,
+                              ev.match.deadline_precision,
+                              ev.match.deadline_note
+                            )
+                          : `${KIND_LABELS[ev.kind]} · ${formatDateShort(ev.date)} (estimate)`}
                     </p>
                   </div>
                   <Link

@@ -188,7 +188,7 @@ export function HowItWorksPage() {
             View My Matches
           </Link>
           <Link
-            to="/how-it-works#verification"
+            to="/how-we-verify"
             className="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
           >
             How we verify listings →

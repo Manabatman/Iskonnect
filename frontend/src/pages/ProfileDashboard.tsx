@@ -5,21 +5,11 @@ import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchResult, MatchRunSummary, ProfileCompleteness, StudentProfileResponse } from "../types";
 import { NetworkError, apiFetch } from "../api/client";
 import { ProfileQualityCard } from "../components/ProfileQualityCard";
-import {
-  formatDateMedium,
-  formatDateTime,
-  formatRelativeManila,
-  startOfTodayManila,
-} from "../utils/formatDate";
+import { formatDateMedium, formatDateTime, formatRelativeManila, startOfTodayManila } from "../utils/formatDate";
+import { formatDeadlineDisplay } from "../utils/formatDeadline";
 import { MatchScoreRing } from "../components/MatchScoreRing";
 import { QualificationStatusBadge } from "../components/QualificationStatusBadge";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
-import {
-  INITIAL_STATE,
-  computeOverallCompletion,
-  type ProfileBuilderState,
-} from "../components/profile-builder/profileBuilderState";
-import { profileToInitialValues } from "../utils/profileDraft";
 
 function IconGraduationCap({ className }: { className?: string }) {
   return (
@@ -78,12 +68,6 @@ function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upco
   }
 }
 
-function profileCompleteness(p: StudentProfileResponse | undefined): number {
-  if (!p) return 0;
-  const flat = profileToInitialValues(p as { id?: number; [key: string]: unknown });
-  const state = { ...INITIAL_STATE, ...flat } as ProfileBuilderState;
-  return computeOverallCompletion(state);
-}
 
 export function ProfileDashboard() {
   const { user, authHeaders } = useAuth();
@@ -98,8 +82,6 @@ export function ProfileDashboard() {
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toggleSave, savedScholarships, savedListLoading: savedLoading } = useSavedScholarships();
-
-  const completeness = useMemo(() => profileCompleteness(profile ?? undefined), [profile]);
 
   useEffect(() => {
     if (!user) return;
@@ -322,8 +304,14 @@ export function ProfileDashboard() {
   if (!user) return null;
 
   const displayName = profile?.full_name?.trim() || "there";
-  const strengthBarColor =
-    completeness < 34 ? "bg-red-500" : completeness < 67 ? "bg-amber-500" : "bg-success-500";
+  const qualityPercent =
+    matchProfileCompleteness?.quality_percent ??
+    (matchProfileCompleteness && matchProfileCompleteness.total_fields > 0
+      ? Math.round(
+          (matchProfileCompleteness.filled_fields / matchProfileCompleteness.total_fields) * 100
+        )
+      : 0);
+  const profileNeedsWork = qualityPercent < 100;
   const topThree = latestMatches.slice(0, 3);
 
   return (
@@ -372,20 +360,10 @@ export function ProfileDashboard() {
                   <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                     Welcome back, {displayName}
                   </h2>
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                    Profile strength:{" "}
-                    <span className="font-semibold text-primary-700 dark:text-primary-300">{completeness}%</span>
-                  </p>
-                  <div className="mt-3 h-3 w-full max-w-md overflow-hidden rounded-full bg-slate-200 dark:bg-slate-600">
-                    <div
-                      className={`h-full rounded-full transition-all ${strengthBarColor}`}
-                      style={{ width: `${completeness}%` }}
-                    />
-                  </div>
-                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                    {completeness < 100
-                      ? "Add a few details to unlock more accurate matches."
-                      : "Great — your profile is in good shape for matching."}
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                    {profile
+                      ? "Run a match to see scholarships you qualify for, or browse the catalog."
+                      : "Complete your profile to unlock personalized matching."}
                   </p>
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:items-stretch sm:text-right">
@@ -410,7 +388,7 @@ export function ProfileDashboard() {
                     to="/scholarships/search"
                     className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                   >
-                    Browse scholarships
+                    Browse opportunities
                   </Link>
                   {profile?.id ? (
                     <Link
@@ -429,12 +407,12 @@ export function ProfileDashboard() {
             {/* Next steps: applications + documents — 2-col when Profile card hidden to avoid empty third column */}
             <div
               className={
-                completeness < 100
+                profileNeedsWork
                   ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
                   : "grid gap-4 sm:grid-cols-2"
               }
             >
-              {completeness < 100 ? (
+              {profileNeedsWork ? (
                 <Link
                   to="/profile-builder"
                   className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
@@ -496,7 +474,15 @@ export function ProfileDashboard() {
                   {topThree.map((m, idx) => {
                     const score = Number(m.final_score ?? m.score ?? 0);
                     const why = (m.explanation && m.explanation.length > 0 ? m.explanation.join(" ") : "") || "";
-                    const deadlineLabel = formatDeadlineShort(m.application_deadline);
+                    const deadlineLine =
+                      m.application_deadline || m.deadline_precision
+                        ? formatDeadlineDisplay(
+                            m.application_deadline,
+                            m.deadline_precision,
+                            m.deadline_note,
+                            m.last_verified_at
+                          )
+                        : null;
                     const isTop = idx === 0;
                     return (
                       <div
@@ -530,10 +516,8 @@ export function ProfileDashboard() {
                           </div>
                           <MatchScoreRing score={score} size={isTop ? 58 : 52} />
                         </div>
-                        {deadlineLabel ? (
-                          <p className="mt-2 text-xs font-medium text-amber-800 dark:text-amber-200/90">
-                            Deadline: {deadlineLabel}
-                          </p>
+                        {deadlineLine ? (
+                          <p className="mt-2 text-xs font-medium text-amber-800 dark:text-amber-200/90">{deadlineLine}</p>
                         ) : null}
                         {why ? (
                           <div className="mt-2 rounded-lg bg-slate-100/80 px-2 py-1.5 dark:bg-slate-800/80">
@@ -619,9 +603,14 @@ export function ProfileDashboard() {
                                 {sch?.title ?? `Scholarship #${item.scholarship_id}`}
                               </Link>
                               <p className="text-sm text-slate-600 dark:text-slate-400">{sch?.provider ?? "—"}</p>
-                              {sch?.application_deadline ? (
+                              {sch?.application_deadline || sch?.deadline_precision ? (
                                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                  Deadline: {formatDateMedium(sch.application_deadline)}
+                                  {formatDeadlineDisplay(
+                                    sch.application_deadline,
+                                    sch.deadline_precision,
+                                    sch.deadline_note,
+                                    sch.last_verified_at
+                                  )}
                                 </p>
                               ) : null}
                             </div>
@@ -804,9 +793,14 @@ export function ProfileDashboard() {
                         {item.scholarship?.title}
                       </Link>{" "}
                       —{" "}
-                      {item.scholarship?.application_deadline
-                        ? formatDateMedium(item.scholarship.application_deadline)
-                        : ""}
+                      {item.scholarship?.application_deadline || item.scholarship?.deadline_precision
+                        ? formatDeadlineDisplay(
+                            item.scholarship.application_deadline,
+                            item.scholarship.deadline_precision,
+                            item.scholarship.deadline_note,
+                            item.scholarship.last_verified_at
+                          )
+                        : "No deadline listed"}
                     </li>
                   ))}
                 </ul>

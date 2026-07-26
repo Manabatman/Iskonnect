@@ -8,6 +8,7 @@ import { ScholarshipSearchFilters, describeActiveFilters } from "../components/S
 import { ScholarshipDetailPanel } from "../components/ScholarshipDetailPanel";
 import { useAuth } from "../contexts/AuthContext";
 import { useScholarshipSearch } from "../hooks/useScholarshipSearch";
+import { OPPORTUNITY_TYPES } from "../constants/opportunityTypes";
 import type { MatchResult, ScholarshipInfo } from "../types";
 
 export function ScholarshipSearchPage() {
@@ -175,7 +176,7 @@ export function ScholarshipSearchPage() {
     <section id="scholarship-search" className="py-8">
       <div className="mx-auto w-full max-w-none px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Search Scholarships</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Search Opportunities</h1>
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
@@ -192,6 +193,39 @@ export function ScholarshipSearchPage() {
               Complete Your Profile
             </Link>
           </div>
+        </div>
+
+        <div className="mb-6">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Opportunity type
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {OPPORTUNITY_TYPES.map((t) =>
+              t.available ? (
+                <span
+                  key={t.slug}
+                  className="inline-flex items-center rounded-full border border-primary-300 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-800 dark:border-primary-700 dark:bg-primary-950/40 dark:text-primary-200"
+                >
+                  ✓ {t.label}
+                </span>
+              ) : (
+                <Link
+                  key={t.slug}
+                  to={`/opportunities/${t.slug}`}
+                  className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                >
+                  {t.label}
+                  <span className="rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                    Coming soon
+                  </span>
+                </Link>
+              )
+            )}
+          </div>
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            Scholarships are fully supported during public beta. Other opportunity types are visible here as part of the
+            long-term platform vision.
+          </p>
         </div>
 
         {checkMatchError ? (

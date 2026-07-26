@@ -1,0 +1,3 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+63,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://erasmus-plus.ec.europa.eu,HEAD check passed on 2026-07-26,,,2026-07-26
+91,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://www.chevening.org/apply,HEAD check passed on 2026-07-26,,,2026-07-26

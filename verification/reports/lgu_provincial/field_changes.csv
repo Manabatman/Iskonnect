@@ -1,0 +1,4 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+39,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.bislig.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+49,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://www.cebu.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+51,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://www.tabuk.gov.ph,HEAD check failed (url_error:[Errno 11001] getaddrinfo failed) on 2026-07-26,,,2026-07-26

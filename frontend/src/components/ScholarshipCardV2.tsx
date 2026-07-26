@@ -58,11 +58,18 @@ function formatDeadlineLine(
   note?: string | null,
   verifiedAt?: string | null
 ): string {
+  const p = (precision ?? "").trim().toLowerCase();
+  if (p === "rolling" || p === "not_announced" || p === "institution_dependent") {
+    return formatDeadlineDisplay(deadline, precision, note, verifiedAt);
+  }
   if (deadline?.trim()) {
     return formatDeadlineDisplay(deadline, precision, note, verifiedAt);
   }
   if (openDate?.trim()) {
     return formatOpenDateDisplay(openDate, precision, note);
+  }
+  if (p) {
+    return formatDeadlineDisplay(null, precision, note, verifiedAt);
   }
   return "No deadline listed";
 }

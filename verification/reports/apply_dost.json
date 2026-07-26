@@ -1,0 +1,33 @@
+line,scholarship_id,field,action,result,detail
+2,2,title,confirm_unchanged,skipped_confirm_unchanged,
+3,2,provider,confirm_unchanged,skipped_confirm_unchanged,
+4,2,primary_link,update,applied,'https://ugs.science-scholarships.ph' -> 'https://ugrad.science-scholarships.ph'
+5,2,link_status,update,skipped_drift,DB='ok' expected iskconnect='broken'
+6,2,data_status,update,skipped_drift,DB='expired' expected iskconnect='broken_link'
+7,2,description,update,skipped_drift,"DB='STEM scholarship for Science, Technology, Engineering, and Mathematics courses.' expected iskconnect='STEM scholarship for Science Technology Engineering and Mathematics courses.'"
+8,2,min_gwa_normalized,flag_review,skipped_idempotent,already needs_review
+9,2,max_income_threshold,flag_review,skipped_idempotent,already needs_review
+10,2,benefit_total_value,update,skipped_unparseable_numeric,"School fees PhP40,000/AY + learning materials PhP10,000/AY + living allowance PhP8,000/month + other allowances"
+11,2,benefit_allowance_monthly,update,applied,7000 -> 8000
+12,2,has_qualifying_exam,confirm_unchanged,skipped_confirm_unchanged,
+13,2,has_return_service,confirm_unchanged,skipped_confirm_unchanged,
+14,2,application_status,confirm_unchanged,skipped_confirm_unchanged,
+15,2,application_open_date,update,skipped_blocked,hard-blocked official_value='2024-10-13'
+16,2,application_deadline,update,skipped_blocked,hard-blocked official_value='2024-12-23'
+17,2,scholarship_type,confirm_unchanged,skipped_confirm_unchanged,
+18,2,eligible_courses_specific,update,skipped_drift,"DB=""['BS Computer Science', 'BS Information Technology', 'BS Mathematics', 'BS Physics', 'BS Chemistry']"" expected iskconnect='BS Computer Science|BS Information Technology|BS Mathematics|BS Physics|BS Chemistry'"
+19,3,title,update,applied,'DOST-SEI Graduate Scholarship' -> 'DOST-SEI Graduate Scholarship Programs (ASTHRDP/CBPSME/ERDT/STRAND)'
+20,3,provider,confirm_unchanged,skipped_confirm_unchanged,
+21,3,primary_link,confirm_unchanged,skipped_confirm_unchanged,
+22,3,link_status,update,skipped_drift,DB='ok' expected iskconnect='broken'
+23,3,data_status,update,skipped_drift,DB='expired' expected iskconnect='broken_link'
+24,3,description,update,applied,"""Graduate scholarship for master's and doctoral programs in STEM."" -> 'Umbrella entry conflates ASTHRDP MS/PhD CBPSME ERDT STRAND and other graduate programs each with separate portals deadlines and consortium universities.'"
+25,3,benefit_total_value,flag_review,applied,
+26,3,benefit_allowance_monthly,flag_review,skipped_idempotent,already needs_review
+27,3,cycle_type,update,applied,'semester' -> 'semester/term (varies by university)'
+28,3,application_status,confirm_unchanged,skipped_confirm_unchanged,
+29,3,application_open_date,flag_review,skipped_idempotent,already needs_review
+30,3,application_deadline,flag_review,skipped_idempotent,already needs_review
+31,3,is_active,confirm_unchanged,skipped_confirm_unchanged,
+32,3,eligible_levels,confirm_unchanged,skipped_confirm_unchanged,
+33,3,has_return_service,flag_review,skipped_idempotent,already needs_review

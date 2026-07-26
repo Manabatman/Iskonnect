@@ -1,0 +1,97 @@
+{
+  "imported": {
+    "new": 8,
+    "updated_candidate": 0,
+    "skipped": 0,
+    "invalid": 0,
+    "rejected_structural": 0
+  },
+  "rows": [
+    {
+      "status": "created",
+      "title": "Scholarship Program for Coconut Farmers and their Families (CoScho)",
+      "provider": "Commission on Higher Education (CHED)",
+      "dedupe_key": "e6c9e20d599b24a5816ba641c59c1964afd6855e8c01e29cd4e8a233810cbac9",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Scholarship Grant Program for Children and Dependents of Sugarcane Industry Workers and Small Sugarcane Farmers (SIDA-SGP)",
+      "provider": "Commission on Higher Education (CHED)",
+      "dedupe_key": "ec5fd3a3791c4508ede613cc733c1f478fa722552d8592178f7c8fd93b25e0f6",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)",
+      "provider": "Commission on Higher Education (CHED)",
+      "dedupe_key": "005cea91dd7df5a08302d10ab84bbcfddee9e4c5a4048a4e1973f4ba444223d8",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Scholarships for Instructors' Knowledge Advancement Program (SIKAP)",
+      "provider": "Commission on Higher Education (CHED)",
+      "dedupe_key": "659c5191bd0178f4e79b3a4bb042f5009bfa79550388c74497a1d3445986fe78",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "DOST-SEI Junior Level Science Scholarship \u2014 Merit Track",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "dedupe_key": "300a0b3312daab26e4fa4f166ad39881de5a37d74f85edce3c2a2463f7c0eb4b",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "DOST-SEI Junior Level Science Scholarship \u2014 RA 7687 Track",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "dedupe_key": "d45ec21ae773ce23ba72111a6b99d56696f90a6c8880c53e81312fa34a812dde",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "DOST-SEI Junior Level Science Scholarship \u2014 RA 10612 Track",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "dedupe_key": "30d4c5ff5cd89f3598b25ffd8499eb944dc57033067e246415e8d41b575512b0",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "OWWA Education and Livelihood Assistance Program (ELAP)",
+      "provider": "Overseas Workers Welfare Administration (OWWA)",
+      "dedupe_key": "44835068a1ad2f9d1081af860991d2aab6c5c99b8d721985175862d0703c8c5f",
+      "warnings": [
+        "missing_deadline"
+      ]
+    }
+  ],
+  "total": 8,
+  "invalid_urls": 0,
+  "invalid_dates": 0,
+  "auto_normalizations": [],
+  "rejected_structural": 0,
+  "unknown_columns": [],
+  "missing_columns": [],
+  "missing_recommended": [],
+  "duplicate_columns": [],
+  "header_errors": [],
+  "header_valid": true,
+  "created": 8,
+  "skipped": 0,
+  "invalid": 0
+}

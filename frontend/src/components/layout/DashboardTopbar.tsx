@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { apiFetch } from "../../api/client";
@@ -30,7 +30,7 @@ type NotificationItem = {
 
 function titleForPath(pathname: string): string {
   if (pathname === "/dashboard") return "Dashboard";
-  if (pathname.startsWith("/scholarships/search")) return "Scholarship search";
+  if (pathname.startsWith("/scholarships/search")) return "Opportunity search";
   if (pathname.startsWith("/scholarships")) return "Explore scholarships";
   if (pathname.startsWith("/scholarship/")) return "Scholarship";
   if (pathname.startsWith("/applications")) return "Applications";
@@ -226,6 +226,52 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
     }
   };
 
+  const markAllNotificationsRead = async () => {
+    try {
+      const res = await apiFetch("/api/v1/notifications/read-all", {
+        method: "POST",
+        headers: authHeaders(),
+      });
+      if (res.ok) {
+        setNotifItems((prev) => prev.map((n) => ({ ...n, is_read: true })));
+        refreshUnreadCount();
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const deleteNotification = async (id: number, e: ReactMouseEvent) => {
+    e.stopPropagation();
+    try {
+      const res = await apiFetch(`/api/v1/notifications/${id}`, {
+        method: "DELETE",
+        headers: authHeaders(),
+      });
+      if (res.ok) {
+        setNotifItems((prev) => prev.filter((n) => n.id !== id));
+        refreshUnreadCount();
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const clearAllNotifications = async () => {
+    try {
+      const res = await apiFetch("/api/v1/notifications", {
+        method: "DELETE",
+        headers: authHeaders(),
+      });
+      if (res.ok) {
+        setNotifItems([]);
+        setNotifUnread(0);
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
   const formatNotifTime = (iso: string) => {
     try {
       return new Date(iso).toLocaleString("en-PH", {
@@ -343,8 +389,26 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
           </button>
           {notifOpen ? (
             <div className="absolute right-0 z-40 mt-1 w-80 max-w-[calc(100vw-2rem)] rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-600 dark:bg-slate-800">
-              <div className="border-b border-slate-100 px-3 py-2 dark:border-slate-700">
+              <div className="flex items-center justify-between border-b border-slate-100 px-3 py-2 dark:border-slate-700">
                 <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications</p>
+                {notifItems.length > 0 ? (
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void markAllNotificationsRead()}
+                      className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
+                    >
+                      Mark all read
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void clearAllNotifications()}
+                      className="text-xs font-medium text-red-600 hover:underline dark:text-red-400"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                ) : null}
               </div>
               <div className="max-h-80 overflow-y-auto">
                 {notifLoading ? (
@@ -353,24 +417,36 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
                   <p className="px-3 py-4 text-sm text-slate-500 dark:text-slate-400">No notifications yet.</p>
                 ) : (
                   notifItems.map((n) => (
-                    <button
+                    <div
                       key={n.id}
-                      type="button"
-                      className={`w-full border-b border-slate-50 px-3 py-2.5 text-left text-sm text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700/80 ${
+                      className={`flex items-start gap-2 border-b border-slate-50 dark:border-slate-700 ${
                         !n.is_read ? "bg-primary-50/50 dark:bg-primary-950/20" : ""
                       }`}
-                      onClick={() => {
-                        if (!n.is_read) void markNotificationRead(n.id);
-                        if (n.scholarship_id) {
-                          navigate(`/scholarship/${n.scholarship_id}`);
-                          setNotifOpen(false);
-                        }
-                      }}
                     >
-                      <p className="font-medium">{n.title}</p>
-                      {n.body ? <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{n.body}</p> : null}
-                      <p className="mt-1 text-[10px] text-slate-400">{formatNotifTime(n.created_at)}</p>
-                    </button>
+                      <button
+                        type="button"
+                        className="min-w-0 flex-1 px-3 py-2.5 text-left text-sm text-slate-800 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-700/80"
+                        onClick={() => {
+                          if (!n.is_read) void markNotificationRead(n.id);
+                          if (n.scholarship_id) {
+                            navigate(`/scholarship/${n.scholarship_id}`);
+                            setNotifOpen(false);
+                          }
+                        }}
+                      >
+                        <p className="font-medium">{n.title}</p>
+                        {n.body ? <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{n.body}</p> : null}
+                        <p className="mt-1 text-[10px] text-slate-400">{formatNotifTime(n.created_at)}</p>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => void deleteNotification(n.id, e)}
+                        className="shrink-0 px-2 py-2.5 text-xs text-slate-400 hover:text-red-600 dark:hover:text-red-400"
+                        aria-label="Delete notification"
+                      >
+                        ×
+                      </button>
+                    </div>
                   ))
                 )}
               </div>

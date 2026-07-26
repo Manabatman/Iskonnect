@@ -1,0 +1,25 @@
+[
+  {
+    "scholarship_id": 2,
+    "notes": [
+      "Apply via ugrad.science-scholarships.ph; face-to-face discouraged unless necessary.",
+      "Two tracks: Merit (RA 2067) and RA 7687; income rules differ by track.",
+      "2026 application forms published; recent cycle: apply Oct 13-Dec 23, 2024; exam Apr 5-6, 2025.",
+      "Privileges include school fees PhP40k/AY, learning materials PhP10k/AY, living allowance PhP8k/month, clothing PhP1k (1st sem 1st year), thesis PhP10k, graduation PhP1k, insurance premium.",
+      "Must pursue approved priority S&T program at approved study placement; incomplete requirements rejected by e-system.",
+      "Background check and home visit may be conducted for socio-economic verification."
+    ],
+    "source_url": "https://www.science-scholarships.ph/"
+  },
+  {
+    "scholarship_id": 3,
+    "notes": [
+      "Single catalog row conflates multiple graduate programs: ASTHRDP, CBPSME, ERDT, STRAND, Foreign Graduate, UAlberta.",
+      "Recommend splitting id 3 into program-specific records or converting to provider hub with child programs.",
+      "ASTHRDP applications submitted to NSC member-university project leader; deadlines vary (e.g. UP Diliman Jun 30/Nov 28, DLSU Aug-Nov-Apr trimester).",
+      "ASTHRDP eligibility: Filipino, not over 50, good health, pass graduate admission and interview; special rules for second MS/PhD degrees.",
+      "JLSS is separate undergraduate-adjacent program for 2nd year students—not covered by id 3 but may exist archived elsewhere."
+    ],
+    "source_url": "https://www.science-scholarships.ph/"
+  }
+]

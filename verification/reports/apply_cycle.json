@@ -1,0 +1,40 @@
+line,scholarship_id,field,action,result,detail
+2,1,application_open_date,update,skipped_low_confidence,cannot_verify
+3,1,application_deadline,update,skipped_low_confidence,cannot_verify
+4,1,last_open_date,update,applied,'2025-03-01' -> '2025-05-20'
+5,1,last_close_date,update,applied,'2025-06-30' -> '2025-06-20'
+6,1,academic_year_target,update,skipped_low_confidence,cannot_verify
+7,2,application_open_date,update,skipped_low_confidence,cannot_verify
+8,2,application_deadline,update,skipped_low_confidence,cannot_verify
+9,2,application_status,update,skipped_idempotent,target matches DB
+10,2,last_open_date,update,applied,'2025-02-01' -> '2025-10-20'
+11,2,last_close_date,update,applied,'2025-04-15' -> '2025-12-05'
+12,2,application_open_date,flag_review,applied,
+13,3,application_open_date,update,skipped_low_confidence,cannot_verify
+14,3,application_deadline,update,skipped_low_confidence,cannot_verify
+15,3,academic_year_target,update,skipped_low_confidence,cannot_verify
+16,5,application_open_date,update,skipped_low_confidence,cannot_verify
+17,5,application_deadline,update,skipped_low_confidence,cannot_verify
+18,5,application_status,update,skipped_drift,DB='needs_verification' expected iskconnect='open'
+19,5,deadline_precision,update,skipped_drift,DB='estimated' expected iskconnect=None
+20,6,application_open_date,update,skipped_low_confidence,cannot_verify
+21,6,application_deadline,update,skipped_low_confidence,cannot_verify
+22,6,application_status,update,applied,'open' -> 'expected_reopen'
+23,6,deadline_precision,update,skipped_drift,DB='estimated' expected iskconnect=None
+24,6,cycle_type,update,applied,None -> 'annual'
+25,19,application_open_date,update,applied,'2026-03-01' -> None
+26,19,application_deadline,update,applied,'2026-06-30' -> None
+27,19,academic_year_target,update,applied,'2026-2027' -> None
+28,19,is_active,archive,applied,"{'is_active': {'from': True, 'to': False}, 'editorial_state': {'from': 'needs_review', 'to': 'archived'}, 'application_status': {'from': 'previous_cycle', 'to': 'permanently_discontinued'}}"
+29,19,application_status,archive,skipped_idempotent,already archived this run
+30,76,application_status,update,applied,'previous_cycle' -> 'expected_reopen'
+31,76,application_open_date,confirm_unchanged,skipped_confirm_unchanged,
+32,76,application_deadline,confirm_unchanged,skipped_confirm_unchanged,
+33,76,last_open_date,update,applied,None -> '2026-04-30'
+34,76,last_close_date,update,applied,None -> '2026-06-30'
+35,79,application_open_date,update,skipped_low_confidence,cannot_verify
+36,79,application_deadline,update,skipped_low_confidence,cannot_verify
+37,79,application_status,update,applied,'archived' -> 'expected_reopen'
+38,79,is_active,update,applied,False -> True
+39,79,last_open_date,update,applied,'2026-04-13' -> '2025-04-21'
+40,79,last_close_date,update,applied,'2026-05-15' -> '2025-05-23'

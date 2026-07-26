@@ -1,0 +1,42 @@
+[
+  {
+    "observed_rule": "Undergraduate scholarship has separate Merit (no income ceiling) and RA 7687 (socio-economic cut-off) tracks under one application system",
+    "example_scholarship_ids": [2],
+    "frequency_in_bundle": 1,
+    "current_workaround": "scholarship_type",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://www.science-scholarships.ph/"]
+  },
+  {
+    "observed_rule": "Study placement restrictions by university for specific priority programs (e.g. UP System only ADMU only DLSU only)",
+    "example_scholarship_ids": [2],
+    "frequency_in_bundle": 1,
+    "current_workaround": "eligible_courses_specific",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://www.science-scholarships.ph/"]
+  },
+  {
+    "observed_rule": "Graduate scholarships have university-specific application deadlines and trimester/term calendars",
+    "example_scholarship_ids": [3],
+    "frequency_in_bundle": 1,
+    "current_workaround": "description",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://www.science-scholarships.ph/"]
+  },
+  {
+    "observed_rule": "Return service obligation with refund of benefits plus interest for misrepresentation",
+    "example_scholarship_ids": [2, 3],
+    "frequency_in_bundle": 2,
+    "current_workaround": "has_return_service",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://www.science-scholarships.ph/pdf/forms/2026%20DOST-SEI%20S&T%20Undergraduate%20Application%20Form%20J.pdf"]
+  },
+  {
+    "observed_rule": "Qualifying examination schedule is national for undergraduate and JLSS but not for graduate consortium programs",
+    "example_scholarship_ids": [2],
+    "frequency_in_bundle": 1,
+    "current_workaround": "has_qualifying_exam",
+    "recommendation": "keep_free_text",
+    "source_urls": ["https://www.science-scholarships.ph/"]
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "research_title": "CHED HUSAY Program (Continuing Professional Development Studies Grant)",
+    "research_provider": "Commission on Higher Education",
+    "classification": "not_a_scholarship",
+    "reason": "HUSAY/CPDSG funds faculty upskilling short courses and microcredentials for active HEI personnel—not undergraduate student bursaries. Official CHED page lists faculty nomination workflows for Thailand/AIT and MMSU programs.",
+    "verification_confidence": "verified",
+    "source_urls": ["https://legacy.ched.gov.ph/continuing-professional-development-studies-grant/"]
+  },
+  {
+    "research_title": "SDG Research Development and Innovation Grant (SDG-RDIG)",
+    "research_provider": "Commission on Higher Education",
+    "classification": "not_a_scholarship",
+    "reason": "Competitive research funding instrument for multi-institutional HEI consortia aligned with UN SDGs (CMO No. 2 s. 2026)—not an individual student scholarship. CHED program page states details to be released.",
+    "verification_confidence": "verified",
+    "source_urls": ["https://legacy.ched.gov.ph/sdg-rdig/"]
+  },
+  {
+    "research_title": "Philippine-California Advanced Research Institutes (PCARI)",
+    "research_provider": "Commission on Higher Education",
+    "classification": "not_a_scholarship",
+    "reason": "Bilateral research partnership program targeting faculty/staff training and research collaborations with California universities—not baccalaureate matching. Official page describes IID and HITM research focus.",
+    "verification_confidence": "verified",
+    "source_urls": ["https://legacy.ched.gov.ph/philippine-california-advanced-research-institute-pcari/"]
+  },
+  {
+    "research_title": "Foreign Scholarships and Training Programs (generic)",
+    "research_provider": "Various bilateral agencies",
+    "classification": "out_of_scope",
+    "reason": "PDF cites generic category without specific program URLs. ISKONNECT already catalogs many international programs separately (MEXT, GKS, Chevening, Australia Awards). Bulk import without per-program official verification would violate evidence rules.",
+    "verification_confidence": "cannot_verify",
+    "source_urls": []
+  }
+]

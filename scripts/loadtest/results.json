@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-07-26T09:46:27.943467+00:00",
+  "base_url": "https://iskonnect-api.onrender.com",
+  "think_time_sec": 1.5,
+  "scholarship_ids_sample": [],
+  "ramps": [
+    {
+      "virtual_users": 30,
+      "total_requests": 90,
+      "errors": 90,
+      "error_rate_pct": 100.0,
+      "avg_ms": 296.4,
+      "p95_ms": 370.6
+    },
+    {
+      "virtual_users": 50,
+      "total_requests": 150,
+      "errors": 150,
+      "error_rate_pct": 100.0,
+      "avg_ms": 330.0,
+      "p95_ms": 477.8
+    },
+    {
+      "virtual_users": 100,
+      "total_requests": 300,
+      "errors": 300,
+      "error_rate_pct": 100.0,
+      "avg_ms": 349.1,
+      "p95_ms": 504.6
+    }
+  ],
+  "recommendation": "30 concurrent users showed p95 370.6 ms with 100.0% errors. Upgrade Render tier or add caching before advertising large university sessions."
+}

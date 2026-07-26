@@ -1,0 +1,3 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+4,link_status,ok,broken,update,automated_head_check,,partially_verified,https://tesda.gov.ph,HEAD check failed (url_error:timed out) on 2026-07-26,,,2026-07-26
+77,link_status,broken,broken,confirm_unchanged,,,partially_verified,https://bpms.ched.gov.ph/,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26

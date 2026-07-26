@@ -1,0 +1,42 @@
+[
+  {
+    "observed_rule": "Cannot hold TDP/TES concurrently with CHED Scholarship Programs (CSPs) or other national government-funded StuFAPs",
+    "example_scholarship_ids": [5, 6],
+    "frequency_in_bundle": 2,
+    "current_workaround": "description",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://unifast.gov.ph/tes.html"]
+  },
+  {
+    "observed_rule": "TES and TDP prioritization by Listahanan, 4Ps household per capita income, then remaining poor private HEI students",
+    "example_scholarship_ids": [6],
+    "frequency_in_bundle": 1,
+    "current_workaround": "priority_groups",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://unifast.gov.ph/tes.html", "https://unifast.gov.ph/assets/pdf/infgrfx/TES2025.pdf"]
+  },
+  {
+    "observed_rule": "CMSP equity group priority points (PWD, Solo Parent, IP, Senior Citizen, first-generation, underprivileged) without separate structured scoring",
+    "example_scholarship_ids": [1],
+    "frequency_in_bundle": 1,
+    "current_workaround": "priority_groups",
+    "recommendation": "add_to_priority_groups",
+    "source_urls": ["https://legacy.ched.gov.ph/merit-scholarship/"]
+  },
+  {
+    "observed_rule": "BPMSP DHEI must have COE/COD, Level III-IV accreditation, or CEB approval; LUCs need current CHED Institutional Recognition",
+    "example_scholarship_ids": [76],
+    "frequency_in_bundle": 1,
+    "current_workaround": "description",
+    "recommendation": "keep_free_text",
+    "source_urls": ["https://caraga.ched.gov.ph/wp-content/uploads/2026/05/BPMSP_FAQ_0428.pdf"]
+  },
+  {
+    "observed_rule": "BPMSP return service obligation and refund/recovery for violations",
+    "example_scholarship_ids": [76],
+    "frequency_in_bundle": 1,
+    "current_workaround": "has_return_service",
+    "recommendation": "add_structured_field",
+    "source_urls": ["https://caraga.ched.gov.ph/wp-content/uploads/2026/05/BPMSP_FAQ_0428.pdf", "https://pia.gov.ph/news/bagong-pilipinas-scholarship-offered-for-top-incoming-college-students/"]
+  }
+]

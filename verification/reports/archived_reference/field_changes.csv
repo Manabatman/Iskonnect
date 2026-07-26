@@ -1,0 +1,37 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+12,link_status,,broken,update,automated_head_check,,partially_verified,https://gokongweifoundation.org/scholarship,HEAD check failed (url_error:[Errno 11001] getaddrinfo failed) on 2026-07-26,,,2026-07-26
+30,link_status,,ok,update,automated_head_check,,partially_verified,https://tcu.edu.ph/lani-scholarship,HEAD check passed on 2026-07-26,,,2026-07-26
+32,link_status,,broken,update,automated_head_check,,partially_verified,https://www.umak.edu.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+35,link_status,,ok,update,automated_head_check,,partially_verified,https://www.marikina.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+36,link_status,,broken,update,automated_head_check,,partially_verified,https://www.cebucity.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+37,link_status,,ok,update,automated_head_check,,partially_verified,https://davaocity.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+38,link_status,,ok,update,automated_head_check,,partially_verified,https://davaocity.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+42,link_status,,broken,update,automated_head_check,,partially_verified,https://www.ateneo.edu,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+43,link_status,,ok,update,automated_head_check,,partially_verified,https://www.dlsu.edu.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+44,link_status,,ok,update,automated_head_check,,partially_verified,https://www.dlsu.edu.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+46,link_status,,ok,update,automated_head_check,,partially_verified,https://www.msumain.edu.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+47,link_status,,broken,update,automated_head_check,,partially_verified,https://www.muntinlupacity.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+54,link_status,ok,ok,confirm_unchanged,,,partially_verified,https://legacy.ched.gov.ph/msrs/,HEAD check passed on 2026-07-26,,,2026-07-26
+58,link_status,,broken,update,automated_head_check,,partially_verified,https://www.securitybank.com,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+60,link_status,,broken,update,automated_head_check,,partially_verified,https://www.icdf.org.tw,HEAD check failed (url_error:[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)) on 2026-07-26,,,2026-07-26
+64,link_status,,ok,update,automated_head_check,,partially_verified,https://www.studyinkorea.go.kr,HEAD check passed on 2026-07-26,,,2026-07-26
+65,link_status,,ok,update,automated_head_check,,partially_verified,https://www.studyinkorea.go.kr,HEAD check passed on 2026-07-26,,,2026-07-26
+66,link_status,,broken,update,automated_head_check,,partially_verified,https://tes.unifast.gov.ph,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+67,link_status,,broken,update,automated_head_check,,partially_verified,https://www.tesda.gov.ph,HEAD check failed (url_error:timed out) on 2026-07-26,,,2026-07-26
+68,link_status,,ok,update,automated_head_check,,partially_verified,https://www.pup.edu.ph/students/scholarships,HEAD check passed on 2026-07-26,,,2026-07-26
+70,link_status,,ok,update,automated_head_check,,partially_verified,https://law.upd.edu.ph/call-for-scholarship-applications-ay-2025-2026/,HEAD check passed on 2026-07-26,,,2026-07-26
+72,link_status,,ok,update,automated_head_check,,partially_verified,https://philscholar.com/gbf-stem-college-scholarship/,HEAD check passed on 2026-07-26,,,2026-07-26
+73,link_status,,ok,update,automated_head_check,,partially_verified,https://www.science-scholarships.ph/,HEAD check passed on 2026-07-26,,,2026-07-26
+74,link_status,,broken,update,automated_head_check,,partially_verified,https://www.australiaawardsphilippines.org/scholarships,HEAD check failed (http_503) on 2026-07-26,,,2026-07-26
+79,link_status,,ok,update,automated_head_check,,partially_verified,https://www.science-scholarships.ph/,HEAD check passed on 2026-07-26,,,2026-07-26
+80,link_status,,ok,update,automated_head_check,,partially_verified,https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html,HEAD check passed on 2026-07-26,,,2026-07-26
+81,link_status,,ok,update,automated_head_check,,partially_verified,https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html,HEAD check passed on 2026-07-26,,,2026-07-26
+82,link_status,,ok,update,automated_head_check,,partially_verified,https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html,HEAD check passed on 2026-07-26,,,2026-07-26
+83,link_status,,ok,update,automated_head_check,,partially_verified,https://www.ph.emb-japan.go.jp/itpr_en/00_000193.html,HEAD check passed on 2026-07-26,,,2026-07-26
+84,link_status,,ok,update,automated_head_check,,partially_verified,https://www.gsis.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+85,link_status,,ok,update,automated_head_check,,partially_verified,https://scholarship.owwa.gov.ph/,HEAD check passed on 2026-07-26,,,2026-07-26
+86,link_status,,broken,update,automated_head_check,,partially_verified,https://scholarship.owwa.gov.ph/,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+87,link_status,,broken,update,automated_head_check,,partially_verified,https://scholarship.owwa.gov.ph/,HEAD check failed (http_403) on 2026-07-26,,,2026-07-26
+88,link_status,,ok,update,automated_head_check,,partially_verified,https://qceservices.quezoncity.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+89,link_status,,ok,update,automated_head_check,,partially_verified,https://qceservices.quezoncity.gov.ph,HEAD check passed on 2026-07-26,,,2026-07-26
+90,link_status,,ok,update,automated_head_check,,partially_verified,https://apply.iie.org/ffsp2027,HEAD check passed on 2026-07-26,,,2026-07-26
