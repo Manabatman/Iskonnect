@@ -1,0 +1,170 @@
+[
+  {
+    "id": 20,
+    "title": "ERC Graduate Fellowship",
+    "provider": "Energy Regulatory Commission",
+    "link_status": "broken",
+    "deadline_precision": "estimated"
+  },
+  {
+    "id": 15,
+    "title": "San Miguel Foundation Scholarship",
+    "provider": "San Miguel Foundation",
+    "link_status": "broken",
+    "deadline_precision": "estimated"
+  },
+  {
+    "id": 60,
+    "title": "Taiwan ICDF Higher Education Scholarship Program",
+    "provider": "Taiwan International Cooperation and Development Fund",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 12,
+    "title": "Gokongwei Brothers Foundation Scholarship",
+    "provider": "Gokongwei Brothers Foundation",
+    "link_status": "broken",
+    "deadline_precision": "estimated"
+  },
+  {
+    "id": 77,
+    "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - TVET Track",
+    "provider": "Technical Education and Skills Development Authority",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 103,
+    "title": "Davao City Medical and Law Education Assistance Program",
+    "provider": "Davao City Government (EBSU)",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 39,
+    "title": "Bislig City Collegiate Scholarship Program",
+    "provider": "Bislig City Government",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 48,
+    "title": "Muntinlupa CARES Financial Assistance Program",
+    "provider": "Muntinlupa Scholarship Division",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 50,
+    "title": "Para\u00f1aque City Tertiary Education Financial Assistance Program",
+    "provider": "Para\u00f1aque City Government",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 51,
+    "title": "Tabuk City College Academic Scholarship",
+    "provider": "Tabuk City Government",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 93,
+    "title": "Pasig City Out-of-School Learners Scholarship",
+    "provider": "Pasig City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 95,
+    "title": "Taguig LANI Full Scholarship",
+    "provider": "Taguig City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 96,
+    "title": "Taguig LANI Basic Scholarship",
+    "provider": "Taguig City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 23,
+    "title": "Philippine Normal University Scholarship",
+    "provider": "Philippine Normal University",
+    "link_status": "broken",
+    "deadline_precision": "estimated"
+  },
+  {
+    "id": 36,
+    "title": "Cebu City College Scholarship Program",
+    "provider": "Cebu City Government",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 47,
+    "title": "Muntinlupa MOST Academic Scholarship",
+    "provider": "Muntinlupa Scholarship Division",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 74,
+    "title": "Australia Awards Scholarships (Philippines)",
+    "provider": "Australian Government",
+    "link_status": "broken",
+    "deadline_precision": "exact"
+  },
+  {
+    "id": 92,
+    "title": "Pasig City Sports Scholarship",
+    "provider": "Pasig City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 94,
+    "title": "Pasig City Sangguniang Kabataan Endorsed Scholarship",
+    "provider": "Pasig City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 97,
+    "title": "Taguig LANI LEAD Graduate Scholarship",
+    "provider": "Taguig City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 98,
+    "title": "Makati City Premier and Specialized School Scholarship",
+    "provider": "Makati City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 100,
+    "title": "NavotaAs Fisherfolk Children Scholarship Track",
+    "provider": "Navotas City Government",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 101,
+    "title": "Davao City STEP FA Category A",
+    "provider": "Davao City Government (EBSU)",
+    "link_status": "ok",
+    "deadline_precision": null
+  },
+  {
+    "id": 102,
+    "title": "Davao City STEP FA Category C",
+    "provider": "Davao City Government (EBSU)",
+    "link_status": "ok",
+    "deadline_precision": null
+  }
+]

@@ -109,6 +109,19 @@ def apply_timing_filter(query, timing: str, today: date | None = None):
     if t in ("", "any"):
         return query
 
+    if t == "open_now":
+        open_status = or_(
+            models.Scholarship.application_status == OPEN,
+            models.Scholarship.application_status.is_(None),
+        )
+        return query.filter(
+            open_status,
+            or_(
+                models.Scholarship.application_open_date.is_(None),
+                models.Scholarship.application_open_date <= today,
+            ),
+        )
+
     if t == "opening_soon":
         return query.filter(
             models.Scholarship.application_open_date > today,
@@ -128,30 +141,40 @@ def apply_timing_filter(query, timing: str, today: date | None = None):
     return query
 
 
+def apply_field_browse_filter(query, field: str):
+    val = field.strip()
+    return query.filter(
+        or_(
+            json_list_empty(models.Scholarship.eligible_courses_psced),
+            json_list_contains(models.Scholarship.eligible_courses_psced, val),
+            json_list_pattern(models.Scholarship.eligible_courses_psced, f"%{val}%"),
+        )
+    )
+
+
 def apply_life_stage_filter(query, life_stage: str):
     stage = life_stage.strip().lower()
     levels = LIFE_STAGE_LEVELS.get(stage)
     if not levels:
         return query
-    clauses = []
+    level_clauses = []
     for lit in levels:
-        clauses.append(json_list_contains(models.Scholarship.eligible_levels, lit))
-        clauses.append(models.Scholarship.level.ilike(f"%{lit}%"))
-    return query.filter(or_(*clauses))
+        level_clauses.append(json_list_contains(models.Scholarship.eligible_levels, lit))
+        level_clauses.append(models.Scholarship.level.ilike(f"%{lit}%"))
+    return query.filter(
+        or_(
+            json_list_empty(models.Scholarship.eligible_levels),
+            or_(*level_clauses),
+        )
+    )
 
 
 def _base_search_query(db: Session, *, include_archived: bool = False):
-    """Default catalog: all non-archived scholarships, including needs_verification."""
+    """Default catalog: active scholarships; optionally include discontinued rows."""
     q = db.query(models.Scholarship)
-    if not include_archived:
-        q = q.filter(
-            models.Scholarship.is_active != False,  # noqa: E712
-            or_(
-                models.Scholarship.application_status.is_(None),
-                models.Scholarship.application_status != ARCHIVED,
-            ),
-        )
-    return q
+    if include_archived:
+        return q
+    return q.filter(models.Scholarship.is_active != False)  # noqa: E712
 
 
 def _status_priority_order(today: date | None = None):
@@ -285,7 +308,7 @@ def search_scholarships(
     page = max(1, page)
     offset = (page - 1) * limit
 
-    show_archived = include_archived or (timing.strip().lower() == "archived")
+    show_archived = include_archived
     q = _base_search_query(db, include_archived=show_archived)
 
     if timing and timing.strip():
@@ -308,13 +331,7 @@ def search_scholarships(
         q = apply_region_browse_filter(q, region)
 
     if field and field.strip():
-        val = field.strip()
-        q = q.filter(
-            or_(
-                json_list_contains(models.Scholarship.eligible_courses_psced, val),
-                json_list_pattern(models.Scholarship.eligible_courses_psced, f"%{val}%"),
-            )
-        )
+        q = apply_field_browse_filter(q, field)
 
     if education_level and education_level.strip():
         q = apply_education_level_browse_filter(q, education_level)
@@ -381,7 +398,7 @@ def search_scholarships_semantic(
     page = max(1, page)
     offset = (page - 1) * limit
 
-    show_archived = include_archived or (timing.strip().lower() == "archived")
+    show_archived = include_archived
     q = _base_search_query(db, include_archived=show_archived)
 
     if timing and timing.strip():
@@ -404,13 +421,7 @@ def search_scholarships_semantic(
         q = apply_region_browse_filter(q, region)
 
     if field and field.strip():
-        val = field.strip()
-        q = q.filter(
-            or_(
-                json_list_contains(models.Scholarship.eligible_courses_psced, val),
-                json_list_pattern(models.Scholarship.eligible_courses_psced, f"%{val}%"),
-            )
-        )
+        q = apply_field_browse_filter(q, field)
 
     if education_level and education_level.strip():
         q = apply_education_level_browse_filter(q, education_level)

@@ -44,7 +44,7 @@ def test_editorial_state_shims():
     assert derive_is_active(row) is True
     apply_editorial_state(row, NEEDS_REVIEW)
     assert row.editorial_state == NEEDS_REVIEW
-    assert row.is_active is False
+    assert row.is_active is True
     assert row.data_status == "needs_review"
 
 

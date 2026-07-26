@@ -22,9 +22,15 @@ def _get(row: Any, key: str, default=None):
 def derive_is_active(row: Any) -> bool:
     """Whether a row should be treated as student-visible catalog entry."""
     es = (_get(row, "editorial_state") or "").strip().lower()
+    if es == ARCHIVED:
+        return False
     if es:
-        return es == PUBLISHED
-    return bool(_get(row, "is_active", True))
+        # needs_review and imported rows remain visible; only archived hides.
+        return True
+    legacy = _get(row, "is_active")
+    if legacy is False and (_get(row, "application_status") or "").strip().lower() == "archived":
+        return False
+    return legacy is not False
 
 
 def derive_data_status(row: Any, *, today: date | None = None) -> str:

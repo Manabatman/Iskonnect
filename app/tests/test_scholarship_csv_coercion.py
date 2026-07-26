@@ -87,8 +87,9 @@ def test_research_metadata_columns_ignored():
     assert not hasattr(sch, "research_notes")
 
 
-def test_gemini_research_maps_to_manual_verification_source():
-    assert verification_source_for("gemini_research") == "manual"
+def test_gemini_research_maps_to_csv_import_verification_source():
+    assert verification_source_for("gemini_research") == "csv_import"
+    assert verification_source_for("discovery_verification") == "csv_import"
     assert verification_source_for("csv_import") == "csv_import"
     assert verification_source_for("philscholar") == "team_verified"
 
@@ -128,6 +129,6 @@ def test_staging_round_trip_csv_row(db_session):
     promoted = promote_staging_row(db_session, st)
     assert promoted is not None
     assert promoted.title == "CSV Round Trip Scholarship"
-    assert promoted.verification_source == "manual"
+    assert promoted.verification_source == "csv_import"
     assert json.loads(promoted.eligible_levels) == ["College"]
     db_session.commit()

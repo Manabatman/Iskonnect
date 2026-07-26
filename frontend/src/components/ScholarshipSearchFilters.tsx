@@ -257,7 +257,7 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             onChange={(e) => updateFilter("include_archived", e.target.checked || undefined)}
             className="h-5 w-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
           />
-          Include archived programs
+          Include discontinued programs
         </label>
 
         <div>

@@ -29,7 +29,7 @@ def _parse_dt(val: Any) -> datetime | None:
     return None
 
 
-def verification_badge(row: Any) -> str:
+def verification_badge(row: Any, *, has_field_evidence: bool | None = None) -> str:
     """
     User-facing badge: verified | partially_verified | imported_unverified | needs_review
     """
@@ -40,17 +40,41 @@ def verification_badge(row: Any) -> str:
     score = _completeness(row)
     verified_at = _parse_dt(_get(row, "last_verified_at"))
     vsource = (_get(row, "verification_source") or "").strip().lower()
-    if verified_at and vsource in ("manual", "team_verified", "partner"):
+    evidence_ok = has_field_evidence if has_field_evidence is not None else False
+    if (
+        evidence_ok
+        and verified_at
+        and vsource in ("manual", "team_verified", "partner")
+    ):
         age_days = (datetime.utcnow() - verified_at.replace(tzinfo=None)).days
         if age_days <= VERIFICATION_FRESH_DAYS and score >= 60:
             return "verified"
         if age_days <= STALE_VERIFICATION_DAYS:
             return "partially_verified"
-    if vsource in ("csv_import", "csv_import_legacy", ""):
+    if vsource in ("csv_import", "csv_import_legacy", "gemini_research", "discovery_verification", ""):
         return "imported_unverified"
-    if score >= 85:
+    if evidence_ok and score >= 85:
         return "partially_verified"
     return "needs_review"
+
+
+def verification_badge_for_row(row: Any, db: Any) -> str:
+    """Badge with field_evidence lookup when db session is available."""
+    from app import models
+
+    sid = _get(row, "id")
+    has_evidence = False
+    if sid and db is not None:
+        has_evidence = (
+            db.query(models.FieldEvidence)
+            .filter(
+                models.FieldEvidence.scholarship_id == sid,
+                models.FieldEvidence.superseded_at.is_(None),
+            )
+            .first()
+            is not None
+        )
+    return verification_badge(row, has_field_evidence=has_evidence)
 
 
 def verification_badge_label(badge: str) -> str:
@@ -77,7 +101,13 @@ def _completeness(row: Any) -> int:
 
 def attach_verification_fields(payload: dict[str, Any]) -> dict[str, Any]:
     """Add user-facing verification/trust fields to a scholarship payload."""
-    badge = verification_badge(payload)
+    evidence = payload.get("field_evidence")
+    has_evidence = False
+    if isinstance(evidence, list) and len(evidence) > 0:
+        has_evidence = True
+    elif payload.get("_has_field_evidence"):
+        has_evidence = True
+    badge = verification_badge(payload, has_field_evidence=has_evidence)
     score = _completeness(payload)
     verified_at = _get(payload, "last_verified_at")
     vsource = _get(payload, "verification_source")

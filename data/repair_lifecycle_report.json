@@ -1,0 +1,374 @@
+{
+  "dry_run": false,
+  "candidates": 61,
+  "repaired": 61,
+  "skipped": 0,
+  "outcomes": [
+    {
+      "scholarship_id": 1,
+      "title": "CHED Merit Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 2,
+      "title": "DOST-SEI Undergraduate Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 3,
+      "title": "DOST-SEI Graduate Scholarship Programs (ASTHRDP/CBPSME/ERDT/STRAND)",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 7,
+      "title": "GSIS Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 14,
+      "title": "BPI Foundation Pagpupugay Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 16,
+      "title": "PLDT-Smart Foundation Gabay Guro Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 17,
+      "title": "DepEd SHS Voucher Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 21,
+      "title": "Pasig City Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 24,
+      "title": "UP Presidential Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 30,
+      "title": "Taguig Lifeline Bar and Board Review Assistance",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 31,
+      "title": "Makati City SUC and Priority Courses Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 34,
+      "title": "NavotaAs Academic College Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 35,
+      "title": "Marikina City Medical Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 37,
+      "title": "Davao City STEP FA Category B",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 38,
+      "title": "Davao City Special Educational Assistance Program for Lumad",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 43,
+      "title": "DLSU Star Scholars Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 44,
+      "title": "DLSU Archer Achievers Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 45,
+      "title": "UST San Martin de Porres Equity Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 46,
+      "title": "Mindanao State University SASE Academic Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 49,
+      "title": "Cebu Province CP GIFTS Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 54,
+      "title": "CHED Medical Scholarship and Return Service (MSRS)",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 59,
+      "title": "Caritas Manila YSLEP Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 61,
+      "title": "Megaworld Foundation Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 62,
+      "title": "AFPSLAI Educational Grant Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 64,
+      "title": "Global Korea Scholarship (GKS) Graduate",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 65,
+      "title": "Global Korea Scholarship (GKS) Undergraduate",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 66,
+      "title": "CHED-UniFAST Tertiary Education Subsidy (TES)",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 67,
+      "title": "TESDA Private Education Student Financial Assistance",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 68,
+      "title": "PUP Entrance Scholarship Program",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 70,
+      "title": "UP College of Law Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 72,
+      "title": "Gokongwei Brothers Foundation STEM-College Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 73,
+      "title": "DOST-SEI Undergraduate Scholarships (RA 7687 / Merit)",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 76,
+      "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - Higher Education Track",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 79,
+      "title": "DOST-SEI Junior Level Science Scholarship (JLSS)",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 80,
+      "title": "MEXT Scholarship - Research Category",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 81,
+      "title": "MEXT Scholarship - Undergraduate Track",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 82,
+      "title": "MEXT Scholarship - Specialized Training Track",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 83,
+      "title": "MEXT Scholarship - College of Technology (KOSEN)",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 84,
+      "title": "GSIS Educational Subsidy Program (GESP)",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 85,
+      "title": "OWWA Education for Development Scholarship (EDSP)",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 86,
+      "title": "OWWA OFW Dependent Scholarship Program (ODSP)",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 88,
+      "title": "Quezon City Scholarship Program (QCSP)",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 89,
+      "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 90,
+      "title": "Fulbright-PhilSA Graduate Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 97,
+      "title": "Taguig LANI LEAD Graduate Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 98,
+      "title": "Makati City Premier and Specialized School Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 99,
+      "title": "University of Makati Special Institutional Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 100,
+      "title": "NavotaAs Fisherfolk Children Scholarship Track",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 101,
+      "title": "Davao City STEP FA Category A",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 102,
+      "title": "Davao City STEP FA Category C",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 103,
+      "title": "Davao City Medical and Law Education Assistance Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 106,
+      "title": "DLSU St La Salle Financial Assistance Grant",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 107,
+      "title": "DLSU Vaugirard Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 108,
+      "title": "UST San Lorenzo Ruiz Student Assistance Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 109,
+      "title": "UST Santo Tomas Academic Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 110,
+      "title": "OWWA Educational Livelihood Assistance Program College Track",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 111,
+      "title": "Security Bank Foundation Agency Personnel Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 115,
+      "title": "SM Foundation College Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 116,
+      "title": "Megaworld Foundation College Scholarship",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    },
+    {
+      "scholarship_id": 125,
+      "title": "DOH Medical Scholarship and Return Service Program",
+      "action": "repaired",
+      "detail": "wrongly_archived_by_deadline"
+    },
+    {
+      "scholarship_id": 126,
+      "title": "Aboitiz Future Leaders Scholarship Program",
+      "action": "repaired",
+      "detail": "legacy_expired_status"
+    }
+  ]
+}

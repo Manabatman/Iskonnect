@@ -20,9 +20,13 @@ def verification_source_for(source: str | None) -> str:
     src_lo = (source or "").strip().lower()
     if src_lo in ("philscholar", "scraper"):
         return "team_verified"
+    if src_lo in ("gemini_research", "gemini", "discovery_verification", "research"):
+        return "csv_import"
     if "csv" in src_lo:
         return "csv_import"
-    return "manual"
+    if src_lo in ("manual", "admin"):
+        return "manual"
+    return "csv_import"
 
 
 def promote_staging_row(

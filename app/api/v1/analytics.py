@@ -70,6 +70,41 @@ def analytics_overview(
         or 0
     )
 
+    active_count = (
+        db.query(func.count(models.Scholarship.id)).filter(models.Scholarship.is_active != False).scalar() or 0  # noqa: E712
+    )
+    broken_links = (
+        db.query(func.count(models.Scholarship.id))
+        .filter(models.Scholarship.is_active != False, models.Scholarship.link_status == "broken")  # noqa: E712
+        .scalar()
+        or 0
+    )
+    with_evidence = (
+        db.query(func.count(func.distinct(models.FieldEvidence.scholarship_id)))
+        .join(models.Scholarship, models.Scholarship.id == models.FieldEvidence.scholarship_id)
+        .filter(
+            models.Scholarship.is_active != False,  # noqa: E712
+            models.FieldEvidence.superseded_at.is_(None),
+        )
+        .scalar()
+        or 0
+    )
+    missing_precision = (
+        db.query(func.count(models.Scholarship.id))
+        .filter(models.Scholarship.is_active != False, models.Scholarship.deadline_precision.is_(None))  # noqa: E712
+        .scalar()
+        or 0
+    )
+
+    catalog_quality = {
+        "active_scholarships": active_count,
+        "broken_links": broken_links,
+        "broken_link_pct": round(100.0 * broken_links / active_count, 1) if active_count else 0.0,
+        "with_field_evidence": with_evidence,
+        "evidence_pct": round(100.0 * with_evidence / active_count, 1) if active_count else 0.0,
+        "missing_deadline_precision": missing_precision,
+    }
+
     return {
         "total_scholarships": total_scholarships,
         "total_profiles": total_profiles,
@@ -84,6 +119,7 @@ def analytics_overview(
         "scholarships_by_region": scholarships_by_region,
         "profiles_by_region": profiles_by_region,
         "match_runs_last_30_days": match_runs_last_30,
+        "catalog_quality": catalog_quality,
     }
 
 

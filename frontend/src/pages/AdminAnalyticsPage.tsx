@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 
+interface CatalogQuality {
+  active_scholarships: number;
+  broken_links: number;
+  broken_link_pct: number;
+  with_field_evidence: number;
+  evidence_pct: number;
+  missing_deadline_precision: number;
+}
+
 interface Overview {
   total_scholarships: number;
   total_profiles: number;
@@ -12,6 +21,7 @@ interface Overview {
   profiles_by_region: Record<string, number>;
   scholarships_by_region: Record<string, number>;
   match_runs_last_30_days: number;
+  catalog_quality?: CatalogQuality;
 }
 
 export function AdminAnalyticsPage() {
@@ -83,6 +93,20 @@ export function AdminAnalyticsPage() {
             </div>
           ))}
         </div>
+
+        {data.catalog_quality ? (
+          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Catalog quality
+            </h3>
+            <ul className="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700 dark:text-slate-300 sm:grid-cols-2">
+              <li>Active scholarships: <strong>{data.catalog_quality.active_scholarships}</strong></li>
+              <li>With field evidence: <strong>{data.catalog_quality.with_field_evidence}</strong> ({data.catalog_quality.evidence_pct}%)</li>
+              <li>Broken links: <strong>{data.catalog_quality.broken_links}</strong> ({data.catalog_quality.broken_link_pct}%)</li>
+              <li>Missing deadline precision: <strong>{data.catalog_quality.missing_deadline_precision}</strong></li>
+            </ul>
+          </div>
+        ) : null}
 
         {data.avg_match_score != null ? (
           <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">

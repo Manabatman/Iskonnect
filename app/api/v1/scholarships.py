@@ -175,7 +175,10 @@ def get_scholarship(
     if not s:
         logger.warning("scholarships_get_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
-    payload = _public_scholarship_payload(s)
+    payload = dict(_scholarship_to_response(s))
+    payload.pop("confidence_score", None)
+    payload.pop("data_completeness_score", None)
+    payload["freshness_chips"] = build_freshness_chips(payload)
     payload["field_evidence"] = list_public_field_evidence(db, scholarship_id)
     if profile_id is not None:
         assert_can_read_profile(profile_id, db, user_id, profile_token)
@@ -184,7 +187,7 @@ def get_scholarship(
             sch_dict = _scholarship_to_dict(s)
             payload["preparation"] = compute_application_readiness(sch_dict, profile)
             payload.update(evaluate_eligibility(profile, sch_dict).to_dict())
-    return payload
+    return attach_verification_fields(payload)
 
 
 @router.get("/scholarships/{scholarship_id}/history", response_model=list[schemas.ScholarshipVersionHistoryItem])
