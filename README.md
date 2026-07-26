@@ -7,7 +7,7 @@ Iskonnect helps students discover scholarships they can realistically apply for�
 > **Status:** Public Beta (v1.0 Beta) — July 2026. Core flows work end-to-end; catalog and matching logic are still being expanded.
 
 **Live stack:** Vercel (frontend) · Render (API) · Supabase (Postgres) · Redis (rate limits & cache)  
-**Deploy guide:** [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)  
+**Deploy guide:** [docs/deployment.md](docs/deployment.md)  
 **Python on Render:** `.python-version` pins **3.11.x** (avoids Render defaulting to 3.14).
 
 ---
@@ -117,7 +117,7 @@ START_BOTH.bat
 Runs backend + frontend in separate windows. Seed manually with python seed_data.py if the catalog is empty.
 
 Optional: larger demo catalog
-For hundreds of verified CSV rows, place files in `../.cursor/plans/data/` (`philscholar.csv`, `sikap.csv`, `scholarships.csv`), then:
+For additional CSV rows, contact the maintainer or place approved import files in `data/`, then:
 
 python -m app.scripts.seed_demo_csvs
 Past-deadline rows remain in the DB as past_deadline so matching demos still work.
@@ -177,18 +177,24 @@ Interactive reference (development only): http://localhost:8000/docs
 Data pipeline (high level)
 CSV / research import → staging → admin approve → live catalog
 Completeness scoring + publishability gate on every write and nightly maintenance
-Details: docs/operations-handbook/06-data-pipeline.md
+Details: [docs/verification.md](docs/verification.md)
 
 Documentation
 Doc	Purpose
-docs/DEPLOYMENT.md
+docs/architecture.md
+System design, matching engine, troubleshooting
+docs/api.md
+API overview + link to FastAPI /docs
+docs/deployment.md
 Vercel + Render + Supabase production setup
-docs/HANDBOOK.md
-Local dev, debugging, common errors
-docs/operations-handbook/00-index.md
-Full ops handbook
-../START_HERE.md
-Monorepo quick start (if applicable)
+docs/verification.md
+Catalog pipeline and maintainer scripts
+docs/import_csv_contract.md
+CSV import format for contributors
+CONTRIBUTING.md
+Setup, tests, PR guidelines
+SECURITY.md
+Vulnerability reporting
 Development
 # Backend tests
 python -m pytest app/tests/
@@ -199,8 +205,8 @@ Catalog coverage is growing (national programs first; LGU and institutional gran
 Matching is explainable and policy-aware but not a substitute for official provider verification
 Always confirm deadlines and requirements on the primary source link before applying
 License
-See LICENSE if present in the repository.
+MIT — see [LICENSE](LICENSE).
 
 Contributing
-Issues and PRs welcome. For large data imports, use the staging workflow rather than writing directly to production tables.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome. For large data imports, use the staging workflow rather than writing directly to production tables.
 

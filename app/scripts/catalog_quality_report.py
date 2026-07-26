@@ -3,7 +3,7 @@ Emit catalog quality metrics and provider coverage report.
 
 Usage:
   python -m app.scripts.catalog_quality_report
-  python -m app.scripts.catalog_quality_report --output verification/reports/CATALOG_QUALITY.md
+  python -m app.scripts.catalog_quality_report --output data/catalog_quality_report.md
 """
 
 from __future__ import annotations
@@ -131,7 +131,7 @@ def build_report() -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default=str(ROOT / "verification" / "reports" / "CATALOG_QUALITY.md"))
+    parser.add_argument("--output", default=str(ROOT / "data" / "catalog_quality_report.md"))
     args = parser.parse_args()
     report = build_report()
     out = Path(args.output)

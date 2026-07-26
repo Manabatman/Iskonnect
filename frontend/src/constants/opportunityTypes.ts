@@ -12,7 +12,7 @@ export const OPPORTUNITY_TYPES: OpportunityTypeDef[] = [
     label: "Scholarships",
     available: true,
     description: "Financial aid for tuition, allowances, and school expenses.",
-    roadmapNote: "Fully supported during public beta.",
+    roadmapNote: "Available now.",
   },
   {
     slug: "internships",

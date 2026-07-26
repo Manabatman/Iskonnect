@@ -32,9 +32,6 @@ export function Footer() {
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
               Connecting Filipino students to scholarship opportunities they actually qualify for.
             </p>
-            <p className="mt-2 text-xs text-slate-500">
-              We don&apos;t publish student outcome stories yet — we focus on accurate listings and honest matching.
-            </p>
             <p className="mt-2 text-xs font-medium text-primary-300">
               {APP_RELEASE_LABEL} · {APP_RELEASE_DATE}
             </p>

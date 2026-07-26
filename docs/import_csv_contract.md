@@ -1,8 +1,8 @@
-# ISKONNECT Scholarship CSV Import Contract
+﻿# ISKONNECT Scholarship CSV Import Contract
 
-This document defines the **exact** CSV format that the Gemini → Cursor generation step must produce before running `python -m app.scripts.csv_to_staging`.
+This document defines the **exact** CSV format that the Gemini ΓåÆ Cursor generation step must produce before running `python -m app.scripts.csv_to_staging`.
 
-The importer enforces this contract strictly. Rows or headers that violate it are **rejected with an explanation** — never silently corrected.
+The importer enforces this contract strictly. Rows or headers that violate it are **rejected with an explanation** ΓÇö never silently corrected.
 
 ## Header row (required)
 
@@ -66,7 +66,7 @@ Pasig Scholarship,...,NCR,,true,...
 | `eligible_courses_psced` | pipe-list | `STEM\|Engineering\|IT\|...` |
 | `eligible_courses_specific` | pipe-list | Free-text course names |
 | `max_income_threshold` | integer | Annual PHP, e.g. `300000` |
-| `min_gwa_normalized` | decimal | 0–100 percentage scale |
+| `min_gwa_normalized` | decimal | 0ΓÇô100 percentage scale |
 | `min_age` | integer | Empty if not applicable |
 | `max_age` | integer | Empty if not applicable |
 | `priority_groups` | pipe-list | e.g. `PWD\|4Ps` |
@@ -133,17 +133,17 @@ python -m app.scripts.csv_to_staging --csv path/to/scholarships.csv --report imp
 
 ### Per-row rejection
 
-- `column_count_mismatch (expected N, got M)` — fix empty-field commas before re-import
+- `column_count_mismatch (expected N, got M)` ΓÇö fix empty-field commas before re-import
 
 ## Validation report fields
 
 After import, the JSON report includes:
 
-- `imported` — counts: `new`, `updated_candidate`, `skipped`, `invalid`, `rejected_structural`
-- `rejected_structural` — rows failed field-count check
-- `unknown_columns`, `missing_columns` — header problems
-- `invalid_urls`, `invalid_dates` — aggregated row warnings
-- `auto_normalizations` — e.g. `normalized_scholarship_type:Merit-based`
-- `structural_rejections` — per-line rejection details
+- `imported` ΓÇö counts: `new`, `updated_candidate`, `skipped`, `invalid`, `rejected_structural`
+- `rejected_structural` ΓÇö rows failed field-count check
+- `unknown_columns`, `missing_columns` ΓÇö header problems
+- `invalid_urls`, `invalid_dates` ΓÇö aggregated row warnings
+- `auto_normalizations` ΓÇö e.g. `normalized_scholarship_type:Merit-based`
+- `structural_rejections` ΓÇö per-line rejection details
 
 Nothing is silently ignored.

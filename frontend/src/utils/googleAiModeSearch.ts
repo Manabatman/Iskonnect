@@ -1,6 +1,6 @@
 /**
  * Builds a Google Search URL that opens in AI Mode (synthesized answer view).
- * Uses udm=50 — Google's AI Mode parameter (may evolve; see HANDBOOK.md).
+ * Uses udm=50 — Google's AI Mode parameter (may evolve; see docs/architecture.md).
  */
 export function buildGoogleAiModeSearchUrl(query: string): string {
   const params = new URLSearchParams({

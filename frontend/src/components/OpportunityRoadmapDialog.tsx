@@ -20,11 +20,10 @@ export function OpportunityRoadmapDialog({ open, onOpenChange }: OpportunityRoad
         >
           <div className="border-b border-slate-200 px-6 py-4 dark:border-slate-700">
             <Dialog.Title className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Explore what&apos;s coming
+              More opportunity types
             </Dialog.Title>
             <Dialog.Description id="roadmap-dialog-desc" className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              ISKONNECT is becoming a unified student opportunity platform. Scholarships are fully supported during
-              public beta; these types are on the roadmap.
+              ISKONNECT is expanding beyond scholarships. These additional opportunity types are on the roadmap.
             </Dialog.Description>
           </div>
           <div className="flex-1 overflow-y-auto px-6 py-4">

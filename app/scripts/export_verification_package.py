@@ -169,9 +169,9 @@ def _bundle_prompt_text(bundle_id: str, scholarship_ids: list[int]) -> str:
 
 ## Before you start
 
-1. Paste `verification/prompts/00_MASTER_INSTRUCTIONS.md` into this conversation first.
+1. Review `docs/verification.md` for the field correction workflow.
 2. Attach `verification/export/bundles/{bundle_id}.json` (generated export).
-3. Enable web search.
+3. Verify each row against official provider sources (web search enabled).
 
 ## Scope
 

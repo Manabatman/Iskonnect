@@ -9,6 +9,7 @@ import { ScholarshipDetailPanel } from "../components/ScholarshipDetailPanel";
 import { useAuth } from "../contexts/AuthContext";
 import { useScholarshipSearch } from "../hooks/useScholarshipSearch";
 import { OpportunityRoadmapDialog } from "../components/OpportunityRoadmapDialog";
+import { OPPORTUNITY_TYPES } from "../constants/opportunityTypes";
 import type { MatchResult, ScholarshipInfo } from "../types";
 
 export function ScholarshipSearchPage() {
@@ -53,6 +54,7 @@ export function ScholarshipSearchPage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [roadmapOpen, setRoadmapOpen] = useState(false);
   const activeFilterLabels = describeActiveFilters(filters);
+  const activeOpportunityType = OPPORTUNITY_TYPES.find((t) => t.available);
 
   const inflightMatchMap = useRef<Promise<Map<number, MatchResult>> | null>(null);
 
@@ -196,20 +198,18 @@ export function ScholarshipSearchPage() {
           </div>
         </div>
 
-        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full border border-primary-300 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-800 dark:border-primary-700 dark:bg-primary-950/40 dark:text-primary-200">
-              Scholarships — fully supported in public beta
-            </span>
-            <button
-              type="button"
-              onClick={() => setRoadmapOpen(true)}
-              className="text-xs font-medium text-primary-600 underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-primary-400 dark:focus-visible:ring-offset-slate-900"
-              aria-haspopup="dialog"
-            >
-              See what&apos;s coming
-            </button>
-          </div>
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <span className="inline-flex items-center rounded-lg border border-primary-300 bg-primary-50 px-3 py-1.5 text-sm font-semibold text-primary-800 dark:border-primary-700 dark:bg-primary-950/40 dark:text-primary-200">
+            {activeOpportunityType?.label ?? "Scholarships"}
+          </span>
+          <button
+            type="button"
+            onClick={() => setRoadmapOpen(true)}
+            className="text-sm font-medium text-primary-600 underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-primary-400 dark:focus-visible:ring-offset-slate-900"
+            aria-haspopup="dialog"
+          >
+            More Opportunity Types
+          </button>
         </div>
         <OpportunityRoadmapDialog open={roadmapOpen} onOpenChange={setRoadmapOpen} />
 
