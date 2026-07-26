@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL, apiFetch, NetworkError } from "../api/client";
+import {
+  DuplicateCandidatesPanel,
+  type DuplicatePair,
+} from "../components/admin/DuplicateCandidatesPanel";
+import { PermanentDeleteScholarshipModal } from "../components/admin/PermanentDeleteScholarshipModal";
 import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
@@ -129,6 +134,11 @@ export function AdminPage() {
   const [editProvider, setEditProvider] = useState("");
   const [editLink, setEditLink] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [permanentDeleteTarget, setPermanentDeleteTarget] = useState<ScholarshipInfo | null>(null);
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [duplicatePairs, setDuplicatePairs] = useState<DuplicatePair[]>([]);
+  const [dismissedPairs, setDismissedPairs] = useState<Set<string>>(new Set());
 
   const headers = useCallback(() => authHeaders(), [authHeaders]);
 
@@ -259,6 +269,52 @@ export function AdminPage() {
       .catch((err) => setError(err instanceof Error ? err.message : "Error"));
   };
 
+  const runBulkAction = async (
+    action: "deactivate" | "permanent_delete" | "restore" | "verify" | "needs_review"
+  ) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    if (action === "permanent_delete" && !confirm(`Permanently delete ${ids.length} inactive scholarship(s)?`)) {
+      return;
+    }
+    setBulkBusy(true);
+    setError(null);
+    try {
+      const res = await apiFetch("/api/v1/admin/scholarships/bulk", {
+        method: "POST",
+        headers: { ...headers(), "Content-Type": "application/json" },
+        body: JSON.stringify({ ids, action }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.detail ?? "Bulk action failed");
+      }
+      const data = (await res.json()) as { succeeded: number[]; failed: { id: number; reason: string }[] };
+      if (data.failed.length > 0) {
+        setError(
+          `Bulk ${action}: ${data.succeeded.length} succeeded, ${data.failed.length} failed (${data.failed
+            .map((f) => `#${f.id}`)
+            .join(", ")})`
+        );
+      }
+      setSelectedIds(new Set());
+      fetchScholarships();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Bulk action failed");
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+  const toggleSelected = (id: number) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   const handleImageUpload = async (scholarshipId: number, file: File) => {
     setUploadingImageId(scholarshipId);
     setError(null);
@@ -304,7 +360,17 @@ export function AdminPage() {
   };
 
   useEffect(() => {
-    if (tab !== "reviews") return;
+    if (tab !== "reviews" || reviewQueue !== "duplicates") return;
+    apiFetch("/api/v1/admin/duplicates/candidates?include_inactive=true", { headers: headers() })
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load duplicate candidates");
+        return r.json();
+      })
+      .then((d: { pairs?: DuplicatePair[] }) => setDuplicatePairs(Array.isArray(d.pairs) ? d.pairs : []))
+      .catch((e) => setError(e instanceof Error ? e.message : "Error"));
+  }, [tab, reviewQueue, headers]);
+
+  useEffect(() => {
 
     let cancelled = false;
     let retried = false;
@@ -445,6 +511,17 @@ export function AdminPage() {
   );
   const schTotalPages = Math.max(1, Math.ceil(scholarships.length / SCH_PAGE_SIZE));
 
+  const toggleSelectAllPage = () => {
+    const pageIds = pagedScholarships.map((s) => s.id);
+    const allSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (allSelected) pageIds.forEach((id) => next.delete(id));
+      else pageIds.forEach((id) => next.add(id));
+      return next;
+    });
+  };
+
   const tabs: { id: Tab; label: string }[] = [
     { id: "scholarships", label: "Scholarships" },
     { id: "staging", label: "Pending" },
@@ -544,6 +621,53 @@ export function AdminPage() {
                 Create scholarship
               </button>
             </div>
+            {selectedIds.size > 0 ? (
+              <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-primary-200 bg-primary-50/60 p-3 dark:border-primary-900 dark:bg-primary-950/30">
+                <span className="text-sm font-medium text-primary-900 dark:text-primary-100">
+                  {selectedIds.size} selected
+                </span>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  className="rounded border px-2 py-1 text-xs disabled:opacity-50"
+                  onClick={() => void runBulkAction("deactivate")}
+                >
+                  Deactivate
+                </button>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  className="rounded border px-2 py-1 text-xs disabled:opacity-50"
+                  onClick={() => void runBulkAction("restore")}
+                >
+                  Restore
+                </button>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  className="rounded border px-2 py-1 text-xs disabled:opacity-50"
+                  onClick={() => void runBulkAction("verify")}
+                >
+                  Verify
+                </button>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  className="rounded border px-2 py-1 text-xs disabled:opacity-50"
+                  onClick={() => void runBulkAction("needs_review")}
+                >
+                  Needs review
+                </button>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  className="rounded border border-danger-300 px-2 py-1 text-xs text-danger-700 disabled:opacity-50 dark:border-danger-800 dark:text-danger-300"
+                  onClick={() => void runBulkAction("permanent_delete")}
+                >
+                  Delete permanently
+                </button>
+              </div>
+            ) : null}
             {(showCreate || editingId !== null) && (
               <div className="mb-4 rounded-lg border border-slate-200 p-4 dark:border-slate-700">
                 <h3 className="mb-2 font-medium">{editingId ? "Edit scholarship" : "New scholarship"}</h3>
@@ -592,6 +716,17 @@ export function AdminPage() {
               <table className="min-w-full text-sm">
                 <thead className="bg-slate-50 dark:bg-slate-800">
                   <tr>
+                    <th className="px-4 py-2 text-left">
+                      <input
+                        type="checkbox"
+                        aria-label="Select all on page"
+                        checked={
+                          pagedScholarships.length > 0 &&
+                          pagedScholarships.every((s) => selectedIds.has(s.id))
+                        }
+                        onChange={toggleSelectAllPage}
+                      />
+                    </th>
                     <th className="px-4 py-2 text-left font-semibold">ID</th>
                     <th className="px-4 py-2 text-left font-semibold">Title</th>
                     <th className="px-4 py-2 text-left font-semibold">Provider</th>
@@ -604,6 +739,14 @@ export function AdminPage() {
                 <tbody>
                   {pagedScholarships.map((s) => (
                     <tr key={s.id} className="border-t border-slate-100 dark:border-slate-700">
+                      <td className="px-4 py-2">
+                        <input
+                          type="checkbox"
+                          aria-label={`Select scholarship ${s.id}`}
+                          checked={selectedIds.has(s.id)}
+                          onChange={() => toggleSelected(s.id)}
+                        />
+                      </td>
                       <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{s.id}</td>
                       <td className="px-4 py-2 font-medium text-slate-900 dark:text-slate-100">{s.title}</td>
                       <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{s.provider ?? "—"}</td>
@@ -682,6 +825,19 @@ export function AdminPage() {
                           >
                             Deactivate
                           </button>
+                          <button
+                            type="button"
+                            onClick={() => setPermanentDeleteTarget(s)}
+                            className="text-danger-600 hover:text-danger-700 disabled:opacity-50"
+                            disabled={s.is_active !== false}
+                            title={
+                              s.is_active !== false
+                                ? "Deactivate before permanent deletion"
+                                : "Delete permanently"
+                            }
+                          >
+                            Delete permanently
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -735,6 +891,30 @@ export function AdminPage() {
             {reviewQueueLoading && !reviewQueueWaking ? (
               <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">Loading queue…</p>
             ) : null}
+            {reviewQueue === "duplicates" ? (
+              <DuplicateCandidatesPanel
+                pairs={duplicatePairs}
+                dismissed={dismissedPairs}
+                authHeaders={headers}
+                onDismiss={(key) =>
+                  setDismissedPairs((prev) => {
+                    const next = new Set(prev);
+                    next.add(key);
+                    return next;
+                  })
+                }
+                onResolved={() => {
+                  fetchScholarships();
+                  apiFetch("/api/v1/admin/duplicates/candidates?include_inactive=true", { headers: headers() })
+                    .then((r) => r.json())
+                    .then((d: { pairs?: DuplicatePair[] }) =>
+                      setDuplicatePairs(Array.isArray(d.pairs) ? d.pairs : [])
+                    )
+                    .catch(() => undefined);
+                }}
+                onError={(msg) => setError(msg)}
+              />
+            ) : (
             <ul className="space-y-2">
               {reviewItems.length === 0 ? (
                 <p className="text-slate-600 dark:text-slate-400">Queue empty.</p>
@@ -755,6 +935,7 @@ export function AdminPage() {
                 ))
               )}
             </ul>
+            )}
           </>
         )}
 
@@ -1088,6 +1269,18 @@ export function AdminPage() {
           </div>
         )}
       </div>
+      <PermanentDeleteScholarshipModal
+        open={permanentDeleteTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setPermanentDeleteTarget(null);
+        }}
+        scholarship={permanentDeleteTarget}
+        authHeaders={headers}
+        onDeleted={() => {
+          setPermanentDeleteTarget(null);
+          fetchScholarships();
+        }}
+      />
     </section>
   );
 }

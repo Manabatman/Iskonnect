@@ -10,6 +10,7 @@ data/raw/*.json
 data/*.log
 data/*_report.json
 data/catalog_quality_report.md
+data/admin_catalog_cleanup_report.json
 verification/reports/*.md
 .pytest_cache
 dist

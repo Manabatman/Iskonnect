@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.api.v1 import (
     admin_extended,
+    admin_catalog,
     admin_queues,
     analytics,
     applications,
@@ -195,6 +196,7 @@ app.include_router(audit_routes.router, prefix="/api/v1")
 app.include_router(notifications.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
 app.include_router(admin_extended.router, prefix="/api/v1")
+app.include_router(admin_catalog.router, prefix="/api/v1")
 app.include_router(admin_queues.router, prefix="/api/v1")
 
 

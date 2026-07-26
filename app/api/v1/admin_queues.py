@@ -136,6 +136,8 @@ def admin_review_queue(
         data["confidence_score"] = round(quality.score / 100.0, 3)
         data["quality_score"] = quality.score
         data["review_reasons"] = needs_review_reasons(s)
+        if queue_name == "duplicates":
+            data["match_type"] = "dedupe_key"
         items.append(data)
 
     total = q.count()
