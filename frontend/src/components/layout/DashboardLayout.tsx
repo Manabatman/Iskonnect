@@ -7,6 +7,7 @@ import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
 import { BottomNav } from "./BottomNav";
 import { FeedbackButton } from "../FeedbackButton";
+import { AuthShellSkeleton } from "../LoadingSkeletons";
 
 function SavedScholarshipsErrorBanner() {
   const { error, clearError } = useSavedScholarships();
@@ -44,14 +45,7 @@ export function DashboardLayout() {
   }, [authLoading, user, navigate, location.pathname]);
 
   if (authLoading || !user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
-          <p className="text-sm">Loading…</p>
-        </div>
-      </div>
-    );
+    return authLoading ? <AuthShellSkeleton /> : null;
   }
 
   return (

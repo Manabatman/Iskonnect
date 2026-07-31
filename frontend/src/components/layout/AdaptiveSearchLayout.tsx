@@ -5,6 +5,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { PublicShell } from "./PublicLayout";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
+import { AuthShellSkeleton } from "../LoadingSkeletons";
 
 function SavedScholarshipsErrorBanner() {
   const { error, clearError } = useSavedScholarships();
@@ -42,14 +43,7 @@ export function AdaptiveSearchLayout({ children }: AdaptiveSearchLayoutProps) {
   const { authError, clearAuthError, user, loading: authLoading } = useAuth();
 
   if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
-          <p className="text-sm">Loading…</p>
-        </div>
-      </div>
-    );
+    return <AuthShellSkeleton />;
   }
 
   if (user) {

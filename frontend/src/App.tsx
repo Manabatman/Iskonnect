@@ -33,6 +33,7 @@ import { SponsorGuard } from "./components/SponsorGuard";
 import { SchoolGuard } from "./components/SchoolGuard";
 import { ApiWarmupBanner } from "./components/ApiWarmupBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { RouteFallbackSkeleton } from "./components/LoadingSkeletons";
 
 const MatchResultsPage = lazy(() =>
   import("./pages/MatchResultsPage").then((m) => ({ default: m.MatchResultsPage }))
@@ -75,11 +76,7 @@ const OrganizationPage = lazy(() =>
 );
 
 function RouteFallback() {
-  return (
-    <div className="flex min-h-[40vh] items-center justify-center px-4 text-sm text-slate-600 dark:text-slate-400">
-      Loading…
-    </div>
-  );
+  return <RouteFallbackSkeleton />;
 }
 
 /** Scroll to in-page anchors when navigating to /path#section (e.g. /how-it-works#verification). */
