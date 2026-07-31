@@ -5,6 +5,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { PublicShell } from "./PublicLayout";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
+import { BottomNav } from "./BottomNav";
 import { AuthShellSkeleton } from "../LoadingSkeletons";
 
 function SavedScholarshipsErrorBanner() {
@@ -81,10 +82,11 @@ export function AdaptiveSearchLayout({ children }: AdaptiveSearchLayoutProps) {
             ].join(" ")}
           >
             <DashboardTopbar onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto pb-20 lg:pb-0">
               <ErrorBoundary>{children}</ErrorBoundary>
             </div>
           </div>
+          <BottomNav />
         </ErrorBoundary>
       </div>
     );
