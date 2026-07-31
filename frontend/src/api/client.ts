@@ -18,6 +18,24 @@ if (!_apiBase && typeof console !== "undefined") {
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
 
+const PERF_LOG_PATHS = [
+  "/auth/login",
+  "/auth/me",
+  "/profiles/me",
+  "/match-runs",
+  "/plan/",
+  "/saved-scholarships",
+];
+
+function maybeLogServerTiming(path: string, res: Response): void {
+  if (_isProd || typeof console === "undefined") return;
+  const shouldLog = PERF_LOG_PATHS.some((p) => path.includes(p));
+  if (!shouldLog) return;
+  const header = res.headers.get("Server-Timing");
+  if (!header) return;
+  console.debug(`[API perf] ${path} Server-Timing:`, header);
+}
+
 /** Long enough for Render free-tier cold starts (often 50s+ after spin-down). */
 const FETCH_TIMEOUT_MS = 70_000;
 const NETWORK_RETRY_DELAY_MS = 1_000;
@@ -158,6 +176,7 @@ export async function apiFetch(path: string, options?: RequestInit): Promise<Res
           res = await attempt(withBearerToken(options, newToken));
         }
       }
+      maybeLogServerTiming(path, res);
       return res;
     } catch (first) {
       if (!(first instanceof NetworkError)) throw first;

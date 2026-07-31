@@ -4,7 +4,7 @@ import logging
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, Response, status
 from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel, EmailStr, field_validator
 from sqlalchemy.orm import Session
@@ -30,6 +30,7 @@ from app.limiter import limiter
 from app import models
 from app.utils.email import send_email_verification_email, send_password_reset_email
 from app.utils.email_abuse import can_send_transactional_email, record_transactional_email_sent
+from app.utils.server_timing import ServerTiming
 from app.utils.timezone import utc_now_naive
 
 router = APIRouter()
@@ -198,23 +199,33 @@ def register(
 def login(
     request: Request,
     req: Annotated[LoginRequest, Body()],
+    response: Response,
     db: Session = Depends(get_db),
 ):
     """Login with email and password."""
-    user = db.query(models.User).filter(models.User.email == req.email).first()
-    if not user or not verify_password(req.password, user.password_hash):
+    timing = ServerTiming()
+    with timing.measure("db_lookup"):
+        user = db.query(models.User).filter(models.User.email == req.email).first()
+    with timing.measure("bcrypt", desc="password verify"):
+        password_ok = user is not None and verify_password(req.password, user.password_hash)
+    if not user or not password_ok:
         logger.warning("auth_login_failed user_hash=%s reason=invalid_credentials", hash(req.email) % 10_000)
+        timing.attach(response)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
     if settings.require_email_verification and not bool(getattr(user, "email_verified", False)):
         logger.info("auth_login_blocked_unverified user_id=%s", user.id)
+        timing.attach(response)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Please verify your email before signing in. Check your inbox or request a new verification link.",
         )
-    return _tokens_for_user(db, user)
+    with timing.measure("token_issue"):
+        tokens = _tokens_for_user(db, user)
+    timing.attach(response)
+    return tokens
 
 
 @router.post("/auth/refresh", response_model=TokenResponse)

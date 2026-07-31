@@ -8,6 +8,11 @@ import {
 } from "react";
 import { NetworkError, apiFetch } from "../api/client";
 import { clearProfileDraft } from "../components/profile-builder/profileBuilderState";
+import {
+  installLoginWaterfallDevHelper,
+  markLoginFlow,
+  measureLoginFlow,
+} from "../utils/perfTiming";
 
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
@@ -87,6 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = useCallback(
     async (t: string) => {
+      markLoginFlow("auth-me-start");
       const loadMe = async (access: string) => {
         const res = await apiFetch("/api/v1/auth/me", {
           headers: { Authorization: `Bearer ${access}` },
@@ -107,6 +113,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           requireEmailVerification: data.require_email_verification !== false,
         });
         setAuthError(null);
+        markLoginFlow("auth-me-done");
+        measureLoginFlow("auth-me", "auth-me-start", "auth-me-done");
         return true;
       };
 
@@ -138,6 +146,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    installLoginWaterfallDevHelper();
+  }, []);
+
+  useEffect(() => {
     if (!token) {
       setUser(null);
       setLoading(false);
@@ -157,6 +169,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const data = await res.json().catch(() => null);
         throw new Error(data?.detail ?? "Login failed");
       }
+      markLoginFlow("login-response");
+      measureLoginFlow("login-request", "submit", "login-response");
       const data = await res.json();
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);

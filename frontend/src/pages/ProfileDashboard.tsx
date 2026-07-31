@@ -7,6 +7,7 @@ import { NetworkError, apiFetch } from "../api/client";
 import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import { formatDateMedium, formatDateTime, formatRelativeManila, startOfTodayManila } from "../utils/formatDate";
 import { formatDeadlineDisplay } from "../utils/formatDeadline";
+import { markLoginFlow, measureLoginFlow } from "../utils/perfTiming";
 import { MatchScoreRing } from "../components/MatchScoreRing";
 import { QualificationStatusBadge } from "../components/QualificationStatusBadge";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
@@ -118,6 +119,8 @@ export function ProfileDashboard() {
       })
       .finally(() => {
         setLoading(false);
+        markLoginFlow("dashboard-data");
+        measureLoginFlow("submit-to-dashboard-data", "submit", "dashboard-data");
       });
   }, [user?.id, authHeaders]);
 
@@ -173,6 +176,10 @@ export function ProfileDashboard() {
       })
       .finally(() => {
         if (!cancelled) setLatestMatchesLoading(false);
+        if (!cancelled) {
+          markLoginFlow("dashboard-matches");
+          measureLoginFlow("submit-to-dashboard-matches", "submit", "dashboard-matches");
+        }
       });
     return () => {
       cancelled = true;

@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { useAuth } from "../contexts/AuthContext";
+import { clearLoginFlowMeasures, markLoginFlow } from "../utils/perfTiming";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
@@ -33,8 +34,11 @@ export function LoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    clearLoginFlowMeasures();
+    markLoginFlow("submit");
     try {
       await login(email, password);
+      markLoginFlow("navigate-dashboard");
       navigate(returnTo ?? "/dashboard", { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
