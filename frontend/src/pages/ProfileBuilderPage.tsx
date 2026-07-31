@@ -59,6 +59,8 @@ export function ProfileBuilderPage() {
   const [sampleMatches, setSampleMatches] = useState<Array<{ id: number; title: string; score?: number; final_score?: number }>>([]);
   const [sampleLoading, setSampleLoading] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hadProfileOnLoadRef = useRef(false);
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const onAuthChange = () => {
@@ -81,6 +83,9 @@ export function ProfileBuilderPage() {
       })
       .then((row: unknown) => {
         if (cancelled || !row || typeof row !== "object") return;
+        if ("id" in row && row.id != null) {
+          hadProfileOnLoadRef.current = true;
+        }
         const flat = profileToInitialValues(row as { id?: number; [key: string]: unknown });
         dispatch({ type: "LOAD_DRAFT", draft: flat });
       })
@@ -196,6 +201,12 @@ export function ProfileBuilderPage() {
     }
   }, [currentStep, state, onChange]);
 
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+    };
+  }, []);
+
   const saveToServer = useCallback(async () => {
     setSaveError(null);
     setSaveOk(null);
@@ -232,13 +243,23 @@ export function ProfileBuilderPage() {
         const data = await res.json().catch(() => null);
         throw new Error(data?.detail ?? "Unable to save profile");
       }
-      setSaveOk("Profile saved to your account.");
+      clearProfileDraft();
+      const isFirstCompletion = !hadProfileOnLoadRef.current && currentStep === TOTAL_STEPS;
+      hadProfileOnLoadRef.current = true;
+      if (isFirstCompletion) {
+        setSaveOk("Profile complete! Taking you to your matches…");
+        redirectTimeoutRef.current = setTimeout(() => {
+          navigate("/dashboard", { replace: true, state: { justCompletedProfile: true } });
+        }, 1200);
+      } else {
+        setSaveOk("Profile saved to your account.");
+      }
     } catch (e) {
       setSaveError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setSaveLoading(false);
     }
-  }, [user, navigate, state, authHeaders]);
+  }, [user, navigate, state, authHeaders, currentStep]);
 
   return (
     <section className="px-4 py-6 sm:px-6 lg:py-8" aria-labelledby="profile-builder-title">

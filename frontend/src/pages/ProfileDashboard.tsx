@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchResult, MatchRunSummary, ProfileCompleteness, StudentProfileResponse } from "../types";
@@ -64,6 +64,11 @@ function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upco
 export function ProfileDashboard() {
   const { user, authHeaders } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [showCompletionBanner, setShowCompletionBanner] = useState(
+    () => Boolean((location.state as { justCompletedProfile?: boolean } | null)?.justCompletedProfile),
+  );
+  const autoMatchTriggeredRef = useRef(false);
   const [profile, setProfile] = useState<StudentProfileResponse | null>(null);
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
   const [latestMatches, setLatestMatches] = useState<MatchResult[]>([]);
@@ -74,6 +79,12 @@ export function ProfileDashboard() {
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toggleSave, savedScholarships, savedListLoading: savedLoading } = useSavedScholarships();
+
+  useEffect(() => {
+    if ((location.state as { justCompletedProfile?: boolean } | null)?.justCompletedProfile) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.pathname, location.state, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -177,7 +188,7 @@ export function ProfileDashboard() {
     };
   }, [user, authHeaders, runs]);
 
-  const handleRunMatches = async () => {
+  const handleRunMatches = async (options?: { stayOnDashboard?: boolean }) => {
     const p = profile;
     if (!p) {
       setError("Complete your profile first");
@@ -209,13 +220,30 @@ export function ProfileDashboard() {
       if (Array.isArray(data.matches)) {
         setLatestMatches(data.matches.slice(0, 5));
       }
-      navigate(`/match/${p.id}?run=${data.run_id}`);
+      if (!options?.stayOnDashboard) {
+        navigate(`/match/${p.id}?run=${data.run_id}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to run matches");
     } finally {
       setRunLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (
+      !showCompletionBanner ||
+      autoMatchTriggeredRef.current ||
+      loading ||
+      !profile?.id ||
+      runs.length > 0 ||
+      runLoading
+    ) {
+      return;
+    }
+    autoMatchTriggeredRef.current = true;
+    void handleRunMatches({ stayOnDashboard: true });
+  }, [showCompletionBanner, loading, profile?.id, runs.length, runLoading]);
 
   const toggleRunSelection = (id: number) => {
     setSelectedRuns((prev) => {
@@ -375,7 +403,7 @@ export function ProfileDashboard() {
                   ) : (
                     <button
                       type="button"
-                      onClick={handleRunMatches}
+                      onClick={() => void handleRunMatches()}
                       disabled={loading || runLoading}
                       className="inline-flex items-center justify-center rounded-2xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-600/25 transition hover:bg-primary-700 disabled:opacity-50"
                     >
@@ -450,6 +478,24 @@ export function ProfileDashboard() {
 
             {/* Recommended matches */}
             <div className="glass rounded-2xl p-6 shadow-md">
+              {showCompletionBanner ? (
+                <div
+                  className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-900 dark:border-green-800 dark:bg-green-950/40 dark:text-green-100"
+                  role="status"
+                >
+                  <p className="font-semibold">Profile complete. Here are your scholarship matches.</p>
+                  {runLoading ? (
+                    <p className="mt-1 text-sm text-green-800 dark:text-green-200">Finding your matches…</p>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="mt-2 text-sm font-medium underline"
+                    onClick={() => setShowCompletionBanner(false)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              ) : null}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Top matches</h3>
                 {runs.length > 0 ? (
