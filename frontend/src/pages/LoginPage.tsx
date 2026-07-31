@@ -4,6 +4,11 @@ import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOve
 import { getPostAuthPath, useAuth } from "../contexts/AuthContext";
 import { clearLoginFlowMeasures, markLoginFlow } from "../utils/perfTiming";
 import { validateEmail } from "../utils/validateEmail";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
@@ -74,71 +79,59 @@ export function LoginPage() {
       </div>
 
       {/* Right — form */}
-      <div className="flex flex-1 items-center justify-center bg-slate-50 px-4 py-12 dark:bg-slate-950 md:py-0">
-        <div className="glass w-full max-w-md rounded-2xl p-8 shadow-xl dark:bg-slate-800/70">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Welcome back</h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">Sign in to continue your scholarship journey.</p>
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+      <div className="flex flex-1 items-center justify-center bg-muted px-4 py-12 md:py-0">
+        <Card className="glass w-full max-w-md shadow-3">
+          <CardHeader>
+            <CardTitle className="text-2xl">Welcome back</CardTitle>
+            <CardDescription>Sign in to continue your scholarship journey.</CardDescription>
+          </CardHeader>
+          <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div
-                className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/30 dark:text-red-300"
-                role="alert"
-              >
-                {error}
-              </div>
+              <Alert variant="destructive" role="alert">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             )}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Email
-              </label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
                 id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
                 placeholder="you@example.com"
                 autoComplete="email"
               />
             </div>
-            <div>
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Password
-                </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
-                >
+                <Label htmlFor="password">Password</Label>
+                <Link to="/forgot-password" className="text-xs font-medium text-primary hover:underline">
                   Forgot password?
                 </Link>
               </div>
-              <input
+              <Input
                 id="password"
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
                 autoComplete="current-password"
               />
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-2xl bg-primary-600 px-4 py-3 font-semibold text-white shadow-lg shadow-primary-600/20 transition hover:bg-primary-700 disabled:opacity-70"
-            >
+            <Button type="submit" disabled={loading} className="w-full">
               {loading ? "Signing in…" : "Sign in"}
-            </button>
+            </Button>
           </form>
-          <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link to="/register" className="font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400">
+            <Link to="/register" className="font-semibold text-primary hover:underline">
               Register
             </Link>
           </p>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

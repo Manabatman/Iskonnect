@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Home", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
@@ -12,7 +13,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden dark:border-slate-700 dark:bg-slate-900/95"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
       aria-label="Main navigation"
     >
       <ul className="mx-auto flex max-w-lg items-stretch justify-around">
@@ -22,12 +23,11 @@ export function BottomNav() {
             <li key={item.to} className="flex-1">
               <Link
                 to={item.to}
-                className={[
+                aria-current={active ? "page" : undefined}
+                className={cn(
                   "flex min-h-[56px] flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium transition",
-                  active
-                    ? "text-primary-600 dark:text-primary-400"
-                    : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100",
-                ].join(" ")}
+                  active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                )}
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />

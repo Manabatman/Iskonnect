@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 import { apiFetch } from "../api/client";
 import { useDebounce } from "../hooks/useDebounce";
 import { PHILIPPINE_REGIONS } from "../constants/regions";
 import type { ScholarshipSearchFilters } from "../types";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 /** Fallback when /search/filters fails or returns no levels */
 const FALLBACK_EDUCATION_LEVELS = [
@@ -155,24 +158,8 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
   const inputClassName =
     "mt-1 w-full min-h-[44px] rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-3 text-base sm:text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
 
-  return (
-    <aside className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-md">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
-          Filters
-        </h3>
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={handleClearAll}
-            className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
-          >
-            Clear all
-          </button>
-        )}
-      </div>
-
-      <div className="space-y-4">
+  const filterFields = (
+    <div className="space-y-4">
         <div>
           <label htmlFor="filter-region" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Region
@@ -354,6 +341,47 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
           )}
         </div>
       </div>
-    </aside>
+  );
+
+  const filterHeader = (
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Filters</h3>
+      {hasActiveFilters && (
+        <Button type="button" variant="link" size="sm" className="h-auto p-0 text-xs" onClick={handleClearAll}>
+          Clear all
+        </Button>
+      )}
+    </div>
+  );
+
+  return (
+    <>
+      <div className="mb-4 lg:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button type="button" variant="outline" className="w-full gap-2">
+              <SlidersHorizontal className="h-4 w-4" aria-hidden />
+              Filters
+              {hasActiveFilters ? (
+                <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">Active</span>
+              ) : null}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-xl">
+            <SheetHeader>
+              <SheetTitle>Search filters</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4">
+              {filterHeader}
+              {filterFields}
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+      <aside className="hidden rounded-xl border border-border bg-card p-4 shadow-2 lg:block">
+        {filterHeader}
+        {filterFields}
+      </aside>
+    </>
   );
 }

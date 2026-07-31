@@ -20,7 +20,7 @@ const companyLinks = [
 ] as const;
 
 const footerLinkClass =
-  "text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900";
+  "inline-flex min-h-11 items-center text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900";
 
 export function Footer() {
   return (

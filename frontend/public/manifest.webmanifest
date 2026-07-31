@@ -1,18 +1,17 @@
-/** PWA manifest for installable offline shell (Vite PWA plugin). */
-export default {
-  name: "Iskonnect",
-  short_name: "Iskonnect",
-  description: "Scholarship matching for Filipino students",
-  theme_color: "#2563eb",
-  background_color: "#ffffff",
-  display: "standalone",
-  start_url: "/",
-  icons: [
+{
+  "name": "Iskonnect",
+  "short_name": "Iskonnect",
+  "description": "Scholarship matching for Filipino students",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
     {
-      src: "/images/logo-light.png",
-      sizes: "512x512",
-      type: "image/png",
-      purpose: "any",
-    },
-  ],
-};
+      "src": "/images/logo-light.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

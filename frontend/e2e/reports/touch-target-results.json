@@ -80,7 +80,7 @@
         {
           "title": "Touch target audit (360px)",
           "file": "touch-targets.spec.ts",
-          "line": 13,
+          "line": 15,
           "column": 6,
           "specs": [
             {
@@ -99,16 +99,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 14370,
+                      "duration": 5366,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[touch-audit] /: 33 elements under 44px\n"
+                          "text": "[touch-audit] /: 0 elements under 44px\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-31T12:47:31.559Z",
+                      "startTime": "2026-07-31T14:17:01.634Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -118,7 +118,7 @@
               ],
               "id": "31af1b6f0fbef132df93-f768083354ad126b5515",
               "file": "touch-targets.spec.ts",
-              "line": 19,
+              "line": 21,
               "column": 5
             },
             {
@@ -137,16 +137,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4407,
+                      "duration": 1122,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[touch-audit] /login: 20 elements under 44px\n"
+                          "text": "[touch-audit] /login: 0 elements under 44px\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-31T12:48:16.295Z",
+                      "startTime": "2026-07-31T14:17:07.287Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -156,7 +156,7 @@
               ],
               "id": "31af1b6f0fbef132df93-6600726c2b091ad0bbae",
               "file": "touch-targets.spec.ts",
-              "line": 19,
+              "line": 21,
               "column": 5
             },
             {
@@ -175,16 +175,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4049,
+                      "duration": 1268,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[touch-audit] /register: 19 elements under 44px\n"
+                          "text": "[touch-audit] /register: 0 elements under 44px\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-31T12:48:20.808Z",
+                      "startTime": "2026-07-31T14:17:08.492Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -194,7 +194,7 @@
               ],
               "id": "31af1b6f0fbef132df93-832f65575a365e9d39c7",
               "file": "touch-targets.spec.ts",
-              "line": 19,
+              "line": 21,
               "column": 5
             },
             {
@@ -213,16 +213,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 11721,
+                      "duration": 1151,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[touch-audit] /scholarships/search: 20 elements under 44px\n"
+                          "text": "[touch-audit] /scholarships/search: 0 elements under 44px\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-31T12:48:24.922Z",
+                      "startTime": "2026-07-31T14:17:09.837Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -232,7 +232,7 @@
               ],
               "id": "31af1b6f0fbef132df93-c47c5c8ffc6a6089f68a",
               "file": "touch-targets.spec.ts",
-              "line": 19,
+              "line": 21,
               "column": 5
             },
             {
@@ -251,16 +251,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3820,
+                      "duration": 1184,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[touch-audit] /scholarship-status: 20 elements under 44px\n"
+                          "text": "[touch-audit] /scholarship-status: 0 elements under 44px\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-31T12:48:36.737Z",
+                      "startTime": "2026-07-31T14:17:11.054Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -270,7 +270,7 @@
               ],
               "id": "31af1b6f0fbef132df93-28670ff2c2fa46560ad8",
               "file": "touch-targets.spec.ts",
-              "line": 19,
+              "line": 21,
               "column": 5
             },
             {
@@ -289,16 +289,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4655,
+                      "duration": 1084,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[touch-audit] /faq: 21 elements under 44px\n"
+                          "text": "[touch-audit] /faq: 0 elements under 44px\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-31T12:48:40.654Z",
+                      "startTime": "2026-07-31T14:17:12.316Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -308,7 +308,7 @@
               ],
               "id": "31af1b6f0fbef132df93-c611b2f33ffa1cde27c0",
               "file": "touch-targets.spec.ts",
-              "line": 19,
+              "line": 21,
               "column": 5
             }
           ]
@@ -318,8 +318,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-31T12:47:26.576Z",
-    "duration": 80469.075,
+    "startTime": "2026-07-31T14:16:56.997Z",
+    "duration": 17266.221999999998,
     "expected": 6,
     "skipped": 0,
     "unexpected": 0,

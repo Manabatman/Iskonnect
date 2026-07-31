@@ -23,6 +23,7 @@ import { ContactPage } from "./pages/ContactPage";
 import { OpportunityComingSoonPage } from "./pages/OpportunityComingSoonPage";
 import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
 import { FaqPage } from "./pages/FaqPage";
+import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
 import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
@@ -34,6 +35,7 @@ import { SchoolGuard } from "./components/SchoolGuard";
 import { ApiWarmupBanner } from "./components/ApiWarmupBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { RouteFallbackSkeleton } from "./components/LoadingSkeletons";
+import { Toaster } from "@/components/ui/sonner";
 
 const MatchResultsPage = lazy(() =>
   import("./pages/MatchResultsPage").then((m) => ({ default: m.MatchResultsPage }))
@@ -120,6 +122,7 @@ function AppRoutes() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/changelog" element={<ChangelogPage />} />
+          <Route path="/design-system" element={<DesignSystemPage />} />
           <Route
             path="/organizations/:slug"
             element={
@@ -217,6 +220,7 @@ export default function App() {
               <FeedbackProvider>
                 <AppRoutes />
                 <ApiWarmupBanner />
+                <Toaster richColors closeButton position="top-center" />
               </FeedbackProvider>
             </SavedScholarshipsProvider>
           </AuthProvider>

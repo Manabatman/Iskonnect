@@ -90,11 +90,10 @@ export const UI_ELIGIBILITY_GUIDE: Record<UiEligibilityState, StatusGuideEntry> 
 };
 
 const LIFECYCLE_TONE_CLASSES: Record<StatusGuideEntry["tone"], string> = {
-  success:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200",
-  warning: "bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-200",
-  neutral: "bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200",
-  info: "bg-primary-100 text-primary-800 dark:bg-primary-900/60 dark:text-primary-200",
+  success: "border-tone-success bg-tone-success text-tone-success",
+  warning: "border-tone-warning bg-tone-warning text-tone-warning",
+  neutral: "border-tone-neutral bg-tone-neutral text-tone-neutral",
+  info: "border-tone-info bg-tone-info text-tone-info",
 };
 
 /** Map legacy data_status values to canonical application_status keys. */
