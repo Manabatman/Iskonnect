@@ -11,7 +11,7 @@ export function ApiWarmupBanner() {
   useEffect(() => {
     const onBusy = () => {
       if (showTimer.current) clearTimeout(showTimer.current);
-      showTimer.current = window.setTimeout(() => setVisible(true), 500);
+      showTimer.current = window.setTimeout(() => setVisible(true), 3000);
     };
     const onIdle = () => {
       if (showTimer.current) {
