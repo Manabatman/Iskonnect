@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
-import { useAuth } from "../contexts/AuthContext";
+import { getPostAuthPath, useAuth } from "../contexts/AuthContext";
 import { clearLoginFlowMeasures, markLoginFlow } from "../utils/perfTiming";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
@@ -21,7 +21,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (!authLoading && user) {
-      navigate(returnTo ?? "/dashboard", { replace: true });
+      navigate(getPostAuthPath(user, returnTo), { replace: true });
     }
   }, [authLoading, user, navigate, returnTo]);
   const [email, setEmail] = useState("");
@@ -37,9 +37,9 @@ export function LoginPage() {
     clearLoginFlowMeasures();
     markLoginFlow("submit");
     try {
-      await login(email, password);
+      const authUser = await login(email, password);
       markLoginFlow("navigate-dashboard");
-      navigate(returnTo ?? "/dashboard", { replace: true });
+      navigate(getPostAuthPath(authUser, returnTo), { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

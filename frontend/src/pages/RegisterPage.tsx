@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
-import { useAuth } from "../contexts/AuthContext";
+import { getPostAuthPath, useAuth } from "../contexts/AuthContext";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/register-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-2.svg";
@@ -12,7 +12,7 @@ export function RegisterPage() {
 
   useEffect(() => {
     if (!authLoading && user) {
-      navigate("/dashboard", { replace: true });
+      navigate(getPostAuthPath(user), { replace: true });
     }
   }, [authLoading, user, navigate]);
   const [email, setEmail] = useState("");
@@ -30,8 +30,8 @@ export function RegisterPage() {
     }
     setLoading(true);
     try {
-      await register(email, password);
-      navigate("/dashboard", { replace: true });
+      const authUser = await register(email, password);
+      navigate(getPostAuthPath(authUser), { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
