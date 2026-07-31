@@ -45,15 +45,6 @@ function insertRunSorted(prev: MatchRunSummary[], run: MatchRunSummary): MatchRu
   return merged;
 }
 
-function formatDeadlineShort(iso: string | null | undefined): string | null {
-  if (!iso) return null;
-  try {
-    return formatDateMedium(iso);
-  } catch {
-    return null;
-  }
-}
-
 function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upcoming" | "later" | null {
   if (!deadlineIso) return null;
   try {

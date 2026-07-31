@@ -1,0 +1,328 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Iskonnect\\scholarship-match\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "e2e/touch-targets.spec.ts"
+    ],
+    "configFile": "C:\\Iskonnect\\scholarship-match\\frontend\\playwright.config.ts",
+    "rootDir": "C:/Iskonnect/scholarship-match/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Iskonnect/scholarship-match/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "C:/Iskonnect/scholarship-match/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "e2e/reports/touch-target-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 6,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "touch-targets.spec.ts",
+      "file": "touch-targets.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Touch target audit (360px)",
+          "file": "touch-targets.spec.ts",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "audit /",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14370,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[touch-audit] /: 33 elements under 44px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-31T12:47:31.559Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "31af1b6f0fbef132df93-f768083354ad126b5515",
+              "file": "touch-targets.spec.ts",
+              "line": 19,
+              "column": 5
+            },
+            {
+              "title": "audit /login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4407,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[touch-audit] /login: 20 elements under 44px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-31T12:48:16.295Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "31af1b6f0fbef132df93-6600726c2b091ad0bbae",
+              "file": "touch-targets.spec.ts",
+              "line": 19,
+              "column": 5
+            },
+            {
+              "title": "audit /register",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4049,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[touch-audit] /register: 19 elements under 44px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-31T12:48:20.808Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "31af1b6f0fbef132df93-832f65575a365e9d39c7",
+              "file": "touch-targets.spec.ts",
+              "line": 19,
+              "column": 5
+            },
+            {
+              "title": "audit /scholarships/search",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11721,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[touch-audit] /scholarships/search: 20 elements under 44px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-31T12:48:24.922Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "31af1b6f0fbef132df93-c47c5c8ffc6a6089f68a",
+              "file": "touch-targets.spec.ts",
+              "line": 19,
+              "column": 5
+            },
+            {
+              "title": "audit /scholarship-status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3820,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[touch-audit] /scholarship-status: 20 elements under 44px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-31T12:48:36.737Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "31af1b6f0fbef132df93-28670ff2c2fa46560ad8",
+              "file": "touch-targets.spec.ts",
+              "line": 19,
+              "column": 5
+            },
+            {
+              "title": "audit /faq",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4655,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[touch-audit] /faq: 21 elements under 44px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-31T12:48:40.654Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "31af1b6f0fbef132df93-c611b2f33ffa1cde27c0",
+              "file": "touch-targets.spec.ts",
+              "line": 19,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-31T12:47:26.576Z",
+    "duration": 80469.075,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
