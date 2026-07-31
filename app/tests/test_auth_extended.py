@@ -140,3 +140,40 @@ def test_auth_me_includes_require_email_verification_flag(api_with_db, monkeypat
     r = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert r.status_code == 200
     assert r.json().get("require_email_verification") is False
+    assert r.json().get("has_profile") is False
+
+
+def test_login_returns_user_and_has_profile(api_with_db, monkeypatch):
+    client, Session = api_with_db
+    monkeypatch.setattr("app.config.settings.require_email_verification", False)
+    user = _create_user(Session, "login_profile@example.com", "password1")
+    r = client.post(
+        "/api/v1/auth/login",
+        json={"email": "login_profile@example.com", "password": "password1"},
+    )
+    assert r.status_code == 200
+    data = r.json()
+    assert data["email"] == "login_profile@example.com"
+    assert data["user_id"] == user.id
+    assert data["has_profile"] is False
+    assert "access_token" in data
+
+    db = Session()
+    try:
+        db.add(
+            models.Student(
+                user_id=user.id,
+                full_name="Test User",
+                email="login_profile@example.com",
+            )
+        )
+        db.commit()
+    finally:
+        db.close()
+
+    r2 = client.post(
+        "/api/v1/auth/login",
+        json={"email": "login_profile@example.com", "password": "password1"},
+    )
+    assert r2.status_code == 200
+    assert r2.json()["has_profile"] is True

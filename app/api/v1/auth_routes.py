@@ -60,6 +60,10 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
     user_id: int
     role: str
+    email: str
+    email_verified: bool = False
+    require_email_verification: bool = True
+    has_profile: bool = False
 
 
 class RegisterResponse(BaseModel):
@@ -71,6 +75,10 @@ class RegisterResponse(BaseModel):
     token_type: str = "bearer"
     user_id: int | None = None
     role: str | None = None
+    email: str | None = None
+    email_verified: bool = False
+    require_email_verification: bool = True
+    has_profile: bool = False
 
 
 class RefreshRequest(BaseModel):
@@ -107,6 +115,7 @@ class UserMeResponse(BaseModel):
     role: str
     email_verified: bool = False
     require_email_verification: bool = True
+    has_profile: bool = False
 
 
 def _maybe_send_verification_email(to_email: str, token: str) -> None:
@@ -127,17 +136,34 @@ def _maybe_send_password_reset_email(to_email: str, token: str) -> None:
         logger.warning("email_reset_throttled to=%s", to_email)
 
 
+def _token_response(
+    db: Session,
+    user: models.User,
+    access: str,
+    refresh: str,
+) -> TokenResponse:
+    has_profile = (
+        db.query(models.Student).filter(models.Student.user_id == user.id).first() is not None
+    )
+    verified = bool(getattr(user, "email_verified", False))
+    return TokenResponse(
+        access_token=access,
+        refresh_token=refresh,
+        user_id=user.id,
+        role=getattr(user, "role", "student"),
+        email=user.email,
+        email_verified=verified,
+        require_email_verification=settings.require_email_verification,
+        has_profile=has_profile,
+    )
+
+
 def _tokens_for_user(db: Session, user: models.User) -> TokenResponse:
     role = getattr(user, "role", "student")
     access = create_access_token(user.id, role=role)
     refresh = issue_refresh_token(db, user.id)
     db.commit()
-    return TokenResponse(
-        access_token=access,
-        refresh_token=refresh,
-        user_id=user.id,
-        role=role,
-    )
+    return _token_response(db, user, access, refresh)
 
 
 @router.post("/auth/register", response_model=RegisterResponse)
@@ -191,6 +217,10 @@ def register(
         refresh_token=tokens.refresh_token,
         user_id=tokens.user_id,
         role=tokens.role,
+        email=tokens.email,
+        email_verified=tokens.email_verified,
+        require_email_verification=tokens.require_email_verification,
+        has_profile=tokens.has_profile,
     )
 
 
@@ -241,11 +271,11 @@ def refresh_tokens(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired refresh token")
     user, new_refresh = out
     role = getattr(user, "role", "student")
-    return TokenResponse(
-        access_token=create_access_token(user.id, role=role),
-        refresh_token=new_refresh,
-        user_id=user.id,
-        role=role,
+    return _token_response(
+        db,
+        user,
+        create_access_token(user.id, role=role),
+        new_refresh,
     )
 
 
@@ -272,6 +302,7 @@ def logout(
 def get_me(
     request: Request,
     user: Annotated[models.User | None, Depends(get_current_user)],
+    db: Session = Depends(get_db),
 ):
     """Return current authenticated user info."""
     if user is None:
@@ -282,12 +313,16 @@ def get_me(
             headers={"WWW-Authenticate": "Bearer"},
         )
     verified = bool(getattr(user, "email_verified", False))
+    has_profile = (
+        db.query(models.Student).filter(models.Student.user_id == user.id).first() is not None
+    )
     return UserMeResponse(
         id=user.id,
         email=user.email,
         role=getattr(user, "role", "student"),
         email_verified=verified,
         require_email_verification=settings.require_email_verification,
+        has_profile=has_profile,
     )
 
 

@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -32,6 +33,33 @@ export interface AuthUser {
   role: string;
   emailVerified: boolean;
   requireEmailVerification: boolean;
+  hasProfile: boolean;
+}
+
+type TokenPayload = {
+  user_id: number;
+  email?: string;
+  role?: string;
+  email_verified?: boolean;
+  require_email_verification?: boolean;
+  has_profile?: boolean;
+};
+
+export function userFromTokenPayload(data: TokenPayload): AuthUser {
+  return {
+    id: data.user_id,
+    email: data.email ?? "",
+    role: data.role ?? "student",
+    emailVerified: Boolean(data.email_verified),
+    requireEmailVerification: data.require_email_verification !== false,
+    hasProfile: Boolean(data.has_profile),
+  };
+}
+
+/** Post-login/register destination based on profile completeness (P1-05). */
+export function getPostAuthPath(user: AuthUser, returnTo?: string | null): string {
+  if (returnTo) return returnTo;
+  return user.hasProfile ? "/dashboard" : "/profile-builder";
 }
 
 interface AuthContextType {
@@ -40,15 +68,18 @@ interface AuthContextType {
   loading: boolean;
   authError: string | null;
   clearAuthError: () => void;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthUser>;
+  register: (email: string, password: string) => Promise<AuthUser>;
   logout: () => Promise<void>;
   authHeaders: () => Record<string, string>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-async function tryRefreshAccessToken(): Promise<{ access_token: string; refresh_token: string } | null> {
+async function tryRefreshAccessToken(): Promise<(TokenPayload & {
+  access_token: string;
+  refresh_token: string;
+}) | null> {
   const rt = localStorage.getItem(AUTH_REFRESH_KEY);
   if (!rt) return null;
   const res = await apiFetch("/api/v1/auth/refresh", {
@@ -70,6 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
+  const skipFetchUserRef = useRef(false);
 
   const setToken = useCallback((t: string | null) => {
     if (t) {
@@ -90,6 +122,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const clearAuthError = useCallback(() => setAuthError(null), []);
 
+  const applyUserFromMe = useCallback((data: Record<string, unknown>) => {
+    setUser({
+      id: data.id as number,
+      email: data.email as string,
+      role: (data.role as string) ?? "student",
+      emailVerified: Boolean(data.email_verified),
+      requireEmailVerification: data.require_email_verification !== false,
+      hasProfile: Boolean(data.has_profile),
+    });
+    setAuthError(null);
+  }, []);
+
   const fetchUser = useCallback(
     async (t: string) => {
       markLoginFlow("auth-me-start");
@@ -105,14 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return true;
         }
         const data = await res.json();
-        setUser({
-          id: data.id,
-          email: data.email,
-          role: data.role ?? "student",
-          emailVerified: Boolean(data.email_verified),
-          requireEmailVerification: data.require_email_verification !== false,
-        });
-        setAuthError(null);
+        applyUserFromMe(data);
         markLoginFlow("auth-me-done");
         measureLoginFlow("auth-me", "auth-me-start", "auth-me-done");
         return true;
@@ -125,7 +162,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (refreshed) {
             setToken(refreshed.access_token);
             setRefreshToken(refreshed.refresh_token);
-            ok = await loadMe(refreshed.access_token);
+            skipFetchUserRef.current = true;
+            setUser(userFromTokenPayload(refreshed));
+            ok = true;
           }
           if (!ok) {
             setToken(null);
@@ -142,7 +181,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuthError("Something went wrong while loading your account.");
       }
     },
-    [setToken, setRefreshToken]
+    [applyUserFromMe, setToken, setRefreshToken]
   );
 
   useEffect(() => {
@@ -152,6 +191,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!token) {
       setUser(null);
+      setLoading(false);
+      return;
+    }
+    if (skipFetchUserRef.current) {
+      skipFetchUserRef.current = false;
       setLoading(false);
       return;
     }
@@ -172,11 +216,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       markLoginFlow("login-response");
       measureLoginFlow("login-request", "submit", "login-response");
       const data = await res.json();
+      const authUser = userFromTokenPayload(data);
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);
+      skipFetchUserRef.current = true;
+      setUser(authUser);
+      setLoading(false);
       setAuthError(null);
       clearProfileDraft();
       dispatchAuthUserChanged(data.user_id);
+      return authUser;
     },
     [setToken, setRefreshToken]
   );
@@ -196,11 +245,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!data.access_token || data.user_id == null) {
         throw new Error(data.detail ?? "Registration could not be completed. Try signing in if you already have an account.");
       }
+      const authUser = userFromTokenPayload(data);
       setToken(data.access_token);
       if (data.refresh_token) setRefreshToken(data.refresh_token);
+      skipFetchUserRef.current = true;
+      setUser(authUser);
+      setLoading(false);
       setAuthError(null);
       clearProfileDraft();
       dispatchAuthUserChanged(data.user_id);
+      return authUser;
     },
     [setToken, setRefreshToken]
   );
