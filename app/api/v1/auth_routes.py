@@ -30,6 +30,7 @@ from app.limiter import limiter
 from app import models
 from app.utils.email import send_email_verification_email, send_password_reset_email
 from app.utils.email_abuse import can_send_transactional_email, record_transactional_email_sent
+from app.utils.email_validation import validate_email_format
 from app.utils.server_timing import ServerTiming
 from app.utils.timezone import utc_now_naive
 
@@ -40,6 +41,12 @@ logger = logging.getLogger(__name__)
 class RegisterRequest(BaseModel):
     email: EmailStr
     password: str
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format_field(cls, v: str) -> str:
+        validate_email_format(str(v))
+        return v
 
     @field_validator("password")
     @classmethod
@@ -52,6 +59,12 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format_field(cls, v: str) -> str:
+        validate_email_format(str(v))
+        return v
 
 
 class TokenResponse(BaseModel):
@@ -91,6 +104,12 @@ class LogoutRequest(BaseModel):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format_field(cls, v: str) -> str:
+        validate_email_format(str(v))
+        return v
 
 
 class ResetPasswordRequest(BaseModel):

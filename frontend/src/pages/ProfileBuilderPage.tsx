@@ -20,6 +20,7 @@ import { StepperSidebar } from "../components/profile-builder/StepperSidebar";
 import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { buildStudentProfileFromBuilderState } from "../utils/studentProfilePayload";
 import { profileToInitialValues } from "../utils/profileDraft";
+import { validateEmail } from "../utils/validateEmail";
 
 const SAVE_DEBOUNCE_MS = 400;
 const TOTAL_STEPS = 5;
@@ -222,8 +223,13 @@ export function ProfileBuilderPage() {
       setSaveError("Please enter your full name (at least 2 characters).");
       return;
     }
-    if (!state.email?.trim() || !state.email.includes("@")) {
+    if (!state.email?.trim()) {
       setSaveError("Please enter a valid email address.");
+      return;
+    }
+    const emailCheck = validateEmail(state.email);
+    if (!emailCheck.valid) {
+      setSaveError(emailCheck.message ?? "Please enter a valid email address.");
       return;
     }
     if (!state.region?.trim()) {

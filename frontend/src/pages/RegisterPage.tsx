@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { getPostAuthPath, useAuth } from "../contexts/AuthContext";
+import { validateEmail } from "../utils/validateEmail";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/register-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-2.svg";
@@ -26,6 +27,11 @@ export function RegisterPage() {
     setError(null);
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
+      return;
+    }
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.valid) {
+      setError(emailCheck.message ?? "Enter a valid email address.");
       return;
     }
     setLoading(true);

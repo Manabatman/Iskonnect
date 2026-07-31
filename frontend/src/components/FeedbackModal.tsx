@@ -9,6 +9,7 @@ import {
 } from "react";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
+import { validateEmail } from "../utils/validateEmail";
 
 export type FeedbackCategory = "bug" | "suggestion" | "experience";
 
@@ -140,6 +141,13 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
 
   const handleSubmit = async () => {
     if (!category || !message.trim()) return;
+    if (email.trim()) {
+      const emailCheck = validateEmail(email);
+      if (!emailCheck.valid) {
+        setSubmitError(emailCheck.message ?? "Enter a valid email address.");
+        return;
+      }
+    }
     setSubmitting(true);
     setSubmitError(null);
     try {

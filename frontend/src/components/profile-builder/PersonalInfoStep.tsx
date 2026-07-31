@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { ProfileBuilderState } from "./profileBuilderState";
 import { inputClass, labelClass } from "./profileBuilderConstants";
+import { validateEmail } from "../../utils/validateEmail";
 
 export interface StepProps {
   state: ProfileBuilderState;
@@ -7,6 +9,8 @@ export interface StepProps {
 }
 
 export function PersonalInfoStep({ state, onChange }: StepProps) {
+  const [emailHint, setEmailHint] = useState<string | null>(null);
+
   return (
     <div className="space-y-4">
       <div>
@@ -43,11 +47,29 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
             id="pb-email"
             type="email"
             value={state.email}
-            onChange={(e) => onChange("email", e.target.value)}
+            onChange={(e) => {
+              setEmailHint(null);
+              onChange("email", e.target.value);
+            }}
+            onBlur={() => {
+              if (!state.email.trim()) {
+                setEmailHint(null);
+                return;
+              }
+              const result = validateEmail(state.email);
+              setEmailHint(result.valid ? null : result.message ?? "Enter a valid email address.");
+            }}
             className={inputClass}
             placeholder="maria@example.com"
             autoComplete="email"
+            aria-invalid={emailHint ? true : undefined}
+            aria-describedby={emailHint ? "pb-email-hint" : undefined}
           />
+          {emailHint ? (
+            <p id="pb-email-hint" className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">
+              {emailHint}
+            </p>
+          ) : null}
         </div>
         <div>
           <label htmlFor="pb-gender" className={labelClass}>

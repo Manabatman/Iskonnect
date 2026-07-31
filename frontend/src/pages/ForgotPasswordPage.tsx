@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiFetch } from "../api/client";
+import { validateEmail } from "../utils/validateEmail";
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,11 @@ export function ForgotPasswordPage() {
     e.preventDefault();
     setError(null);
     setMessage(null);
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.valid) {
+      setError(emailCheck.message ?? "Enter a valid email address.");
+      return;
+    }
     setLoading(true);
     try {
       const res = await apiFetch("/api/v1/auth/forgot-password", {

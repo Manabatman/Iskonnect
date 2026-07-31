@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
 import { getPostAuthPath, useAuth } from "../contexts/AuthContext";
 import { clearLoginFlowMeasures, markLoginFlow } from "../utils/perfTiming";
+import { validateEmail } from "../utils/validateEmail";
 
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
@@ -33,6 +34,11 @@ export function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.valid) {
+      setError(emailCheck.message ?? "Enter a valid email address.");
+      return;
+    }
     setLoading(true);
     clearLoginFlowMeasures();
     markLoginFlow("submit");
