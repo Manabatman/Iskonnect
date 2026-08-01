@@ -1,0 +1,79 @@
+{
+  "imported": {
+    "new": 6,
+    "updated_candidate": 0,
+    "skipped": 0,
+    "invalid": 0,
+    "rejected_structural": 0
+  },
+  "rows": [
+    {
+      "status": "created",
+      "title": "OWWA Educational Livelihood Assistance Program College Track",
+      "provider": "Overseas Workers Welfare Administration",
+      "dedupe_key": "9ccea555637900a7f73841c4a8f85c0c6dc859817a04e77a31e66fd0d20fc29d",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Aboitiz Future Leaders Scholarship Program",
+      "provider": "Aboitiz Foundation",
+      "dedupe_key": "5cf484eb13401735370c1a99d50099875af66010f68c0bc36c471336040eb52a",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "CHED Merit Scholarship Program (CMSP)",
+      "provider": "Commission on Higher Education",
+      "dedupe_key": "1d3f4b5c554a0364286d89049633c52a0085a3d94ded82ffb59c47b98e7628d0",
+      "warnings": [
+        "deadline_in_past"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "DOST-SEI Junior Level Science Scholarship (JLSS)",
+      "provider": "DOST-SEI",
+      "dedupe_key": "000076de633aa9d9c7da9c22f957cf4130c666ae325a19a5660c724ba561d96e",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "SM Foundation College Scholarship Program",
+      "provider": "SM Foundation",
+      "dedupe_key": "406af518060aac6cfb417a6863bc06f676c7619931138f046b6e972569e8e358",
+      "warnings": [
+        "missing_deadline"
+      ]
+    },
+    {
+      "status": "created",
+      "title": "Megaworld Foundation College Scholarship",
+      "provider": "Megaworld Foundation",
+      "dedupe_key": "b124f153d08f981d1cb4196c85f80d6ba1e7b2af17535c46273dd4b7e8aa819d",
+      "warnings": [
+        "missing_deadline"
+      ]
+    }
+  ],
+  "total": 6,
+  "invalid_urls": 0,
+  "invalid_dates": 3,
+  "auto_normalizations": [],
+  "rejected_structural": 0,
+  "unknown_columns": [],
+  "missing_columns": [],
+  "missing_recommended": [],
+  "duplicate_columns": [],
+  "header_errors": [],
+  "header_valid": true,
+  "created": 6,
+  "skipped": 0,
+  "invalid": 0
+}

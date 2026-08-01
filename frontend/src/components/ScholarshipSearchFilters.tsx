@@ -52,6 +52,27 @@ const LIFE_STAGE_LABELS: Record<string, string> = {
   tvet: "TVET",
 };
 
+/** Name the filter most likely to zero out results (CONT-03). */
+export function mostRestrictiveFilterHint(filters: ScholarshipSearchFilters): string | null {
+  if (filters.region) {
+    return `Region (${filters.region}) is often the strictest filter — try removing it first.`;
+  }
+  if (filters.max_income != null && filters.max_income >= 0) {
+    const incomeLabel = INCOME_OPTIONS.find((o) => o.value === filters.max_income)?.label;
+    return `Income ceiling (${incomeLabel ?? `≤ ₱${filters.max_income.toLocaleString()}`}) may be excluding programs — try relaxing it.`;
+  }
+  if (filters.education_level) {
+    return `Education level (${filters.education_level}) may be limiting results — try clearing it.`;
+  }
+  if (filters.school?.trim()) {
+    return `School filter (${filters.school.trim()}) is very specific — try clearing it.`;
+  }
+  if (filters.field) {
+    return `Study area (${filters.field}) may be too narrow — try a broader field or clear it.`;
+  }
+  return null;
+}
+
 export function describeActiveFilters(filters: ScholarshipSearchFilters): string[] {
   const labels: string[] = [];
   if (filters.region) labels.push(`Region: ${filters.region}`);

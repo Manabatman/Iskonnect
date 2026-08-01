@@ -44,6 +44,9 @@ export function profileToInitialValues(p: { id?: number; [key: string]: unknown 
     is_uniformed_service_dependent: (p as { is_uniformed_service_dependent?: boolean }).is_uniformed_service_dependent ? "on" : "",
     is_gsis_dependent: (p as { is_gsis_dependent?: boolean }).is_gsis_dependent ? "on" : "",
     is_sss_dependent: (p as { is_sss_dependent?: boolean }).is_sss_dependent ? "on" : "",
+    employment_status: String((p as { employment_status?: string }).employment_status ?? ""),
+    evening_weekend_program: (p as { evening_weekend_program?: boolean }).evening_weekend_program ? "on" : "",
+    athlete_level: String((p as { athlete_level?: string }).athlete_level ?? ""),
     privacy_consent: (p as { privacy_consent?: boolean }).privacy_consent ? "on" : "",
   };
 }

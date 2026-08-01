@@ -131,6 +131,9 @@ class StudentProfile(BaseModel):
     is_uniformed_service_dependent: Optional[bool] = False
     is_gsis_dependent: Optional[bool] = False
     is_sss_dependent: Optional[bool] = False
+    employment_status: Optional[str] = None
+    evening_weekend_program: Optional[bool] = None
+    athlete_level: Optional[str] = None
     parent_occupation: Optional[str] = None
     guardian_full_name: Optional[str] = Field(default=None, max_length=255)
     guardian_email: Optional[EmailStr] = None
@@ -259,6 +262,9 @@ class StudentProfileResponse(BaseModel):
     is_uniformed_service_dependent: Optional[bool] = False
     is_gsis_dependent: Optional[bool] = False
     is_sss_dependent: Optional[bool] = False
+    employment_status: Optional[str] = None
+    evening_weekend_program: Optional[bool] = None
+    athlete_level: Optional[str] = None
     parent_occupation: Optional[str] = None
     documents: Optional[List[dict]] = []
     privacy_consent_at: Optional[datetime] = None
@@ -562,6 +568,31 @@ class OrganizationResponse(BaseModel):
         from_attributes = True
 
 
+class CatalogTrustResponse(BaseModel):
+    """Public aggregate verification posture for the active catalog."""
+
+    published_count: int = 0
+    last_catalog_verification_at: Optional[datetime] = None
+    verified_within_90d_count: int = 0
+    verification_fresh_days: int = 90
+
+
+class PublicStatsResponse(BaseModel):
+    """Public landing statistics — every number derived from catalog data or omitted."""
+
+    source: Literal["live", "fallback"] = "live"
+    as_of: datetime
+    verification_fresh_days: int = 90
+    verified_listing_count: Optional[int] = None
+    provider_count: Optional[int] = None
+    last_catalog_verification_at: Optional[datetime] = None
+    region_count: Optional[int] = None
+    regions: Optional[List[str]] = None
+    education_level_count: Optional[int] = None
+    education_levels: Optional[List[str]] = None
+    total_documented_funding_php: Optional[int] = None
+
+
 class ScoringWeightItem(BaseModel):
     component: str
     weight: float
@@ -654,6 +685,8 @@ class MatchResponse(BaseModel):
     missing_requirements: Optional[List[str]] = None
     eligibility_confidence: Optional[str] = None
     requirements: Optional[List[Any]] = None
+    unverified_requirements: Optional[List[str]] = None
+    provisional_reason: Optional[str] = None
     # Verification / trust display
     verification_badge: Optional[str] = None
     verification_badge_label: Optional[str] = None

@@ -1,30 +1,14 @@
 import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
-import { AboutPage } from "./pages/AboutPage";
-import { TermsPage } from "./pages/TermsPage";
-import { PrivacyPage } from "./pages/PrivacyPage";
-import { ChangelogPage } from "./pages/ChangelogPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { VerifyEmailPage } from "./pages/VerifyEmailPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
-import { HowItWorksPage } from "./pages/HowItWorksPage";
-import { TransparencyPage } from "./pages/TransparencyPage";
-import { VerificationPage } from "./pages/VerificationPage";
-import { MatchMethodologyPage } from "./pages/MatchMethodologyPage";
-import { WhyIskonnectPage } from "./pages/WhyIskonnectPage";
-import { ContactPage } from "./pages/ContactPage";
-import { OpportunityComingSoonPage } from "./pages/OpportunityComingSoonPage";
-import { ScholarshipStatusPage } from "./pages/ScholarshipStatusPage";
-import { FaqPage } from "./pages/FaqPage";
-import { DesignSystemPage } from "./pages/DesignSystemPage";
-import { SuccessStoriesPage } from "./pages/SuccessStoriesPage";
 import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { AdaptiveSearchLayout } from "./components/layout/AdaptiveSearchLayout";
@@ -32,10 +16,40 @@ import { FeedbackProvider } from "./components/FeedbackModal";
 import { AdminGuard } from "./components/AdminGuard";
 import { SponsorGuard } from "./components/SponsorGuard";
 import { SchoolGuard } from "./components/SchoolGuard";
+import { OfflineIndicator } from "./components/OfflineIndicator";
+import { SessionExpiryHandler } from "./components/SessionExpiryHandler";
 import { ApiWarmupBanner } from "./components/ApiWarmupBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { RouteFallbackSkeleton } from "./components/LoadingSkeletons";
 import { Toaster } from "@/components/ui/sonner";
+
+const AboutPage = lazy(() => import("./pages/AboutPage").then((m) => ({ default: m.AboutPage })));
+const TermsPage = lazy(() => import("./pages/TermsPage").then((m) => ({ default: m.TermsPage })));
+const PrivacyPage = lazy(() => import("./pages/PrivacyPage").then((m) => ({ default: m.PrivacyPage })));
+const ChangelogPage = lazy(() => import("./pages/ChangelogPage").then((m) => ({ default: m.ChangelogPage })));
+const RoadmapPage = lazy(() => import("./pages/RoadmapPage").then((m) => ({ default: m.RoadmapPage })));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
+const HowItWorksPage = lazy(() => import("./pages/HowItWorksPage").then((m) => ({ default: m.HowItWorksPage })));
+const HowMatchingWorksPage = lazy(() =>
+  import("./pages/HowMatchingWorksPage").then((m) => ({ default: m.HowMatchingWorksPage }))
+);
+const VerificationPage = lazy(() =>
+  import("./pages/VerificationPage").then((m) => ({ default: m.VerificationPage }))
+);
+const ContactPage = lazy(() => import("./pages/ContactPage").then((m) => ({ default: m.ContactPage })));
+const OpportunityComingSoonPage = lazy(() =>
+  import("./pages/OpportunityComingSoonPage").then((m) => ({ default: m.OpportunityComingSoonPage }))
+);
+const ScholarshipStatusPage = lazy(() =>
+  import("./pages/ScholarshipStatusPage").then((m) => ({ default: m.ScholarshipStatusPage }))
+);
+const FaqPage = lazy(() => import("./pages/FaqPage").then((m) => ({ default: m.FaqPage })));
+const DesignSystemPage = lazy(() =>
+  import("./pages/DesignSystemPage").then((m) => ({ default: m.DesignSystemPage }))
+);
+const SuccessStoriesPage = lazy(() =>
+  import("./pages/SuccessStoriesPage").then((m) => ({ default: m.SuccessStoriesPage }))
+);
 
 const MatchResultsPage = lazy(() =>
   import("./pages/MatchResultsPage").then((m) => ({ default: m.MatchResultsPage }))
@@ -109,10 +123,11 @@ function AppRoutes() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
-          <Route path="/transparency" element={<TransparencyPage />} />
-          <Route path="/match-methodology" element={<MatchMethodologyPage />} />
-          <Route path="/why-iskonnect" element={<WhyIskonnectPage />} />
+          <Route path="/how-matching-works" element={<HowMatchingWorksPage />} />
           <Route path="/how-we-verify" element={<VerificationPage />} />
+          <Route path="/transparency" element={<Navigate to="/how-matching-works" replace />} />
+          <Route path="/match-methodology" element={<Navigate to="/how-matching-works#methodology" replace />} />
+          <Route path="/why-iskonnect" element={<Navigate to="/how-matching-works#why" replace />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/opportunities/:typeSlug" element={<OpportunityComingSoonPage />} />
           <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />
@@ -122,15 +137,9 @@ function AppRoutes() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/changelog" element={<ChangelogPage />} />
+          <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="/design-system" element={<DesignSystemPage />} />
-          <Route
-            path="/organizations/:slug"
-            element={
-              <Suspense fallback={<RouteFallback />}>
-                <OrganizationPage />
-              </Suspense>
-            }
-          />
+          <Route path="/organizations/:slug" element={<OrganizationPage />} />
         </Route>
 
         <Route
@@ -218,7 +227,9 @@ export default function App() {
           <AuthProvider>
             <SavedScholarshipsProvider>
               <FeedbackProvider>
+                <SessionExpiryHandler />
                 <AppRoutes />
+                <OfflineIndicator />
                 <ApiWarmupBanner />
                 <Toaster richColors closeButton position="top-center" />
               </FeedbackProvider>

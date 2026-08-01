@@ -67,6 +67,41 @@ class RequirementCheck:
         }
 
 
+# Requirement keys whose single UNMET failure is achievable (student can close the gap).
+_ACHIEVABLE_UNMET_KEYS = frozenset(
+    {"gwa", "education_level", "year_level", "enrollment_status", "field"}
+)
+
+_REQUIREMENT_STUDENT_LABELS: dict[str, str] = {
+    "age": "your age",
+    "education_level": "your education level",
+    "region": "your location",
+    "school_type": "your school type",
+    "school": "your school",
+    "school_category": "your school category",
+    "year_level": "your year level",
+    "enrollment_status": "your enrollment status",
+    "citizenship": "your citizenship",
+    "income": "your household income",
+    "gwa": "your GWA",
+    "field": "your field of study",
+    "members_only": "your priority group membership",
+}
+
+
+def derive_provisional_disclosure(requirements: list[RequirementCheck]) -> tuple[list[str], str]:
+    """Human labels and summary reason from UNKNOWN requirement checks."""
+    applicable = [r for r in requirements if r.result != RequirementResult.NOT_APPLICABLE]
+    unknowns = [r for r in applicable if r.result == RequirementResult.UNKNOWN]
+    labels: list[str] = []
+    for req in unknowns:
+        label = _REQUIREMENT_STUDENT_LABELS.get(req.key, req.label.lower())
+        if label not in labels:
+            labels.append(label)
+    reason = f"We could not verify: {', '.join(labels)}" if labels else ""
+    return labels, reason
+
+
 @dataclass
 class EligibilityResult:
     status: QualificationStatus
@@ -74,6 +109,8 @@ class EligibilityResult:
     missing_requirements: list[str] = field(default_factory=list)
     qualifying_requirements: list[str] = field(default_factory=list)
     confidence: str = "partially_verified"  # verified_requirements | partially_verified | needs_manual_review
+    unverified_requirements: list[str] = field(default_factory=list)
+    provisional_reason: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -82,12 +119,17 @@ class EligibilityResult:
             "missing_requirements": self.missing_requirements,
             "qualifying_requirements": self.qualifying_requirements,
             "eligibility_confidence": self.confidence,
+            "unverified_requirements": self.unverified_requirements,
+            "provisional_reason": self.provisional_reason,
         }
 
     @property
     def passes_for_matching(self) -> bool:
         """Scholarships that may appear in scored match results."""
-        return self.status != QualificationStatus.NOT_ELIGIBLE
+        return self.status in (
+            QualificationStatus.QUALIFIED,
+            QualificationStatus.PROVISIONALLY_QUALIFIED,
+        )
 
 
 # --- City normalization (reduces substring false positives) ---
@@ -562,7 +604,16 @@ def _evaluate_citizenship(profile: dict, sch: dict) -> RequirementCheck:
     required = (sch.get("citizenship_required") or "Filipino").strip()
     if not required or required.lower() in ("any", "none", "open"):
         return RequirementCheck("citizenship", "Citizenship", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
-    citizenship = (profile.get("citizenship") or "Filipino").strip()
+    citizenship = (profile.get("citizenship") or "").strip()
+    if not citizenship:
+        return RequirementCheck(
+            "citizenship",
+            f"Citizenship ({required})",
+            "hard",
+            RequirementResult.UNKNOWN,
+            RequirementVerification.UNVERIFIED,
+            "Citizenship not provided",
+        )
     if citizenship.lower() == required.lower():
         return RequirementCheck(
             "citizenship",
@@ -792,10 +843,31 @@ def _evaluate_members_only(profile: dict, sch: dict) -> RequirementCheck:
     groups = parse_json_list(sch.get("priority_groups"))
     if not groups:
         return RequirementCheck("members_only", "Priority group membership", "hard", RequirementResult.NOT_APPLICABLE, RequirementVerification.VERIFIED)
+    from app.taxonomy.profile_priority_groups import (
+        STUDENT_ATHLETE,
+        WORKING_STUDENT,
+        profile_student_athlete,
+        profile_working_student,
+    )
+
+    profile_priority_checks = {
+        WORKING_STUDENT: profile_working_student,
+        STUDENT_ATHLETE: profile_student_athlete,
+    }
     for group in groups:
         if not group:
             continue
         canon = resolve_priority_group(str(group))
+        check_fn = profile_priority_checks.get(canon)
+        if check_fn and check_fn(profile):
+            return RequirementCheck(
+                "members_only",
+                f"Membership ({canon})",
+                "hard",
+                RequirementResult.MET,
+                RequirementVerification.VERIFIED,
+                f"You declared: {canon}",
+            )
         info = EQUITY_GROUPS.get(canon, {})
         flag = info.get("profile_flag")
         if not flag:
@@ -852,7 +924,10 @@ def _evaluators_for_opportunity(scholarship: dict) -> list:
 
 def _derive_status(requirements: list[RequirementCheck], sch: dict) -> QualificationStatus:
     applicable = [r for r in requirements if r.result != RequirementResult.NOT_APPLICABLE]
-    if any(r.result == RequirementResult.UNMET for r in applicable):
+    unmet = [r for r in applicable if r.result == RequirementResult.UNMET]
+    if len(unmet) == 1 and unmet[0].key in _ACHIEVABLE_UNMET_KEYS:
+        return QualificationStatus.ALMOST_QUALIFIED
+    if unmet:
         return QualificationStatus.NOT_ELIGIBLE
     unknowns = [r for r in applicable if r.result == RequirementResult.UNKNOWN]
     if unknowns:
@@ -909,10 +984,14 @@ def evaluate_eligibility(profile: dict, scholarship: dict) -> EligibilityResult:
         elif req.result == RequirementResult.UNKNOWN:
             missing.append(f"{req.label} (not verified — add to profile)")
 
+    unverified, provisional_reason = derive_provisional_disclosure(requirements)
+
     return EligibilityResult(
         status=status,
         requirements=requirements,
         missing_requirements=missing,
         qualifying_requirements=qualifying,
         confidence=confidence,
+        unverified_requirements=unverified,
+        provisional_reason=provisional_reason,
     )

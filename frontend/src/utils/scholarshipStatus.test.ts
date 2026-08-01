@@ -3,6 +3,7 @@ import {
   formatUiStateLabel,
   lifecycleStatusLabel,
   resolveApplicationStatus,
+  statusGuideHref,
 } from "./scholarshipStatus";
 
 describe("scholarshipStatus", () => {
@@ -26,5 +27,16 @@ describe("scholarshipStatus", () => {
 
   it("uses Expected to reopen label for expected_reopen", () => {
     expect(lifecycleStatusLabel("expected_reopen")).toBe("Expected to reopen");
+  });
+
+  it("defaults unknown lifecycle to needs_verification, not open (TRUST-02)", () => {
+    expect(resolveApplicationStatus({})).toBe("needs_verification");
+    expect(resolveApplicationStatus({ application_status: null, data_status: null })).toBe(
+      "needs_verification"
+    );
+  });
+
+  it("statusGuideHref deep-links to anchor", () => {
+    expect(statusGuideHref("needs_verification")).toBe("/scholarship-status#needs_verification");
   });
 });

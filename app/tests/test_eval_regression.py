@@ -45,3 +45,15 @@ def test_matching_eval_explanation_coverage():
     assert cov >= PROD_EXPLANATION_COVERAGE_MIN, (
         f"explanation coverage {cov:.3f} < {PROD_EXPLANATION_COVERAGE_MIN}"
     )
+
+
+def test_matching_eval_strict_oracle_reports_over_inclusion():
+    """Strict oracle runs in CI; over-inclusion rate is reported without a threshold gate."""
+    report = run_full_evaluation()
+    assert "strict_prod" in report
+    assert "over_inclusion_rate" in report
+    oir = report["over_inclusion_rate"]
+    assert "prod" in oir
+    assert oir["prod"] is not None
+    assert 0.0 <= oir["prod"] <= 1.0
+    assert report["strict_prod"]["confusion"]["FP"] >= 0

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HERO_CAROUSEL_FALLBACK_SVGS, HERO_CAROUSEL_INTERVAL_MS } from "../constants/heroImages";
+import { HERO_CAROUSEL_FALLBACK_SVGS, HERO_CAROUSEL_HEIGHT, HERO_CAROUSEL_INTERVAL_MS, HERO_CAROUSEL_WIDTH } from "../constants/heroImages";
 
 interface HeroCarouselProps {
   images: readonly string[];
@@ -42,6 +42,8 @@ export function HeroCarousel({ images, alts, className = "" }: HeroCarouselProps
             key={`${i}-${attempt}`}
             src={src}
             alt=""
+            width={HERO_CAROUSEL_WIDTH}
+            height={HERO_CAROUSEL_HEIGHT}
             decoding="async"
             fetchPriority={i === index ? "high" : undefined}
             loading={i === index ? "eager" : "lazy"}

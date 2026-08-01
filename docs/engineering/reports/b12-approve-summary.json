@@ -1,0 +1,106 @@
+{
+  "pending": 14,
+  "approved": 14,
+  "rejected": 0,
+  "errors": 0,
+  "rows": [
+    {
+      "id": 103,
+      "title": "OWWA Educational Livelihood Assistance Program College Track",
+      "source": "gemini_research",
+      "status": "approved",
+      "scholarship_id": 127
+    },
+    {
+      "id": 104,
+      "title": "Aboitiz Future Leaders Scholarship Program",
+      "source": "gemini_research",
+      "status": "approved",
+      "scholarship_id": 128
+    },
+    {
+      "id": 105,
+      "title": "CHED Merit Scholarship Program (CMSP)",
+      "source": "gemini_research",
+      "status": "approved",
+      "scholarship_id": 129
+    },
+    {
+      "id": 106,
+      "title": "DOST-SEI Junior Level Science Scholarship (JLSS)",
+      "source": "gemini_research",
+      "status": "approved",
+      "scholarship_id": 130
+    },
+    {
+      "id": 107,
+      "title": "SM Foundation College Scholarship Program",
+      "source": "gemini_research",
+      "status": "approved",
+      "scholarship_id": 131
+    },
+    {
+      "id": 108,
+      "title": "Megaworld Foundation College Scholarship",
+      "source": "gemini_research",
+      "status": "approved",
+      "scholarship_id": 132
+    },
+    {
+      "id": 109,
+      "title": "Scholarship Program for Coconut Farmers and their Families (CoScho)",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 117
+    },
+    {
+      "id": 110,
+      "title": "Scholarship Grant Program for Children and Dependents of Sugarcane Industry Workers and Small Sugarcane Farmers (SIDA-SGP)",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 118
+    },
+    {
+      "id": 111,
+      "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 119
+    },
+    {
+      "id": 112,
+      "title": "Scholarships for Instructors' Knowledge Advancement Program (SIKAP)",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 120
+    },
+    {
+      "id": 113,
+      "title": "DOST-SEI Junior Level Science Scholarship \u2014 Merit Track",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 121
+    },
+    {
+      "id": 114,
+      "title": "DOST-SEI Junior Level Science Scholarship \u2014 RA 7687 Track",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 122
+    },
+    {
+      "id": 115,
+      "title": "DOST-SEI Junior Level Science Scholarship \u2014 RA 10612 Track",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 123
+    },
+    {
+      "id": 116,
+      "title": "OWWA Education and Livelihood Assistance Program (ELAP)",
+      "source": "discovery_verification",
+      "status": "approved",
+      "scholarship_id": 124
+    }
+  ]
+}

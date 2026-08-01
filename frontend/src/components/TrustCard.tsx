@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { FieldEvidence } from "../types";
 import { formatDateMedium } from "../utils/formatDate";
+import { trackOutboundClick } from "../utils/trackOutboundClick";
 
 const FIELD_LABELS: Record<string, string> = {
   application_deadline: "Application deadline",
@@ -28,6 +29,7 @@ function confidenceTone(badge?: string | null): string {
 }
 
 export interface TrustCardProps {
+  scholarshipId?: number;
   fieldEvidence?: FieldEvidence[] | null;
   nextReviewDate?: string | null;
   verificationBadge?: string | null;
@@ -39,6 +41,7 @@ export interface TrustCardProps {
 }
 
 export function TrustCard({
+  scholarshipId,
   fieldEvidence,
   nextReviewDate,
   verificationBadge,
@@ -113,6 +116,15 @@ export function TrustCard({
                       href={row.source_url}
                       target="_blank"
                       rel="noreferrer"
+                      onClick={() => {
+                        if (scholarshipId != null) {
+                          trackOutboundClick({
+                            scholarshipId,
+                            surface: "trust_source",
+                            linkKind: "view_source",
+                          });
+                        }
+                      }}
                       className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                     >
                       View source

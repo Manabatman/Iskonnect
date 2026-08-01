@@ -3,7 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
-import { brandLogoSrc, BRAND_LOGO_NAV_CLASS, BRAND_LOGO_NAV_HEIGHT, BRAND_LOGO_NAV_WIDTH, LOGO_LIGHT_SRC } from "../lib/brandLogo";
+import { usePublicStats } from "../hooks/usePublicStats";
+import {
+  brandLogoSrc,
+  BRAND_LOGO_NAV_CLASS,
+  BRAND_LOGO_NAV_HEIGHT,
+  BRAND_LOGO_NAV_WIDTH,
+  LOGO_LIGHT_SRC,
+} from "../lib/brandLogo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn, MIN_TOUCH_TARGET_CLASS } from "@/lib/utils";
@@ -19,6 +26,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { resolvedTheme } = useTheme();
+  const stats = usePublicStats();
   const path = location.pathname;
   const logoSrc = brandLogoSrc(resolvedTheme);
 
@@ -26,7 +34,14 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled((prev) => {
+        if (!prev && y > 24) return true;
+        if (prev && y < 8) return false;
+        return prev;
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -39,14 +54,15 @@ export function Navbar() {
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
   const navItems: { to: string; label: string; match?: () => boolean }[] = [
-    { to: "/", label: "Home" },
-    { to: "/scholarships/search", label: "Explore", match: () => path.startsWith("/scholarships") },
+    { to: "/how-it-works", label: "How it works" },
+    { to: "/scholarships/search", label: "Scholarships", match: () => path.startsWith("/scholarships") },
     {
-      to: "/how-it-works",
-      label: "Trust & matching",
-      match: () => isActive("/how-it-works") || isActive("/transparency") || isActive("/match-methodology"),
+      to: "/how-matching-works",
+      label: "Transparency",
+      match: () => isActive("/how-matching-works") || isActive("/how-we-verify"),
     },
-  ] as const;
+    { to: "/faq", label: "FAQ" },
+  ];
 
   const navLinks = (mobile = false) =>
     navItems.map(({ to, label, match }) => {
@@ -102,11 +118,11 @@ export function Navbar() {
           aria-current={isActive("/login") ? "page" : undefined}
           onClick={() => mobile && setMobileOpen(false)}
         >
-          Login
+          Sign in
         </Link>
         <Button asChild className={mobile ? "w-full" : undefined}>
           <Link to="/register" onClick={() => mobile && setMobileOpen(false)}>
-            Get Started
+            Get started free
           </Link>
         </Button>
       </>
@@ -115,31 +131,38 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 border-b pt-[env(safe-area-inset-top)] transition-colors duration-base",
-        scrolled ? "border-border bg-background shadow-1" : "border-border/80 bg-background"
+        "sticky top-0 z-40 border-b pt-[env(safe-area-inset-top)] transition-all duration-base motion-reduce:transition-none",
+        scrolled ? "border-border bg-background/95 py-0 shadow-1 backdrop-blur-sm" : "border-border/80 bg-background py-0.5"
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6 sm:py-2.5">
+      <div
+        className={cn(
+          "mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6 transition-all duration-base motion-reduce:transition-none",
+          scrolled ? "py-1.5" : "py-2 sm:py-2.5"
+        )}
+      >
         <Link to="/" className="flex shrink-0 items-center gap-3">
           <img
             src={logoSrc}
             alt=""
-            className={BRAND_LOGO_NAV_CLASS}
+            className={cn(BRAND_LOGO_NAV_CLASS, scrolled && "scale-95 motion-reduce:scale-100")}
             width={BRAND_LOGO_NAV_WIDTH}
             height={BRAND_LOGO_NAV_HEIGHT}
             onError={(e) => {
               (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
             }}
           />
-          <span>
+          <span className={cn("transition-all duration-base motion-reduce:transition-none", scrolled && "hidden sm:inline")}>
             <span className="block font-display text-xl tracking-tight text-primary sm:text-2xl">Iskonnect</span>
-            <span className="hidden text-xs font-medium text-muted-foreground sm:block">
-              Connecting Filipino Students to Opportunity
-            </span>
+            {!scrolled ? (
+              <span className="hidden text-xs font-medium text-muted-foreground sm:block">
+                Connecting Filipino Students to Opportunity
+              </span>
+            ) : null}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-x-2 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-x-1 md:flex" aria-label="Primary">
           {navLinks()}
         </nav>
 
@@ -165,6 +188,16 @@ export function Navbar() {
               {navLinks(true)}
               <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">{authLinks(true)}</div>
             </nav>
+            {stats?.last_catalog_verification_at ? (
+              <p className="mt-6 text-xs text-muted-foreground">
+                Catalog last verified{" "}
+                {new Date(stats.last_catalog_verification_at).toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </p>
+            ) : null}
           </SheetContent>
         </Sheet>
       </div>

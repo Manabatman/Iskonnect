@@ -7,6 +7,7 @@ import type {
   ScholarshipSearchResponse,
   ScholarshipSearchFilters,
 } from "../types";
+import { getNetworkErrorMessage } from "../constants/errorCopy";
 import { cacheSearchResults, readCachedSearchResults } from "../utils/offlineCache";
 
 const DEBOUNCE_MS = 300;
@@ -40,6 +41,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [usingCached, setUsingCached] = useState(false);
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
@@ -86,12 +88,14 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     let cancelled = false;
     setLoading(true);
     setError(null);
+    setUsingCached(false);
     fetchSearch(debouncedQuery, filters, page)
       .then((data) => {
         if (!cancelled) {
           setResults(data.results ?? []);
           setTotal(data.total ?? 0);
           setTotalPages(data.total_pages ?? 0);
+          setUsingCached(false);
           void cacheSearchResults(`search:${debouncedQuery}:${filtersCacheKey}:${page}`, data);
         }
       })
@@ -105,8 +109,10 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
             setTotal(cached.total ?? cached.results.length);
             setTotalPages(cached.total_pages ?? 1);
             setError(null);
+            setUsingCached(true);
           } else {
-            setError(err instanceof Error ? err.message : "Search failed");
+            setUsingCached(false);
+            setError(getNetworkErrorMessage());
           }
         }
       })
@@ -210,6 +216,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     totalPages,
     loading,
     error,
+    usingCached,
     suggestions,
     suggestionsOpen,
     setSuggestionsOpen,

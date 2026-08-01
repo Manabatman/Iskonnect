@@ -32,7 +32,8 @@ export function Section({
   return (
     <section
       id={id}
-      className={`relative overflow-hidden py-20 sm:py-28 ${borderClass} ${bgClass} ${className}`}
+      data-testid={id ? `landing-${id}` : undefined}
+      className={`relative overflow-hidden py-12 sm:py-16 lg:py-24 xl:py-32 ${borderClass} ${bgClass} ${className}`}
     >
       {variant === "tint" ? (
         <div aria-hidden className="pointer-events-none absolute inset-0">
@@ -41,7 +42,7 @@ export function Section({
           <div className="absolute inset-0 opacity-60 dark:opacity-30 [background-image:linear-gradient(to_right,rgba(2,6,23,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(2,6,23,0.05)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
         </div>
       ) : null}
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">{children}</div>
+      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6">{children}</div>
     </section>
   );
 }
@@ -99,7 +100,7 @@ export function IconTile({ Icon, className = "" }: IconTileProps) {
 }
 
 export const cardClass =
-  "group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition duration-[250ms] ease-out hover:border-primary-300 hover:shadow-xl hover:shadow-primary-900/5 motion-safe:hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-primary-700";
+  "group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition duration-[240ms] ease-out hover:border-primary-300 hover:shadow-xl hover:shadow-primary-900/5 motion-safe:hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-primary-700";
 
 export const primaryButtonClass =
   "inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-600/25 transition hover:bg-primary-700 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900";

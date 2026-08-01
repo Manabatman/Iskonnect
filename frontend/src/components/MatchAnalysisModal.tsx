@@ -1,10 +1,18 @@
-import * as Dialog from "@radix-ui/react-dialog";
 import type { MatchBreakdown, MatchResult } from "../types";
+import { MatchConfidenceNote } from "./MatchConfidenceNote";
 import { MatchScoreRing } from "./MatchScoreRing";
 import {
   MatchStatusIcon,
   statusToFactorPercent,
 } from "./scholarshipMatchDisplay";
+import { UnverifiedRequirementsList } from "./QualificationStatusBadge";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 function formatBreakdownKey(key: string): string {
   const k = String(key ?? "");
@@ -23,6 +31,20 @@ interface MatchAnalysisModalProps {
   match: MatchResult | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** When true, the scholarship is not in the student's computed plan (TRUST-05). */
+  notCalculated?: boolean;
+}
+
+function NotCalculatedPanel({ title }: { title: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-center dark:border-slate-700 dark:bg-slate-800/50">
+      <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Not calculated yet</p>
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        We have not scored <span className="font-medium text-slate-800 dark:text-slate-200">{title}</span> against
+        your profile. Run a full match from your dashboard or complete your profile for personalized results.
+      </p>
+    </div>
+  );
 }
 
 function BreakdownList({ breakdown }: { breakdown: MatchBreakdown }) {
@@ -84,7 +106,12 @@ function BreakdownList({ breakdown }: { breakdown: MatchBreakdown }) {
   );
 }
 
-export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisModalProps) {
+export function MatchAnalysisModal({
+  match,
+  open,
+  onOpenChange,
+  notCalculated = false,
+}: MatchAnalysisModalProps) {
   const score = match != null ? (match.final_score ?? match.score) : 0;
   const hasContent =
     match != null &&
@@ -96,49 +123,51 @@ export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisM
     );
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm data-[state=open]:animate-overlayFade data-[state=closed]:animate-overlayFadeOut dark:bg-black/60" />
-        <Dialog.Content
-          className="fixed inset-0 z-[101] flex max-h-full w-full items-center justify-center p-0 outline-none pointer-events-none data-[state=open]:animate-matchDialogIn data-[state=closed]:animate-matchDialogOut sm:p-4"
-          aria-describedby={match ? "match-analysis-desc" : undefined}
-        >
-          <div className="pointer-events-auto flex h-full max-h-full min-h-0 w-full flex-col overflow-hidden bg-white p-0 shadow-2xl dark:bg-slate-900 sm:h-auto sm:max-h-[90vh] sm:max-w-lg sm:rounded-2xl sm:border sm:border-slate-200 sm:dark:border-slate-700">
-            <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-5 py-4 dark:border-slate-700">
-              <div className="min-w-0">
-                <Dialog.Title className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                  Match Analysis
-                </Dialog.Title>
-                {match ? (
-                  <Dialog.Description id="match-analysis-desc" className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                    How your profile lines up with{" "}
-                    <span className="font-medium text-slate-800 dark:text-slate-200">{match.title}</span>.
-                  </Dialog.Description>
-                ) : (
-                  <Dialog.Description className="sr-only">Match analysis</Dialog.Description>
-                )}
-              </div>
-              <Dialog.Close
-                type="button"
-                className="shrink-0 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                aria-label="Close"
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </Dialog.Close>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        hideCloseButton
+        aria-describedby={match ? "match-analysis-desc" : undefined}
+        className="fixed inset-0 z-[101] flex max-h-full w-full max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden border-0 p-0 shadow-2xl sm:inset-auto sm:left-[50%] sm:top-[50%] sm:max-h-[90vh] sm:max-w-lg sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-2xl sm:border sm:border-slate-200 sm:dark:border-slate-700"
+      >
+        <div className="flex h-full max-h-full min-h-0 w-full flex-col overflow-hidden bg-white dark:bg-slate-900">
+          <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-5 py-4 dark:border-slate-700">
+            <div className="min-w-0">
+              <DialogTitle className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                Match Analysis
+              </DialogTitle>
+              {match ? (
+                <DialogDescription id="match-analysis-desc" className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  How your profile lines up with{" "}
+                  <span className="font-medium text-slate-800 dark:text-slate-200">{match.title}</span>.
+                </DialogDescription>
+              ) : (
+                <DialogDescription className="sr-only">Match analysis</DialogDescription>
+              )}
             </div>
+            <DialogClose
+              type="button"
+              className="focus-visible-ring shrink-0 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+              aria-label="Close"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </DialogClose>
+          </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-5">
+          <div className="flex-1 overflow-y-auto px-5 py-5">
             {!match ? (
               <p className="text-sm text-slate-600 dark:text-slate-400">No match data to show.</p>
+            ) : notCalculated ? (
+              <NotCalculatedPanel title={match.title} />
             ) : (
               <>
                 <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-gradient-to-b from-primary-50 to-white py-8 dark:border-slate-700 dark:from-primary-950/40 dark:to-slate-900">
                   <MatchScoreRing score={score} size={120} />
                   <p className="mt-4 text-center text-xs font-bold uppercase tracking-widest text-primary-700 dark:text-primary-300">
-                    {Math.round(score)}% overall match
+                    {Math.round(score)}% eligibility fit
                   </p>
+                  <MatchConfidenceNote variant="full" className="mt-3 max-w-xs px-2 text-center" />
                   {match.scoring_policy_version ? (
                     <p className="mt-2 text-center text-[10px] text-slate-500 dark:text-slate-400">
                       Scoring policy: {match.scoring_policy_version}
@@ -152,6 +181,12 @@ export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisM
                   </p>
                 ) : (
                   <div className="mt-6 space-y-6">
+                    <UnverifiedRequirementsList
+                      unverified={match.unverified_requirements}
+                      requirements={match.requirements as Array<{ key?: string; result?: string; label?: string }> | undefined}
+                      provisionalReason={match.provisional_reason}
+                    />
+
                     {match.breakdown ? (
                       <div>
                         <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
@@ -212,10 +247,9 @@ export function MatchAnalysisModal({ match, open, onOpenChange }: MatchAnalysisM
                 )}
               </>
             )}
-            </div>
           </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

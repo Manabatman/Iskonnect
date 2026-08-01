@@ -54,6 +54,22 @@ export const YEAR_LEVELS = [
   { value: "5", label: "College 5th Year+" },
 ] as const;
 
+export const EMPLOYMENT_STATUSES = [
+  { value: "", label: "Select employment status" },
+  { value: "none", label: "Not employed" },
+  { value: "part-time", label: "Employed part-time" },
+  { value: "full-time", label: "Employed full-time" },
+  { value: "self-employed", label: "Self-employed" },
+] as const;
+
+export const ATHLETE_LEVELS = [
+  { value: "", label: "Not an athlete" },
+  { value: "club", label: "Club / intramural" },
+  { value: "varsity", label: "Varsity / university team" },
+  { value: "regional", label: "Regional team" },
+  { value: "national", label: "National team" },
+] as const;
+
 export const EQUITY_FLAG_MAP: Record<string, string> = {
   Underprivileged: "is_underprivileged",
   PWD: "is_pwd",
@@ -67,3 +83,33 @@ export const EQUITY_FLAG_MAP: Record<string, string> = {
   "GSIS Dependent": "is_gsis_dependent",
   "SSS Dependent": "is_sss_dependent",
 };
+
+/** Static fallback when profile-options API is unavailable (DATA-04 / B8). */
+export type FieldOfStudyOption = { value: string; label: string };
+export type FieldOfStudyGroup = { label: string; options: FieldOfStudyOption[] };
+
+export const FIELDS_OF_STUDY_FALLBACK: FieldOfStudyGroup[] = [
+  {
+    label: "Broad disciplines",
+    options: [
+      { value: "STEM", label: "Science, Technology, Engineering, Mathematics" },
+      { value: "Engineering", label: "Engineering and Technology" },
+      { value: "IT", label: "Information Technology" },
+      { value: "Medical", label: "Medicine and Health Sciences" },
+      { value: "Business", label: "Business and Accountancy" },
+      { value: "Education", label: "Education and Teacher Training" },
+      { value: "Agriculture", label: "Agriculture, Forestry, Fisheries" },
+      { value: "Arts", label: "Arts and Humanities" },
+      { value: "Law", label: "Law" },
+      { value: "Architecture", label: "Architecture and Planning" },
+    ],
+  },
+  {
+    label: "Communication",
+    options: [
+      { value: "Development Communication", label: "Development Communication" },
+      { value: "Journalism", label: "Journalism" },
+      { value: "Communication Arts", label: "Communication Arts" },
+    ],
+  },
+];

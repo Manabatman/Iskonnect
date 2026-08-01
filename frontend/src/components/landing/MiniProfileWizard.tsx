@@ -42,8 +42,12 @@ export function MiniProfileWizard() {
   }, [educationLevel, region, field]);
 
   return (
-    <section className="border-b border-slate-200 bg-slate-50 py-16 dark:border-slate-800 dark:bg-slate-900/50">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section
+      id="wizard"
+      data-testid="landing-wizard"
+      className="border-b border-slate-200 bg-slate-50 py-12 dark:border-slate-800 dark:bg-slate-900/50 sm:py-16"
+    >
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
             Preview scholarship matching

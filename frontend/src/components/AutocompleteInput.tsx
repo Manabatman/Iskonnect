@@ -139,7 +139,7 @@ export function AutocompleteInput({
     }
   }, [highlightIndex]);
 
-  const inputClassName = `mt-1 w-full rounded-lg border bg-white dark:bg-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 ${error ? "border-red-500" : "border-slate-300 dark:border-slate-600 focus:border-primary-500"} ${className}`;
+  const inputClassName = `focus-visible-ring mt-1 w-full rounded-lg border bg-white dark:bg-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 outline-none transition ${error ? "border-red-500" : "border-slate-300 dark:border-slate-600 focus:border-primary-500"} ${className}`;
 
   return (
     <div ref={containerRef} className="relative">
@@ -153,6 +153,7 @@ export function AutocompleteInput({
           id={id}
           name={name}
           type="text"
+          role="combobox"
           value={value}
           onChange={(e) => {
             userInteractedRef.current = true;

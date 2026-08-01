@@ -221,13 +221,13 @@ export function DashboardSidebar({
           {collapsed ? (
             <Link
               to="/dashboard"
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-primary-700 dark:text-primary-400"
-              title="Iskonnect dashboard"
+              className="focus-visible-ring flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-primary-700 dark:text-primary-400"
+              aria-label="Iskonnect dashboard"
             >
               I
             </Link>
           ) : (
-            <Link to="/dashboard" className="min-w-0 flex-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800">
+            <Link to="/dashboard" className="focus-visible-ring min-w-0 flex-1 dark:ring-offset-slate-800">
               <span className="block truncate text-lg font-bold text-primary-700 dark:text-primary-400">
                 Iskonnect
               </span>
@@ -268,6 +268,7 @@ export function DashboardSidebar({
                   className={`${sharedClass} cursor-not-allowed opacity-50`}
                   title={item.disabledHint ?? item.label}
                   aria-disabled="true"
+                  aria-label={collapsed ? item.label : undefined}
                 >
                   <Icon className="shrink-0 opacity-90" />
                   {!collapsed ? <span className="truncate">{item.label}</span> : null}
@@ -281,6 +282,7 @@ export function DashboardSidebar({
                 to={item.to}
                 onClick={onMobileClose}
                 aria-current={active ? "page" : undefined}
+                aria-label={collapsed ? item.label : undefined}
                 className={sharedClass}
                 title={collapsed ? item.label : undefined}
               >
@@ -297,6 +299,7 @@ export function DashboardSidebar({
               <Link
                 to="/sponsor"
                 onClick={onMobileClose}
+                aria-label={collapsed ? "Sponsor portal" : undefined}
                 className={[
                   "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
                   path.startsWith("/sponsor")
@@ -316,6 +319,7 @@ export function DashboardSidebar({
               <Link
                 to="/school"
                 onClick={onMobileClose}
+                aria-label={collapsed ? "School verification" : undefined}
                 className={[
                   "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
                   path.startsWith("/school")
@@ -335,6 +339,7 @@ export function DashboardSidebar({
               <Link
                 to="/admin"
                 onClick={onMobileClose}
+                aria-label={collapsed ? "Admin" : undefined}
                 className={[
                   "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
                   path.startsWith("/admin")

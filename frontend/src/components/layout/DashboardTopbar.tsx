@@ -322,7 +322,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
               setSearchResults([]);
             }
           }}
-          className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-200 dark:placeholder:text-slate-500"
+          className="focus-visible-ring w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-primary-500 dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-200 dark:placeholder:text-slate-500"
           autoComplete="off"
         />
         {searchOpen && (searchQuery.trim() || searchLoading || searchResults.length > 0) ? (
@@ -458,7 +458,8 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
-            className="flex max-w-[12rem] items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-1.5 pl-2 pr-2 text-left transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-900/40 dark:hover:bg-slate-700"
+            className="focus-visible-ring flex max-w-[12rem] items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-1.5 pl-2 pr-2 text-left transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-900/40 dark:hover:bg-slate-700"
+            aria-label="Account menu"
             aria-expanded={menuOpen}
             aria-haspopup="true"
           >

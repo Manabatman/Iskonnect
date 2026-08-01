@@ -116,7 +116,7 @@ export function resolveApplicationStatus(sch: {
   if (app && app in LIFECYCLE_STATUS_GUIDE) return app as ScholarshipLifecycleStatus;
   const legacy = legacyDataStatusToApplicationStatus(sch.data_status);
   if (legacy) return legacy;
-  return "open";
+  return "needs_verification";
 }
 
 export function lifecycleStatusLabel(status: string | null | undefined): string {
@@ -171,7 +171,7 @@ export function humanizeVerificationSource(source: string | null | undefined): s
   return mapping[key] ?? source.replaceAll("_", " ");
 }
 
-/** @deprecated Use resolveApplicationStatus */
-export function dataStatusToLifecycle(status: string | null | undefined): ScholarshipLifecycleStatus | null {
-  return legacyDataStatusToApplicationStatus(status);
+/** Deep-link anchor for the scholarship status guide (CONT-01). */
+export function statusGuideHref(statusKey: string): string {
+  return `/scholarship-status#${encodeURIComponent(statusKey)}`;
 }

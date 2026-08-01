@@ -8,7 +8,6 @@ status not_eligible are excluded from scored matches; others may be scored and r
 import logging
 from datetime import date, datetime
 
-from app.config import settings
 from app.matching.eligibility_result import (
     EligibilityResult,
     QualificationStatus,
@@ -17,16 +16,8 @@ from app.matching.eligibility_result import (
     evaluate_eligibility,
     normalize_city,
 )
-from app.matching.field_match import (
-    broad_maps_to_specific_eligible,
-    profile_fields_for_matching,
-    psced_code_matches,
-    specific_course_matches,
-)
-from app.taxonomy.education_levels import education_levels_compatible
-from app.taxonomy.equity_groups import EQUITY_GROUPS
-from app.taxonomy.regions import normalize_region
 from app.utils.json_helpers import parse_json_list
+from app.utils.timezone import today_manila
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +41,7 @@ def is_application_deadline_passed(application_deadline) -> bool:
             return False
     else:
         return False
-    return deadline_day < date.today()
+    return deadline_day < today_manila()
 
 
 # Re-export for backward compatibility in tests and temporal_state
@@ -62,91 +53,7 @@ __all__ = [
     "is_application_deadline_passed",
     "normalize_city",
     "_hard_filter_failure_stage",
-    "_region_matches",
-    "_income_matches",
 ]
-
-
-def _data_status_passes_for_matching(data_status: str | None) -> bool:
-    if not data_status:
-        return True
-    return data_status not in ("expired", "broken_link", "past_deadline")
-
-
-def _level_matches(profile_level: str | None, eligible_levels: list, legacy_level: str | None) -> bool:
-    if not profile_level or not profile_level.strip():
-        return True
-    levels_to_check = eligible_levels if eligible_levels else ([legacy_level] if legacy_level else [])
-    if not levels_to_check:
-        return True
-    for el in levels_to_check:
-        if el and education_levels_compatible(profile_level, str(el)):
-            return True
-    return False
-
-
-def _region_matches(
-    profile_region: str | None,
-    profile_city: str | None,
-    eligible_regions: list,
-    eligible_cities: list,
-    residency_required: bool,
-    legacy_regions: list,
-    scholarship_id: int | None = None,
-) -> bool:
-    """Legacy boolean region check — prefer evaluate_eligibility for new code."""
-    regions = eligible_regions if eligible_regions else legacy_regions
-    if not regions and not eligible_cities:
-        return True
-    if residency_required:
-        geo_restricted = bool(regions or eligible_cities)
-        has_profile_location = bool(
-            (profile_region and str(profile_region).strip())
-            or (profile_city and str(profile_city).strip())
-        )
-        if geo_restricted and not has_profile_location:
-            return False
-    if eligible_cities and profile_city:
-        for ec in eligible_cities:
-            if ec and cities_match(profile_city, ec):
-                return True
-    profile_region_norm = normalize_region(profile_region or "")
-    for r in regions:
-        if not r:
-            continue
-        r_norm = normalize_region(r)
-        if profile_region_norm and profile_region_norm == r_norm:
-            return True
-        if profile_region and r and profile_region.strip().lower() == r.strip().lower():
-            return True
-    if regions or eligible_cities:
-        return False
-    return True
-
-
-def _income_matches(
-    profile_income: int | None,
-    profile_bracket: str | None,
-    max_income_threshold: int | None,
-) -> bool:
-    """Legacy boolean income check — uses conservative bracket lower bound."""
-    from app.matching.eligibility_result import _bracket_bounds
-
-    if max_income_threshold is None:
-        return True
-    if profile_income is not None:
-        return profile_income <= max_income_threshold
-    if profile_bracket:
-        lower, upper = _bracket_bounds(profile_bracket)
-        if lower is not None and lower > max_income_threshold:
-            return False
-        if upper is not None and upper <= max_income_threshold:
-            return True
-        if lower is not None and lower <= max_income_threshold:
-            return True  # overlaps — legacy pass (evaluate_eligibility uses UNKNOWN)
-    if profile_income is None and not profile_bracket:
-        return True
-    return False
 
 
 def _hard_filter_failure_stage(profile: dict, sch: dict) -> str | None:

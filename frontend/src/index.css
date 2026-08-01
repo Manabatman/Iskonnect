@@ -119,6 +119,11 @@
 }
 
 @layer utilities {
+  /* A11Y-02 — single focus-visible ring treatment */
+  .focus-visible-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
   .bg-tone-success { background-color: hsl(var(--tone-success-bg)); }
   .text-tone-success { color: hsl(var(--tone-success-fg)); }
   .border-tone-success { border-color: hsl(var(--tone-success-border)); }

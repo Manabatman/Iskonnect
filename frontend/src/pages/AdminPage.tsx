@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API_BASE_URL, apiFetch, NetworkError } from "../api/client";
+import { apiFetch, NetworkError } from "../api/client";
+import { ERROR_COPY, getNetworkErrorMessage } from "../constants/errorCopy";
 import {
   DuplicateCandidatesPanel,
   type DuplicatePair,
@@ -30,7 +31,91 @@ type AdminFeedback = {
   contact_email: string | null;
   created_at: string | null;
   ph_created_at?: string | null;
+  triage_status?: string;
+  triage_note?: string | null;
 };
+
+const FEEDBACK_TRIAGE_OPTIONS = [
+  "new",
+  "triaged",
+  "planned",
+  "in_progress",
+  "shipped",
+  "declined",
+] as const;
+
+function FeedbackTriageRow({
+  feedback,
+  busy,
+  onSave,
+}: {
+  feedback: AdminFeedback;
+  busy: boolean;
+  onSave: (id: number, status: string, note: string | null) => Promise<void>;
+}) {
+  const [status, setStatus] = useState(feedback.triage_status ?? "new");
+  const [note, setNote] = useState(feedback.triage_note ?? "");
+
+  useEffect(() => {
+    setStatus(feedback.triage_status ?? "new");
+    setNote(feedback.triage_note ?? "");
+  }, [feedback.triage_status, feedback.triage_note, feedback.id]);
+
+  return (
+    <li className="rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs text-slate-500">
+          #{feedback.id} · {feedback.category} · {formatDateTime(feedback.ph_created_at ?? feedback.created_at ?? "")}
+        </p>
+        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+          {status.replace("_", " ")}
+        </span>
+      </div>
+      <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800 dark:text-slate-200">{feedback.message}</p>
+      {feedback.contact_email ? (
+        <p className="mt-1 text-xs text-slate-500">Contact: {feedback.contact_email}</p>
+      ) : null}
+      <div className="mt-3 grid gap-2 sm:grid-cols-[10rem_1fr_auto] sm:items-start">
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm dark:border-slate-600 dark:bg-slate-800"
+          aria-label={`Triage status for feedback ${feedback.id}`}
+        >
+          {FEEDBACK_TRIAGE_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt.replace("_", " ")}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Internal triage note (optional)"
+          className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm dark:border-slate-600 dark:bg-slate-800"
+        />
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void onSave(feedback.id, status, note || null)}
+          className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+        >
+          {busy ? "Saving…" : "Save triage"}
+        </button>
+      </div>
+    </li>
+  );
+}
+
+const REVIEW_QUEUES = [
+  { id: "needs_review", label: "Needs verification" },
+  { id: "missing_image", label: "Missing image" },
+  { id: "low_quality", label: "Low quality" },
+  { id: "stale", label: "Stale verification" },
+  { id: "duplicates", label: "Duplicates" },
+] as const;
+
 type AdminReport = {
   id: number;
   scholarship_id: number;
@@ -57,6 +142,9 @@ type CatalogHealthDashboard = {
   deadline_unknown_count?: number;
   avg_quality_score?: number;
   verified_this_month?: number;
+  verification_sla_days?: number;
+  verification_age_distribution?: Record<string, number>;
+  provider_verification_sla?: { provider: string; expired_count: number }[];
   health?: Record<string, number>;
   import?: { staging_pending?: number; staging_total?: number; recent_maintenance_runs?: MaintenanceRunRow[] };
   data_quality?: DataQualitySummary;
@@ -93,13 +181,6 @@ type StagingRow = {
 };
 
 const SCH_PAGE_SIZE = 50;
-const REVIEW_QUEUES = [
-  { id: "needs_review", label: "Needs verification" },
-  { id: "missing_image", label: "Missing image" },
-  { id: "low_quality", label: "Low quality" },
-  { id: "stale", label: "Stale verification" },
-  { id: "duplicates", label: "Duplicates" },
-] as const;
 
 export function AdminPage() {
   const { authHeaders } = useAuth();
@@ -113,6 +194,7 @@ export function AdminPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [matchRuns, setMatchRuns] = useState<AdminMatchRun[]>([]);
   const [feedback, setFeedback] = useState<AdminFeedback[]>([]);
+  const [feedbackTriageBusy, setFeedbackTriageBusy] = useState<number | null>(null);
   const [reports, setReports] = useState<AdminReport[]>([]);
   const [maintenanceRuns, setMaintenanceRuns] = useState<MaintenanceRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
@@ -247,9 +329,7 @@ export function AdminPage() {
         setCatalogHealth(null);
         setImportDashboard(null);
         if (e instanceof NetworkError) {
-          setError(
-            `Unable to reach the API at ${API_BASE_URL}. Confirm the backend is running, VITE_API_BASE_URL is set, and CORS allows this site.`
-          );
+          setError(getNetworkErrorMessage());
           return;
         }
         setError("Could not load system health (check admin role and API URL).");
@@ -407,9 +487,7 @@ export function AdminPage() {
           }
           setReviewQueueWaking(false);
           if (e instanceof NetworkError) {
-            setError(
-              `Unable to reach the API at ${API_BASE_URL}. The server may be waking up — wait a moment and switch tabs to retry. Confirm VITE_API_BASE_URL and CORS are configured.`
-            );
+            setError(ERROR_COPY.cold_start.message);
             return;
           }
           setError(e instanceof Error ? e.message : "Error");
@@ -475,6 +553,36 @@ export function AdminPage() {
     });
     if (!res.ok) throw new Error(`Failed to ${action} report`);
     setReports((prev) => prev.filter((r) => r.id !== reportId));
+  };
+
+  const handleFeedbackTriageUpdate = async (
+    feedbackId: number,
+    triage_status: string,
+    triage_note: string | null,
+  ) => {
+    setFeedbackTriageBusy(feedbackId);
+    try {
+      const res = await apiFetch(`/api/v1/admin/feedback/${feedbackId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...headers() },
+        body: JSON.stringify({ triage_status, triage_note: triage_note?.trim() || null }),
+      });
+      if (!res.ok) throw new Error("Failed to update feedback triage");
+      const updated = (await res.json()) as AdminFeedback;
+      setFeedback((prev) =>
+        prev.map((row) =>
+          row.id === feedbackId
+            ? {
+                ...row,
+                triage_status: updated.triage_status ?? triage_status,
+                triage_note: updated.triage_note ?? triage_note,
+              }
+            : row,
+        ),
+      );
+    } finally {
+      setFeedbackTriageBusy(null);
+    }
   };
 
   const handleSaveScholarship = async (scholarshipId?: number) => {
@@ -1060,17 +1168,18 @@ export function AdminPage() {
 
         {tab === "feedback" && (
           <ul className="space-y-3">
-            {feedback.map((f) => (
-              <li key={f.id} className="rounded-lg border border-slate-200 p-4 dark:border-slate-700">
-                <p className="text-xs text-slate-500">
-                  #{f.id} · {f.category} · {formatDateTime(f.ph_created_at ?? f.created_at ?? "")}
-                </p>
-                <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800 dark:text-slate-200">{f.message}</p>
-                {f.contact_email ? (
-                  <p className="mt-1 text-xs text-slate-500">Contact: {f.contact_email}</p>
-                ) : null}
-              </li>
-            ))}
+            {feedback.length === 0 ? (
+              <p className="text-slate-600 dark:text-slate-400">No feedback yet.</p>
+            ) : (
+              feedback.map((f) => (
+                <FeedbackTriageRow
+                  key={f.id}
+                  feedback={f}
+                  busy={feedbackTriageBusy === f.id}
+                  onSave={handleFeedbackTriageUpdate}
+                />
+              ))
+            )}
           </ul>
         )}
 
@@ -1141,6 +1250,47 @@ export function AdminPage() {
                       </li>
                     ))}
                   </ul>
+                  {catalogHealth.verification_age_distribution ? (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        Verification age (SLA {catalogHealth.verification_sla_days ?? 90} days)
+                      </h4>
+                      <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+                        {[
+                          ["0–30 days", catalogHealth.verification_age_distribution["0_30"] ?? 0],
+                          ["31–90 days", catalogHealth.verification_age_distribution["31_90"] ?? 0],
+                          ["90+ days", catalogHealth.verification_age_distribution["90_plus"] ?? 0],
+                          ["Never verified", catalogHealth.verification_age_distribution.never ?? 0],
+                        ].map(([label, value]) => (
+                          <li
+                            key={String(label)}
+                            className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                          >
+                            <span className="text-slate-600 dark:text-slate-400">{label}</span>
+                            <span className="font-semibold text-slate-900 dark:text-slate-100">{String(value)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {catalogHealth.provider_verification_sla?.length ? (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        Providers past verification SLA
+                      </h4>
+                      <ul className="mt-2 space-y-1 text-sm">
+                        {catalogHealth.provider_verification_sla.slice(0, 8).map((row) => (
+                          <li
+                            key={row.provider}
+                            className="flex justify-between rounded border border-slate-200 px-3 py-1.5 dark:border-slate-700"
+                          >
+                            <span className="truncate text-slate-700 dark:text-slate-300">{row.provider}</span>
+                            <span className="font-medium text-amber-800 dark:text-amber-200">{row.expired_count}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                 </div>
               ) : (
                 <p className="mt-2 text-sm text-slate-500">—</p>

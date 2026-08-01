@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { trackOutboundClick } from "../utils/trackOutboundClick";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
@@ -6,9 +7,12 @@ import { LifecycleStatusBadge } from "./LifecycleStatusBadge";
 import {
   EligibilityRequirementsList,
   QualificationStatusBadge,
+  UnverifiedRequirementsList,
   VerificationBadge,
 } from "./QualificationStatusBadge";
+import { MatchConfidenceNote } from "./MatchConfidenceNote";
 import { MatchScoreRing } from "./MatchScoreRing";
+import { FreshnessChipRow, freshnessFromMatch, freshnessFromScholarship } from "./FreshnessChip";
 import { ScholarshipTypeInfoModal } from "./ScholarshipTypeInfoModal";
 import { getCardVisualClasses } from "../utils/cardImages";
 import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
@@ -39,16 +43,6 @@ function canOpenMatchAnalysis(match: MatchResult): boolean {
     (match.suggestions && match.suggestions.length > 0) ||
     (match.why_not_higher && match.why_not_higher.length > 0)
   );
-}
-
-function formatVerifiedCompact(iso: string | null | undefined): string | null {
-  if (!iso?.trim()) return null;
-  try {
-    const d = new Date(iso.slice(0, 10));
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return null;
-  }
 }
 
 function formatDeadlineLine(
@@ -162,9 +156,7 @@ export function ScholarshipCardV2({
     ("deadline_note" in base ? base.deadline_note : undefined) ?? match?.deadline_note,
     "last_verified_at" in base ? base.last_verified_at : undefined
   );
-  const lastVerified = formatVerifiedCompact(
-    "last_verified_at" in base ? base.last_verified_at : undefined
-  );
+  const freshnessChips = match ? freshnessFromMatch(match) : freshnessFromScholarship(base);
   const predictedOpen =
     match?.predicted_open ??
     ("predicted_next_open" in base ? base.predicted_next_open : undefined);
@@ -189,19 +181,7 @@ export function ScholarshipCardV2({
       <article
         className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
         aria-labelledby={`scholarship-card-title-${base.id}`}
-        role={cardInteractive ? "button" : undefined}
-        tabIndex={cardInteractive ? 0 : undefined}
         onClick={cardInteractive ? handleCardActivate : undefined}
-        onKeyDown={
-          cardInteractive
-            ? (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleCardActivate();
-                }
-              }
-            : undefined
-        }
       >
         <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-t-2xl">
           {displayImageUrl ? (
@@ -212,6 +192,8 @@ export function ScholarshipCardV2({
               <img
                 src={displayImageUrl}
                 alt={info.image_alt?.trim() || base.title}
+                width={640}
+                height={360}
                 loading="lazy"
                 decoding="async"
                 className={[
@@ -250,10 +232,11 @@ export function ScholarshipCardV2({
 
           {score != null ? (
             <div
-              className="absolute right-3 top-3 z-10 rounded-2xl bg-black/30 px-2 py-2 backdrop-blur-md"
+              className="absolute right-3 top-3 z-10 max-w-[9.5rem] rounded-2xl bg-black/30 px-2 py-2 backdrop-blur-md"
               onClick={(e) => e.stopPropagation()}
             >
               <MatchScoreRing score={score} size={64} variant="onDark" showMatchLabel />
+              <MatchConfidenceNote variant="compact" className="mt-1 text-center text-white/90" />
             </div>
           ) : null}
         </div>
@@ -316,21 +299,29 @@ export function ScholarshipCardV2({
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600 dark:text-slate-400">
             <span className="inline-flex min-w-0 items-center gap-1.5">
               <IconBuilding className="h-4 w-4 shrink-0 opacity-80" />
-              <span className="truncate">{base.provider ?? "—"}</span>
+              <span className="truncate">
+                {("provider_display" in base && base.provider_display) || base.provider || "—"}
+              </span>
             </span>
-            {lastVerified ? (
-              <span className="text-xs text-slate-500 dark:text-slate-400">Verified {lastVerified}</span>
-            ) : appStatus !== "needs_verification" ? (
-              <span className="text-xs text-amber-700 dark:text-amber-300">Not yet verified</span>
-            ) : null}
+          </div>
+          <div className="mt-2">
+            <FreshnessChipRow chips={freshnessChips} />
           </div>
 
           {match ? (
-            <EligibilityRequirementsList
-              qualifying={match.qualifying_requirements}
-              missing={match.missing_requirements}
-              compact
-            />
+            <>
+              <UnverifiedRequirementsList
+                unverified={match.unverified_requirements}
+                requirements={match.requirements as Array<{ key?: string; result?: string; label?: string }> | undefined}
+                provisionalReason={match.provisional_reason}
+                compact
+              />
+              <EligibilityRequirementsList
+                qualifying={match.qualifying_requirements}
+                missing={match.missing_requirements}
+                compact
+              />
+            </>
           ) : null}
 
           {match?.gap_reason ? (
@@ -419,7 +410,7 @@ export function ScholarshipCardV2({
                   type="button"
                   disabled={checkMatchLoading}
                   onClick={() => onCheckMatch(base.id)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-accent-600 underline-offset-2 transition hover:text-accent-700 hover:underline disabled:cursor-wait disabled:opacity-70 dark:text-accent-400 dark:hover:text-accent-300"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-accent-700 underline-offset-2 transition hover:text-accent-800 hover:underline disabled:cursor-wait disabled:opacity-70 dark:text-accent-400 dark:hover:text-accent-300"
                 >
                   {checkMatchLoading ? (
                     <>
@@ -443,10 +434,34 @@ export function ScholarshipCardV2({
                 href={link}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() =>
+                  trackOutboundClick({
+                    scholarshipId: base.id,
+                    surface: "card",
+                    linkKind: "apply_official",
+                  })
+                }
                 className="inline-flex flex-1 items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-center text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
                 aria-label={`Apply now for ${base.title}`}
               >
                 Apply Now
+              </a>
+            ) : hasLink && appStatus === "needs_verification" ? (
+              <a
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() =>
+                  trackOutboundClick({
+                    scholarshipId: base.id,
+                    surface: "card",
+                    linkKind: "check_official",
+                  })
+                }
+                className="inline-flex flex-1 items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-center text-sm font-semibold text-amber-900 transition hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100 dark:hover:bg-amber-950/60 dark:focus:ring-offset-slate-900"
+                aria-label={`Check official site for ${base.title}`}
+              >
+                Check official site
               </a>
             ) : appStatus !== "open" || match?.deadline_passed ? (
               <span

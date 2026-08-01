@@ -99,3 +99,63 @@ def resolve_organization_logo(row: Any, db: Session | None = None) -> str | None
         return None
     org = db.query(models.Organization).filter(models.Organization.id == org_id).first()
     return org.logo_url if org else None
+
+
+def ensure_organization_id(
+    db: Session,
+    provider: str | None,
+    provider_type: str | None = None,
+) -> int | None:
+    """Resolve or create an organization row for a provider string; return its id."""
+    name = (provider or "").strip()
+    if not name:
+        return None
+
+    key = name.lower()
+    org = (
+        db.query(models.Organization)
+        .filter(models.Organization.canonical_name.ilike(name))
+        .first()
+    )
+    if org:
+        return org.id
+
+    base_slug = slugify_org_name(name)
+    slug = base_slug
+    suffix = 1
+    while db.query(models.Organization).filter(models.Organization.slug == slug).first():
+        suffix += 1
+        slug = f"{base_slug}-{suffix}"
+
+    org = models.Organization(
+        slug=slug,
+        canonical_name=name,
+        aliases=json.dumps([]),
+        org_type=_infer_org_type(provider_type),
+        official_domains=json.dumps([]),
+        verification_status="unverified",
+    )
+    db.add(org)
+    db.flush()
+    return org.id
+
+
+def link_organization_on_row(db: Session, row: models.Scholarship) -> None:
+    """Auto-link organization_id from provider when missing (DATA-10)."""
+    if row.organization_id or not (row.provider or "").strip():
+        return
+    org_id = ensure_organization_id(db, row.provider, row.provider_type)
+    if org_id:
+        row.organization_id = org_id
+
+
+def known_organization_names(db: Session) -> set[str]:
+    """Lowercase canonical names and aliases for import validation."""
+    names: set[str] = set()
+    for org in db.query(models.Organization).all():
+        if org.canonical_name:
+            names.add(org.canonical_name.strip().lower())
+        for alias in json.loads(org.aliases or "[]"):
+            if alias:
+                names.add(str(alias).strip().lower())
+    return names

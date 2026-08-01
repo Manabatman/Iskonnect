@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, Float, Boolean, Date, DateTime, ForeignKey, UniqueConstraint, Index
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db import Base
 
@@ -18,6 +19,7 @@ class User(Base):
     password_reset_expires_at = Column(DateTime, nullable=True)
     notify_deadline_reminders = Column(Boolean, nullable=False, server_default="1")
     notify_new_matches = Column(Boolean, nullable=False, server_default="1")
+    notify_weekly_digest = Column(Boolean, nullable=False, server_default="1")
 
 
 class RefreshToken(Base):
@@ -143,6 +145,9 @@ class Student(Base):
     is_uniformed_service_dependent = Column(Boolean, default=False)
     is_gsis_dependent = Column(Boolean, default=False)
     is_sss_dependent = Column(Boolean, default=False)
+    employment_status = Column(String, nullable=True)
+    evening_weekend_program = Column(Boolean, nullable=True)
+    athlete_level = Column(String, nullable=True)
     parent_occupation = Column(String)
 
     # === DOCUMENT INVENTORY (readiness tracking) ===
@@ -460,6 +465,8 @@ class Application(Base):
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
+    scholarship = relationship("Scholarship", lazy="joined")
+
 
 class ApplicationStatusEvent(Base):
     """Append-only status history for an application."""
@@ -515,7 +522,21 @@ class ProductFeedback(Base):
     category = Column(String(64), nullable=False)
     message = Column(Text, nullable=False)
     contact_email = Column(String(255), nullable=True)
+    triage_status = Column(String(32), nullable=False, server_default="new")
+    triage_note = Column(Text, nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class ReferralClickDaily(Base):
+    """Aggregate outbound referral clicks — no PII (C9 / §19.4)."""
+
+    __tablename__ = "referral_click_daily"
+
+    day = Column(Date, primary_key=True)
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), primary_key=True)
+    surface = Column(String(32), primary_key=True)
+    link_kind = Column(String(32), primary_key=True)
+    click_count = Column(Integer, nullable=False, server_default="0")
 
 
 class ScraperRun(Base):

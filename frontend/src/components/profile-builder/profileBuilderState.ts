@@ -43,6 +43,9 @@ export interface ProfileBuilderState {
   is_uniformed_service_dependent: string;
   is_gsis_dependent: string;
   is_sss_dependent: string;
+  employment_status: string;
+  evening_weekend_program: string;
+  athlete_level: string;
   /** "on" when user accepts RA 10173 consent (required to save). */
   privacy_consent: string;
 }
@@ -58,16 +61,13 @@ export function clearProfileDraft(): void {
   }
 }
 
-/** Not counted toward profile-builder completion % (optional UX fields). */
-export const OPTIONAL_PROFILE_FIELDS = new Set<keyof ProfileBuilderState>([
-  "barangay",
-  "target_school",
-  "preferred_course_2",
-  "preferred_course_3",
-  "extracurriculars",
-  "awards",
-  "parent_occupation",
-]);
+/** Required to save profile — completion % reflects these only (CLARITY-06). */
+export const SAVE_REQUIRED_FIELDS: (keyof ProfileBuilderState)[] = [
+  "full_name",
+  "email",
+  "region",
+  "privacy_consent",
+];
 
 /** RA priority flags — any number can apply; not required for 100% completion. */
 export const PRIORITY_GROUP_FIELDS: (keyof ProfileBuilderState)[] = [
@@ -83,6 +83,40 @@ export const PRIORITY_GROUP_FIELDS: (keyof ProfileBuilderState)[] = [
   "is_gsis_dependent",
   "is_sss_dependent",
 ];
+
+/** Not counted toward profile-builder completion % (optional UX fields). */
+export const OPTIONAL_PROFILE_FIELDS = new Set<keyof ProfileBuilderState>([
+  "barangay",
+  "target_school",
+  "preferred_course_2",
+  "preferred_course_3",
+  "extracurriculars",
+  "awards",
+  "parent_occupation",
+  "employment_status",
+  "evening_weekend_program",
+  "athlete_level",
+  "age",
+  "gender",
+  "education_level",
+  "current_academic_stage",
+  "enrollment_status",
+  "current_year_level",
+  "target_academic_year",
+  "school",
+  "school_type",
+  "gwa_raw",
+  "gwa_scale",
+  "province",
+  "city_municipality",
+  "household_income_annual",
+  "income_bracket",
+  "field_of_study_broad",
+  "field_of_study_specific",
+  "preferred_course_1",
+  "needs",
+  ...PRIORITY_GROUP_FIELDS,
+]);
 
 export const INITIAL_STATE: ProfileBuilderState = {
   full_name: "",
@@ -129,6 +163,9 @@ export const INITIAL_STATE: ProfileBuilderState = {
   is_uniformed_service_dependent: "",
   is_gsis_dependent: "",
   is_sss_dependent: "",
+  employment_status: "",
+  evening_weekend_program: "",
+  athlete_level: "",
   privacy_consent: "",
 };
 
@@ -144,74 +181,69 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
     id: 1,
     label: "Personal Info",
     shortLabel: "Personal",
-    fields: ["full_name", "email", "age", "gender"],
+    fields: ["full_name", "email"],
   },
   {
     id: 2,
     label: "Education",
     shortLabel: "Education",
-    fields: (
-      [
-        "education_level",
-        "current_academic_stage",
-        "enrollment_status",
-        "current_year_level",
-        "target_academic_year",
-        "school",
-        "school_type",
-        "target_school",
-        "gwa_raw",
-        "gwa_scale",
-      ] as (keyof ProfileBuilderState)[]
-    ).filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
+    fields: [],
   },
   {
     id: 3,
     label: "Location and Background",
     shortLabel: "Location",
-    fields: (
-      [
-        "region",
-        "province",
-        "city_municipality",
-        "barangay",
-      ] as (keyof ProfileBuilderState)[]
-    ).filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
+    fields: ["region"],
   },
   {
     id: 4,
     label: "Field of Study and Skills",
     shortLabel: "Skills",
-    fields: (
-      [
-        "field_of_study_broad",
-        "field_of_study_specific",
-        "preferred_course_1",
-        "preferred_course_2",
-        "preferred_course_3",
-        "extracurriculars",
-        "awards",
-      ] as (keyof ProfileBuilderState)[]
-    ).filter((k) => !OPTIONAL_PROFILE_FIELDS.has(k)),
+    fields: [],
   },
   {
     id: 5,
     label: "Eligibility and Goals",
     shortLabel: "Goals",
-    // Priority RA flags are optional for %; only needs + consent gate completion.
-    fields: ["needs", "privacy_consent"],
+    fields: ["privacy_consent"],
   },
 ];
 
 function isFieldFilled(key: keyof ProfileBuilderState, value: string): boolean {
   const v = (value ?? "").trim();
-  if (key.startsWith("is_") || key === "privacy_consent") {
+  if (key === "full_name") return v.length >= 2;
+  if (key.startsWith("is_") || key === "privacy_consent" || key === "evening_weekend_program") {
     return v === "on";
   }
-  if (key === "needs") {
-    return v.length > 0;
-  }
   return v.length > 0;
+}
+
+/** Validate fields required before leaving a step (CLARITY-05). */
+export function validateProfileBuilderStep(
+  stepId: number,
+  state: ProfileBuilderState,
+  emailValid: (email: string) => { valid: boolean; message?: string }
+): string | null {
+  if (stepId === 1) {
+    if (!state.full_name?.trim() || state.full_name.trim().length < 2) {
+      return "Please enter your full name (at least 2 characters).";
+    }
+    if (!state.email?.trim()) {
+      return "Please enter your email address.";
+    }
+    const check = emailValid(state.email);
+    if (!check.valid) {
+      return check.message ?? "Please enter a valid email address.";
+    }
+    return null;
+  }
+  if (stepId === 3) {
+    if (!state.region?.trim()) {
+      return "Please select your region before continuing.";
+    }
+    return null;
+  }
+  return null;
 }
 
 export function computeStepCompletion(
@@ -221,18 +253,6 @@ export function computeStepCompletion(
   const step = PROFILE_BUILDER_STEPS.find((s) => s.id === stepId);
   if (!step) return { filled: 0, total: 0 };
 
-  if (stepId === 3) {
-    let filled = 0;
-    for (const key of step.fields) {
-      if (isFieldFilled(key, state[key])) filled += 1;
-    }
-    const incomeFilled =
-      isFieldFilled("household_income_annual", state.household_income_annual) ||
-      isFieldFilled("income_bracket", state.income_bracket);
-    if (incomeFilled) filled += 1;
-    return { filled, total: step.fields.length + 1 };
-  }
-
   let filled = 0;
   for (const key of step.fields) {
     if (isFieldFilled(key, state[key])) filled += 1;
@@ -241,12 +261,11 @@ export function computeStepCompletion(
 }
 
 export function computeOverallCompletion(state: ProfileBuilderState): number {
-  let sum = 0;
-  for (const s of PROFILE_BUILDER_STEPS) {
-    const { filled, total } = computeStepCompletion(state, s.id);
-    if (total > 0) sum += filled / total;
+  let filled = 0;
+  for (const key of SAVE_REQUIRED_FIELDS) {
+    if (isFieldFilled(key, state[key])) filled += 1;
   }
-  return Math.round((sum / PROFILE_BUILDER_STEPS.length) * 100);
+  return Math.round((filled / SAVE_REQUIRED_FIELDS.length) * 100);
 }
 
 export type ProfileBuilderAction =
@@ -276,6 +295,25 @@ export function profileBuilderReducer(
     default:
       return state;
   }
+}
+
+/** Merge device-local draft with server profile — server wins when both have a value (TRUST-01). */
+export function mergeProfileDrafts(
+  local: Partial<Record<string, string>>,
+  server: Partial<Record<string, string>>
+): Partial<Record<string, string>> {
+  const merged: Partial<Record<string, string>> = { ...local };
+  for (const key of Object.keys(INITIAL_STATE) as (keyof ProfileBuilderState)[]) {
+    const sk = key as string;
+    const serverVal = server[sk];
+    const localVal = local[sk];
+    if (serverVal !== undefined && String(serverVal).trim()) {
+      merged[sk] = serverVal;
+    } else if (localVal !== undefined && String(localVal).trim()) {
+      merged[sk] = localVal;
+    }
+  }
+  return merged;
 }
 
 export function parseDraftFromStorage(raw: string | null): Partial<Record<string, string>> | null {

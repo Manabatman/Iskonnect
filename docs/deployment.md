@@ -36,6 +36,15 @@ See also: [architecture.md](architecture.md) for system overview.
 
 `SENTRY_DSN`, `STRUCTURED_LOGGING=true`, `ACCESS_TOKEN_EXPIRE_MINUTES=30`
 
+### Matching behavior flags
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `FILTER_EXPIRED_FROM_MATCHES` | `true` | When `true`, scholarships with `data_status` in `expired`, `broken_link`, or `past_deadline` fail the hard `data_status` check in matching (`app/matching/eligibility_result.py`, `_evaluate_data_status`). Set to `false` only if you need expired listings to remain eligible in ranked match results (e.g. local debugging). Defined in `app/config.py`; consumed via `settings.filter_expired_from_matches`. |
+| `PLAN_PREFILTER_ENABLED` | `false` | When `true`, `/plan` uses SQL prefilter (`_prefilter_scholarships_query`) before scoring. **Do not enable in production** until ADR-007 decision gate is re-run at ≥300 publishable listings and HTTP `/plan` p95 is confirmed ≤800 ms. Benchmark: `python -m app.scripts.measure_plan_prefilter`. Parity: `app/tests/test_plan_prefilter_parity.py`. |
+
+Do **not** change this flag in production without re-running persona and eval regression tests — it affects who appears in `/plan` results.
+
 ## Vercel (frontend)
 
 - **Root directory:** `frontend`

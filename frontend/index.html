@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Iskonnect - Scholarship Matching Platform</title>
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- SEC-03: CSP report-only baseline for SPA. Move to enforcing header at hosting layer after violation review. -->
+    <meta
+      http-equiv="Content-Security-Policy-Report-Only"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://*.ingest.sentry.io; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    />
     <!-- Apply theme class before React paints (avoids flash). Default = light when no key. -->
     <script>
       (function () {

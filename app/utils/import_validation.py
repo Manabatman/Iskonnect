@@ -31,6 +31,7 @@ def validate_import_row(
     *,
     live_dedupe_keys: set[str] | None = None,
     pending_dedupe_keys: set[str] | None = None,
+    known_org_names: set[str] | None = None,
 ) -> dict[str, Any]:
     """
     Validate one raw import row. Returns structured result for import reports.
@@ -61,6 +62,9 @@ def validate_import_row(
     _warn_missing(sch.application_deadline, "deadline", warnings)
     _warn_missing(sch.link, "application_link", warnings)
     _warn_missing(sch.provider, "provider", warnings)
+    if known_org_names is not None and sch.provider:
+        if sch.provider.strip().lower() not in known_org_names:
+            warnings.append("unknown_provider")
     _warn_url(sch.link, "link", warnings)
     if sch.image_url:
         _warn_url(sch.image_url, "image", warnings)

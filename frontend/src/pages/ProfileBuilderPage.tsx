@@ -12,12 +12,14 @@ import {
   DRAFT_KEY,
   INITIAL_STATE,
   clearProfileDraft,
-  type ProfileBuilderState,
+  mergeProfileDrafts,
   parseDraftFromStorage,
+  validateProfileBuilderStep,
+  type ProfileBuilderState,
   profileBuilderReducer,
 } from "../components/profile-builder/profileBuilderState";
 import { StepperSidebar } from "../components/profile-builder/StepperSidebar";
-import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
+import { AUTH_USER_CHANGED_EVENT, type AuthUserChangedDetail, useAuth } from "../contexts/AuthContext";
 import { buildStudentProfileFromBuilderState } from "../utils/studentProfilePayload";
 import { profileToInitialValues } from "../utils/profileDraft";
 import { validateEmail } from "../utils/validateEmail";
@@ -55,6 +57,7 @@ export function ProfileBuilderPage() {
   const [serverLoading, setServerLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [stepError, setStepError] = useState<string | null>(null);
   const [saveOk, setSaveOk] = useState<string | null>(null);
   const [consentModalOpen, setConsentModalOpen] = useState(false);
   const [sampleMatches, setSampleMatches] = useState<Array<{ id: number; title: string; score?: number; final_score?: number }>>([]);
@@ -64,10 +67,17 @@ export function ProfileBuilderPage() {
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const onAuthChange = () => {
-      clearProfileDraft();
-      dispatch({ type: "RESET" });
-      setCurrentStep(1);
+    const onAuthChange = (event: Event) => {
+      const detail = (event as CustomEvent<AuthUserChangedDetail>).detail;
+      const prev = detail?.previousUserId ?? null;
+      const next = detail?.userId ?? null;
+      // Anonymous → authenticated: keep local draft; server merge runs in profiles/me effect.
+      if (prev === null && next !== null) return;
+      if (next === null || (prev !== null && prev !== next)) {
+        clearProfileDraft();
+        dispatch({ type: "RESET" });
+        setCurrentStep(1);
+      }
     };
     window.addEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
     return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
@@ -87,8 +97,10 @@ export function ProfileBuilderPage() {
         if ("id" in row && row.id != null) {
           hadProfileOnLoadRef.current = true;
         }
-        const flat = profileToInitialValues(row as { id?: number; [key: string]: unknown });
-        dispatch({ type: "LOAD_DRAFT", draft: flat });
+        const serverFlat = profileToInitialValues(row as { id?: number; [key: string]: unknown });
+        const localDraft = parseDraftFromStorage(localStorage.getItem(DRAFT_KEY)) ?? {};
+        const merged = mergeProfileDrafts(localDraft, serverFlat);
+        dispatch({ type: "LOAD_DRAFT", draft: merged });
       })
       .catch(() => {
         /* keep local draft */
@@ -182,8 +194,19 @@ export function ProfileBuilderPage() {
     dispatch({ type: "SET_FIELD", field, value });
   }, []);
 
-  const goNext = () => setCurrentStep((s) => Math.min(TOTAL_STEPS, s + 1));
-  const goBack = () => setCurrentStep((s) => Math.max(1, s - 1));
+  const goNext = () => {
+    const validationError = validateProfileBuilderStep(currentStep, state, validateEmail);
+    if (validationError) {
+      setStepError(validationError);
+      return;
+    }
+    setStepError(null);
+    setCurrentStep((s) => Math.min(TOTAL_STEPS, s + 1));
+  };
+  const goBack = () => {
+    setStepError(null);
+    setCurrentStep((s) => Math.max(1, s - 1));
+  };
 
   const stepContent = useMemo(() => {
     switch (currentStep) {
@@ -305,8 +328,13 @@ export function ProfileBuilderPage() {
           </p>
         ) : null}
         {saveError ? (
-          <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100">
+          <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100" role="alert">
             {saveError}
+          </p>
+        ) : null}
+        {stepError ? (
+          <p className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-100" role="alert">
+            {stepError}
           </p>
         ) : null}
 

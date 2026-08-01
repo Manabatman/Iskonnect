@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import type { OrganizationProfile } from "../types";
 import { apiFetch } from "../api/client";
 import { BackNavLink } from "../components/BackNavLink";
+import { resolveUserErrorMessage } from "../constants/errorCopy";
 
 export function OrganizationPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,7 +29,7 @@ export function OrganizationPage() {
         if (!cancelled) setOrg(data);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Something went wrong");
+        if (!cancelled) setError(resolveUserErrorMessage(err, "load_failed"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -73,6 +74,8 @@ export function OrganizationPage() {
               <img
                 src={org.logo_url}
                 alt=""
+                width={64}
+                height={64}
                 className="h-16 w-16 rounded-lg border border-slate-200 object-contain dark:border-slate-600"
               />
             ) : (

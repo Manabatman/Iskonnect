@@ -7,6 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 from app.matching.hard_filters import (
     DEADLINE_PASSED_MESSAGE,
+    cities_match,
     filter_scholarships,
     is_application_deadline_passed,
 )
@@ -30,52 +31,18 @@ def _get_field_match_level(
     eligible_specific: list,
     needs_tags: list,
 ) -> str:
-    """Determine field match level: exact, broad, partial, none."""
-    from app.matching.field_match import (
-        profile_fields_for_matching,
-        psced_code_matches,
-        specific_course_matches,
+    """Determine field match level: exact, sibling, discipline, partial, or none."""
+    from app.matching.field_match import compute_field_match_level
+
+    return compute_field_match_level(
+        profile_field_broad,
+        profile_field_specific,
+        profile_preferred_courses,
+        profile_needs,
+        eligible_psced,
+        eligible_specific,
+        needs_tags,
     )
-
-    eligible_psced = [str(x).strip().lower() for x in (eligible_psced or []) if x]
-    eligible_specific = [str(x).strip().lower() for x in (eligible_specific or []) if x]
-    needs_tags = [str(x).strip().lower() for x in (needs_tags or []) if x]
-    profile_broad = (profile_field_broad or "").strip().lower()
-    profile_specific = (profile_field_specific or "").strip().lower()
-    profile_needs = [str(x).strip().lower() for x in (profile_needs or []) if x]
-
-    profile_fields_to_check = [f for f in profile_fields_for_matching(profile_field_broad) if f]
-
-    preferred_courses = [str(x).strip().lower() for x in (profile_preferred_courses or []) if x]
-
-    if profile_fields_to_check and eligible_psced:
-        for pf in profile_fields_to_check:
-            if pf in eligible_psced:
-                return "exact"
-        for pf in profile_fields_to_check:
-            for ep in eligible_psced:
-                if psced_code_matches(pf, ep):
-                    return "broad"
-    courses_to_check = preferred_courses or ([profile_specific] if profile_specific else [])
-    for course in courses_to_check:
-        if course and eligible_specific:
-            if course in eligible_specific:
-                return "exact"
-            if any(specific_course_matches(course, es) for es in eligible_specific):
-                return "exact"
-    if profile_specific and eligible_specific:
-        if profile_specific in eligible_specific:
-            return "exact"
-        if any(specific_course_matches(profile_specific, ps) for ps in eligible_specific):
-            return "exact"
-    if profile_needs and needs_tags:
-        for pn in profile_needs:
-            for nt in needs_tags:
-                if pn in nt or nt in pn:
-                    return "broad"
-    if profile_broad or profile_needs:
-        return "partial"
-    return "none"
 
 
 def _get_geographic_match_level(
@@ -92,7 +59,7 @@ def _get_geographic_match_level(
 
     if eligible_cities and profile_city_lower:
         for ec in eligible_cities:
-            if ec and (ec.strip().lower() in profile_city_lower or profile_city_lower in ec.strip().lower()):
+            if ec and cities_match(profile_city, ec):
                 return "city"
 
     for r in regions:
@@ -119,6 +86,8 @@ def _get_geographic_match_level(
 
 def _get_equity_flags(profile: dict) -> dict[str, bool]:
     """Extract equity flags from profile for payload."""
+    from app.taxonomy.profile_priority_groups import profile_student_athlete, profile_working_student
+
     return {
         "is_underprivileged": bool(profile.get("is_underprivileged")),
         "is_pwd": bool(profile.get("is_pwd")),
@@ -131,6 +100,8 @@ def _get_equity_flags(profile: dict) -> dict[str, bool]:
         "is_uniformed_service_dependent": bool(profile.get("is_uniformed_service_dependent")),
         "is_gsis_dependent": bool(profile.get("is_gsis_dependent")),
         "is_sss_dependent": bool(profile.get("is_sss_dependent")),
+        "working_student": profile_working_student(profile),
+        "student_athlete": profile_student_athlete(profile),
         "underprivileged": bool(profile.get("is_underprivileged")),
         "pwd": bool(profile.get("is_pwd")),
         "ip": bool(profile.get("is_indigenous_people")),
@@ -246,6 +217,10 @@ class MatchService:
             legacy_regions,
         )
 
+        elig = scholarship.get("_eligibility_result") or {}
+        qual_status = elig.get("qualification_status", "qualified")
+        is_provisional = qual_status == "provisionally_qualified"
+
         return ScoringPayload(
             gwa_normalized=profile.get("gwa_normalized"),
             household_income_annual=income,
@@ -263,6 +238,7 @@ class MatchService:
             eligible_cities=eligible_cities,
             has_geographic_restriction=has_geographic_restriction,
             has_field_restriction=has_field_restriction,
+            is_provisional=is_provisional,
         )
 
     def _build_match_result(self, scholarship: dict, scoring_result: ScoringResult, profile: dict | None = None) -> dict:
@@ -292,6 +268,11 @@ class MatchService:
                 if line not in explanation:
                     explanation.append(line)
 
+        unverified = elig.get("unverified_requirements") or []
+        provisional_reason = elig.get("provisional_reason") or ""
+        if provisional_reason and provisional_reason not in explanation:
+            explanation.insert(0, provisional_reason)
+
         scoring = {
             "score": scoring_result.final_score,
             "final_score": scoring_result.final_score,
@@ -309,5 +290,7 @@ class MatchService:
             "missing_requirements": missing,
             "eligibility_confidence": elig.get("eligibility_confidence"),
             "requirements": elig.get("requirements") or [],
+            "unverified_requirements": unverified,
+            "provisional_reason": provisional_reason,
         }
         return build_match_result_payload(scholarship, scoring=scoring)

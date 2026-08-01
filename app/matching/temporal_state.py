@@ -9,7 +9,9 @@ from app.matching.eligibility_result import QualificationStatus, evaluate_eligib
 from app.matching.hard_filters import _hard_filter_failure_stage, is_application_deadline_passed
 from app.matching.profile_completeness import profile_completeness_payload
 from app.prediction.cycle_predictor import predict_next_open, _parse_date as parse_cycle_date
+from app.utils.application_status import NEEDS_VERIFICATION
 from app.utils.json_helpers import parse_json_list
+from app.utils.trust_constants import STALE_VERIFICATION_DAYS
 
 # Canonical eligibility states exposed to API/UI
 ELIGIBLE_NOW = "eligible_now"
@@ -45,6 +47,32 @@ UI_STATE_MAP: dict[str, str] = {
 }
 
 SOON_DAYS = 90
+
+
+def _parse_verified_at(val: Any) -> datetime | None:
+    if val is None:
+        return None
+    if isinstance(val, datetime):
+        return val
+    if isinstance(val, date):
+        return datetime(val.year, val.month, val.day)
+    if isinstance(val, str) and val.strip():
+        try:
+            return datetime.fromisoformat(val.strip().replace("Z", "+00:00")[:19])
+        except ValueError:
+            return None
+    return None
+
+
+def _null_deadline_stale_verification(sch: dict, today: date | None = None) -> bool:
+    """Null deadline with missing or stale verification must not read as actively open."""
+    if _parse_open_date(sch.get("application_deadline")) is not None:
+        return False
+    verified_at = _parse_verified_at(sch.get("last_verified_at"))
+    if verified_at is None:
+        return True
+    age_days = (datetime.utcnow() - verified_at.replace(tzinfo=None)).days
+    return age_days > STALE_VERIFICATION_DAYS
 
 
 def map_to_ui_state(eligibility_state: str) -> str:
@@ -229,12 +257,17 @@ def classify_scholarship_temporal(
     open_now = _is_application_open(sch, today)
     if open_now:
         state = PREPARE_NOW if _needs_preparation(sch) else ELIGIBLE_NOW
+        lifecycle_hint = "open"
+        gap_reason = None
+        if _null_deadline_stale_verification(sch, today):
+            lifecycle_hint = "needs_verification"
+            gap_reason = "No application deadline is listed and our last verification is outdated — confirm on the official site."
         return {
             "eligibility_state": state,
-            "gap_reason": None,
+            "gap_reason": gap_reason,
             "predicted_open": None,
             "next_action": _next_action(state, sch),
-            "lifecycle_hint": "open",
+            "lifecycle_hint": lifecycle_hint,
         }
 
     if _opens_within_days(sch, SOON_DAYS, today):
@@ -272,4 +305,6 @@ def attach_temporal_fields(match_row: dict, profile: dict) -> dict:
     temporal = classify_scholarship_temporal(profile, match_row)
     state = temporal.get("eligibility_state", "")
     out = {**match_row, **temporal, "ui_state": map_to_ui_state(state)}
+    if temporal.get("lifecycle_hint") == "needs_verification":
+        out["application_status"] = NEEDS_VERIFICATION
     return out

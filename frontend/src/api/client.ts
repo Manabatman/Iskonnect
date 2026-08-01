@@ -18,6 +18,9 @@ if (!_apiBase && typeof console !== "undefined") {
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
 
+/** Dispatched when refresh token fails after a 401 — SessionExpiryHandler listens (UX-15). */
+export const AUTH_SESSION_EXPIRED_EVENT = "iskonnect-auth-session-expired";
+
 const PERF_LOG_PATHS = [
   "/auth/login",
   "/auth/me",
@@ -108,6 +111,9 @@ async function refreshAccessToken(): Promise<string | null> {
     if (!res.ok) {
       localStorage.removeItem(AUTH_REFRESH_KEY);
       localStorage.removeItem(AUTH_TOKEN_KEY);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+      }
       return null;
     }
     const data = (await res.json()) as { access_token?: string; refresh_token?: string };
@@ -174,6 +180,8 @@ export async function apiFetch(path: string, options?: RequestInit): Promise<Res
         const newToken = await refreshAccessToken();
         if (newToken) {
           res = await attempt(withBearerToken(options, newToken));
+        } else if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
         }
       }
       maybeLogServerTiming(path, res);

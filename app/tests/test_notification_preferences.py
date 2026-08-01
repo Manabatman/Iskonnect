@@ -30,13 +30,19 @@ def test_notification_preferences_roundtrip(api_with_db):
     data = r.json()
     assert data["notify_deadline_reminders"] is True
     assert data["notify_new_matches"] is True
+    assert data["notify_weekly_digest"] is True
 
     r2 = client.patch(
         "/api/v1/settings/notifications",
         headers=headers,
-        json={"notify_deadline_reminders": False, "notify_new_matches": False},
+        json={
+            "notify_deadline_reminders": False,
+            "notify_new_matches": False,
+            "notify_weekly_digest": False,
+        },
     )
     assert r2.status_code == 200, r2.text
     updated = r2.json()
     assert updated["notify_deadline_reminders"] is False
     assert updated["notify_new_matches"] is False
+    assert updated["notify_weekly_digest"] is False

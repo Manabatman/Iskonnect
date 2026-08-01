@@ -36,18 +36,19 @@ function filledState(overrides: Partial<ProfileBuilderState> = {}): ProfileBuild
 }
 
 describe("profile completion", () => {
-  it("treats income bracket OR annual income as one field", () => {
-    const withAnnual = filledState({ income_bracket: "" });
-    const withBracket = filledState({ household_income_annual: "", income_bracket: "below_250k" });
-    const stepAnnual = computeStepCompletion(withAnnual, 3);
-    const stepBracket = computeStepCompletion(withBracket, 3);
-    expect(stepAnnual.filled).toBe(stepBracket.filled);
-    expect(stepAnnual.total).toBe(4);
+  it("100% when all save-required fields are filled", () => {
+    const state = filledState();
+    expect(computeOverallCompletion(state)).toBe(100);
   });
 
-  it("does not require parent_occupation for 100%", () => {
-    const state = filledState({ parent_occupation: "" });
+  it("does not require enrollment_status or parent_occupation for 100%", () => {
+    const state = filledState({ enrollment_status: "", current_year_level: "", parent_occupation: "" });
     expect(computeOverallCompletion(state)).toBe(100);
+  });
+
+  it("step 3 tracks region only for required fields", () => {
+    const withRegion = filledState({ province: "", city_municipality: "", household_income_annual: "", income_bracket: "" });
+    expect(computeStepCompletion(withRegion, 3)).toEqual({ filled: 1, total: 1 });
   });
 });
 

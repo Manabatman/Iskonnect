@@ -3,8 +3,12 @@ import { Reveal } from "./Reveal";
 
 export function OfficialSourcesBar() {
   return (
-    <section className="border-b border-slate-200 bg-white py-10 dark:border-slate-800 dark:bg-slate-950">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section
+      id="sources"
+      data-testid="landing-sources"
+      className="border-b border-slate-200 bg-white py-10 dark:border-slate-800 dark:bg-slate-950 sm:py-12"
+    >
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
         <Reveal>
           <div className="flex flex-col items-center gap-4">
             <p className="text-sm font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">

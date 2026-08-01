@@ -23,6 +23,7 @@ from app.utils.timezone import utc_now_naive
 from app.taxonomy.regions import canonical_region_label
 from app.taxonomy.priority_groups import normalize_priority_groups
 from app.taxonomy.school_registry import resolve_school_ids
+from app.taxonomy.organizations import link_organization_on_row
 
 
 class PersistResult:
@@ -220,6 +221,7 @@ def persist_scholarship_from_schema(
                 changed_by=version_changed_by,
             )
         apply_quality_scores(existing, db)
+        link_organization_on_row(db, existing)
         if auto_commit:
             db.commit()
             db.refresh(existing)
@@ -242,6 +244,7 @@ def persist_scholarship_from_schema(
         db_scholarship.data_status = "active"
     db.add(db_scholarship)
     db.flush()
+    link_organization_on_row(db, db_scholarship)
     apply_quality_scores(db_scholarship, db)
     snap = snapshot_scholarship_row(db_scholarship)
     record_scholarship_version(

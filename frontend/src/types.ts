@@ -46,6 +46,9 @@ export interface StudentProfile {
   is_uniformed_service_dependent?: boolean;
   is_gsis_dependent?: boolean;
   is_sss_dependent?: boolean;
+  employment_status?: string;
+  evening_weekend_program?: boolean;
+  athlete_level?: string;
   parent_occupation?: string;
   documents?: Array<{ type: string; status: string }>;
   privacy_consent?: boolean;
@@ -278,7 +281,17 @@ export interface MatchResult {
   qualification_status?: QualificationStatus | string;
   qualifying_requirements?: string[];
   missing_requirements?: string[];
+  unverified_requirements?: string[];
+  provisional_reason?: string | null;
   eligibility_confidence?: string;
+  requirements?: Array<{
+    key?: string;
+    label?: string;
+    kind?: string;
+    result?: string;
+    verified?: string;
+    evidence?: string | null;
+  }>;
   verification_badge?: string | null;
   verification_badge_label?: string | null;
   verification_source_label?: string | null;
@@ -327,6 +340,7 @@ export interface ScholarshipInfo {
   id: number;
   title: string;
   provider?: string | null;
+  provider_display?: string | null;
   link: string | null;
   description: string;
   regions: string[];

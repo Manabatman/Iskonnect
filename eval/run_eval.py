@@ -330,9 +330,34 @@ def run_full_evaluation() -> dict:
         scholarships,
         lambda p: _engine_eligible_ids_prod(svc, db, p),
     )
+    strict_fn = lambda p, s: is_eligible(p, s, unknown_policy="strict")
+    strict_core = evaluate(
+        "CORE (strict oracle)",
+        strict_fn,
+        profiles,
+        scholarships,
+        lambda p: _engine_eligible_ids_core(svc, p, scholarships),
+    )
+    strict_prod = evaluate(
+        "PROD (strict oracle)",
+        strict_fn,
+        profiles,
+        scholarships,
+        lambda p: _engine_eligible_ids_prod(svc, db, p),
+    )
+    sc = strict_core["confusion"]
+    sp = strict_prod["confusion"]
+    over_inclusion_core = sc["FP"] / (sc["TP"] + sc["FP"]) if (sc["TP"] + sc["FP"]) else 0.0
+    over_inclusion_prod = sp["FP"] / (sp["TP"] + sp["FP"]) if (sp["TP"] + sp["FP"]) else 0.0
     return {
         "core": core,
         "prod": prod,
+        "strict_core": strict_core,
+        "strict_prod": strict_prod,
+        "over_inclusion_rate": {
+            "core": over_inclusion_core,
+            "prod": over_inclusion_prod,
+        },
         "dataset": {"profiles": len(profiles), "scholarships": len(scholarships)},
     }
 
@@ -392,6 +417,12 @@ def main():
         print("  FP examples:")
         for ex in r["fp_examples"][:8]:
             print(f"    profile#{ex[0]} got '{ex[1]}' -> {ex[2]}")
+
+    oir = report.get("over_inclusion_rate", {})
+    print("\n" + "=" * 78)
+    print("STRICT ORACLE — over-inclusion rate (engine FP vs strict baseline; report-only)")
+    print(f"  CORE over_inclusion_rate={_fmt_pct(oir.get('core'))}")
+    print(f"  PROD over_inclusion_rate={_fmt_pct(oir.get('prod'))}")
 
 
 if __name__ == "__main__":

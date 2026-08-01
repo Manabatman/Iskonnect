@@ -38,7 +38,7 @@ function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebar
       <div className="flex gap-2 overflow-x-auto pb-1 lg:hidden" role="tablist" aria-label="Profile steps">
         {PROFILE_BUILDER_STEPS.map((s) => {
           const { filled, total } = computeStepCompletion(state, s.id);
-          const done = filled === total && total > 0;
+          const done = total > 0 ? filled === total : false;
           const active = currentStep === s.id;
           return (
             <button
@@ -67,7 +67,7 @@ function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebar
       <nav className="hidden space-y-2 lg:block" aria-label="Profile steps">
         {PROFILE_BUILDER_STEPS.map((s) => {
           const { filled, total } = computeStepCompletion(state, s.id);
-          const done = filled === total && total > 0;
+          const done = total > 0 ? filled === total : false;
           const active = currentStep === s.id;
           return (
             <button
@@ -102,8 +102,8 @@ function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebar
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">{s.label}</span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  {filled}/{total} fields
+                <span className="text-xs text-slate-600 dark:text-slate-400">
+                  {total > 0 ? `${filled}/${total} required` : "Optional — improves matches"}
                 </span>
               </span>
             </button>

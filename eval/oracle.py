@@ -6,12 +6,19 @@ It does NOT import the engine's hard_filters; region normalization, level
 bucketing, and field bridging are implemented here independently so the oracle
 represents *correct* behaviour rather than the engine's behaviour.
 
-Guiding principle (per the brief): missing a scholarship is worse than an extra
+Guiding principle (lenient mode): missing a scholarship is worse than an extra
 one, so when STUDENT data is missing we give the benefit of the doubt (eligible).
 Scholarship restrictions that are present are enforced.
+
+Strict mode (unknown_policy="strict") fails closed on missing student data so CI
+can measure engine over-inclusion against a conservative baseline.
 """
 
 from __future__ import annotations
+
+from typing import Literal
+
+UnknownPolicy = Literal["lenient", "strict"]
 
 # --- Region normalization (independent of engine) ---
 _REGION_ALIASES = {
@@ -19,6 +26,8 @@ _REGION_ALIASES = {
     "barmm": "barmm", "bangsamoro": "barmm",
     "car": "car", "cordillera": "car",
     "calabarzon": "region iv-a - calabarzon", "region iv-a - calabarzon": "region iv-a - calabarzon",
+    "region 4a": "region iv-a - calabarzon", "region 4a - calabarzon": "region iv-a - calabarzon",
+    "region iv-a": "region iv-a - calabarzon",
     "central visayas": "region vii - central visayas", "region vii - central visayas": "region vii - central visayas",
     "davao": "region xi - davao", "davao region": "region xi - davao", "region xi - davao": "region xi - davao",
     "central luzon": "region iii - central luzon", "region iii - central luzon": "region iii - central luzon",
@@ -49,22 +58,13 @@ def _bucket(level: str | None) -> str | None:
     return _LEVEL_BUCKET.get(level.strip().lower(), level.strip().lower())
 
 
-# --- Field taxonomy (independent, with broad<->specific bridge) ---
-_PARENTS = {"engineering": ["stem"], "it": ["stem"], "science": ["stem"], "mathematics": ["stem"]}
+from app.matching.field_match import profile_fields_for_matching, specific_course_matches
+from app.taxonomy.psced_fields import PSCED_SPECIFIC_COURSES, resolve_normalized_field
+
+# Oracle-specific course bridge (same vocabulary as engine; independent matching logic)
 _SPECIFIC_BY_BROAD = {
-    "stem": ["bs biology", "bs chemistry", "bs physics", "bs mathematics", "bs computer science"],
-    "engineering": ["bs civil engineering", "bs mechanical engineering", "bs electrical engineering"],
-    "it": ["bs information technology", "bs computer science", "bs information systems"],
-    "medical": ["bs nursing", "bs medicine", "bs pharmacy", "bs medical technology"],
-    "business": ["bs accountancy", "bs business administration", "bs economics"],
-    "education": ["beed", "bsed", "bs education"],
-    "agriculture": ["bs agriculture", "bs forestry"],
-    "arts": ["ba communication", "ba psychology", "ab political science"],
-    "architecture": ["bs architecture"],
-    "science": ["bs biology", "bs chemistry", "bs physics"],
-    "mathematics": ["bs mathematics"],
-    "humss": ["ab political science", "ab communication"],
-    "tvl": ["cookery nc ii"],
+    broad.lower(): [c.lower() for c in courses]
+    for broad, courses in PSCED_SPECIFIC_COURSES.items()
 }
 
 _PRIORITY_GROUP_TO_FLAG = {
@@ -80,23 +80,27 @@ _PRIORITY_GROUP_TO_FLAG = {
 _MERIT_TYPES = ("merit", "merit-based", "academic")
 
 
-def _field_eligible(profile: dict, sch: dict) -> bool:
+def _strict_missing(*values) -> bool:
+    return any(v is None or (isinstance(v, str) and not str(v).strip()) for v in values)
+
+
+def _field_eligible(profile: dict, sch: dict, *, unknown_policy: UnknownPolicy) -> bool:
     restr_psced = {str(c).strip().lower() for c in (sch.get("eligible_courses_psced") or []) if c}
     restr_spec = {str(c).strip().lower() for c in (sch.get("eligible_courses_specific") or []) if c}
     if not restr_psced and not restr_spec:
         return True
-    broad = (profile.get("field_of_study_broad") or "").strip().lower()
+    broad_raw = profile.get("field_of_study_broad") or ""
+    broad = (resolve_normalized_field(broad_raw) or broad_raw).strip().lower()
     prefs = [str(p).strip().lower() for p in (profile.get("preferred_courses") or []) if p]
     spec = (profile.get("field_of_study_specific") or "").strip().lower()
     if spec:
         prefs.append(spec)
     if not broad and not prefs:
-        return True  # no field data -> benefit of the doubt
+        if unknown_policy == "strict":
+            return False
+        return True  # no field data -> benefit of the doubt (lenient)
 
-    disc = set()
-    if broad:
-        disc.add(broad)
-        disc.update(_PARENTS.get(broad, []))
+    disc = set(profile_fields_for_matching(broad_raw or broad))
     if disc & restr_psced:
         return True
     if restr_spec and any(p in restr_spec for p in prefs):
@@ -112,8 +116,10 @@ def _field_eligible(profile: dict, sch: dict) -> bool:
     return False
 
 
-def is_eligible(profile: dict, sch: dict) -> bool:
+def is_eligible(profile: dict, sch: dict, *, unknown_policy: UnknownPolicy = "lenient") -> bool:
     """Return True if the admin would consider the student eligible for the scholarship."""
+    strict = unknown_policy == "strict"
+
     # data quality gates (engine and reality agree)
     if sch.get("is_active") is False:
         return False
@@ -127,14 +133,20 @@ def is_eligible(profile: dict, sch: dict) -> bool:
             return False
         if sch.get("max_age") is not None and age > sch["max_age"]:
             return False
+    elif strict and (sch.get("min_age") is not None or sch.get("max_age") is not None):
+        return False
 
     # education level
     levels = [str(x).strip().lower() for x in (sch.get("eligible_levels") or []) if x]
     plevel = _bucket(profile.get("education_level") or profile.get("current_academic_stage"))
-    if levels and plevel is not None:
-        buckets = {_bucket(x) for x in levels}
-        if plevel not in buckets and plevel not in levels:
-            return False
+    if levels:
+        if plevel is None:
+            if strict:
+                return False
+        else:
+            buckets = {_bucket(x) for x in levels}
+            if plevel not in buckets and plevel not in levels:
+                return False
 
     # region / city
     regions = [r for r in (sch.get("eligible_regions") or []) if r]
@@ -152,15 +164,21 @@ def is_eligible(profile: dict, sch: dict) -> bool:
             sch_regions = {_onorm(r) for r in regions}
             if pregion in sch_regions:
                 matched = True
-        # residency-required city grants need a verifiable location
         if not matched:
+            if strict and _strict_missing(profile.get("region"), profile.get("city_municipality")):
+                return False
+            if not strict and not pcity and not pregion:
+                return True  # lenient: benefit of the doubt
             return False
 
     # school type
     est = [str(x).strip().lower() for x in (sch.get("eligible_school_types") or []) if x]
     pst = (profile.get("school_type") or "").strip().lower()
-    if est and pst:
-        if pst not in est:
+    if est:
+        if not pst:
+            if strict:
+                return False
+        elif pst not in est:
             return False
 
     # specific HEI / system
@@ -174,7 +192,9 @@ def is_eligible(profile: dict, sch: dict) -> bool:
         target_id = profile.get("target_school_id") or resolve_school_id(profile.get("target_school"))
         profile_ids = [x for x in (school_id, target_id) if x]
         if not profile_ids:
-            return True  # benefit of the doubt when school data missing
+            if strict:
+                return False
+            return True  # benefit of the doubt when school data missing (lenient)
         if eligible_schools and not any(pid in eligible_schools for pid in profile_ids):
             return False
         if eligible_systems:
@@ -193,7 +213,10 @@ def is_eligible(profile: dict, sch: dict) -> bool:
         from app.taxonomy.schools import school_category_for_profile
 
         cat = school_category_for_profile(profile)
-        if cat and cat.strip().lower() not in eligible_categories:
+        if not cat:
+            if strict:
+                return False
+        elif cat.strip().lower() not in eligible_categories:
             return False
 
     # year level
@@ -206,39 +229,54 @@ def is_eligible(profile: dict, sch: dict) -> bool:
     if eligible_levels:
         current = profile.get("current_year_level")
         nxt = profile.get("next_year_level")
-        if current is not None or nxt is not None:
-            if not any(int(v) in eligible_levels for v in (current, nxt) if v is not None):
+        if current is None and nxt is None:
+            if strict:
                 return False
+        elif not any(int(v) in eligible_levels for v in (current, nxt) if v is not None):
+            return False
 
     # enrollment status
     eligible_status = [str(x).strip().lower() for x in (sch.get("eligible_enrollment_status") or []) if x]
     status = (profile.get("enrollment_status") or "").strip().lower()
-    if eligible_status and status and status not in eligible_status:
-        return False
+    if eligible_status:
+        if not status:
+            if strict:
+                return False
+        elif status not in eligible_status:
+            return False
 
     # citizenship
     required_cit = (sch.get("citizenship_required") or "Filipino").strip().lower()
     if required_cit not in ("any", "none", "open", ""):
-        pcit = (profile.get("citizenship") or "Filipino").strip().lower()
-        if pcit != required_cit:
+        pcit = (profile.get("citizenship") or "").strip().lower()
+        if not pcit:
+            if strict:
+                return False
+        elif pcit != required_cit:
             return False
 
     # income ceiling (a stated ceiling is a hard cap)
     ceil = sch.get("max_income_threshold")
     pinc = profile.get("household_income_annual")
-    if ceil is not None and pinc is not None:
-        if pinc > ceil:
+    if ceil is not None:
+        if pinc is None and not (profile.get("income_bracket") or "").strip():
+            if strict:
+                return False
+        elif pinc is not None and pinc > ceil:
             return False
 
     # GWA minimum
     mingwa = sch.get("min_gwa_normalized")
     pgwa = profile.get("gwa_normalized")
-    if mingwa is not None and pgwa is not None:
-        if pgwa < mingwa:
+    if mingwa is not None:
+        if pgwa is None:
+            if strict:
+                return False
+        elif pgwa < mingwa:
             return False
 
     # field of study
-    if not _field_eligible(profile, sch):
+    if not _field_eligible(profile, sch, unknown_policy=unknown_policy):
         return False
 
     # exclusive priority groups (members-only)

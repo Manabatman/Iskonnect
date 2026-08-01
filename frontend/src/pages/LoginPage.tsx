@@ -10,14 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { safeReturnPath } from "../utils/returnPath";
+
 const AUTH_PANEL_PRIMARY = "/images/auth/login-illustration.jpg";
 const AUTH_PANEL_FALLBACK = "/images/hero/hero-1.svg";
-
-function safeReturnPath(from: unknown): string | null {
-  if (typeof from !== "string" || !from.startsWith("/")) return null;
-  if (from.startsWith("//")) return null;
-  return from;
-}
 
 export function LoginPage() {
   const { login, user, loading: authLoading } = useAuth();
@@ -33,15 +29,19 @@ export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [authPanelSrc, setAuthPanelSrc] = useState(AUTH_PANEL_PRIMARY);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    setEmailError(null);
     const emailCheck = validateEmail(email);
     if (!emailCheck.valid) {
-      setError(emailCheck.message ?? "Enter a valid email address.");
+      const message = emailCheck.message ?? "Enter a valid email address.";
+      setEmailError(message);
+      setError(message);
       return;
     }
     setLoading(true);
@@ -65,6 +65,8 @@ export function LoginPage() {
         <img
           src={authPanelSrc}
           alt=""
+          width={800}
+          height={600}
           decoding="async"
           loading="lazy"
           onError={() => setAuthPanelSrc((s) => (s === AUTH_PANEL_PRIMARY ? AUTH_PANEL_FALLBACK : s))}
@@ -99,10 +101,19 @@ export function LoginPage() {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError(null);
+                }}
                 placeholder="you@example.com"
                 autoComplete="email"
+                error={emailError ?? undefined}
               />
+              {emailError ? (
+                <p id="email-error" className="text-sm text-tone-danger">
+                  {emailError}
+                </p>
+              ) : null}
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -126,7 +137,11 @@ export function LoginPage() {
           </form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link to="/register" className="font-semibold text-primary hover:underline">
+            <Link
+              to="/register"
+              state={returnTo ? { from: returnTo } : undefined}
+              className="font-semibold text-primary hover:underline"
+            >
               Register
             </Link>
           </p>

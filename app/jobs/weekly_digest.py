@@ -32,6 +32,8 @@ def run_weekly_digest() -> dict[str, int]:
         scholarships = get_cached_scholarship_dicts(db)
         svc = MatchService()
         for user in users:
+            if not bool(getattr(user, "notify_weekly_digest", True)):
+                continue
             profile_row = db.query(models.Student).filter(models.Student.user_id == user.id).first()
             if not profile_row:
                 continue

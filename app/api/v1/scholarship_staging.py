@@ -21,6 +21,7 @@ from app.scholarship_cache import invalidate_scholarship_cache
 from app.utils.audit import log_action
 from app.utils.dedupe import scholarship_dedupe_key
 from app.utils.duplicate_candidates import find_duplicate_candidates, merge_confidence
+from app.taxonomy.organizations import known_organization_names
 from app.utils.import_validation import summarize_import_report, validate_import_row
 from app.utils.scholarship_persist import find_existing_scholarship
 from app.utils.scholarship_versioning import diff_snapshots, snapshot_scholarship_row
@@ -138,13 +139,19 @@ def import_staging_rows(
     live_keys = _live_dedupe_keys(db)
     pending_keys = _pending_dedupe_keys(db)
     catalog = _live_catalog_index(db)
+    known_orgs = known_organization_names(db)
     report_rows: list[dict[str, Any]] = []
     created = 0
     skipped = 0
     invalid = 0
 
     for row in body.rows:
-        result = validate_import_row(row, live_dedupe_keys=live_keys, pending_dedupe_keys=pending_keys)
+        result = validate_import_row(
+            row,
+            live_dedupe_keys=live_keys,
+            pending_dedupe_keys=pending_keys,
+            known_org_names=known_orgs,
+        )
         if result.get("status") == "invalid":
             invalid += 1
             report_rows.append(result)

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { trackOutboundClick } from "../utils/trackOutboundClick";
 import type { ScholarshipInfo } from "../types";
 import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 import { normalizeScholarshipRegions } from "../utils/normalizeLocation";
@@ -236,6 +237,13 @@ export function ScholarshipDetailPanel({ scholarship, onClose, isOpen }: Scholar
                 href={scholarship.link!}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() =>
+                  trackOutboundClick({
+                    scholarshipId: scholarship.id,
+                    surface: "detail_panel",
+                    linkKind: "apply_official",
+                  })
+                }
                 className="block w-full rounded-lg bg-primary-600 px-4 py-3 text-center font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               >
                 Apply Now →

@@ -2,7 +2,7 @@
 
 export function RouteFallbackSkeleton() {
   return (
-    <div className="mx-auto max-w-6xl animate-pulse px-4 py-8" aria-busy="true" aria-label="Loading page">
+    <div className="mx-auto max-w-6xl animate-pulse px-4 py-8" role="status" aria-busy="true" aria-label="Loading page">
       <div className="h-8 w-2/3 max-w-md rounded-lg bg-slate-200 dark:bg-slate-700" />
       <div className="mt-4 h-4 w-full max-w-xl rounded bg-slate-200 dark:bg-slate-700" />
       <div className="mt-2 h-4 w-5/6 max-w-lg rounded bg-slate-200 dark:bg-slate-700" />
@@ -17,7 +17,7 @@ export function RouteFallbackSkeleton() {
 
 export function DashboardShellSkeleton() {
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6 dark:bg-slate-900" aria-busy="true" aria-label="Loading dashboard">
+    <div className="min-h-screen bg-slate-50 px-4 py-6 dark:bg-slate-900" role="status" aria-busy="true" aria-label="Loading dashboard">
       <div className="mx-auto max-w-6xl animate-pulse space-y-6">
         <div className="h-24 rounded-2xl bg-slate-200 dark:bg-slate-800" />
         <div className="grid gap-4 lg:grid-cols-3">
@@ -38,6 +38,7 @@ export function AuthShellSkeleton() {
   return (
     <div
       className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900"
+      role="status"
       aria-busy="true"
       aria-label="Loading"
     >

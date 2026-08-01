@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ProfileBuilderState } from "./profileBuilderState";
-import { inputClass, labelClass } from "./profileBuilderConstants";
+import { inputClass, labelClass, fieldHintClass } from "./profileBuilderConstants";
 import { validateEmail } from "../../utils/validateEmail";
 
 export interface StepProps {
@@ -29,6 +29,7 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-full_name" className={labelClass}>
             Full name
           </label>
+          <p className={fieldHintClass}>Used on your profile and application exports.</p>
           <input
             id="pb-full_name"
             type="text"
@@ -43,6 +44,7 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-email" className={labelClass}>
             Email
           </label>
+          <p className={fieldHintClass}>For sign-in and deadline reminders — we never share it.</p>
           <input
             id="pb-email"
             type="email"
@@ -75,6 +77,7 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-gender" className={labelClass}>
             Gender
           </label>
+          <p className={fieldHintClass}>Some programs are gender-specific — leave blank if unsure.</p>
           <select
             id="pb-gender"
             value={state.gender}
@@ -91,6 +94,7 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-age" className={labelClass}>
             Age
           </label>
+          <p className={fieldHintClass}>Used for age-limited scholarships (e.g. senior high, undergrad caps).</p>
           <input
             id="pb-age"
             type="number"

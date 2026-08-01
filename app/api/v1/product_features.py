@@ -32,7 +32,6 @@ def _partial_profile_from_query(
         "gwa_normalized": gwa_normalized,
         "household_income_annual": household_income_annual,
         "field_of_study_broad": field_of_study_broad or None,
-        "privacy_consent": True,
     }
 
 

@@ -17,11 +17,46 @@ from app.utils.json_helpers import parse_json
 
 logger = logging.getLogger(__name__)
 from app.limiter import limiter
+from app.plan_cache import invalidate_plan_cache
 from app.taxonomy.income_brackets import get_income_bracket
 from app.taxonomy.gwa_normalizer import normalize_gwa
 from app.taxonomy.school_registry import resolve_school_id
 
 router = APIRouter()
+
+_PII_AUDIT_KEYS = frozenset({"email", "full_name", "guardian_email", "contact_email", "name", "address"})
+
+
+def _redact_audit_details_pii(details: dict | None) -> dict:
+    """Remove PII keys from audit log details while preserving the record."""
+    if not details:
+        return {}
+    return {k: v for k, v in details.items() if k not in _PII_AUDIT_KEYS}
+
+
+def _anonymize_user_feedback(db: Session, user_id: int) -> None:
+    """RA 10173 — anonymize product feedback linked to a deleted account."""
+    db.query(models.ProductFeedback).filter(models.ProductFeedback.user_id == user_id).update(
+        {
+            models.ProductFeedback.user_id: None,
+            models.ProductFeedback.contact_email: None,
+        },
+        synchronize_session=False,
+    )
+
+
+def _redact_user_audit_logs(db: Session, user_id: int) -> None:
+    """Strip PII from audit log details for a user being erased."""
+    rows = db.query(models.AuditLog).filter(models.AuditLog.actor_id == user_id).all()
+    for row in rows:
+        if not row.details:
+            continue
+        try:
+            parsed = json.loads(row.details)
+        except (json.JSONDecodeError, TypeError):
+            continue
+        if isinstance(parsed, dict):
+            row.details = json.dumps(_redact_audit_details_pii(parsed))
 
 
 def _profile_to_response(p, *, include_access_token: bool = False):
@@ -74,6 +109,9 @@ def _profile_to_response(p, *, include_access_token: bool = False):
         "is_uniformed_service_dependent": getattr(p, "is_uniformed_service_dependent", False) or False,
         "is_gsis_dependent": getattr(p, "is_gsis_dependent", False) or False,
         "is_sss_dependent": getattr(p, "is_sss_dependent", False) or False,
+        "employment_status": getattr(p, "employment_status", None),
+        "evening_weekend_program": getattr(p, "evening_weekend_program", None),
+        "athlete_level": getattr(p, "athlete_level", None),
         "parent_occupation": getattr(p, "parent_occupation", None),
         "documents": parse_json(getattr(p, "documents", None), default=[]),
         "privacy_consent_at": p.privacy_consent_at.isoformat() if getattr(p, "privacy_consent_at", None) else None,
@@ -147,6 +185,9 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "is_uniformed_service_dependent": profile.is_uniformed_service_dependent or False,
         "is_gsis_dependent": profile.is_gsis_dependent or False,
         "is_sss_dependent": profile.is_sss_dependent or False,
+        "employment_status": profile.employment_status,
+        "evening_weekend_program": profile.evening_weekend_program,
+        "athlete_level": profile.athlete_level,
         "parent_occupation": profile.parent_occupation,
         "guardian_full_name": strip_tags(profile.guardian_full_name) if profile.guardian_full_name else None,
         "guardian_email": str(profile.guardian_email) if profile.guardian_email else None,
@@ -220,6 +261,7 @@ def put_my_profile(
         setattr(existing, k, v)
     db.commit()
     db.refresh(existing)
+    invalidate_plan_cache(existing.id)
     log_action(
         db,
         actor_id=user_id,
@@ -227,7 +269,7 @@ def put_my_profile(
         action="profile.update",
         resource_type="student",
         resource_id=existing.id,
-        details={"email": u.email},
+        details={"user_id": user_id},
         ip_address=request.client.host if request.client else None,
     )
     return _profile_to_response(existing)
@@ -307,6 +349,7 @@ def patch_drive_vault(
 
 
 @router.delete("/profiles/me")
+@limiter.limit("3/minute")
 def delete_my_data(
     request: Request,
     db: Session = Depends(get_db),
@@ -356,6 +399,8 @@ def delete_my_data(
         {models.ScholarshipVersion.changed_by: None},
         synchronize_session=False,
     )
+    _anonymize_user_feedback(db, user_id)
+    _redact_user_audit_logs(db, user_id)
     db.query(models.Student).filter(models.Student.user_id == user_id).delete(synchronize_session=False)
     db.query(models.User).filter(models.User.id == user_id).delete(synchronize_session=False)
     db.commit()
@@ -372,7 +417,7 @@ def create_profile(
 ):
     """Create or update profile. Requires auth when AUTH_DISABLED=false."""
     if not settings.auth_disabled and user_id is None:
-        logger.warning("profile_create_denied email=%s reason=not_authenticated", profile.email)
+        logger.warning("profile_create_denied user_id=%s reason=not_authenticated", user_id)
         raise HTTPException(status_code=401, detail="Not authenticated")
 
     data = _profile_to_db_dict(profile)
@@ -390,6 +435,7 @@ def create_profile(
                 setattr(existing_user_profile, k, v)
             db.commit()
             db.refresh(existing_user_profile)
+            invalidate_plan_cache(existing_user_profile.id)
             log_action(
                 db,
                 actor_id=user_id,
@@ -397,12 +443,12 @@ def create_profile(
                 action="profile.update",
                 resource_type="student",
                 resource_id=existing_user_profile.id,
-                details={"email": u.email},
+                details={"user_id": user_id},
                 ip_address=request.client.host if request.client else None,
             )
             return _profile_to_response(existing_user_profile)
 
-    logger.info("profile_create email=%s user_id=%s", data.get("email"), user_id)
+    logger.info("profile_create user_id=%s", user_id)
 
     # Try insert first. On duplicate email, update only when the caller owns the row
     # (or both sides are anonymous); never silently overwrite another user's profile.
@@ -411,6 +457,7 @@ def create_profile(
         db.add(db_profile)
         db.commit()
         db.refresh(db_profile)
+        invalidate_plan_cache(db_profile.id)
         log_action(
             db,
             actor_id=user_id,
@@ -418,13 +465,13 @@ def create_profile(
             action="profile.create",
             resource_type="student",
             resource_id=db_profile.id,
-            details={"email": profile.email},
+            details={"user_id": user_id},
             ip_address=request.client.host if request.client else None,
         )
         return _profile_to_response(db_profile, include_access_token=user_id is None)
     except IntegrityError:
         db.rollback()
-        logger.warning("profile_create_integrity_conflict email=%s", profile.email)
+        logger.warning("profile_create_integrity_conflict user_id=%s", user_id)
         existing = db.query(models.Student).filter(
             models.Student.email == profile.email
         ).first()
@@ -454,7 +501,7 @@ def create_profile(
             action="profile.update",
             resource_type="student",
             resource_id=existing.id,
-            details={"email": profile.email},
+            details={"user_id": user_id},
             ip_address=request.client.host if request.client else None,
         )
         return _profile_to_response(existing)

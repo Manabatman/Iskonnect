@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   createContext,
@@ -215,7 +216,11 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
                     Thank you for helping us improve
                   </p>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                    Your feedback was received. We read every message.
+                    Your feedback was received. We read every message and triage suggestions on our{" "}
+                    <Link to="/roadmap" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+                      public roadmap
+                    </Link>
+                    .
                   </p>
                   <Dialog.Close asChild>
                     <button

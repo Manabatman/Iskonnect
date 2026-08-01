@@ -8,19 +8,14 @@ import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import { ExcludedScholarshipsPanel } from "../components/ExcludedScholarshipsPanel";
 import { useAuth } from "../contexts/AuthContext";
 import { NetworkError, apiFetch } from "../api/client";
+import { ERROR_COPY, getNetworkErrorMessage, resolveUserErrorMessage } from "../constants/errorCopy";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 
-function fetchErrorMessage(err: unknown, fallback: string): string {
+function fetchErrorMessage(err: unknown): string {
   if (err instanceof NetworkError) {
-    return "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL is correct.";
+    return getNetworkErrorMessage();
   }
-  if (err instanceof Error) {
-    if (err.message === "Failed to fetch" || err.name === "TypeError") {
-      return "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL is correct.";
-    }
-    return err.message;
-  }
-  return fallback;
+  return resolveUserErrorMessage(err, "load_failed");
 }
 
 export function MatchResultsPage() {
@@ -61,7 +56,7 @@ export function MatchResultsPage() {
           }
         })
         .catch((err) => {
-          if (!cancelled) setError(fetchErrorMessage(err, "Something went wrong"));
+          if (!cancelled) setError(fetchErrorMessage(err));
         })
         .finally(() => {
           if (!cancelled) setLoading(false);
@@ -97,7 +92,7 @@ export function MatchResultsPage() {
         }
       })
       .catch((err) => {
-        if (!cancelled) setError(fetchErrorMessage(err, "Something went wrong"));
+        if (!cancelled) setError(fetchErrorMessage(err));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -140,7 +135,7 @@ export function MatchResultsPage() {
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center dark:border-red-800 dark:bg-red-950/40">
-            <p className="font-medium text-red-800 dark:text-red-200">We couldn&apos;t load your match results</p>
+            <p className="font-medium text-red-800 dark:text-red-200">{ERROR_COPY.load_failed.title}</p>
             <p className="mt-2 text-sm text-red-700 dark:text-red-300">{error}</p>
             <button
               type="button"

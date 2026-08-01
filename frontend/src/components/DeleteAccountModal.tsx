@@ -61,7 +61,11 @@ export function DeleteAccountModal({ open, onOpenChange, userEmail }: Props) {
           <Dialog.Description className="mt-2 space-y-2 text-sm text-slate-600 dark:text-slate-400">
             <p>
               This permanently removes your profile, match history, saved scholarships, and applications for{" "}
-              <strong className="text-slate-900 dark:text-slate-100">{userEmail}</strong>. This cannot be undone.
+              <strong className="text-slate-900 dark:text-slate-100">{userEmail}</strong>.
+            </p>
+            <p>
+              This cannot be undone and is not reversible. You can create a new account later, but your previous data
+              will not be restored.
             </p>
             <p>Type <strong>delete</strong> to confirm.</p>
           </Dialog.Description>

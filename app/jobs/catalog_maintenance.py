@@ -20,7 +20,7 @@ from app.scholarship_cache import invalidate_scholarship_cache
 from app.utils.application_status import sync_application_status
 from app.utils.editorial_state import NEEDS_REVIEW, apply_editorial_state, sync_legacy_fields_from_editorial
 from app.utils.lifecycle_repair import is_permanently_discontinued, sync_past_deadline_cycle
-from app.utils.trust_constants import STALE_VERIFICATION_DAYS
+from app.utils.trust_constants import STALE_VERIFICATION_DAYS, VERIFICATION_FRESH_DAYS
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +36,11 @@ def run_catalog_maintenance() -> dict[str, int]:
     """
     today = date.today()
     stale_cutoff = datetime.now(timezone.utc) - timedelta(days=STALE_VERIFICATION_DAYS)
+    expired_cutoff = datetime.now(timezone.utc) - timedelta(days=VERIFICATION_FRESH_DAYS)
     db = SessionLocal()
     cycle_synced = 0
     review_count = 0
+    expired_verification_90d = 0
     try:
         deadline_rows = (
             db.query(models.Scholarship)
@@ -82,6 +84,19 @@ def run_catalog_maintenance() -> dict[str, int]:
             sync_application_status(s, today=today)
             review_count += 1
 
+        expired_rows = (
+            db.query(models.Scholarship)
+            .filter(
+                models.Scholarship.is_active != False,  # noqa: E712
+                or_(
+                    models.Scholarship.last_verified_at.is_(None),
+                    models.Scholarship.last_verified_at < expired_cutoff,
+                ),
+            )
+            .all()
+        )
+        expired_verification_90d = len(expired_rows)
+
         broken_open = (
             db.query(models.Scholarship)
             .filter(
@@ -116,9 +131,10 @@ def run_catalog_maintenance() -> dict[str, int]:
 
         db.commit()
         logger.info(
-            "catalog_maintenance_done cycle_synced=%s needs_review=%s",
+            "catalog_maintenance_done cycle_synced=%s needs_review=%s expired_90d=%s",
             cycle_synced,
             review_count,
+            expired_verification_90d,
         )
         try:
             invalidate_scholarship_cache()
@@ -147,6 +163,8 @@ def run_catalog_maintenance() -> dict[str, int]:
             "cycle_synced": cycle_synced,
             "expired": cycle_synced,
             "needs_review": review_count,
+            "expired_verification_90d": expired_verification_90d,
+            "verification_sla_days": VERIFICATION_FRESH_DAYS,
             "data_quality": quality,
             "completeness_updated": completeness_updated,
             "structured_eligibility_gaps": structured_gaps,
@@ -164,5 +182,5 @@ if __name__ == "__main__":
     out = run_catalog_maintenance()
     print(
         f"catalog_maintenance: cycle_synced={out['cycle_synced']}, "
-        f"needs_review={out['needs_review']}"
+        f"needs_review={out['needs_review']}, expired_90d={out.get('expired_verification_90d', 0)}"
     )

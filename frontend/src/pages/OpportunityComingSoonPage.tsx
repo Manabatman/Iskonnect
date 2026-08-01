@@ -1,11 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getOpportunityType, OPPORTUNITY_TYPES } from "../constants/opportunityTypes";
 
 export function OpportunityComingSoonPage() {
   const { typeSlug } = useParams<{ typeSlug: string }>();
   const oppType = typeSlug ? getOpportunityType(typeSlug) : undefined;
 
-  if (!oppType || oppType.available) {
+  if (!oppType) {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-2xl px-4 text-center">
@@ -18,6 +18,10 @@ export function OpportunityComingSoonPage() {
         </div>
       </section>
     );
+  }
+
+  if (oppType.available && oppType.searchPath) {
+    return <Navigate to={oppType.searchPath} replace />;
   }
 
   const availableTypes = OPPORTUNITY_TYPES.filter((t) => t.available);
@@ -45,7 +49,7 @@ export function OpportunityComingSoonPage() {
             {availableTypes.map((t) => (
               <li key={t.slug}>
                 <Link
-                  to="/scholarships/search"
+                  to={t.searchPath ?? "/scholarships/search"}
                   className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
                   {t.label} →

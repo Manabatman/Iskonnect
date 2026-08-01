@@ -34,7 +34,7 @@ export function AboutPage() {
               into one place—and matches them to your real profile so you can plan ahead, not just search.
             </p>
             <p className="mt-3">
-              <Link to="/why-iskonnect" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              <Link to="/how-matching-works#why" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 Why ISKONNECT exists →
               </Link>
             </p>
@@ -48,7 +48,7 @@ export function AboutPage() {
               ranked so your strongest fits rise to the top—and you can see why each one matched.
             </p>
             <p className="mt-3">
-              <Link to="/transparency" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              <Link to="/how-matching-works" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 How match scores work →
               </Link>
             </p>

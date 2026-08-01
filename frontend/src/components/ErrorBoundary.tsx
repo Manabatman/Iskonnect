@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import * as Sentry from "@sentry/react";
+import { captureSentryException, isSentryConfigured } from "../lib/sentry";
+import { ERROR_COPY } from "../constants/errorCopy";
 
 interface Props {
   children: ReactNode;
@@ -9,9 +10,7 @@ interface State {
   error: Error | null;
 }
 
-const sentryEnabled = Boolean(
-  (import.meta as unknown as { env?: { VITE_SENTRY_DSN?: string } }).env?.VITE_SENTRY_DSN,
-);
+const sentryEnabled = isSentryConfigured();
 
 /**
  * Catches render errors in child trees so one bad page does not white-screen the whole app.
@@ -28,9 +27,7 @@ export class ErrorBoundary extends Component<Props, State> {
       console.error("[ErrorBoundary]", error, info.componentStack);
     }
     if (sentryEnabled) {
-      Sentry.captureException(error, {
-        contexts: { react: { componentStack: info.componentStack } },
-      });
+      void captureSentryException(error, { componentStack: info.componentStack });
     }
   }
 
@@ -39,17 +36,17 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="mx-auto max-w-lg px-4 py-16 text-center">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-            Something went wrong
+            {ERROR_COPY.generic.title}
           </h1>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-            This page hit an unexpected error. Try going back to the dashboard or refresh the page.
+            {ERROR_COPY.generic.message}
           </p>
           <button
             type="button"
             className="mt-6 rounded-xl bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700"
             onClick={() => this.setState({ error: null })}
           >
-            Try again
+            {ERROR_COPY.generic.recoveryAction}
           </button>
         </div>
       );

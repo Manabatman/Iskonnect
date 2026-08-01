@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { MatchResult, OpportunityTimeline, PlanResponse, ProfileCompleteness } from "../types";
-import { apiFetch } from "../api/client";
+import { getNetworkErrorMessage, resolveUserErrorMessage } from "../constants/errorCopy";
+import { NetworkError, apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { OpportunityTimelineView } from "../components/OpportunityTimeline";
 import { OpportunityCalendarView } from "../components/OpportunityCalendarView";
@@ -10,9 +11,9 @@ import { ExcludedScholarshipsPanel } from "../components/ExcludedScholarshipsPan
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import type { MatchDiagnostics } from "../types";
 
-function fetchErrorMessage(err: unknown, fallback: string): string {
-  if (err instanceof Error) return err.message;
-  return fallback;
+function fetchErrorMessage(err: unknown): string {
+  if (err instanceof NetworkError) return getNetworkErrorMessage();
+  return resolveUserErrorMessage(err, "load_failed");
 }
 
 export function OpportunityPlannerPage() {
@@ -49,7 +50,7 @@ export function OpportunityPlannerPage() {
         setDiagnostics(data.diagnostics ?? null);
       })
       .catch((err) => {
-        if (!cancelled) setError(fetchErrorMessage(err, "Something went wrong"));
+        if (!cancelled) setError(fetchErrorMessage(err));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

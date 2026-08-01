@@ -19,8 +19,8 @@ export function ResetPasswordPage() {
       setError("Missing reset token. Use the link from your email.");
       return;
     }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
+    if (password.length < 10) {
+      setError("Password must be at least 10 characters.");
       return;
     }
     if (password !== confirm) {
@@ -71,7 +71,7 @@ export function ResetPasswordPage() {
                 id="password"
                 type="password"
                 required
-                minLength={8}
+                minLength={10}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
@@ -86,7 +86,7 @@ export function ResetPasswordPage() {
                 id="confirm"
                 type="password"
                 required
-                minLength={8}
+                minLength={10}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"

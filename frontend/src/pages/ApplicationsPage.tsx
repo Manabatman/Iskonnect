@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import { apiFetch, NetworkError } from "../api/client";
+import { resolveUserErrorMessage } from "../constants/errorCopy";
 import { formatDateTimeLong } from "../utils/formatDate";
 import { formatDeadlineDisplay } from "../utils/formatDeadline";
 
@@ -91,7 +92,7 @@ export function ApplicationsPage() {
       setApplications(Array.isArray(appData) ? appData : []);
     } catch (e) {
       if (e instanceof NetworkError) setError("Could not reach the server.");
-      else setError(e instanceof Error ? e.message : "Something went wrong.");
+      else setError(resolveUserErrorMessage(e, "load_failed"));
       setApplications([]);
     } finally {
       setLoading(false);

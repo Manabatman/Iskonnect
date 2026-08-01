@@ -112,3 +112,33 @@ Never put `DATABASE_URL` or `SECRET_KEY` in Vercel — the frontend bundle is pu
 - `GET /ready` — Stricter DB ping
 
 Point uptime monitoring at `/health`.
+
+## Phase 3 documentation pointers
+
+**Last updated:** 2026-07-31 (M7/M8)
+
+Phase 3 shifts focus from build quality to **truth and launch readiness**. Key artifacts:
+
+| Document | Purpose |
+| --- | --- |
+| [`docs/engineering/ISKONNECT_PHASE_3_MASTER_PLAN.md`](engineering/ISKONNECT_PHASE_3_MASTER_PLAN.md) | Single source of truth for M0–M8 tasks |
+| [`docs/engineering/codebase-audit-2026Q3.md`](engineering/codebase-audit-2026Q3.md) | Keep/defer/delete for orphan routes, unused endpoints, SIPP tables |
+| [`docs/engineering/catalog-readiness.md`](engineering/catalog-readiness.md) | Real catalog counts and launch recommendation |
+| [`docs/engineering/verification-capacity.md`](engineering/verification-capacity.md) | Solo-maintainer verification throughput |
+| [`docs/engineering/catalog-state-machine.md`](engineering/catalog-state-machine.md) | Four overlapping scholarship state fields (MATCH-07) |
+| [`docs/engineering/matching-personas.md`](engineering/matching-personas.md) | 12-persona safety net (QA-05) |
+| [`docs/engineering/security-checklist.md`](engineering/security-checklist.md) | Pre-deploy security verification (M3) |
+| [`docs/engineering/reports/PHASE-3-EXIT-report.md`](engineering/reports/PHASE-3-EXIT-report.md) | Exit criteria evidence |
+| [`docs/engineering/adr/`](engineering/adr/) | ADR-001 through ADR-009 |
+
+### Architecture changes in Phase 3 (behavioral)
+
+- **Eligibility authority:** `evaluate_eligibility` in `eligibility_result.py` is the only path; legacy boolean helpers removed from `hard_filters.py` (SUBTRACT-08).
+- **Deadline timezone:** Backend uses `today_manila()` — must stay aligned with frontend `formatDate.ts` (TRUST-03).
+- **Trust surfaces:** Non-guarantee copy on match scores; unknown lifecycle → `needs_verification`, not `open` (TRUST-02, TRUST-04).
+- **SIPP/OJT tables:** `hte_partners`, `internship_opportunities`, `ojt_compliance_vault` remain in schema but deferred — no API until vertical launches.
+- **Route consolidation:** `/match-methodology` remains a separate public route (`App.tsx` renders `MatchMethodologyPage`). Stale docs previously claimed a redirect to `/transparency` (SUBTRACT-09); that redirect was **not** implemented. Trust-page consolidation is scheduled for Phase 5 `CONT-04` (two canonical pages plus redirects).
+
+### Launch gate
+
+Do not launch publicly until M0, M2, M3 complete and catalog depth meets `catalog-readiness.md` (≥300 published target).

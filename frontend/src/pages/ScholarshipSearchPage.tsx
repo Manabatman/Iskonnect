@@ -1,10 +1,13 @@
 import { useCallback, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/client";
+import { LiveRegion } from "../components/a11y/LiveRegion";
 import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
 import { StatusGuideLink } from "../components/LifecycleStatusBadge";
-import { ScholarshipSearchFilters, describeActiveFilters } from "../components/ScholarshipSearchFilters";
+import { ScholarshipSearchFilters, describeActiveFilters, mostRestrictiveFilterHint } from "../components/ScholarshipSearchFilters";
+import { StateMessage } from "../components/StateMessage";
+import { ERROR_COPY } from "../constants/errorCopy";
 import { ScholarshipDetailPanel } from "../components/ScholarshipDetailPanel";
 import { useAuth } from "../contexts/AuthContext";
 import { useScholarshipSearch } from "../hooks/useScholarshipSearch";
@@ -28,6 +31,7 @@ export function ScholarshipSearchPage() {
     totalPages,
     loading,
     error,
+    usingCached,
     suggestions,
     suggestionsOpen,
     setSuggestionsOpen,
@@ -45,6 +49,7 @@ export function ScholarshipSearchPage() {
 
   const [selectedScholarship, setSelectedScholarship] = useState<ScholarshipInfo | null>(null);
   const [analysisMatch, setAnalysisMatch] = useState<MatchResult | null>(null);
+  const [analysisNotCalculated, setAnalysisNotCalculated] = useState(false);
   /** Cached bulk matches for “Check my match” (single API shape, client-side lookup). */
   const [matchCache, setMatchCache] = useState<Map<number, MatchResult> | null>(null);
   const [checkingMatchId, setCheckingMatchId] = useState<number | null>(null);
@@ -54,12 +59,20 @@ export function ScholarshipSearchPage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [roadmapOpen, setRoadmapOpen] = useState(false);
   const activeFilterLabels = describeActiveFilters(filters);
+  const restrictiveHint = mostRestrictiveFilterHint(filters);
   const activeOpportunityType = OPPORTUNITY_TYPES.find((t) => t.available);
+  const resultCountMessage =
+    loading || error
+      ? ""
+      : `${total} scholarship${total !== 1 ? "s" : ""} found`;
 
   const inflightMatchMap = useRef<Promise<Map<number, MatchResult>> | null>(null);
 
   const handleAnalysisOpenChange = useCallback((open: boolean) => {
-    if (!open) setAnalysisMatch(null);
+    if (!open) {
+      setAnalysisMatch(null);
+      setAnalysisNotCalculated(false);
+    }
   }, []);
 
   const handleGoToMatches = useCallback(async () => {
@@ -151,8 +164,10 @@ export function ScholarshipSearchPage() {
         const map = await getOrFetchMatchMap();
         const found = map.get(scholarshipId);
         if (found) {
+          setAnalysisNotCalculated(false);
           setAnalysisMatch(found);
         } else {
+          setAnalysisNotCalculated(true);
           setAnalysisMatch({
             id: scholarshipId,
             title: titleFallback,
@@ -177,21 +192,77 @@ export function ScholarshipSearchPage() {
 
   return (
     <section id="scholarship-search" className="py-8">
+      <LiveRegion message={resultCountMessage} />
       <div className="mx-auto w-full max-w-none px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mb-6 flex flex-col gap-4">
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Search Opportunities</h1>
+
+          <form onSubmit={handleSearchSubmit} className="relative">
+            <label htmlFor="search-input" className="sr-only">
+              Search scholarship names
+            </label>
+            <input
+              ref={searchInputRef}
+              id="search-input"
+              type="text"
+              role="combobox"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => query.trim() && suggestions.length > 0 && setSuggestionsOpen(true)}
+              onBlur={() => setTimeout(() => setSuggestionsOpen(false), 150)}
+              onKeyDown={handleKeyDown}
+              placeholder="e.g. DOST, CHED, Merit"
+              className="focus-visible-ring w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 pr-10 text-slate-900 dark:text-slate-100 placeholder-slate-500 outline-none transition focus:border-primary-500"
+              autoComplete="off"
+              aria-autocomplete="list"
+              aria-expanded={suggestionsOpen}
+              aria-controls="search-input-listbox"
+              aria-activedescendant={
+                highlightIndex >= 0 ? `search-input-opt-${highlightIndex}` : undefined
+              }
+            />
+            {suggestionsOpen && suggestions.length > 0 && (
+              <ul
+                ref={suggestionsRef}
+                id="search-input-listbox"
+                role="listbox"
+                className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 py-1 shadow-lg"
+              >
+                {suggestions.map((item, i) => (
+                  <li
+                    key={item}
+                    id={`search-input-opt-${i}`}
+                    role="option"
+                    aria-selected={i === highlightIndex}
+                    className={`cursor-pointer px-4 py-2 text-sm text-slate-900 dark:text-slate-100 ${
+                      i === highlightIndex
+                        ? "bg-primary-100 dark:bg-primary-900"
+                        : "hover:bg-slate-100 dark:hover:bg-slate-700"
+                    }`}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleSuggestionSelect(item);
+                    }}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </form>
+
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={handleGoToMatches}
               disabled={findMatchesNavLoading}
-              className="rounded-xl bg-accent-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 disabled:opacity-70 dark:focus:ring-offset-slate-900"
+              className="focus-visible-ring rounded-xl bg-accent-700 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-accent-800 disabled:opacity-70 dark:ring-offset-slate-900"
             >
               {findMatchesNavLoading ? "Opening…" : "Find My Matches"}
             </button>
             <Link
               to="/profile-builder"
-              className="w-fit rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="focus-visible-ring w-fit rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition hover:bg-primary-700"
             >
               Complete Your Profile
             </Link>
@@ -222,58 +293,11 @@ export function ScholarshipSearchPage() {
           </div>
         ) : null}
 
-        <p className="mb-4 text-xs text-slate-500 dark:text-slate-400">
+        <p className="mb-6 text-xs text-slate-500 dark:text-slate-400">
           <strong>Find My Matches</strong> runs a full match and saves it to your dashboard history.{" "}
           <strong>Check my match</strong> on a card previews your score without creating a new saved run.{" "}
           <StatusGuideLink />
         </p>
-
-        <form onSubmit={handleSearchSubmit} className="relative mb-6">
-          <label htmlFor="search-input" className="sr-only">
-            Search scholarship names
-          </label>
-          <input
-            ref={searchInputRef}
-            id="search-input"
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => query.trim() && suggestions.length > 0 && setSuggestionsOpen(true)}
-            onBlur={() => setTimeout(() => setSuggestionsOpen(false), 150)}
-            onKeyDown={handleKeyDown}
-            placeholder="e.g. DOST, CHED, Merit"
-            className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 pr-10 text-slate-900 dark:text-slate-100 placeholder-slate-500 outline-none transition focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            autoComplete="off"
-            aria-autocomplete="list"
-            aria-expanded={suggestionsOpen}
-          />
-          {suggestionsOpen && suggestions.length > 0 && (
-            <ul
-              ref={suggestionsRef}
-              role="listbox"
-              className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 py-1 shadow-lg"
-            >
-              {suggestions.map((item, i) => (
-                <li
-                  key={item}
-                  role="option"
-                  aria-selected={i === highlightIndex}
-                  className={`cursor-pointer px-4 py-2 text-sm text-slate-900 dark:text-slate-100 ${
-                    i === highlightIndex
-                      ? "bg-primary-100 dark:bg-primary-900"
-                      : "hover:bg-slate-100 dark:hover:bg-slate-700"
-                  }`}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    handleSuggestionSelect(item);
-                  }}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </form>
 
         <div className="mb-4 flex items-center justify-between lg:hidden">
           <button
@@ -319,13 +343,28 @@ export function ScholarshipSearchPage() {
               </div>
             )}
 
-            {error && (
+            {usingCached && !loading ? (
               <div
-                className="rounded-lg border border-danger-200 bg-danger-50 px-3 py-2 text-sm text-danger-700 dark:border-red-800 dark:bg-red-900/40 dark:text-red-200"
-                role="alert"
+                className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100"
+                role="status"
               >
-                {error}
+                Showing saved results from your last visit — reconnect to refresh the catalog.
               </div>
+            ) : null}
+
+            {error && (
+              <StateMessage
+                copy={ERROR_COPY.load_failed}
+                action={
+                  <button
+                    type="button"
+                    onClick={() => window.location.reload()}
+                    className="rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
+                  >
+                    {ERROR_COPY.load_failed.recoveryAction}
+                  </button>
+                }
+              />
             )}
 
             {!loading && !error && (
@@ -351,12 +390,32 @@ export function ScholarshipSearchPage() {
                 ) : null}
 
                 {results.length === 0 ? (
-                  <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-12 text-center shadow-md">
-                    <p className="text-slate-600 dark:text-slate-400">No scholarships match your search.</p>
-                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-500">
-                      Try adjusting your filters or search query.
-                    </p>
-                  </div>
+                  <StateMessage
+                    copy={{
+                      ...ERROR_COPY.search_no_results,
+                      message: restrictiveHint
+                        ? `${ERROR_COPY.search_no_results.message} ${restrictiveHint}`
+                        : ERROR_COPY.search_no_results.message,
+                    }}
+                    action={
+                      activeFilterLabels.length > 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => handleFiltersChange({})}
+                          className="rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
+                        >
+                          {ERROR_COPY.search_no_results.recoveryAction}
+                        </button>
+                      ) : (
+                        <Link
+                          to="/scholarships/search"
+                          className="inline-flex rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                        >
+                          Browse all scholarships
+                        </Link>
+                      )
+                    }
+                  />
                 ) : (
                   <>
                     <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -414,7 +473,12 @@ export function ScholarshipSearchPage() {
         />
       )}
 
-      <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />
+      <MatchAnalysisModal
+        match={analysisMatch}
+        open={analysisMatch != null}
+        onOpenChange={handleAnalysisOpenChange}
+        notCalculated={analysisNotCalculated}
+      />
     </section>
   );
 }

@@ -53,6 +53,12 @@ def invalidate_scholarship_cache() -> None:
             r.delete(REDIS_KEY)
         except Exception as e:
             logger.warning("scholarship_cache_redis_invalidate_failed: %s", e)
+    from app.plan_cache import invalidate_plan_cache
+
+    invalidate_plan_cache()
+    from app.public_stats_cache import invalidate_public_stats_cache
+
+    invalidate_public_stats_cache()
 
 
 def get_cached_scholarship_dicts(

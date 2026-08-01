@@ -4,6 +4,7 @@ import {
   lifecycleStatusLabel,
   lifecycleStatusTone,
   resolveApplicationStatus,
+  statusGuideHref,
 } from "../utils/scholarshipStatus";
 import { Badge } from "@/components/ui/badge";
 
@@ -49,9 +50,16 @@ export function LifecycleStatusExample({ statusKey }: LifecycleStatusExampleProp
   );
 }
 
-export function StatusGuideLink({ className = "" }: { className?: string }) {
+export function StatusGuideLink({
+  className = "",
+  statusKey,
+}: {
+  className?: string;
+  statusKey?: string;
+}) {
+  const to = statusKey ? statusGuideHref(statusKey) : "/scholarship-status";
   return (
-    <Link to="/scholarship-status" className={`text-sm font-medium text-primary hover:underline ${className}`}>
+    <Link to={to} className={`text-sm font-medium text-primary hover:underline ${className}`}>
       What do these labels mean?
     </Link>
   );

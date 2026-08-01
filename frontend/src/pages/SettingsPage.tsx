@@ -110,6 +110,7 @@ export function SettingsPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [notifyDeadline, setNotifyDeadline] = useState(true);
   const [notifyNewMatch, setNotifyNewMatch] = useState(true);
+  const [notifyWeeklyDigest, setNotifyWeeklyDigest] = useState(true);
   const [prefsLoading, setPrefsLoading] = useState(true);
   const [prefsSaving, setPrefsSaving] = useState(false);
   const [prefsError, setPrefsError] = useState<string | null>(null);
@@ -118,7 +119,11 @@ export function SettingsPage() {
   const [exportError, setExportError] = useState<string | null>(null);
 
   const savePref = useCallback(
-    async (patch: { notify_deadline_reminders?: boolean; notify_new_matches?: boolean }) => {
+    async (patch: {
+      notify_deadline_reminders?: boolean;
+      notify_new_matches?: boolean;
+      notify_weekly_digest?: boolean;
+    }) => {
       setPrefsSaving(true);
       setPrefsError(null);
       try {
@@ -131,10 +136,12 @@ export function SettingsPage() {
         const data = (await res.json()) as {
           notify_deadline_reminders: boolean;
           notify_new_matches: boolean;
+          notify_weekly_digest: boolean;
           notifications_globally_enabled: boolean;
         };
         setNotifyDeadline(data.notify_deadline_reminders);
         setNotifyNewMatch(data.notify_new_matches);
+        setNotifyWeeklyDigest(data.notify_weekly_digest);
         setNotificationsEnabled(data.notifications_globally_enabled);
       } catch (e) {
         setPrefsError(e instanceof Error ? e.message : "Could not save settings");
@@ -161,6 +168,7 @@ export function SettingsPage() {
         if (cancelled || !data) return;
         setNotifyDeadline(Boolean(data.notify_deadline_reminders));
         setNotifyNewMatch(Boolean(data.notify_new_matches));
+        setNotifyWeeklyDigest(Boolean(data.notify_weekly_digest));
         setNotificationsEnabled(Boolean(data.notifications_globally_enabled));
       })
       .catch(() => {
@@ -174,7 +182,7 @@ export function SettingsPage() {
     };
   }, [user, authHeaders]);
 
-  const alertsActive = notifyDeadline || notifyNewMatch;
+  const alertsActive = notifyDeadline || notifyNewMatch || notifyWeeklyDigest;
 
   const email = user?.email ?? "";
   const displayName = email ? emailToDisplayName(email) : "";
@@ -320,6 +328,23 @@ export function SettingsPage() {
                 }}
               />
             </label>
+            <label className="flex items-start justify-between gap-4">
+              <span>
+                <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">Weekly digest</span>
+                <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                  In-app summary of opportunities and reopening programs once per week
+                </span>
+              </span>
+              <Toggle
+                label="Weekly digest"
+                checked={notifyWeeklyDigest}
+                disabled={prefsLoading || prefsSaving || !notificationsEnabled}
+                onChange={(next) => {
+                  setNotifyWeeklyDigest(next);
+                  void savePref({ notify_weekly_digest: next });
+                }}
+              />
+            </label>
           </div>
         </Card>
 
@@ -420,12 +445,17 @@ export function SettingsPage() {
               </Link>
             </li>
             <li>
+              <Link to="/roadmap" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+                Roadmap
+              </Link>
+            </li>
+            <li>
               <Link to="/how-it-works" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 How it works
               </Link>
             </li>
             <li>
-              <Link to="/transparency" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              <Link to="/how-matching-works" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 Transparency
               </Link>
             </li>

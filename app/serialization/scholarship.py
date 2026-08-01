@@ -105,6 +105,8 @@ MATCH_SCORING_KEYS: tuple[str, ...] = (
     "missing_requirements",
     "eligibility_confidence",
     "requirements",
+    "unverified_requirements",
+    "provisional_reason",
 )
 
 MATCH_MINIMAL_EXTRA_KEYS: tuple[str, ...] = (
@@ -138,6 +140,17 @@ def _resolved_regions(row: Any) -> list:
     return regions or []
 
 
+def _resolve_provider_display(row: Any) -> str | None:
+    """Canonical provider label from linked organization when available."""
+    org = _get_attr(row, "organization")
+    if org is not None:
+        return getattr(org, "canonical_name", None) or _get_attr(row, "provider")
+    display = _get_attr(row, "provider_display") or _get_attr(row, "provider_canonical_name")
+    if display:
+        return display
+    return _get_attr(row, "provider")
+
+
 def _resolve_provider_logo(row: Any) -> str | None:
     """Wire provider_logo from organization.logo_url when linked."""
     explicit = _get_attr(row, "provider_logo")
@@ -164,6 +177,7 @@ def scholarship_row_to_payload(row: Any, *, dates_as_iso: bool = False) -> dict[
         "id": _get_attr(row, "id"),
         "title": _get_attr(row, "title"),
         "provider": _get_attr(row, "provider"),
+        "provider_display": _resolve_provider_display(row),
         "source": _get_attr(row, "source"),
         "countries": parse_json(_get_attr(row, "countries")),
         "regions": _resolved_regions(row),

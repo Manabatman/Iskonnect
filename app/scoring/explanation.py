@@ -86,6 +86,8 @@ def build_breakdown(
         level = (payload.field_match_level or "none").strip().lower()
         labels = {
             "exact": "Exact match",
+            "sibling": "Related field match",
+            "discipline": "Discipline match",
             "broad": "Broad match",
             "partial": "Partial match",
             "none": "No match",
@@ -96,7 +98,7 @@ def build_breakdown(
             return ("not_applicable", disp, "Open to all fields")
         if level == "none":
             return ("not_met", "No course match", "Course eligibility")
-        if level == "partial":
+        if level in ("partial", "discipline"):
             return ("partial", user, "Course eligibility")
         return ("met", user, "Course eligibility")
 
@@ -210,8 +212,11 @@ def build_why_not_higher(
 def build_explanation(
     components: dict[str, float],
     payload: ScoringPayload,
+    *,
+    is_provisional: bool | None = None,
 ) -> list[str]:
     """Build plain-language explanation strings for the student."""
+    provisional = is_provisional if is_provisional is not None else getattr(payload, "is_provisional", False)
     lines: list[str] = []
     if payload.gwa_normalized is not None and payload.min_gwa_required is not None:
         if payload.gwa_normalized >= payload.min_gwa_required + 10:
@@ -225,9 +230,9 @@ def build_explanation(
         if st not in ("merit", "merit-based", "academic") and payload.household_income_annual <= payload.max_income_threshold:
             lines.append(f"Income PHP {payload.household_income_annual:,} within ceiling PHP {payload.max_income_threshold:,}")
     if payload.has_field_restriction:
-        if payload.field_match_level in ("exact", "broad"):
+        if payload.field_match_level in ("exact", "broad", "sibling"):
             lines.append("Course/field alignment")
-        elif payload.field_match_level == "partial":
+        elif payload.field_match_level in ("partial", "discipline"):
             lines.append("Partial course alignment")
     if payload.has_geographic_restriction:
         if payload.geographic_match_level == "city":
@@ -241,7 +246,11 @@ def build_explanation(
         lines.append(f"Equity priority: {equity_line}")
 
     if not lines:
-        if not payload.has_field_restriction and not payload.has_geographic_restriction:
+        if provisional:
+            lines.append(
+                "Some eligibility requirements could not be verified — complete your profile for a firm answer."
+            )
+        elif not payload.has_field_restriction and not payload.has_geographic_restriction:
             lines.append("Open to all fields and nationwide — you meet the listed requirements.")
         elif not payload.has_field_restriction:
             lines.append("Open to all fields of study — you meet the listed requirements.")

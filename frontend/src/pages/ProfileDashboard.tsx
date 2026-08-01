@@ -4,11 +4,13 @@ import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchResult, MatchRunSummary, ProfileCompleteness, StudentProfileResponse } from "../types";
 import { NetworkError, apiFetch } from "../api/client";
+import { ERROR_COPY, getNetworkErrorMessage } from "../constants/errorCopy";
 import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import { formatDateMedium, formatDateTime, formatRelativeManila, startOfTodayManila } from "../utils/formatDate";
 import { formatDeadlineDisplay } from "../utils/formatDeadline";
 import { markLoginFlow, measureLoginFlow } from "../utils/perfTiming";
 import { MatchScoreRing } from "../components/MatchScoreRing";
+import { MatchConfidenceNote } from "../components/MatchConfidenceNote";
 import { QualificationStatusBadge } from "../components/QualificationStatusBadge";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
 
@@ -112,11 +114,9 @@ export function ProfileDashboard() {
       })
       .catch((err) => {
         if (err instanceof NetworkError) {
-          setError(
-            "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL matches your backend."
-          );
+          setError(getNetworkErrorMessage());
         } else {
-          setError("Failed to load data");
+          setError(ERROR_COPY.load_failed.message);
         }
       })
       .finally(() => {
@@ -127,25 +127,72 @@ export function ProfileDashboard() {
   }, [user?.id, authHeaders]);
 
   useEffect(() => {
-    if (!profile?.id) {
+    if (loading || !user) return;
+
+    const headers = authHeaders();
+    const profileId = profile?.id;
+    const latestRunId = runs[0]?.id;
+    let cancelled = false;
+
+    if (!profileId && runs.length === 0) {
       setMatchProfileCompleteness(null);
+      setLatestMatches([]);
       return;
     }
-    let cancelled = false;
-    apiFetch(`/api/v1/plan/${profile.id}`, { headers: authHeaders() })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (!cancelled && data?.profile_completeness) {
-          setMatchProfileCompleteness(data.profile_completeness);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setMatchProfileCompleteness(null);
-      });
+
+    if (latestRunId) {
+      setLatestMatchesLoading(true);
+    }
+
+    const tasks: Promise<void>[] = [];
+
+    if (profileId) {
+      tasks.push(
+        apiFetch(`/api/v1/plan/${profileId}`, { headers })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (!cancelled && data?.profile_completeness) {
+              setMatchProfileCompleteness(data.profile_completeness);
+            }
+          })
+          .catch(() => {
+            if (!cancelled) setMatchProfileCompleteness(null);
+          })
+      );
+    } else {
+      setMatchProfileCompleteness(null);
+    }
+
+    if (latestRunId) {
+      tasks.push(
+        apiFetch(`/api/v1/match-runs/${latestRunId}`, { headers })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((data: { results?: MatchResult[] } | null) => {
+            if (cancelled || !data?.results) return;
+            setLatestMatches(data.results.slice(0, 5));
+          })
+          .catch(() => {
+            if (!cancelled) setLatestMatches([]);
+          })
+          .finally(() => {
+            if (!cancelled) setLatestMatchesLoading(false);
+          })
+      );
+    } else {
+      setLatestMatches([]);
+      setLatestMatchesLoading(false);
+    }
+
+    void Promise.all(tasks).finally(() => {
+      if (cancelled) return;
+      markLoginFlow("dashboard-matches");
+      measureLoginFlow("submit-to-dashboard-matches", "submit", "dashboard-matches");
+    });
+
     return () => {
       cancelled = true;
     };
-  }, [profile?.id, authHeaders]);
+  }, [user, loading, profile?.id, runs, authHeaders]);
 
   useEffect(() => {
     const onAuthChange = () => {
@@ -158,35 +205,6 @@ export function ProfileDashboard() {
     window.addEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
     return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
   }, []);
-
-  useEffect(() => {
-    if (!user || runs.length === 0) {
-      setLatestMatches([]);
-      return;
-    }
-    const runId = runs[0].id;
-    let cancelled = false;
-    setLatestMatchesLoading(true);
-    apiFetch(`/api/v1/match-runs/${runId}`, { headers: authHeaders() })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: { results?: MatchResult[] } | null) => {
-        if (cancelled || !data?.results) return;
-        setLatestMatches(data.results.slice(0, 5));
-      })
-      .catch(() => {
-        if (!cancelled) setLatestMatches([]);
-      })
-      .finally(() => {
-        if (!cancelled) setLatestMatchesLoading(false);
-        if (!cancelled) {
-          markLoginFlow("dashboard-matches");
-          measureLoginFlow("submit-to-dashboard-matches", "submit", "dashboard-matches");
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [user, authHeaders, runs]);
 
   const handleRunMatches = async (options?: { stayOnDashboard?: boolean }) => {
     const p = profile;
@@ -454,7 +472,7 @@ export function ProfileDashboard() {
                 to="/applications"
                 className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <span className="text-xs font-semibold uppercase tracking-wide text-accent-600 dark:text-accent-400">
+                <span className="text-xs font-semibold uppercase tracking-wide text-accent-700 dark:text-accent-400">
                   Applications
                 </span>
                 <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Track applications</span>
@@ -466,7 +484,7 @@ export function ProfileDashboard() {
                 to="/documents"
                 className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <span className="text-xs font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+                <span className="text-xs font-semibold uppercase tracking-wide text-teal-700 dark:text-teal-400">
                   Documents
                 </span>
                 <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Document checklist</span>
@@ -558,7 +576,10 @@ export function ProfileDashboard() {
                               <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{m.provider}</p>
                             </div>
                           </div>
-                          <MatchScoreRing score={score} size={isTop ? 58 : 52} />
+                          <div className="flex shrink-0 flex-col items-center gap-1">
+                            <MatchScoreRing score={score} size={isTop ? 58 : 52} />
+                            <MatchConfidenceNote variant="compact" className="max-w-[7rem] text-center" />
+                          </div>
                         </div>
                         {deadlineLine ? (
                           <p className="mt-2 text-xs font-medium text-amber-800 dark:text-amber-200/90">{deadlineLine}</p>
@@ -636,7 +657,7 @@ export function ProfileDashboard() {
                                   </span>
                                 ) : urgency === "later" ? (
                                   <span className="inline-flex rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
-                                    Deadline clear
+                                    Over 30 days left
                                   </span>
                                 ) : null}
                               </div>

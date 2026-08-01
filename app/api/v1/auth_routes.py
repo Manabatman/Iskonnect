@@ -51,8 +51,8 @@ class RegisterRequest(BaseModel):
     @field_validator("password")
     @classmethod
     def password_min_length(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
+        if len(v) < 10:
+            raise ValueError("Password must be at least 10 characters")
         return v
 
 
@@ -119,8 +119,8 @@ class ResetPasswordRequest(BaseModel):
     @field_validator("new_password")
     @classmethod
     def password_min_length(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
+        if len(v) < 10:
+            raise ValueError("Password must be at least 10 characters")
         return v
 
 
@@ -144,7 +144,7 @@ def _maybe_send_verification_email(to_email: str, token: str) -> None:
         if send_email_verification_email(to_email, token):
             record_transactional_email_sent("verify", to_email)
     else:
-        logger.warning("email_verify_throttled to=%s", to_email)
+        logger.warning("email_verify_throttled")
 
 
 def _maybe_send_password_reset_email(to_email: str, token: str) -> None:
@@ -152,7 +152,7 @@ def _maybe_send_password_reset_email(to_email: str, token: str) -> None:
         if send_password_reset_email(to_email, token):
             record_transactional_email_sent("reset", to_email)
     else:
-        logger.warning("email_reset_throttled to=%s", to_email)
+        logger.warning("email_reset_throttled")
 
 
 def _token_response(

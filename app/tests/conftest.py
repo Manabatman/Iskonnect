@@ -10,6 +10,8 @@ import os
 # Avoid Alembic upgrading the developer's DATABASE_URL during TestClient lifespan
 # (schema for tests comes from Base.metadata.create_all on the in-memory engine).
 os.environ.setdefault("RUN_MIGRATIONS_ON_STARTUP", "false")
+# SEC-01: explicit development relaxes startup guards for pytest.
+os.environ.setdefault("ENVIRONMENT", "development")
 
 import pytest
 from fastapi.testclient import TestClient

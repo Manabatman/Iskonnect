@@ -19,6 +19,7 @@ vi.mock("../hooks/useScholarshipSearch", () => ({
     totalPages: 0,
     loading: false,
     error: null,
+    usingCached: false,
     suggestions: [],
     suggestionsOpen: false,
     setSuggestionsOpen: vi.fn(),

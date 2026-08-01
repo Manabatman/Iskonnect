@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import type { MatchComparisonResponse } from "../types";
 import { apiFetch } from "../api/client";
+import { resolveUserErrorMessage } from "../constants/errorCopy";
 import { formatDateTime } from "../utils/formatDate";
 
 export function MatchComparisonPage() {
@@ -38,7 +39,7 @@ export function MatchComparisonPage() {
       })
       .catch((err) => {
         if (!cancelled)
-          setError(err instanceof Error ? err.message : "Something went wrong");
+          setError(resolveUserErrorMessage(err, "load_failed"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from app.matching.hard_filters import filter_scholarships, _region_matches
+from app.matching.hard_filters import filter_scholarships
 from app import models
 from app.api.v1.scholarships import _scholarship_to_dict
 
@@ -63,28 +63,29 @@ def test_nationwide_scholarship_passes():
     assert len(out) == 1
 
 
-def test_residency_required_blocks_without_location():
-    assert not _region_matches(
-        None,
-        None,
-        ["Region VI - Western Visayas"],
-        [],
-        True,
-        [],
-        scholarship_id=99,
+def test_residency_required_without_location_is_provisional_not_hard_excluded():
+    """Missing location with residency_required → UNKNOWN (fail-open), not legacy hard exclude."""
+    profile = _profile(region=None, city_municipality=None)
+    sch = _sch_base(
+        eligible_regions=["Region VI - Western Visayas"],
+        residency_required=True,
     )
+    out, _diag = filter_scholarships(profile, [sch])
+    assert len(out) == 1
+    elig = out[0]["_eligibility_result"]
+    assert elig["qualification_status"] == "provisionally_qualified"
+    region_req = next(r for r in elig["requirements"] if r["key"] == "region")
+    assert region_req["result"] == "unknown"
 
 
 def test_residency_required_allows_with_region():
-    assert _region_matches(
-        "Region VI - Western Visayas",
-        None,
-        ["Region VI - Western Visayas"],
-        [],
-        True,
-        [],
-        scholarship_id=100,
+    profile = _profile(region="Region VI - Western Visayas")
+    sch = _sch_base(
+        eligible_regions=["Region VI - Western Visayas"],
+        residency_required=True,
     )
+    out, _diag = filter_scholarships(profile, [sch])
+    assert len(out) == 1
 
 
 @pytest.mark.parametrize(

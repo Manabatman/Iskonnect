@@ -21,14 +21,15 @@ export function FeedbackButton() {
     return () => window.clearTimeout(t);
   }, []);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
     <button
       type="button"
       onClick={() => openFeedback(null)}
-      className={[
-        "fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900",
-        visible ? "opacity-100" : "opacity-0",
-      ].join(" ")}
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
       aria-label="Share feedback"
     >
       <IconChat className="shrink-0" />

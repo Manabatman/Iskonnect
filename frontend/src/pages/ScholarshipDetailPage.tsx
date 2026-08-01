@@ -13,7 +13,11 @@ import { formatDateMedium } from "../utils/formatDate";
 import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
+import { ERROR_COPY, resolveUserErrorMessage } from "../constants/errorCopy";
+import { resolveApplicationStatus, statusGuideHref } from "../utils/scholarshipStatus";
 import { TrustCard } from "../components/TrustCard";
+import { trackOutboundClick } from "../utils/trackOutboundClick";
+import { GlossaryTerm } from "../components/GlossaryTerm";
 import type { FieldEvidence, QualificationStatus, SavedScholarship, ScholarshipEligibilityDetail, ScholarshipVersionHistoryItem } from "../types";
 
 const DOCUMENT_LABELS: Record<string, string> = {
@@ -154,7 +158,7 @@ export function ScholarshipDetailPage() {
         if (!cancelled) setScholarship(data);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Something went wrong");
+        if (!cancelled) setError(resolveUserErrorMessage(err, "load_failed"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -307,7 +311,12 @@ export function ScholarshipDetailPage() {
               </Link>
               {" · "}
               <Link
-                to="/scholarship-status"
+                to={statusGuideHref(
+                  resolveApplicationStatus({
+                    application_status: scholarship.application_status,
+                    data_status: scholarship.data_status,
+                  })
+                )}
                 className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300"
               >
                 Status guide
@@ -386,6 +395,8 @@ export function ScholarshipDetailPage() {
               <img
                 src={scholarship.image_url}
                 alt={scholarship.image_alt?.trim() || scholarship.title}
+                width={640}
+                height={192}
                 className="mt-4 h-48 w-full rounded-xl object-cover"
                 loading="lazy"
               />
@@ -413,10 +424,15 @@ export function ScholarshipDetailPage() {
                 <li>School type: {scholarship.eligible_school_types.join(", ")}</li>
               ) : null}
               {scholarship.eligible_courses_psced?.length ? (
-                <li>Field of study: {scholarship.eligible_courses_psced.join(", ")}</li>
+                <li>
+                  Eligible courses (<GlossaryTerm term="PSCED">PSCED</GlossaryTerm>):{" "}
+                  {scholarship.eligible_courses_psced.join(", ")}
+                </li>
               ) : null}
               {scholarship.min_gwa_normalized != null && (
-                <li>Minimum GWA: {scholarship.min_gwa_normalized}%</li>
+                <li>
+                  Minimum <GlossaryTerm term="GWA">GWA</GlossaryTerm>: {scholarship.min_gwa_normalized}%
+                </li>
               )}
               {scholarship.max_income_threshold != null && (
                 <li>Income ceiling: PHP {scholarship.max_income_threshold.toLocaleString()}/year</li>
@@ -494,6 +510,7 @@ export function ScholarshipDetailPage() {
           </div>
 
           <TrustCard
+            scholarshipId={scholarship.id}
             fieldEvidence={scholarship.field_evidence}
             nextReviewDate={scholarship.next_review_date}
             verificationBadge={scholarship.verification_badge}
@@ -709,6 +726,13 @@ export function ScholarshipDetailPage() {
                 href={scholarship.link!}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() =>
+                  trackOutboundClick({
+                    scholarshipId: scholarship.id,
+                    surface: "detail_page",
+                    linkKind: "apply_official",
+                  })
+                }
                 className="mt-4 inline-block rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               >
                 Apply Now →

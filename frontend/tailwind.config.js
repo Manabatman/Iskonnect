@@ -115,10 +115,6 @@ export default {
         },
       },
       keyframes: {
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
         overlayFade: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
@@ -145,7 +141,6 @@ export default {
         },
       },
       animation: {
-        marquee: "marquee 40s linear infinite",
         overlayFade: "overlayFade var(--duration-overlay) var(--ease-out) both",
         overlayFadeOut: "overlayFadeOut var(--duration-base) var(--ease-in) forwards",
         matchDialogIn: "matchDialogIn var(--duration-overlay) var(--ease-out) both",

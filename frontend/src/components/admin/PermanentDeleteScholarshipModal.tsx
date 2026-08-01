@@ -65,24 +65,26 @@ export function PermanentDeleteScholarshipModal({
           <Dialog.Title className="text-lg font-semibold text-danger-700 dark:text-danger-400">
             Delete scholarship permanently?
           </Dialog.Title>
-          <Dialog.Description className="mt-2 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-            <p>
-              <strong className="text-slate-900 dark:text-slate-100">{scholarship?.title ?? "—"}</strong>
-            </p>
-            <p>
-              This scholarship will be permanently removed from the catalog.
-              <br />
-              This action cannot be undone.
-            </p>
-            {!inactive ? (
-              <p className="text-amber-700 dark:text-amber-300">
-                Deactivate this scholarship before permanent deletion.
-              </p>
-            ) : (
+          <Dialog.Description asChild>
+            <div className="mt-2 space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <p>
-                Type <strong>DELETE</strong> to confirm.
+                <strong className="text-slate-900 dark:text-slate-100">{scholarship?.title ?? "—"}</strong>
               </p>
-            )}
+              <p>
+                This scholarship will be permanently removed from the catalog, including match history references and
+                saved bookmarks for all users.
+              </p>
+              <p className="font-medium text-danger-700 dark:text-danger-400">This action cannot be undone.</p>
+              {!inactive ? (
+                <p className="text-amber-700 dark:text-amber-300">
+                  Deactivate this scholarship before permanent deletion.
+                </p>
+              ) : (
+                <p>
+                  Type <strong>DELETE</strong> to confirm.
+                </p>
+              )}
+            </div>
           </Dialog.Description>
           {inactive ? (
             <input

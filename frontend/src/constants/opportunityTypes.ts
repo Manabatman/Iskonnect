@@ -4,6 +4,8 @@ export type OpportunityTypeDef = {
   available: boolean;
   description: string;
   roadmapNote: string;
+  /** Canonical browse route when this vertical is live. */
+  searchPath?: string;
 };
 
 export const OPPORTUNITY_TYPES: OpportunityTypeDef[] = [
@@ -11,6 +13,7 @@ export const OPPORTUNITY_TYPES: OpportunityTypeDef[] = [
     slug: "scholarships",
     label: "Scholarships",
     available: true,
+    searchPath: "/scholarships/search",
     description: "Financial aid for tuition, allowances, and school expenses.",
     roadmapNote: "Available now.",
   },

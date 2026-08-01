@@ -15,15 +15,15 @@ from app.auth import require_admin
 from app.db import get_db
 from app.limiter import limiter
 from app.utils.application_status import sync_application_status
-from app.utils.editorial_state import PUBLISHED, apply_editorial_state
-from app.utils.quality_score import needs_review_reasons
-from app.utils.opportunity_quality import apply_quality_scores, compute_opportunity_quality
 from app.utils.data_completeness import (
     PUBLISHABILITY_THRESHOLD,
     completeness_gaps,
     completeness_tier,
     compute_data_completeness_score,
 )
+from app.utils.editorial_state import PUBLISHED, apply_editorial_state
+from app.utils.opportunity_quality import apply_quality_scores, compute_opportunity_quality
+from app.utils.quality_score import needs_review_reasons
 from app.utils.trust_constants import STALE_VERIFICATION_DAYS, VERIFICATION_FRESH_DAYS
 from app.utils.timezone import utc_now_naive
 
@@ -384,6 +384,42 @@ def admin_data_quality_dashboard(
     }
 
 
+def _verification_age_metrics(db: Session) -> dict:
+    """Verification freshness buckets and per-provider SLA breaches (DATA-11)."""
+    now = utc_now_naive()
+    stale_cutoff = now - timedelta(days=STALE_VERIFICATION_DAYS)
+    fresh_cutoff = now - timedelta(days=VERIFICATION_FRESH_DAYS)
+    buckets = {"0_30": 0, "31_90": 0, "90_plus": 0, "never": 0}
+    provider_breaches: dict[str, int] = {}
+
+    rows = db.query(models.Scholarship).filter(models.Scholarship.is_active == True).all()  # noqa: E712
+    for row in rows:
+        verified_at = row.last_verified_at
+        if verified_at is None:
+            buckets["never"] += 1
+        elif verified_at >= stale_cutoff:
+            buckets["0_30"] += 1
+            continue
+        elif verified_at >= fresh_cutoff:
+            buckets["31_90"] += 1
+        else:
+            buckets["90_plus"] += 1
+
+        if verified_at is None or verified_at < fresh_cutoff:
+            label = (row.provider or "Unknown").strip() or "Unknown"
+            provider_breaches[label] = provider_breaches.get(label, 0) + 1
+
+    provider_sla = [
+        {"provider": name, "expired_count": count}
+        for name, count in sorted(provider_breaches.items(), key=lambda x: (-x[1], x[0]))[:15]
+    ]
+    return {
+        "verification_sla_days": VERIFICATION_FRESH_DAYS,
+        "verification_age_distribution": buckets,
+        "provider_verification_sla": provider_sla,
+    }
+
+
 @router.get("/admin/dashboard/catalog-health")
 @limiter.limit("30/minute")
 def admin_catalog_health_dashboard(
@@ -426,6 +462,7 @@ def admin_catalog_health_dashboard(
         .scalar()
         or 0
     )
+    verification_metrics = _verification_age_metrics(db)
 
     return {
         "as_of": today.isoformat(),
@@ -436,4 +473,5 @@ def admin_catalog_health_dashboard(
         "deadline_unknown_count": int(deadline_unknown_count),
         "avg_quality_score": quality.get("average_quality_score", 0),
         "verified_this_month": int(verified_this_month),
+        **verification_metrics,
     }

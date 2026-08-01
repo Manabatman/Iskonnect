@@ -8,7 +8,7 @@ export function FaqSection() {
     <Section variant="tint" border="bottom" id="faq">
       <SectionHeader
         eyebrow="FAQ"
-        title="Common questions"
+        title="Common questions, answered plainly."
         description="Straight answers about matching, trust, and how we handle your data."
       />
       <div className="mx-auto mt-12 max-w-2xl space-y-2 sm:mt-16">

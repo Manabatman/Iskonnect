@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AutocompleteInput } from "../AutocompleteInput";
+import { GlossaryTerm } from "../GlossaryTerm";
 import type { ProfileBuilderState } from "./profileBuilderState";
 import {
   ACADEMIC_STAGES,
@@ -73,12 +74,16 @@ export function EducationStep({ state, onChange }: StepProps) {
       <div>
         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Education</h2>
         <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Where you study and how you are performing academically.
+          Where you study and how you are performing academically. Programs may come from{" "}
+          <GlossaryTerm term="CHED">CHED</GlossaryTerm>, <GlossaryTerm term="DOST-SEI">DOST-SEI</GlossaryTerm>,{" "}
+          <GlossaryTerm term="TESDA">TESDA</GlossaryTerm>, <GlossaryTerm term="LGU">LGUs</GlossaryTerm>, or{" "}
+          <GlossaryTerm term="SUC">SUCs</GlossaryTerm>/<GlossaryTerm term="LUC">LUCs</GlossaryTerm> and other{" "}
+          <GlossaryTerm term="HEI">HEIs</GlossaryTerm>.
         </p>
       </div>
 
       <div className="rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-800 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-200">
-        Adding your GWA lets us check merit-based scholarships.
+        Adding your <GlossaryTerm term="GWA">GWA</GlossaryTerm> lets us check merit-based scholarships.
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -103,6 +108,9 @@ export function EducationStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-enrollment_status" className={labelClass}>
             Enrollment status
           </label>
+          <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">
+            Choose <GlossaryTerm term="LOA">LOA</GlossaryTerm> if you are on an approved leave of absence.
+          </p>
           <select
             id="pb-enrollment_status"
             value={state.enrollment_status}
@@ -138,7 +146,8 @@ export function EducationStep({ state, onChange }: StepProps) {
             Target education level for scholarship
           </label>
           <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">
-            The level you want scholarships for — can differ from your current academic stage above.
+            The level you want scholarships for — includes <GlossaryTerm term="TVET">TVET</GlossaryTerm>,{" "}
+            <GlossaryTerm term="ALS">ALS</GlossaryTerm>, and college paths.
           </p>
           <select
             id="pb-education_level"
@@ -209,7 +218,7 @@ export function EducationStep({ state, onChange }: StepProps) {
         </div>
         <div>
           <label htmlFor="pb-gwa_raw" className={labelClass}>
-            GWA / Grade
+            <GlossaryTerm term="GWA">GWA</GlossaryTerm> / Grade
           </label>
           <input
             id="pb-gwa_raw"

@@ -10,6 +10,25 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+export const proofStripItems = [
+  {
+    variant: "matches" as const,
+    caption: "See which programs fit your profile before you apply.",
+  },
+  {
+    variant: "breakdown" as const,
+    caption: "Understand why a match scored the way it did—without guesswork.",
+  },
+  {
+    variant: "search" as const,
+    caption: "Filter by region, level, and field to narrow your list fast.",
+  },
+  {
+    variant: "mobile" as const,
+    caption: "Track your plan on the go—same eligibility rules, smaller screen.",
+  },
+] as const;
+
 export const officialSources = [
   "CHED",
   "DOST-SEI",

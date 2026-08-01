@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { NetworkError, apiFetch } from "../api/client";
+import { ERROR_COPY } from "../constants/errorCopy";
 import { clearProfileDraft } from "../components/profile-builder/profileBuilderState";
 import {
   installLoginWaterfallDevHelper,
@@ -21,9 +22,16 @@ const AUTH_REFRESH_KEY = "auth_refresh_token";
 /** Fired when login/register/logout changes the authenticated user so dashboards reset cached state. */
 export const AUTH_USER_CHANGED_EVENT = "scholarship-match-auth-user-changed";
 
-function dispatchAuthUserChanged(userId: number | null) {
+export type AuthUserChangedDetail = {
+  previousUserId: number | null;
+  userId: number | null;
+};
+
+function dispatchAuthUserChanged(previousUserId: number | null, userId: number | null) {
   window.dispatchEvent(
-    new CustomEvent(AUTH_USER_CHANGED_EVENT, { detail: { userId } })
+    new CustomEvent(AUTH_USER_CHANGED_EVENT, {
+      detail: { previousUserId, userId } satisfies AuthUserChangedDetail,
+    })
   );
 }
 
@@ -54,6 +62,30 @@ export function userFromTokenPayload(data: TokenPayload): AuthUser {
     requireEmailVerification: data.require_email_verification !== false,
     hasProfile: Boolean(data.has_profile),
   };
+}
+
+/** Presentational only — decode JWT payload without verification for optimistic shell (PERF-03). */
+export function decodeJwtPayload(token: string): TokenPayload | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+    const json = atob(padded);
+    const data = JSON.parse(json) as TokenPayload;
+    if (typeof data.user_id !== "number") return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function cachedUserFromStorage(): AuthUser | null {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  if (!token) return null;
+  const payload = decodeJwtPayload(token);
+  if (!payload) return null;
+  return userFromTokenPayload(payload);
 }
 
 /** Post-login/register destination based on profile completeness (P1-05). */
@@ -98,10 +130,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setTokenState] = useState<string | null>(() =>
     localStorage.getItem(AUTH_TOKEN_KEY)
   );
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<AuthUser | null>(() => cachedUserFromStorage());
+  const [loading, setLoading] = useState(() => Boolean(localStorage.getItem(AUTH_TOKEN_KEY)));
   const [authError, setAuthError] = useState<string | null>(null);
   const skipFetchUserRef = useRef(false);
+  /** Last signed-in user id — used to detect account switches vs anonymous → authenticated. */
+  const lastAuthenticatedUserIdRef = useRef<number | null>(null);
 
   const setToken = useCallback((t: string | null) => {
     if (t) {
@@ -178,7 +212,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setAuthError("Server unreachable — your session is preserved. Try again when you are online.");
           return;
         }
-        setAuthError("Something went wrong while loading your account.");
+        setAuthError(ERROR_COPY.load_failed.message);
       }
     },
     [applyUserFromMe, setToken, setRefreshToken]
@@ -223,8 +257,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(authUser);
       setLoading(false);
       setAuthError(null);
-      clearProfileDraft();
-      dispatchAuthUserChanged(data.user_id);
+      const prevId = lastAuthenticatedUserIdRef.current;
+      if (prevId !== null && prevId !== data.user_id) {
+        clearProfileDraft();
+      }
+      lastAuthenticatedUserIdRef.current = data.user_id;
+      dispatchAuthUserChanged(prevId, data.user_id);
       return authUser;
     },
     [setToken, setRefreshToken]
@@ -252,8 +290,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(authUser);
       setLoading(false);
       setAuthError(null);
-      clearProfileDraft();
-      dispatchAuthUserChanged(data.user_id);
+      const prevId = lastAuthenticatedUserIdRef.current;
+      if (prevId !== null && prevId !== data.user_id) {
+        clearProfileDraft();
+      }
+      lastAuthenticatedUserIdRef.current = data.user_id;
+      dispatchAuthUserChanged(prevId, data.user_id);
       return authUser;
     },
     [setToken, setRefreshToken]
@@ -272,12 +314,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         /* ignore */
       }
     }
+    const prevId = lastAuthenticatedUserIdRef.current;
     setRefreshToken(null);
     setToken(null);
     setUser(null);
     setAuthError(null);
     clearProfileDraft();
-    dispatchAuthUserChanged(null);
+    lastAuthenticatedUserIdRef.current = null;
+    dispatchAuthUserChanged(prevId, null);
   }, [setToken, setRefreshToken]);
 
   const authHeaders = useCallback(
