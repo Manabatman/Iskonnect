@@ -37,7 +37,7 @@ def test_scholarship_eligibility_endpoint(api_with_db):
     client, Session = api_with_db
     reg = client.post(
         "/api/v1/auth/register",
-        json={"email": "elig-user@test.com", "password": "password1"},
+        json={"email": "elig-user@test.com", "password": "password1234"},
     )
     token = reg.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
@@ -85,7 +85,7 @@ def test_profile_export(api_with_db):
     client, _Session = api_with_db
     reg = client.post(
         "/api/v1/auth/register",
-        json={"email": "export-user@test.com", "password": "password1"},
+        json={"email": "export-user@test.com", "password": "password1234"},
     )
     token = reg.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}

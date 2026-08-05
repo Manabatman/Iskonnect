@@ -6,7 +6,7 @@ import { Section, SectionHeader, cardClass, IconTile } from "./Section";
 
 export function HowItWorksSection() {
   return (
-    <Section variant="white" border="bottom">
+    <Section variant="white" border="bottom" data-testid="landing-how-it-works">
       <SectionHeader
         eyebrow="How it works"
         title="From profile to ranked matches in three steps."

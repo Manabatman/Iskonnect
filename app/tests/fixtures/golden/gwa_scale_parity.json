@@ -1,0 +1,237 @@
+{
+  "persona_id": "gwa_scale_parity",
+  "generated_on": "2026-08-01",
+  "ordered_results": [
+    {
+      "id": 101,
+      "title": "Nationwide STEM Merit",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 79.9,
+      "deadline_passed": false
+    },
+    {
+      "id": 126,
+      "title": "Need 500k Ceiling",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 78.47,
+      "deadline_passed": false
+    },
+    {
+      "id": 125,
+      "title": "Need 400k Ceiling",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 75.59,
+      "deadline_passed": false
+    },
+    {
+      "id": 113,
+      "title": "Hybrid Merit Need",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 70.51,
+      "deadline_passed": false
+    },
+    {
+      "id": 148,
+      "title": "NCR Metro Only",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 70.13,
+      "deadline_passed": false
+    },
+    {
+      "id": 107,
+      "title": "Previous Cycle Reference",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 108,
+      "title": "Expected Reopen Grant",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 109,
+      "title": "Archived Program",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 116,
+      "title": "Public HEI Only",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 118,
+      "title": "UP Diliman Named",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 119,
+      "title": "UP System Schools",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 140,
+      "title": "Third Year Only",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 141,
+      "title": "Transferee Only",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 145,
+      "title": "Filipino Citizenship Required",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 146,
+      "title": "SUC Category Only",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 158,
+      "title": "Incoming Freshman Only",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": false
+    },
+    {
+      "id": 103,
+      "title": "Low Income Need Grant",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 66.94,
+      "deadline_passed": false
+    },
+    {
+      "id": 157,
+      "title": "Athletic Merit Grant",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 64.71,
+      "deadline_passed": false
+    },
+    {
+      "id": 122,
+      "title": "GWA Percentage Gate",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 64.34,
+      "deadline_passed": false
+    },
+    {
+      "id": 127,
+      "title": "PWD Priority Boost",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 128,
+      "title": "IP Priority Boost",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 129,
+      "title": "Solo Parent Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 130,
+      "title": "OFW Dependent Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 131,
+      "title": "Farmer Fisher Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 132,
+      "title": "4Ps Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 133,
+      "title": "Underprivileged Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 134,
+      "title": "Military Dependent Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 135,
+      "title": "Uniformed Service Priority",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 62.06,
+      "deadline_passed": false
+    },
+    {
+      "id": 124,
+      "title": "GWA Four Point Gate",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 61.03,
+      "deadline_passed": false
+    },
+    {
+      "id": 111,
+      "title": "Nationwide STEM Needs Review",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 51.94,
+      "deadline_passed": false
+    },
+    {
+      "id": 110,
+      "title": "Unverified Listing",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 45.12,
+      "deadline_passed": false
+    },
+    {
+      "id": 106,
+      "title": "Closed Cycle Grant",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": true
+    },
+    {
+      "id": 142,
+      "title": "Passed Deadline Open Row",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 69.41,
+      "deadline_passed": true
+    }
+  ]
+}

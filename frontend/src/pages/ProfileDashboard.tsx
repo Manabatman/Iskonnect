@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { parseApiDetail } from "../utils/apiErrors";
 import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchResult, MatchRunSummary, ProfileCompleteness, StudentProfileResponse } from "../types";
 import { NetworkError, apiFetch } from "../api/client";
+import { ERROR_COPY, getNetworkErrorMessage } from "../constants/errorCopy";
 import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import { formatDateMedium, formatDateTime, formatRelativeManila, startOfTodayManila } from "../utils/formatDate";
 import { formatDeadlineDisplay } from "../utils/formatDeadline";
+import { markLoginFlow, measureLoginFlow } from "../utils/perfTiming";
 import { MatchScoreRing } from "../components/MatchScoreRing";
 import { QualificationStatusBadge } from "../components/QualificationStatusBadge";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
@@ -44,15 +47,6 @@ function insertRunSorted(prev: MatchRunSummary[], run: MatchRunSummary): MatchRu
   return merged;
 }
 
-function formatDeadlineShort(iso: string | null | undefined): string | null {
-  if (!iso) return null;
-  try {
-    return formatDateMedium(iso);
-  } catch {
-    return null;
-  }
-}
-
 function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upcoming" | "later" | null {
   if (!deadlineIso) return null;
   try {
@@ -72,6 +66,14 @@ function deadlineUrgency(deadlineIso: string | null | undefined): "soon" | "upco
 export function ProfileDashboard() {
   const { user, authHeaders } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [showCompletionBanner, setShowCompletionBanner] = useState(
+    () => Boolean((location.state as { justCompletedProfile?: boolean } | null)?.justCompletedProfile),
+  );
+  const [betaNotice] = useState(
+    () => (location.state as { betaNotice?: string } | null)?.betaNotice ?? null,
+  );
+  const autoMatchTriggeredRef = useRef(false);
   const [profile, setProfile] = useState<StudentProfileResponse | null>(null);
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
   const [latestMatches, setLatestMatches] = useState<MatchResult[]>([]);
@@ -82,6 +84,13 @@ export function ProfileDashboard() {
   const [runLoading, setRunLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toggleSave, savedScholarships, savedListLoading: savedLoading } = useSavedScholarships();
+
+  useEffect(() => {
+    const state = location.state as { justCompletedProfile?: boolean; betaNotice?: string } | null;
+    if (state?.justCompletedProfile || state?.betaNotice) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.pathname, location.state, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -109,38 +118,85 @@ export function ProfileDashboard() {
       })
       .catch((err) => {
         if (err instanceof NetworkError) {
-          setError(
-            "Unable to reach the server. Check that the API is running and VITE_API_BASE_URL matches your backend."
-          );
+          setError(getNetworkErrorMessage());
         } else {
-          setError("Failed to load data");
+          setError(ERROR_COPY.load_failed.message);
         }
       })
       .finally(() => {
         setLoading(false);
+        markLoginFlow("dashboard-data");
+        measureLoginFlow("submit-to-dashboard-data", "submit", "dashboard-data");
       });
   }, [user?.id, authHeaders]);
 
   useEffect(() => {
-    if (!profile?.id) {
+    if (loading || !user) return;
+
+    const headers = authHeaders();
+    const profileId = profile?.id;
+    const latestRunId = runs[0]?.id;
+    let cancelled = false;
+
+    if (!profileId && runs.length === 0) {
       setMatchProfileCompleteness(null);
+      setLatestMatches([]);
       return;
     }
-    let cancelled = false;
-    apiFetch(`/api/v1/plan/${profile.id}`, { headers: authHeaders() })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (!cancelled && data?.profile_completeness) {
-          setMatchProfileCompleteness(data.profile_completeness);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setMatchProfileCompleteness(null);
-      });
+
+    if (latestRunId) {
+      setLatestMatchesLoading(true);
+    }
+
+    const tasks: Promise<void>[] = [];
+
+    if (profileId) {
+      tasks.push(
+        apiFetch(`/api/v1/plan/${profileId}`, { headers })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (!cancelled && data?.profile_completeness) {
+              setMatchProfileCompleteness(data.profile_completeness);
+            }
+          })
+          .catch(() => {
+            if (!cancelled) setMatchProfileCompleteness(null);
+          })
+      );
+    } else {
+      setMatchProfileCompleteness(null);
+    }
+
+    if (latestRunId) {
+      tasks.push(
+        apiFetch(`/api/v1/match-runs/${latestRunId}`, { headers })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((data: { results?: MatchResult[] } | null) => {
+            if (cancelled || !data?.results) return;
+            setLatestMatches(data.results.slice(0, 5));
+          })
+          .catch(() => {
+            if (!cancelled) setLatestMatches([]);
+          })
+          .finally(() => {
+            if (!cancelled) setLatestMatchesLoading(false);
+          })
+      );
+    } else {
+      setLatestMatches([]);
+      setLatestMatchesLoading(false);
+    }
+
+    void Promise.all(tasks).finally(() => {
+      if (cancelled) return;
+      markLoginFlow("dashboard-matches");
+      measureLoginFlow("submit-to-dashboard-matches", "submit", "dashboard-matches");
+    });
+
     return () => {
       cancelled = true;
     };
-  }, [profile?.id, authHeaders]);
+  }, [user, loading, profile?.id, runs, authHeaders]);
 
   useEffect(() => {
     const onAuthChange = () => {
@@ -154,32 +210,7 @@ export function ProfileDashboard() {
     return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
   }, []);
 
-  useEffect(() => {
-    if (!user || runs.length === 0) {
-      setLatestMatches([]);
-      return;
-    }
-    const runId = runs[0].id;
-    let cancelled = false;
-    setLatestMatchesLoading(true);
-    apiFetch(`/api/v1/match-runs/${runId}`, { headers: authHeaders() })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: { results?: MatchResult[] } | null) => {
-        if (cancelled || !data?.results) return;
-        setLatestMatches(data.results.slice(0, 5));
-      })
-      .catch(() => {
-        if (!cancelled) setLatestMatches([]);
-      })
-      .finally(() => {
-        if (!cancelled) setLatestMatchesLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [user, authHeaders, runs]);
-
-  const handleRunMatches = async () => {
+  const handleRunMatches = async (options?: { stayOnDashboard?: boolean }) => {
     const p = profile;
     if (!p) {
       setError("Complete your profile first");
@@ -195,7 +226,7 @@ export function ProfileDashboard() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.detail ?? "Failed to run matches");
+        throw new Error(parseApiDetail(data?.detail, "Failed to run matches"));
       }
       const data = await res.json();
       setRuns((prev) => [
@@ -211,13 +242,30 @@ export function ProfileDashboard() {
       if (Array.isArray(data.matches)) {
         setLatestMatches(data.matches.slice(0, 5));
       }
-      navigate(`/match/${p.id}?run=${data.run_id}`);
+      if (!options?.stayOnDashboard) {
+        navigate(`/match/${p.id}?run=${data.run_id}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to run matches");
     } finally {
       setRunLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (
+      !showCompletionBanner ||
+      autoMatchTriggeredRef.current ||
+      loading ||
+      !profile?.id ||
+      runs.length > 0 ||
+      runLoading
+    ) {
+      return;
+    }
+    autoMatchTriggeredRef.current = true;
+    void handleRunMatches({ stayOnDashboard: true });
+  }, [showCompletionBanner, loading, profile?.id, runs.length, runLoading]);
 
   const toggleRunSelection = (id: number) => {
     setSelectedRuns((prev) => {
@@ -313,6 +361,7 @@ export function ProfileDashboard() {
       : 0);
   const profileNeedsWork = qualityPercent < 100;
   const topThree = latestMatches.slice(0, 3);
+  const nextDeadline = upcomingDeadlines[0] ?? null;
 
   return (
     <section className="py-8 sm:py-12">
@@ -325,12 +374,20 @@ export function ProfileDashboard() {
             {error}
           </div>
         )}
+        {betaNotice && (
+          <div
+            className="mb-6 rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-900 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-100"
+            role="status"
+          >
+            {betaNotice}
+          </div>
+        )}
         {user && user.requireEmailVerification && !user.emailVerified && (
           <div
             className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
             role="status"
           >
-            Please verify your email — check your inbox for the verification link from Iskonnect.
+            Please verify your email. Check your inbox for the verification link from Iskonnect.
             {" "}
             <button
               type="button"
@@ -365,6 +422,27 @@ export function ProfileDashboard() {
                       ? "Run a match to see scholarships you qualify for, or browse the catalog."
                       : "Complete your profile to unlock personalized matching."}
                   </p>
+                  {nextDeadline?.scholarship ? (
+                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/90 px-4 py-3 dark:border-amber-900 dark:bg-amber-950/30">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-amber-900 dark:text-amber-200">
+                        Next deadline
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                        {nextDeadline.scholarship.title}
+                      </p>
+                      <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">
+                        {nextDeadline.scholarship.application_deadline
+                          ? formatDateMedium(nextDeadline.scholarship.application_deadline)
+                          : "Date not listed"}
+                      </p>
+                      <Link
+                        to={`/scholarship/${nextDeadline.scholarship_id}`}
+                        className="focus-visible-ring mt-2 inline-flex text-sm font-semibold text-primary-700 hover:underline dark:text-primary-400"
+                      >
+                        View scholarship
+                      </Link>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:items-stretch sm:text-right">
                   {!profile ? (
@@ -377,7 +455,7 @@ export function ProfileDashboard() {
                   ) : (
                     <button
                       type="button"
-                      onClick={handleRunMatches}
+                      onClick={() => void handleRunMatches()}
                       disabled={loading || runLoading}
                       className="inline-flex items-center justify-center rounded-2xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-600/25 transition hover:bg-primary-700 disabled:opacity-50"
                     >
@@ -386,14 +464,14 @@ export function ProfileDashboard() {
                   )}
                   <Link
                     to="/scholarships/search"
-                    className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                    className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                   >
                     Browse opportunities
                   </Link>
                   {profile?.id ? (
                     <Link
                       to={`/planner/${profile.id}`}
-                      className="inline-flex items-center justify-center rounded-2xl border border-primary-200 bg-primary-50 px-5 py-2.5 text-sm font-semibold text-primary-800 transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-200 dark:hover:bg-primary-900/50"
+                      className="inline-flex items-center justify-center rounded-2xl border border-primary-200 bg-primary-50 px-5 py-3 text-sm font-semibold text-primary-800 transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-200 dark:hover:bg-primary-900/50"
                     >
                       Opportunity planner
                     </Link>
@@ -415,7 +493,7 @@ export function ProfileDashboard() {
               {profileNeedsWork ? (
                 <Link
                   to="/profile-builder"
-                  className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                  className="glass flex flex-col rounded-2xl p-4 transition duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3"
                 >
                   <span className="text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">
                     Profile
@@ -426,9 +504,9 @@ export function ProfileDashboard() {
               ) : null}
               <Link
                 to="/applications"
-                className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="glass flex flex-col rounded-2xl p-4 transition duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3"
               >
-                <span className="text-xs font-semibold uppercase tracking-wide text-accent-600 dark:text-accent-400">
+                <span className="text-xs font-semibold uppercase tracking-wide text-accent-700 dark:text-accent-400">
                   Applications
                 </span>
                 <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Track applications</span>
@@ -438,9 +516,9 @@ export function ProfileDashboard() {
               </Link>
               <Link
                 to="/documents"
-                className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="glass flex flex-col rounded-2xl p-4 transition duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3"
               >
-                <span className="text-xs font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+                <span className="text-xs font-semibold uppercase tracking-wide text-teal-700 dark:text-teal-400">
                   Documents
                 </span>
                 <span className="mt-1 font-semibold text-slate-900 dark:text-slate-100">Document checklist</span>
@@ -452,6 +530,24 @@ export function ProfileDashboard() {
 
             {/* Recommended matches */}
             <div className="glass rounded-2xl p-6 shadow-md">
+              {showCompletionBanner ? (
+                <div
+                  className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-900 dark:border-green-800 dark:bg-green-950/40 dark:text-green-100"
+                  role="status"
+                >
+                  <p className="font-semibold">Profile complete. Here are your scholarship matches.</p>
+                  {runLoading ? (
+                    <p className="mt-1 text-sm text-green-800 dark:text-green-200">Finding your matches…</p>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="mt-2 text-sm font-medium underline"
+                    onClick={() => setShowCompletionBanner(false)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              ) : null}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Top matches</h3>
                 {runs.length > 0 ? (
@@ -514,7 +610,9 @@ export function ProfileDashboard() {
                               <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{m.provider}</p>
                             </div>
                           </div>
-                          <MatchScoreRing score={score} size={isTop ? 58 : 52} />
+                          <div className="flex shrink-0 flex-col items-center">
+                            <MatchScoreRing score={score} size={isTop ? 58 : 52} />
+                          </div>
                         </div>
                         {deadlineLine ? (
                           <p className="mt-2 text-xs font-medium text-amber-800 dark:text-amber-200/90">{deadlineLine}</p>
@@ -533,7 +631,7 @@ export function ProfileDashboard() {
                           to={`/scholarship/${m.id}`}
                           className="mt-3 inline-flex text-sm font-semibold text-primary-600 hover:underline dark:text-primary-400"
                         >
-                          View details →
+                          View details
                         </Link>
                       </div>
                     );
@@ -571,7 +669,7 @@ export function ProfileDashboard() {
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div className="min-w-0 flex-1 space-y-2">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="inline-flex rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
+                                <span className="inline-flex rounded-full bg-primary-100 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
                                   {typeLabel}
                                 </span>
                                 {sch ? (
@@ -592,7 +690,7 @@ export function ProfileDashboard() {
                                   </span>
                                 ) : urgency === "later" ? (
                                   <span className="inline-flex rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
-                                    Deadline clear
+                                    Over 30 days left
                                   </span>
                                 ) : null}
                               </div>
@@ -614,7 +712,7 @@ export function ProfileDashboard() {
                                 </p>
                               ) : null}
                             </div>
-                            <div className="flex shrink-0 gap-2 opacity-100 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
+                            <div className="flex shrink-0 gap-2 opacity-100 sm:opacity-0 sm:transition-opacity sm:duration-fast sm:group-hover:opacity-100">
                               <Link
                                 to={`/scholarship/${item.scholarship_id}`}
                                 className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
@@ -646,7 +744,7 @@ export function ProfileDashboard() {
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={handleRunMatches}
+                    onClick={() => void handleRunMatches()}
                     disabled={loading || runLoading || !profile}
                     className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
                   >
@@ -725,7 +823,7 @@ export function ProfileDashboard() {
                             <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:items-end">
                               <Link
                                 to={`/match/${run.profile_id}?run=${run.id}`}
-                                className="inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-center text-sm font-bold text-white shadow hover:bg-primary-700"
+                                className="inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-3 text-center text-sm font-bold text-white shadow hover:bg-primary-700"
                               >
                                 View results
                               </Link>

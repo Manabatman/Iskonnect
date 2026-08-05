@@ -1,0 +1,20 @@
+{
+  "persona_id": "grade11_shs",
+  "generated_on": "2026-08-01",
+  "ordered_results": [
+    {
+      "id": 150,
+      "title": "SHS General Assistance",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 47.35,
+      "deadline_passed": false
+    },
+    {
+      "id": 105,
+      "title": "Grade 11 Senior High",
+      "qualification_status": "provisionally_qualified",
+      "final_score": 41.18,
+      "deadline_passed": false
+    }
+  ]
+}

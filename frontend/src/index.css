@@ -2,15 +2,155 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100 font-sans;
+/* DS-01 / DS-02 / DS-10 / DS-14 — design tokens (HSL triplets for opacity modifiers) */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 20% 40%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 217 91% 60%;
+
+  --primary: 224 76% 48%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 25 95% 53%;
+  --accent-foreground: 0 0% 100%;
+
+  --tone-success-bg: 141 79% 95%;
+  --tone-success-fg: 143 64% 24%;
+  --tone-success-border: 141 62% 80%;
+  --tone-warning-bg: 48 96% 92%;
+  --tone-warning-fg: 26 90% 26%;
+  --tone-warning-border: 45 93% 76%;
+  --tone-danger-bg: 0 86% 97%;
+  --tone-danger-fg: 0 74% 34%;
+  --tone-danger-border: 0 91% 85%;
+  --tone-info-bg: 214 95% 96%;
+  --tone-info-fg: 224 76% 33%;
+  --tone-info-border: 213 94% 84%;
+  --tone-neutral-bg: 210 40% 96%;
+  --tone-neutral-fg: 215 25% 27%;
+  --tone-neutral-border: 214 32% 91%;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1rem;
+
+  --shadow-1: 0 1px 2px 0 rgb(15 23 42 / 0.06);
+  --shadow-2: 0 2px 8px -2px rgb(15 23 42 / 0.1), 0 1px 3px -1px rgb(15 23 42 / 0.06);
+  --shadow-3: 0 8px 24px -6px rgb(15 23 42 / 0.14), 0 2px 8px -4px rgb(15 23 42 / 0.08);
+  --shadow-4: 0 20px 48px -12px rgb(15 23 42 / 0.22);
+
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-overlay: 240ms;
+  --duration-reveal: 320ms;
+  --duration-celebrate: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  --page-gutter: 1rem;
+  --section-gap: 3rem;
+  --card-padding: 1.5rem;
+  --stack-gap: 0.75rem;
+  --nav-height-mobile: 3.5rem;
+  --sidebar-width-expanded: 16rem;
+  --bottom-nav-offset: 5rem;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --feedback-fab-offset: calc(var(--nav-height-mobile) + var(--safe-area-bottom) + 1rem);
+  --hero-scrim: linear-gradient(to top, rgb(15 23 42 / 0.7), transparent 60%);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-brand: "Montserrat", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+.dark {
+  --background: 222 47% 6%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 9%;
+  --card-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 33% 22%;
+  --input: 217 33% 22%;
+  --ring: 217 91% 60%;
+
+  --primary: 217 91% 60%;
+  --primary-foreground: 222 47% 11%;
+
+  --tone-success-bg: 143 64% 12%;
+  --tone-success-fg: 141 79% 85%;
+  --tone-success-border: 143 64% 24%;
+  --tone-warning-bg: 26 90% 12%;
+  --tone-warning-fg: 48 96% 85%;
+  --tone-warning-border: 26 90% 26%;
+  --tone-danger-bg: 0 74% 12%;
+  --tone-danger-fg: 0 86% 90%;
+  --tone-danger-border: 0 74% 34%;
+  --tone-info-bg: 224 76% 12%;
+  --tone-info-fg: 214 95% 90%;
+  --tone-info-border: 224 76% 33%;
+  --tone-neutral-bg: 217 33% 17%;
+  --tone-neutral-fg: 215 20% 75%;
+  --tone-neutral-border: 217 33% 28%;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased font-sans;
+    font-family: var(--font-sans);
+  }
 }
 
 @layer components {
   .glass {
-    @apply backdrop-blur-xl bg-white/70 border border-white/20 shadow-lg dark:bg-slate-800/60 dark:border-white/10;
+    @apply backdrop-blur-xl border shadow-lg;
+    background-color: hsl(var(--card) / 0.7);
+    border-color: hsl(var(--border) / 0.5);
   }
-  .glass-dark {
-    @apply backdrop-blur-xl bg-slate-900/50 border border-white/10 shadow-lg;
+  .dark .glass {
+    background-color: hsl(var(--card) / 0.6);
+    border-color: hsl(var(--border) / 0.4);
   }
+}
+
+@layer utilities {
+  /* A11Y-02 — single focus-visible ring treatment */
+  .focus-visible-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .bg-tone-success { background-color: hsl(var(--tone-success-bg)); }
+  .text-tone-success { color: hsl(var(--tone-success-fg)); }
+  .border-tone-success { border-color: hsl(var(--tone-success-border)); }
+  .bg-tone-warning { background-color: hsl(var(--tone-warning-bg)); }
+  .text-tone-warning { color: hsl(var(--tone-warning-fg)); }
+  .border-tone-warning { border-color: hsl(var(--tone-warning-border)); }
+  .bg-tone-danger { background-color: hsl(var(--tone-danger-bg)); }
+  .text-tone-danger { color: hsl(var(--tone-danger-fg)); }
+  .border-tone-danger { border-color: hsl(var(--tone-danger-border)); }
+  .bg-tone-info { background-color: hsl(var(--tone-info-bg)); }
+  .text-tone-info { color: hsl(var(--tone-info-fg)); }
+  .border-tone-info { border-color: hsl(var(--tone-info-border)); }
+  .bg-tone-neutral { background-color: hsl(var(--tone-neutral-bg)); }
+  .text-tone-neutral { color: hsl(var(--tone-neutral-fg)); }
+  .border-tone-neutral { border-color: hsl(var(--tone-neutral-border)); }
+
 }

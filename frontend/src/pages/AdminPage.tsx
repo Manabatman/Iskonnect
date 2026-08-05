@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API_BASE_URL, apiFetch, NetworkError } from "../api/client";
+import { toast } from "@/components/ui/sonner";
+import { apiFetch, NetworkError } from "../api/client";
+import { ERROR_COPY, getNetworkErrorMessage } from "../constants/errorCopy";
 import {
   DuplicateCandidatesPanel,
   type DuplicatePair,
 } from "../components/admin/DuplicateCandidatesPanel";
 import { PermanentDeleteScholarshipModal } from "../components/admin/PermanentDeleteScholarshipModal";
+import { ScholarshipEditSheet } from "../components/admin/ScholarshipEditSheet";
 import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
@@ -30,7 +33,126 @@ type AdminFeedback = {
   contact_email: string | null;
   created_at: string | null;
   ph_created_at?: string | null;
+  triage_status?: string;
+  triage_note?: string | null;
 };
+
+const FEEDBACK_TRIAGE_OPTIONS = [
+  "new",
+  "triaged",
+  "planned",
+  "in_progress",
+  "shipped",
+  "declined",
+] as const;
+
+function FeedbackTriageRow({
+  feedback,
+  busy,
+  deleteBusy,
+  onSave,
+  onDelete,
+}: {
+  feedback: AdminFeedback;
+  busy: boolean;
+  deleteBusy: boolean;
+  onSave: (id: number, status: string, note: string | null) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
+}) {
+  const [status, setStatus] = useState(feedback.triage_status ?? "new");
+  const [note, setNote] = useState(feedback.triage_note ?? "");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  useEffect(() => {
+    setStatus(feedback.triage_status ?? "new");
+    setNote(feedback.triage_note ?? "");
+  }, [feedback.triage_status, feedback.triage_note, feedback.id]);
+
+  return (
+    <li className="rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs text-slate-500">
+          #{feedback.id} · {feedback.category} · {formatDateTime(feedback.ph_created_at ?? feedback.created_at ?? "")}
+        </p>
+        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+          {status.replace("_", " ")}
+        </span>
+      </div>
+      <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800 dark:text-slate-200">{feedback.message}</p>
+      {feedback.contact_email ? (
+        <p className="mt-1 text-xs text-slate-500">Contact: {feedback.contact_email}</p>
+      ) : null}
+      <div className="mt-3 grid gap-2 sm:grid-cols-[10rem_1fr_auto_auto] sm:items-start">
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm dark:border-slate-600 dark:bg-slate-800"
+          aria-label={`Triage status for feedback ${feedback.id}`}
+        >
+          {FEEDBACK_TRIAGE_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt.replace("_", " ")}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Internal triage note (optional)"
+          className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm dark:border-slate-600 dark:bg-slate-800"
+        />
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void onSave(feedback.id, status, note || null)}
+          className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+        >
+          {busy ? "Updating…" : "Update status"}
+        </button>
+        {confirmDelete ? (
+          <div className="flex flex-wrap items-center gap-2 sm:col-span-4">
+            <span className="text-xs text-slate-600 dark:text-slate-400">Delete this feedback permanently?</span>
+            <button
+              type="button"
+              disabled={deleteBusy}
+              onClick={() => void onDelete(feedback.id)}
+              className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-700 disabled:opacity-50"
+            >
+              {deleteBusy ? "Deleting…" : "Confirm delete"}
+            </button>
+            <button
+              type="button"
+              disabled={deleteBusy}
+              onClick={() => setConfirmDelete(false)}
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs dark:border-slate-600"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            disabled={deleteBusy || busy}
+            onClick={() => setConfirmDelete(true)}
+            className="rounded-lg border border-rose-200 px-3 py-1.5 text-sm text-rose-700 hover:bg-rose-50 disabled:opacity-50 dark:border-rose-900 dark:text-rose-300 dark:hover:bg-rose-950/40"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+    </li>
+  );
+}
+
+const REVIEW_QUEUES = [
+  { id: "needs_review", label: "Needs verification" },
+  { id: "missing_image", label: "Missing image" },
+  { id: "low_quality", label: "Low quality" },
+  { id: "stale", label: "Stale verification" },
+  { id: "duplicates", label: "Duplicates" },
+] as const;
+
 type AdminReport = {
   id: number;
   scholarship_id: number;
@@ -57,6 +179,9 @@ type CatalogHealthDashboard = {
   deadline_unknown_count?: number;
   avg_quality_score?: number;
   verified_this_month?: number;
+  verification_sla_days?: number;
+  verification_age_distribution?: Record<string, number>;
+  provider_verification_sla?: { provider: string; expired_count: number }[];
   health?: Record<string, number>;
   import?: { staging_pending?: number; staging_total?: number; recent_maintenance_runs?: MaintenanceRunRow[] };
   data_quality?: DataQualitySummary;
@@ -93,13 +218,6 @@ type StagingRow = {
 };
 
 const SCH_PAGE_SIZE = 50;
-const REVIEW_QUEUES = [
-  { id: "needs_review", label: "Needs verification" },
-  { id: "missing_image", label: "Missing image" },
-  { id: "low_quality", label: "Low quality" },
-  { id: "stale", label: "Stale verification" },
-  { id: "duplicates", label: "Duplicates" },
-] as const;
 
 export function AdminPage() {
   const { authHeaders } = useAuth();
@@ -113,6 +231,8 @@ export function AdminPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [matchRuns, setMatchRuns] = useState<AdminMatchRun[]>([]);
   const [feedback, setFeedback] = useState<AdminFeedback[]>([]);
+  const [feedbackTriageBusy, setFeedbackTriageBusy] = useState<number | null>(null);
+  const [feedbackDeleteBusy, setFeedbackDeleteBusy] = useState<number | null>(null);
   const [reports, setReports] = useState<AdminReport[]>([]);
   const [maintenanceRuns, setMaintenanceRuns] = useState<MaintenanceRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
@@ -129,11 +249,12 @@ export function AdminPage() {
   const [schPage, setSchPage] = useState(1);
   const [reviewQueue, setReviewQueue] = useState<(typeof REVIEW_QUEUES)[number]["id"]>("needs_review");
   const [reviewItems, setReviewItems] = useState<Record<string, unknown>[]>([]);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editProvider, setEditProvider] = useState("");
-  const [editLink, setEditLink] = useState("");
+  const [editSheetOpen, setEditSheetOpen] = useState(false);
+  const [editSheetScholarship, setEditSheetScholarship] = useState<ScholarshipInfo | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [createTitle, setCreateTitle] = useState("");
+  const [createProvider, setCreateProvider] = useState("");
+  const [createLink, setCreateLink] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [permanentDeleteTarget, setPermanentDeleteTarget] = useState<ScholarshipInfo | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
@@ -247,9 +368,7 @@ export function AdminPage() {
         setCatalogHealth(null);
         setImportDashboard(null);
         if (e instanceof NetworkError) {
-          setError(
-            `Unable to reach the API at ${API_BASE_URL}. Confirm the backend is running, VITE_API_BASE_URL is set, and CORS allows this site.`
-          );
+          setError(getNetworkErrorMessage());
           return;
         }
         setError("Could not load system health (check admin role and API URL).");
@@ -407,9 +526,7 @@ export function AdminPage() {
           }
           setReviewQueueWaking(false);
           if (e instanceof NetworkError) {
-            setError(
-              `Unable to reach the API at ${API_BASE_URL}. The server may be waking up — wait a moment and switch tabs to retry. Confirm VITE_API_BASE_URL and CORS are configured.`
-            );
+            setError(ERROR_COPY.cold_start.message);
             return;
           }
           setError(e instanceof Error ? e.message : "Error");
@@ -477,31 +594,78 @@ export function AdminPage() {
     setReports((prev) => prev.filter((r) => r.id !== reportId));
   };
 
-  const handleSaveScholarship = async (scholarshipId?: number) => {
+  const handleFeedbackTriageUpdate = async (
+    feedbackId: number,
+    triage_status: string,
+    triage_note: string | null,
+  ) => {
+    setFeedbackTriageBusy(feedbackId);
+    try {
+      const res = await apiFetch(`/api/v1/admin/feedback/${feedbackId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...headers() },
+        body: JSON.stringify({ triage_status, triage_note: triage_note?.trim() || null }),
+      });
+      if (!res.ok) throw new Error("Failed to update feedback triage");
+      const updated = (await res.json()) as AdminFeedback;
+      setFeedback((prev) =>
+        prev.map((row) =>
+          row.id === feedbackId
+            ? {
+                ...row,
+                triage_status: updated.triage_status ?? triage_status,
+                triage_note: updated.triage_note ?? triage_note,
+              }
+            : row,
+        ),
+      );
+      toast.success("Feedback status updated");
+    } finally {
+      setFeedbackTriageBusy(null);
+    }
+  };
+
+  const handleFeedbackDelete = async (feedbackId: number) => {
+    setFeedbackDeleteBusy(feedbackId);
+    try {
+      const res = await apiFetch(`/api/v1/admin/feedback/${feedbackId}`, {
+        method: "DELETE",
+        headers: headers(),
+      });
+      if (!res.ok) throw new Error("Failed to delete feedback");
+      setFeedback((prev) => prev.filter((row) => row.id !== feedbackId));
+      toast.success("Feedback deleted");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to delete feedback");
+    } finally {
+      setFeedbackDeleteBusy(null);
+    }
+  };
+
+  const handleCreateScholarship = async () => {
     const payload = {
-      title: editTitle.trim(),
-      provider: editProvider.trim() || null,
-      link: editLink.trim() || null,
+      title: createTitle.trim(),
+      provider: createProvider.trim() || null,
+      link: createLink.trim() || null,
       source: "manual",
     };
     if (!payload.title) {
       setError("Title is required");
       return;
     }
-    const res = await apiFetch(
-      scholarshipId ? `/api/v1/scholarships/${scholarshipId}` : "/api/v1/scholarships",
-      {
-        method: scholarshipId ? "PUT" : "POST",
-        headers: { ...headers(), "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
+    const res = await apiFetch("/api/v1/scholarships", {
+      method: "POST",
+      headers: { ...headers(), "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
     if (!res.ok) {
       const data = await res.json().catch(() => null);
       throw new Error(data?.detail ?? "Save failed");
     }
-    setEditingId(null);
     setShowCreate(false);
+    setCreateTitle("");
+    setCreateProvider("");
+    setCreateLink("");
     fetchScholarships();
   };
 
@@ -612,9 +776,9 @@ export function AdminPage() {
                 type="button"
                 onClick={() => {
                   setShowCreate(true);
-                  setEditTitle("");
-                  setEditProvider("");
-                  setEditLink("");
+                  setCreateTitle("");
+                  setCreateProvider("");
+                  setCreateLink("");
                 }}
                 className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white"
               >
@@ -668,44 +832,41 @@ export function AdminPage() {
                 </button>
               </div>
             ) : null}
-            {(showCreate || editingId !== null) && (
+            {showCreate && (
               <div className="mb-4 rounded-lg border border-slate-200 p-4 dark:border-slate-700">
-                <h3 className="mb-2 font-medium">{editingId ? "Edit scholarship" : "New scholarship"}</h3>
+                <h3 className="mb-2 font-medium">New scholarship</h3>
                 <div className="grid gap-2 sm:grid-cols-3">
                   <input
                     className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
                     placeholder="Title"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
+                    value={createTitle}
+                    onChange={(e) => setCreateTitle(e.target.value)}
                   />
                   <input
                     className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
                     placeholder="Provider"
-                    value={editProvider}
-                    onChange={(e) => setEditProvider(e.target.value)}
+                    value={createProvider}
+                    onChange={(e) => setCreateProvider(e.target.value)}
                   />
                   <input
                     className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
                     placeholder="Application link"
-                    value={editLink}
-                    onChange={(e) => setEditLink(e.target.value)}
+                    value={createLink}
+                    onChange={(e) => setCreateLink(e.target.value)}
                   />
                 </div>
                 <div className="mt-2 flex gap-2">
                   <button
                     type="button"
                     className="rounded bg-primary-600 px-3 py-1 text-sm text-white"
-                    onClick={() => void handleSaveScholarship(editingId ?? undefined).catch((e) => setError(String(e)))}
+                    onClick={() => void handleCreateScholarship().catch((e) => setError(String(e)))}
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     className="rounded border px-3 py-1 text-sm"
-                    onClick={() => {
-                      setEditingId(null);
-                      setShowCreate(false);
-                    }}
+                    onClick={() => setShowCreate(false)}
                   >
                     Cancel
                   </button>
@@ -807,10 +968,8 @@ export function AdminPage() {
                           <button
                             type="button"
                             onClick={() => {
-                              setEditingId(s.id);
-                              setEditTitle(s.title);
-                              setEditProvider(s.provider ?? "");
-                              setEditLink(s.link ?? "");
+                              setEditSheetScholarship(s);
+                              setEditSheetOpen(true);
                               setShowCreate(false);
                             }}
                             className="text-primary-600 hover:underline"
@@ -1060,17 +1219,20 @@ export function AdminPage() {
 
         {tab === "feedback" && (
           <ul className="space-y-3">
-            {feedback.map((f) => (
-              <li key={f.id} className="rounded-lg border border-slate-200 p-4 dark:border-slate-700">
-                <p className="text-xs text-slate-500">
-                  #{f.id} · {f.category} · {formatDateTime(f.ph_created_at ?? f.created_at ?? "")}
-                </p>
-                <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800 dark:text-slate-200">{f.message}</p>
-                {f.contact_email ? (
-                  <p className="mt-1 text-xs text-slate-500">Contact: {f.contact_email}</p>
-                ) : null}
-              </li>
-            ))}
+            {feedback.length === 0 ? (
+              <p className="text-slate-600 dark:text-slate-400">No feedback yet.</p>
+            ) : (
+              feedback.map((f) => (
+                <FeedbackTriageRow
+                  key={f.id}
+                  feedback={f}
+                  busy={feedbackTriageBusy === f.id}
+                  deleteBusy={feedbackDeleteBusy === f.id}
+                  onSave={handleFeedbackTriageUpdate}
+                  onDelete={handleFeedbackDelete}
+                />
+              ))
+            )}
           </ul>
         )}
 
@@ -1141,6 +1303,47 @@ export function AdminPage() {
                       </li>
                     ))}
                   </ul>
+                  {catalogHealth.verification_age_distribution ? (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        Verification age (SLA {catalogHealth.verification_sla_days ?? 90} days)
+                      </h4>
+                      <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+                        {[
+                          ["0–30 days", catalogHealth.verification_age_distribution["0_30"] ?? 0],
+                          ["31–90 days", catalogHealth.verification_age_distribution["31_90"] ?? 0],
+                          ["90+ days", catalogHealth.verification_age_distribution["90_plus"] ?? 0],
+                          ["Never verified", catalogHealth.verification_age_distribution.never ?? 0],
+                        ].map(([label, value]) => (
+                          <li
+                            key={String(label)}
+                            className="flex justify-between rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                          >
+                            <span className="text-slate-600 dark:text-slate-400">{label}</span>
+                            <span className="font-semibold text-slate-900 dark:text-slate-100">{String(value)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {catalogHealth.provider_verification_sla?.length ? (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        Providers past verification SLA
+                      </h4>
+                      <ul className="mt-2 space-y-1 text-sm">
+                        {catalogHealth.provider_verification_sla.slice(0, 8).map((row) => (
+                          <li
+                            key={row.provider}
+                            className="flex justify-between rounded border border-slate-200 px-3 py-1.5 dark:border-slate-700"
+                          >
+                            <span className="truncate text-slate-700 dark:text-slate-300">{row.provider}</span>
+                            <span className="font-medium text-amber-800 dark:text-amber-200">{row.expired_count}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                 </div>
               ) : (
                 <p className="mt-2 text-sm text-slate-500">—</p>
@@ -1269,6 +1472,18 @@ export function AdminPage() {
           </div>
         )}
       </div>
+      <ScholarshipEditSheet
+        open={editSheetOpen}
+        onOpenChange={(open) => {
+          setEditSheetOpen(open);
+          if (!open) setEditSheetScholarship(null);
+        }}
+        scholarshipId={editSheetScholarship?.id ?? null}
+        rowFallback={editSheetScholarship ?? undefined}
+        authHeaders={headers}
+        onSaved={fetchScholarships}
+        onError={(msg) => setError(msg)}
+      />
       <PermanentDeleteScholarshipModal
         open={permanentDeleteTarget !== null}
         onOpenChange={(open) => {

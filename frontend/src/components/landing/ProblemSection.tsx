@@ -4,11 +4,11 @@ import { Section, SectionHeader, cardClass, IconTile } from "./Section";
 
 export function ProblemSection() {
   return (
-    <Section variant="tint" border="bottom">
+    <Section variant="tint" border="bottom" data-testid="landing-problem">
       <SectionHeader
         eyebrow="The problem"
         title="Searching for scholarships shouldn't be this hard."
-        description="Filipino students spend hours jumping between government sites, university pages, and social media—often without knowing if they even qualify."
+        description="Filipino students spend hours jumping between government sites, university pages, and social media, often without knowing if they even qualify."
       />
       <div className="mt-12 grid gap-6 sm:mt-16 md:grid-cols-3">
         {problemItems.map(({ title, body, Icon }, i) => (

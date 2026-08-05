@@ -28,11 +28,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run tests with coverage ratchet
         run: python -m pytest app/tests/ -v --tb=short
 
       - name: Matching eval regression gate
         run: python -m pytest app/tests/test_eval_regression.py -v --tb=short
+
+      - name: Persona matching suite
+        run: python -m pytest app/tests/test_persona_matching.py -v --tb=short
+
+      - name: PII-in-logs guard (SEC-05)
+        run: python scripts/check_pii_logs.py
 
   migrate-postgres:
     runs-on: ubuntu-latest
@@ -71,6 +77,13 @@ jobs:
           alembic downgrade base
           alembic upgrade head
 
+      - name: Plan prefilter parity on Postgres (MATCH-08 / A6)
+        env:
+          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/iskonnect_ci
+          RUN_MIGRATIONS_ON_STARTUP: "false"
+          ENVIRONMENT: development
+        run: python -m pytest app/tests/test_plan_prefilter_parity.py -v -k postgres --tb=short --no-cov
+
   frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -91,5 +104,97 @@ jobs:
           npm ci
           npm run lint
           npm run typecheck
-          npm test
+          npm test -- --coverage
+          npm run audit:dev-strings
+          npm run audit:verification-copy
+          SPACING_LINT=enforced npm run audit:design-tokens
           npm run build
+          npm run audit:bundle-budget
+
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: iskonnect_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: frontend
+    env:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/iskonnect_ci
+      ENVIRONMENT: development
+      SECRET_KEY: ci-e2e-secret-key-not-for-production-use-32chars
+      AUTH_DISABLED: "false"
+      FRONTEND_URL: http://localhost:4173
+      CORS_ORIGINS: http://localhost:5173,http://localhost:5174,http://localhost:3000,http://localhost:4173,http://127.0.0.1:5173,http://127.0.0.1:5174,http://127.0.0.1:3000,http://127.0.0.1:4173
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Migrate and seed CI data
+        working-directory: .
+        run: |
+          alembic upgrade head
+          python -m app.scripts.seed_ci_e2e
+
+      - name: Start API
+        working-directory: .
+        run: |
+          uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 2
+          done
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build and preview frontend
+        run: |
+          npm ci
+          VITE_API_BASE_URL=http://127.0.0.1:8000 npm run build
+          npm run preview -- --host 127.0.0.1 --port 4173 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:4173/ && break
+            sleep 2
+          done
+
+      - name: Install Playwright
+        run: npx playwright install chromium
+
+      - name: E2E smoke + axe (desktop)
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+          PLAYWRIGHT_SKIP_WEBSERVER: "1"
+        run: npx playwright test e2e/smoke.spec.ts e2e/a11y.spec.ts e2e/zoom-reflow.spec.ts --project=desktop-chrome
+
+      - name: Touch-target guard (MOB-01)
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+          PLAYWRIGHT_SKIP_WEBSERVER: "1"
+          E2E_AUTH_EMAIL: e2e-test@example.com
+          E2E_AUTH_PASSWORD: E2eTestPass1!
+        run: npx playwright test e2e/touch-targets.spec.ts --project=desktop-chrome

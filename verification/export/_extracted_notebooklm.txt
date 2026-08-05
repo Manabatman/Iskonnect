@@ -1,0 +1,630 @@
+Production Matching Coverage & Engineering Gap Analysis (V2) 
+To: ISKONNECT Stakeholders 
+From: ISKONNECT Team of Experts 
+Objective: Evaluation of engineering readiness to faithfully implement canonically 
+verified scholarship rules. 
+ 
+1. Executive Summary: Production Readiness Assessment 
+Based on a synthesis of the Canonical Verification Reports (Group A, B, and C) 
+against the Current Database Schema and Matching Engine documentation, the 
+platform cannot currently faithfully represent every officially verified scholarship rule 
+without producing incorrect recommendations. 
+While the engine handles basic GWA and income filters, it lacks the structural depth to 
+model specialized entry gates (e.g., zero-unit clauses), complex sectoral registries (e.g., 
+NCFRS), and institutional exclusivity mandates (e.g., LGU conflicts). Production risk is 
+currently High due to data corruptions and schema omissions that will trigger 
+significant false-positive recommendations. 
+ 
+2. Key Engineering Gaps & Production Risks 
+A. Temporal and Entry-Gate Logic (High Risk) 
+The current system fails to distinguish between generic year-level eligibility and strict 
+entry-window constraints. 
+●​ Gap: The schema lacks an incoming_year_only or max_earned_units 
+boolean. 
+●​ Rule Conflict: Programs like DOST Undergraduate (ID 73) and CHED BPMSP 
+(ID 76) strictly require "zero (0) earned tertiary units." Conversely, Aboitiz 
+Brights (ID 75) is restricted exclusively to Year 2 students. 
+●​ Production Impact: Enrolled upperclassmen will incorrectly match with 
+freshman-only grants, leading to automatic disqualification by providers. 
+B. Sectoral and Affiliation Hard-Filters (Critical Risk) 
+The engine relies on generic priority_groups (JSONB) intended for scoring, rather 
+than deterministic hard-gates for sectoral membership. 
+●​ Gap: Missing explicit fields for Parent Employment and Sectoral Registry 
+Status. 
+●​ Rule Conflict: 
+○​ CoScho (ID 117): Requires parent registration in the NCFRS coconut 
+farmer database. 
+○​ DA ACEF (ID 55): Requires parent registration in the RSBSA. 
+○​ OWWA ELAP (ID 124): Requires parent status to be specifically 
+"deceased" or "permanently incapacitated." 
+
+●​ Production Impact: General agriculture students or active OFW families will 
+receive false-positive matches for programs requiring specific casualty or registry 
+status. 
+C. Academic and Quantitative Merit Alternatives 
+The current schema and engine treat min_gwa as the primary academic gate, failing to 
+model "either/or" merit logic. 
+●​ Gap: Missing a rank_cutoff_alternative field. 
+●​ Rule Conflict: CHED BPMSP (ID 76) allows entry if the student has a 95% GWA 
+OR is in the Top 5 of their class. Makati (ID 31, 98) and PUP (ID 68) use similar 
+Top 10% class rank triggers. 
+●​ Production Impact: Top-ranked students with slightly lower GWAs (e.g., 93% 
+GWA but Rank 2) will be incorrectly filtered out (false-negatives). 
+D. Institutional Exclusivity & Conflict Resolution 
+The platform does not currently model the "One-Grant-Only" policies mandated by 
+LGUs and national agencies. 
+●​ Gap: No lgu_exclusivity_clause or national_grant_exclusivity 
+fields. 
+●​ Rule Conflict: Quezon City (ID 88) and Taguig (ID 27-29) explicitly bar students 
+already enjoying another LGU grant. Most CHED/DOST programs bar duplicate 
+national funding. 
+●​ Production Impact: Students already holding a grant will be matched with 
+incompatible secondary funding, causing administrative friction. 
+E. Professional and Graduate Tracks 
+The current schema cannot handle professional prerequisites for international or 
+graduate tracks. 
+●​ Gap: Missing work_experience_years and age_limit constraints. 
+●​ Rule Conflict: Australia Awards (ID 74) and Chevening (ID 91) require a 
+minimum of 2 years post-graduation work experience. MEXT (ID 81-83) and 
+GKS (ID 65) enforce strict age cutoffs based on specific birthdates (e.g., April 2, 
+2002). 
+ 
+3. Strategic Data Quality Anomalies 
+The current database contains high-risk "silent failures" where the engineering state 
+contradicts verified policy: 
+●​ ID 130 (JLSS): Marked is_active: false (Archived) while verified as an 
+active, mandatory annual program for 2nd-year students. 
+●​ ID 3 (DOST Graduate): Erroneously enforces a ₱500,000 income ceiling and 
+underestimates stipends by ~50%. 
+
+●​ ID 54 (CHED MSRS): Records an income cap of ₱600k in the DB, while verified 
+CMO rules set it at ₱450k, creating a ₱150k window of false-positive eligibility. 
+ 
+4. Required Engineering Actions (Directives) 
+I. Schema Expansion (DDL) 
+Database Architects must execute the following structural updates to 
+public.scholarships: 
+●​ ADD COLUMN incoming_year_only BOOLEAN DEFAULT true (Freshman 
+entry gate). 
+●​ ADD COLUMN alternative_class_rank INT (Top 5, Top 10 logic). 
+●​ ADD COLUMN sectoral_restriction VARCHAR (NCFRS, RSBSA, SRA 
+tags). 
+●​ ADD COLUMN lgu_exclusivity_clause BOOLEAN (LGU conflict filter). 
+●​ ADD COLUMN work_experience_years INT (International/Professional 
+gate). 
+●​ ADD COLUMN partner_school_restricted BOOLEAN (Consortium/Partner 
+school lock). 
+II. Matching Engine Pipeline Enhancement 
+Backend Engineers must implement a Three-Stage Pipeline in match_service.py: 
+1.​ Stage 1 (Hard Temporal/Level): Enforce earned_units == 0 for 
+freshman-only tracks and dynamic age calculation against birthdate. 
+2.​ Stage 2 (Quant/Socioeconomic): Implement OR logic for (gwa >= min_gwa 
+OR class_rank <= rank_cutoff). 
+3.​ Stage 3 (Sectoral/Institutional): Cross-verify user affiliation (e.g., 
+user.is_ncfrs_registered) and school_id against specific 
+partner/consortium lists. 
+III. Data Remediation (DML) 
+All Group B/C programs identified as "Published" or "Open" must undergo a batch 
+update to align with Tier 1 evidence (e.g., Correcting ID 3, 54, 130, and 117). 
+ 
+5. Final Conclusion 
+The ISKONNECT platform is not production-ready for its deterministic matching 
+mission. While the verification reports provide the necessary "intelligence," the current 
+schema is too shallow to house that intelligence. Engineering work must shift from 
+UI/UX and ranking to these fundamental structural extensions to prevent misleading 
+Filipino students. 
+ 
+ISKONNECT Production Matching Coverage & Engineering Gap Analysis (V2) 
+
+ 
+1. Executive Summary 
+Based on a synthesis of the Live Database Export and Canonical Verification 
+Reports (V1–V3), the following metrics define the current state of the ISKONNECT 
+platform: 
+●​ Total Scholarships Reviewed: 120. 
+●​ Active Scholarships: 114. 
+●​ Archived Scholarships: 6. 
+●​ Scholarships Requiring Manual Review: 83 (Editorial state: needs_review). 
+●​ Overall Engineering Readiness: LOW. While the engine processes basic 
+academic and geographic filters, it cannot currently enforce the "Zero-Unit" 
+clauses, "One-Scholar-per-Family" rules, or sectoral registry verifications 
+required by the verified rules. 
+●​ Overall Schema Coverage Estimate: ~65%. The current schema handles 
+approximately two-thirds of required parameters but lacks the structural depth for 
+temporal logic, professional prerequisites, and institutional exclusivity. 
+●​ Overall Production Risk: CRITICAL. There is a high probability of 
+false-positive recommendations for freshmen-only grants and false-negative 
+omissions for top-ranked students with lower GWAs due to missing "OR" logic 
+(GWA vs. Class Rank). 
+ 
+2. Eligibility Rule Inventory 
+A master inventory of rules discovered across the verification audits: 
+Rule Type 
+Importance 
+Existing Support 
+Missing Support / Gaps 
+Academic 
+Standing 
+(GWA) 
+Critical 
+min_gwa_normali
+zed 
+Needs "Either/Or" logic for 
+Rank alternatives. 
+Enrollment 
+Timing 
+High 
+application_sta
+tus 
+max_earned_units and 
+incoming_year_only. 
+Sectoral 
+Registry 
+High 
+priority_groups 
+(JSONB) 
+Hard-gates for RSBSA, 
+NCFRS, and SRA. 
+
+Grant 
+Exclusivity 
+High 
+None 
+lgu_exclusivity and 
+national_grant_bar. 
+Household 
+Limit 
+High 
+None 
+one_scholar_per_famil
+y cross-field check. 
+Professional 
+Exp. 
+Medium 
+None 
+work_experience_years 
+for Int'l grants. 
+Institution 
+Lock 
+Critical 
+eligible_school
+s 
+Consortium-only table 
+lookups (ERDT/ASTHRDP). 
+Age Cutoffs 
+High 
+min_age / 
+max_age 
+Dynamic logic for 
+birthdate-specific cutoffs. 
+Return Service 
+Medium 
+has_return_serv
+ice 
+Service Type (Teaching vs. 
+Health vs. Industry). 
+ 
+3. Schema Coverage Assessment 
+Eligibility 
+Rule 
+Used By 
+Existing 
+Schema 
+Partial 
+Support 
+Missing 
+Engineering 
+Recommendation 
+Zero-Unit 
+Clause 
+DOST (73), 
+BPMSP 
+(76) 
+ 
+ 
+[X] 
+ADD 
+incoming_year_on
+ly BOOLEAN. 
+
+Class Rank 
+Alt. 
+Makati (31), 
+BPMSP 
+(76) 
+ 
+[X] 
+ 
+ADD 
+rank_cutoff_alte
+rnative INT. 
+LGU 
+Exclusivity 
+QC (88), 
+Taguig (27) 
+ 
+ 
+[X] 
+ADD 
+lgu_exclusivity_
+clause BOOLEAN. 
+Sectoral 
+Registry 
+CoScho 
+(117), DA 
+(55) 
+ 
+[X] 
+ 
+ADD 
+sectoral_restric
+tion ENUM. 
+Family Cap 
+Pasig (25), 
+Davao (37) 
+ 
+ 
+[X] 
+ADD 
+one_scholar_per_
+family BOOLEAN. 
+Work 
+Experience 
+Chevening 
+(91), 
+Australia 
+(74) 
+ 
+ 
+[X] 
+ADD 
+work_experience_
+years INT. 
+Employment 
+Status 
+GSIS (78), 
+SIKAP 
+(120) 
+ 
+[X] 
+ 
+ADD 
+parent_salary_gr
+ade & 
+is_hei_staff. 
+ 
+4. Matching Logic Coverage 
+●​ Rules Already Enforced: Basic GWA cutoffs, Region/City residency, Income 
+ceilings (though many caps are currently corrupted in data), and School types. 
+●​ Rules Partially Enforced: priority_groups as soft scores rather than hard 
+gates, and eligible_levels which lack lateral entry distinction. 
+●​ Rules Not Enforceable: 
+○​ Compound/OR Conditions: e.g., "GWA >= 95 OR Top 5 Rank". 
+
+○​ Historical State: "Has NOT earned tertiary units" requires checking the 
+student's completed unit count. 
+○​ Cross-Field Validation: "One scholar per family" requires querying 
+existing grants held by family members. 
+○​ Temporal Logic: Birthdate-calculated age relative to intake date (e.g., 
+"Born after April 2, 1992"). 
+●​ Rules Requiring Normalization: 
+○​ GWA Scales: Normalizing university-specific decimal scales (1.0–5.0) 
+against percentage-based scholarship rules. 
+○​ Registry Tags: Mapping user-provided employment proof to agency 
+registries like RSBSA or NCFRS. 
+ 
+5. Hidden Eligibility Risks 
+1.​ The "Enrolled Freshman" Trap (Zero Units): 
+○​ Risk: Enrolled college freshmen will match with DOST (73) or BPMSP 
+(76). 
+○​ Reason: These grants require zero (0) post-secondary units. Once a 
+student finishes their first semester, they are permanently barred from 
+these "Freshman Track" grants. The current engine lacks an 
+earned_units == 0 check. 
+2.​ LGU and National Grant Exclusivity: 
+○​ Risk: Students holding a Taguig grant (27) will match with Quezon City 
+(88) or CHED Merit (1). 
+○​ Reason: Most LGUs and national agencies strictly bar dual-grant 
+enjoyment. Recommending a second grant leads to immediate 
+disqualification or refund demands. 
+3.​ Consortium Institutional Locks: 
+○​ Risk: Students in any public university will match with DOST Graduate (3) 
+or ERDT (134). 
+○​ Reason: These are restricted to Consortium Member Universities (only 
+8-10 specific schools). Generic "SUC" filters will produce massive false 
+positives. 
+4.​ Implicit Marital/Health Status: 
+○​ Risk: Married students matching with OWWA (85) or Caritas (59). 
+○​ Reason: These programs explicitly mandate Single Marital Status, a 
+field currently under-utilized in the hard-filter layer. 
+5.​ Graduate vs. Undergraduate Med/Law: 
+○​ Risk: Pre-med seniors matching with CHED MSRS (54). 
+
+○​ Reason: The program requires a completed Bachelor's degree and 
+NMAT score prior to entry. The engine must distinguish "Incoming 
+Graduate" from "Ongoing Undergraduate". 
+ 
+Production Matching Coverage & Engineering Gap Analysis (V2) 
+ 
+1. Executive Summary 
+A comprehensive audit of the ISKONNECT platform against canonical verification 
+reports (V1–V3) reveals a significant divergence between officially verified scholarship 
+rules and the platform’s current engineering capabilities. 
+●​ Total Scholarships Reviewed: 120. 
+●​ Active Scholarships: 114. 
+●​ Archived Scholarships: 6. 
+●​ Scholarships Requiring Manual Review: 83 (currently in needs_review 
+editorial state). 
+●​ Overall Engineering Readiness: LOW. The system lacks the structural depth to 
+handle strict temporal gates (Zero-Unit clauses), sectoral registry verifications 
+(RSBSA/NCFRS), and institutional exclusivity mandates (LGU conflicts). 
+●​ Overall Schema Coverage Estimate: ~65%. While basic academic and 
+demographic fields exist, secondary control parameters (e.g., 
+incoming_year_only, lgu_exclusivity) are missing from the 
+public.scholarships table. 
+●​ Overall Production Risk: CRITICAL. Without immediate schema mutations and 
+matching engine logic updates, the platform will generate significant 
+false-positive recommendations for freshman-only and sectoral grants. 
+ 
+2. False Positive Analysis 
+Missing 
+Capability 
+Current 
+Behavior 
+Incorrect 
+Recommendati
+on 
+Affected 
+Scholarshi
+ps 
+Production 
+Impact 
+Severit
+y 
+
+Zero-Unit 
+Clause 
+Filters by 
+year_lev
+el only. 
+Recommends 
+freshman grants 
+to enrolled 
+college 
+students. 
+DOST (73), 
+BPMSP 
+(76), SM 
+(10). 
+Students 
+waste effort 
+applying for 
+grants they 
+are 
+permanently 
+barred from 
+after earning 
+1 unit. 
+Critical 
+LGU 
+Exclusivity 
+Checks 
+only 
+residency. 
+Recommends 
+QCSP (88) to a 
+student already 
+holding a Taguig 
+grant. 
+QC (88), 
+Taguig 
+(27-30). 
+Administrative 
+friction; 
+dual-enjoyme
+nt leads to 
+disqualificatio
+n or refund 
+demands. 
+High 
+Sectoral 
+Registry 
+Checks 
+only 
+degree 
+type. 
+Recommends 
+agriculture 
+grants to 
+non-farming 
+families. 
+CoScho 
+(117), DA 
+(55), SIDA 
+(118). 
+Massive 
+rejection 
+rates; these 
+programs 
+require SRA 
+or NCFRS 
+registry proof. 
+High 
+Institutiona
+l Lock 
+Checks 
+only 
+school_t
+ype. 
+Recommends 
+ERDT (134) to 
+students in 
+non-consortium 
+SUCs. 
+ERDT, 
+ASTHRDP, 
+Aboitiz (75). 
+Misleading 
+students; 
+these grants 
+are restricted 
+to ~8–10 
+specific 
+universities. 
+Critical 
+ 
+3. False Negative Analysis 
+●​ Logic Limitation: Missing "Either/Or" (OR) logic for academic cutoffs. 
+●​ Affected Scholarships: BPMSP (76), Makati (31). 
+
+●​ Impact: A student with a 93% GWA who is Top 5 in their class will be rejected 
+by the current engine because it only evaluates min_gwa: 95. This suppresses 
+valid funding for the most elite candidates. 
+ 
+4. Database Engineering Gap Analysis (Grouped Issue Matrix) 
+A. Temporal and Enrollment Gaps 
+●​ Current Limitation: Lacks fields for "Zero units earned" or "Lateral entry 
+allowed". 
+●​ Affected Fields: eligible_year_levels, incoming_year_only (Missing). 
+●​ Affected Scholarships: DOST (73, 130), Aboitiz (75), SM Foundation (10). 
+●​ Recommendation: ADD COLUMN incoming_year_only BOOLEAN, ADD 
+COLUMN max_earned_units INT. 
+B. Sectoral and Affiliation Gaps 
+●​ Current Limitation: Relies on generic priority_groups (JSONB) for 
+soft-scoring instead of hard deterministic gates. 
+●​ Affected Fields: sectoral_restriction, 
+parent_employment_restriction. 
+●​ Affected Scholarships: CoScho (117), OWWA (85, 124), GSIS (78, 84). 
+●​ Recommendation: ADD COLUMN sectoral_restriction VARCHAR, ADD 
+COLUMN parent_gsis_sg INT. 
+C. Institutional Gaps 
+●​ Current Limitation: No lookup table for Consortium/Partner University locks. 
+●​ Affected Fields: partner_school_restricted (Missing). 
+●​ Affected Scholarships: Megaworld (61), ERDT (134), ASTHRDP (133). 
+●​ Recommendation: ADD COLUMN partner_school_restricted BOOLEAN, 
+link to organizations table. 
+ 
+5. Matching Engine Gap Analysis 
+Requirement 
+Type 
+Why it is 
+Required 
+Affected 
+Scholarships 
+Complexity 
+Regression 
+Risk 
+OR Logic 
+For "GWA >= X 
+OR Rank <= Y" 
+rules. 
+BPMSP (76), 
+Makati (31). 
+Medium 
+Low 
+
+Cross-Field 
+Validation 
+For "One scholar 
+per family" rules. 
+Pasig (25), 
+Davao (37). 
+High 
+Medium 
+Temporal Age 
+Logic 
+Age must be 
+relative to intake 
+date, not today's 
+date. 
+MEXT (81-83), 
+GKS (65). 
+Medium 
+Medium 
+Salary Grade 
+Logic 
+Parent income 
+ceiling is tied to 
+civil service SG 
+levels. 
+GSIS GSSP 
+(78). 
+Low 
+Low 
+ 
+6. Engineering Priority Matrix 
+●​ P0 — Critical (Immediate Fix Required): 
+○​ Implementing the "Zero-Unit" clause to prevent enrolled freshmen from 
+matching with DOST/BPMSP. 
+○​ Fixing the LGU exclusivity gate to prevent duplicate local grant 
+recommendations. 
+○​ Correcting corrupted data for ID 3 (DOST Graduate) which currently 
+enforces a false ₱500k cap. 
+●​ P1 — High: 
+○​ Adding Consortium Lookup validation for institutional locks. 
+○​ Implementing OR logic for GWA vs. Class Rank. 
+●​ P2 — Medium: 
+○​ Normalization of GWA scales (decimal vs. percentage) for deterministic 
+matching. 
+ 
+7. Production Readiness Assessment 
+●​ Overall Schema Coverage: 65% [Source Synthesis]. 
+●​ Overall Matching Coverage: 50% (Fails on all complex logic types) [Source 
+Synthesis]. 
+●​ Critical Blockers: Missing earned_units user field; Missing 
+exclusivity_clause scholarship field. 
+
+None
+●​ High-Risk Assumption: Currently assumes eligible_levels implies 
+freshman entry; verified reports prove this is false. 
+ 
+8. ISKONNECT Engineering Specification for Production Matching 
+I. Engineering Principles 
+1.​ Hard-Gate First: Quantitative filters (GWA, Income, Units) must execute before 
+soft scoring. 
+2.​ Zero-False-Positives: Recommending a scholarship to a candidate with 1 
+earned college unit when the grant requires 0 units is a system failure. 
+3.​ Temporal Relativity: Eligibility is calculated against the Academic Year Target, 
+not the current system time. 
+II. Required Schema Changes (DDL) 
+ALTER TABLE public.scholarships  
+  ADD COLUMN IF NOT EXISTS incoming_year_only BOOLEAN DEFAULT false, 
+  ADD COLUMN IF NOT EXISTS max_earned_units INT DEFAULT NULL, 
+  ADD COLUMN IF NOT EXISTS rank_cutoff_alternative INT DEFAULT NULL, 
+  ADD COLUMN IF NOT EXISTS lgu_exclusivity_clause BOOLEAN DEFAULT 
+false, 
+  ADD COLUMN IF NOT EXISTS one_scholar_per_family_clause BOOLEAN 
+DEFAULT false, 
+  ADD COLUMN IF NOT EXISTS sectoral_restriction VARCHAR(100) DEFAULT 
+NULL, 
+  ADD COLUMN IF NOT EXISTS partner_school_restricted BOOLEAN DEFAULT 
+false, 
+  ADD COLUMN IF NOT EXISTS work_experience_years INT DEFAULT NULL; 
+(Ref:) 
+III. Required Matching Logic Changes 
+●​ Stage 1 Update: If incoming_year_only == true, engine must verify 
+user.earned_college_units == 0. 
+●​ Stage 2 Update: Implement IF (GWA >= min_gwa OR class_rank <= 
+rank_cutoff_alternative) THEN qualified. 
+●​ Stage 3 Update: If lgu_exclusivity_clause == true, engine must check 
+user.existing_grants for other LGU tags. 
+IV. Required Explainability Changes 
+●​ Temporal Warnings: "You will become eligible for this grant in your Junior Year" 
+(JLSS ID 130). 
+
+●​ Disqualification Alerts: "You are ineligible for this grant because you have 
+already earned college units" (DOST ID 73). 
+V. Regression Testing Requirements 
+●​ Persona A (The "Enrolled Freshman"): Verify that a student in 1st Year, 2nd 
+Sem with 18 units cannot match with DOST (73). 
+●​ Persona B (The "Elite Ranker"): Verify that a student with 90% GWA (below 
+95% threshold) but Rank 2 in class can match with BPMSP (76). 
+●​ Persona C (The "Double Dipper"): Verify that a student holding a Taguig grant 
+is filtered out of QCSP (88). 
+VI. Success Criteria for Production Readiness 
+●​ 100% of Group B/C programs have the incoming_year_only flag correctly 
+set. 
+●​ The max_income parameter for ID 3 is removed (uncapped per policy). 
+●​ The engine correctly handles "Consortium Only" matching for ERDT and 
+ASTHRDP. 
+ 

@@ -1,0 +1,473 @@
+
+===== DATABASE_V1_GROUPA.pdf (29p, 57988c) =====
+
+and private sectors. To eliminate false-positive recommendations that direct applicants to
+ineligible programs and false-negative omissions that suppress viable funding, this report
+establishes the canonical verification ground truth for all database records that have not yet
+Enterprise database updates require deterministic verification: every eligibility parameter must
+be validated against Tier 1 primary evidence, mapped to explicit SQL data types, and reconciled
+with governing agency mandates. Where an official provider document or governing policy does
+GSIS Policy and Procedural Guidelines (PPGs), DOST Administrative Orders, and official
+official FAQs, and direct advisories published by scholarship secretariats.
+data cannot override Tier 1 or Tier 2 mandates.
+DOST-SEI Junior Level
+DOST-SEI Junior Level
+Track
+DOST-SEI Junior Level
+7687 Track
+DOST-SEI Junior Level
+10612 Track
+- Higher Education Track
+Group B comprises all remaining active, pending, and unverified records present in the live
+verification audits for primary programs are detailed below.
+Program Audit 1: CHED Medical Scholarship and Return Service
+●​ Official Name: CHED Medical Scholarship and Return Service (MSRS) Program
+(enacted under Republic Act No. 11509, "Doktor Para sa Bayan Act").
+●​ Category: Government / National / Graduate / Merit-and-Need / Return Service
+Colleges (SUCs) and Partner Private Higher Education Institutions (PHEIs).
+("Guidelines for the Medical Scholarship and Return Service Program"); CHED
+●​ Official Announcement: Office of the Chairperson Memorandum: Call for Applications
+for First Semester AY 2025–2026.
+To expand access to medical education for deserving Filipino students and address the critical
+shortage of health human resources in underserved, remote, and low-income municipalities by
+establishing a mandatory return service framework in public health facilities.
+3. Official Eligibility Requirements
+●​ Citizenship: Natural-born or naturalized Filipino citizen residing in the Philippines.
+●​ Education Level: Graduate (Doctor of Medicine degree program).
+●​ Eligible Year Levels: Incoming 1st Year medical students, as well as regular ongoing 2nd
+Year, 3rd Year, and 4th Year medical students.
+●​ Incoming Freshman Only?: No.
+●​ Existing College Students?: Eligible (as medical students in years 1 through 4).
+●​ Graduate Students?: Yes (Doctor of Medicine is a post-baccalaureate degree).
+●​ Current Enrollment Requirement: Must be accepted or enrolled in a Doctor of Medicine
+program at an accredited partner SUC or PHEI.
+
+===== DATABASE_V2_GROUPB.pdf (21p, 43109c) =====
+
+recommendations that misdirect applicants and false-negative omissions that hide viable
+funding, this verification report establishes the canonical ground truth for production database
+eligibility parameter must be validated against primary evidence, mapped to strict SQL column
+data types, and verified against governing policy mandates. If an official governing body or
+CHED Memoranda, DOST Administrative Orders, and verified Facebook pages managed
+instructions, official FAQs, admission notices, and formal advisories published directly by
+university scholarship office notices, and recognized educational organizations.
+Secondary sources serve strictly to clarify or locate primary documentation and can never
+override Tier 1 or Tier 2 official data. If PhilScholar conflicts with an official agency
+structural inaccuracies, stale data models, and critical logic mismatches between live database
+parameters and official agency guidelines. The table below outlines these discrepancies, their
+canonical realities, and their impact on automated matching.
+active and opens
+2nd-year college
+2nd-year college
+95\% or Top 5
+1st-year entry only.
+mapping for class
+and strict
+incoming/current
+1st-year, parent
+Active; incoming
+and specific
+7687 & Merit Tracks)
+Scholarships (Republic Act No. 7687 & Merit Scholarship Tracks).
+●​ Provider: Department of Science and Technology – Science Education Institute
+To stimulate and entice talented Filipino youth to pursue lifetime productive careers in science
+and technology, ensuring a steady and adequate supply of qualified S&T human resources to
+3. Official Eligibility Requirements
+●​ Residency: For RA 7687, must be a resident of the municipality for at least four (4) years
+as attested by the barangay. For Merit, no municipal duration constraint is specified.
+●​ Education Level: Senior High School (Grade 12) graduating students or High School /
+SHS prior graduates who have not entered college.
+college, or vocational units.
+●​ Academic Performance & Strand Rules:
+○​ STEM Strand: All graduating Grade 12 STEM students are eligible regardless of
+○​ Non-STEM Strand: Must belong to the top 5% of the Grade 11 graduating/ranking
+○​ Prior SHS/HS Graduates: STEM graduates eligible; Non-STEM graduates must
+belong to top 5% of their graduating class.
+○​ RA 7687 Track: Family socio-economic status must not exceed the set cut-off
+
+===== DATABASE_V3_GROUPC_DOST_GRADUATE.pdf (31p, 66836c) =====
+
+2026-08-05) reveals structural inaccuracies, incomplete data models, and critical logic
+mismatches between live database parameters and official agency mandates governing
+ineligible applicants to submit applications for programs that will reject them, while
+false-negative omissions suppress viable funding opportunities for qualified candidates.
+This report provides canonical verification for five Department of Science and Technology -
+entry (ID 3) and its four component sub-tracks—Accelerated Science and Technology Human
+Resource Development Program (ASTHRDP, ID 133), Engineering Research and Development
+for Technology (ERDT, ID 134), Capacity Building Program in Science and Mathematics
+Education (CBPSME, ID 135), and Science and Technology Education for Regional
+downloadable PDF guidelines, and governing administrative orders. Tier 2 covers official press
+releases and advisories published directly by governing secretariats. Tier 3 includes trusted
+blogs and secondary aggregators are discarded. Fields lacking explicit mandates in Tier 1
+or ₱38,000/mo
+applicant eligibility.
+graduate track.
+Schema:
+and completeness
+graduate track
+Schema &
+tagging for the
+track for science
+and math
+Schema &
+Sectoral
+teacher sectoral
+development track
+Schema &
+ASTHRDP, CBPSME, ERDT, and STRAND)
+●​ Provider: Department of Science and Technology - Science Education Institute
+To boost the production of high-level human resources needed for Research and Development
+(R&D) in Science and Technology (S&T), upgrade engineering research capability, improve the
+quality of science and mathematics education, and strengthen the faculty profile of regional
+3. Official Eligibility Requirements
+●​ Citizenship: Natural-born or naturalized Filipino citizen.
+●​ Education Level: Graduate (Master's Degree and Doctoral/PhD Degree).
+●​ Eligible Year Levels: MS Program: Years 1 and 2; PhD Program: Years 1, 2, and 3 (up to
+Year 4 for straight-PhD track).
+●​ Incoming Freshman Only?: No (Lateral entry ongoing graduate students with earned units
+●​ Existing College Students?: Ineligible for undergraduate degree enrollment; applicants
+must possess a completed Bachelor's degree (for MS) or Master's degree (for PhD).
+
+===== DATABASE_V3_GROUPC_INTERNATIONAL.pdf (56p, 85503c) =====
+
+international and bilateral scholarship programs available to Filipino applicants1. Developed for
+immutable source of truth required for production database mutations and matching engine
+guidebooks, and official program memoranda1. In accordance with platform audit protocols,
+●​ Provider: Taiwan International Cooperation and Development Fund (TaiwanICDF)3
+To assist friendly and developing partner nations in human resource development by providing
+full financial support for talented international students to pursue Master's and Doctoral
+3. Official Eligibility Requirements
+●​ Education Level: Graduate (Master's and Doctoral degree levels)3.
+●​ Eligible Year Levels: Year 1 (Incoming Graduate Students)4.
+●​ Incoming Freshman Only?: No4.
+●​ Existing College Students?: Ineligible for initial award unless applying for entry-level
+●​ Current Enrollment Requirement: Must apply for admission to a designated TaiwanICDF
+●​ Academic Requirements: Outstanding academic record from prior post-secondary
+transcripts and university admission standards; live database parameter lists 85.00%)3.
+●​ Age Restrictions: Must be above 18 years of age4.
+●​ Priority Courses: Agriculture, Science and Engineering, Public Health and Medicine,
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE
+●​ Health Requirements: Satisfactory physical and mental health4.
+government scholarship concurrently8.
+●​ Who May Apply: Bachelor's degree holders applying for Master's programs, and Master's
+degree holders applying for PhD programs at partner Taiwanese universities4.
+●​ Can current seniors apply?: Yes (provided they graduate prior to scholarship intake)8.
+●​ Tuition: 100% full coverage of tuition and credit fees3.
+●​ Monthly Stipend: NTD 15,000 for Master's students; NTD 17,000–18,000 for PhD
+●​ Insurance: Full health and accident insurance coverage4.
+●​ Return Service: None required by TaiwanICDF, though scholars are expected to return
+3.​ Highest Degree Diploma and Official Academic Transcripts4.
+8. Renewal Requirements
+●​ Return Service: None3.
+●​ Holding ROC (Taiwan) citizenship or overseas Chinese student status4.
+●​ Concurrent enjoyment of another Taiwanese government scholarship8.
+10. Temporal Eligibility Matrix
+Eligibility Status
+degree prior to applying4.
+Graduating Senior /
+January and March for
+January and March for PhD
+11. Structured Eligibility Matrix
+> 18 Years
+18 years old."
+
+===== DATABASE_V3_GROUPC_LGU_PART1.pdf (81p, 118605c) =====
+
+Scholarship Tracks
+●​ Official Name: Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier
+To provide financial assistance and merit incentives to qualified Taguig City residents pursuing
+Philippines System (Luzon campuses) and private/public higher education institutions in the
+3. Official Eligibility Requirements
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years immediately
+●​ Eligible Year Levels: 1, 2, 3, 4, 51.
+●​ Incoming Freshman Only?: No1.
+●​ Graduate Students?: No (Covered under LEAD track ID 97)1.
+●​ Current Enrollment Requirement: Enrolled or enrolling in the UP System (Luzon
+campuses) or CHED-certified Centers of Excellence in NCR1.
+●​ Academic Requirements: Senior High School or college academic performance meeting
+admission and retention cutoffs1.
+●​ Minimum GWA: 90% (or equivalent 1.75 semestral weighted average)1.
+and CHED-certified Centers of Excellence in NCR1.
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE
+●​ Good Moral: Required (Certificate of Good Moral Character issued for the current
+school year)1.
+●​ Other Official Rules: Must be a registered voter of Taguig City if 18 years or older, with at
+●​ Who May Apply: Graduating SHS students and ongoing college students enrolled in
+qualifying COE institutions or UP Luzon campuses1.
+●​ Can previous applicants reapply?: Yes (Requires semestral renewal)1.
+●​ Allowance: PHP 40,000.00 to PHP 50,000.00 per school year (PHP 20,000.00 to PHP
+●​ Return Service: None mandated; scholars are encouraged to serve Taguig City1.
+average of 1.75 or higher1.
+2.​ Registration Form or Official Receipt of Enrollment for the current semester1.
+3.​ Authenticated Copy of Grades/Transcript of Records for the preceding semester1.
+4.​ Certificate of Good Moral Character issued for the current academic year1.
+5.​ Voter's Certification issued by COMELEC (for applicant if >=18 years old, and parent)1.
+6.​ Certificate of Residency (minimum 3 years)1.
+7.​ Proof of Billing under the applicant's or parent's name1.
+8. Renewal Requirements
+●​ Regular Load: Enrolled in at least 15 academic units per semester or equivalent per
+●​ No Failures: Zero failing grades (5.0), unremoved 4.0, Incomplete (INC), or Dropped
+●​ Return Service: None1.
+●​ Residing in Taguig City for less than three (3) consecutive years1.
+●​ Non-voter status of applicant (if 18+) or parent in Taguig City1.
+●​ Semester GWA dropping below 2.50 or receiving grades of 5.0, 4.0, INC, or Dropped5.
+●​ Enrollment in non-COE institutions or non-UP Luzon campuses1.
+10. Temporal Eligibility Matrix
+
+===== DATABASE_V3_GROUPC_LGU_PART2.pdf (72p, 104585c) =====
+
+This canonical verification report establishes the definitive ground truth for sixteen local
+government unit (LGU) and specialized scholarship programs within the ISKONNECT
+applicants toward ineligible grants and false-negative omissions that conceal viable funding,
+government portals, official ordinances, downloadable citizen charters, and governing
+bonafide Pasig City residents across basic and tertiary education levels5. By offering semestral
+3. Official Eligibility Requirements
+●​ Education Level: Elementary, Junior High School, Senior High School, College4
+●​ Eligible Year Levels: All year levels (Grade 1 through College Senior)1
+●​ Incoming Freshman Only?: No7
+●​ Current Enrollment Requirement: Enrolled in a recognized public or private educational
+or submission of a Barangay Certificate of Indigence1
+●​ School Restrictions: Recognized public or private schools5
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE
+one scholar per household)6; Voter's Certification Record (VCR) of parent (for minors) or
+●​ Who May Apply: Resident students in elementary, secondary, and tertiary levels4
+●​ Can previous applicants reapply?: Yes (via annual renewal/reenlistment)7
+●​ Tuition: Covered up to city cap for private school scholars; free in SUCs/LUCs1
+●​ Return Service: False1
+2.​ School ID (photocopy, front and back)5
+3.​ Report of Grades / Card for the preceding academic year4
+4.​ Proof of Enrollment / Enrolment Slip for current academic year4
+5.​ Proof of Parents' / Guardians' Income (ITR, Pay Slip, or Barangay Certificate of Indigence)4
+6.​ Barangay Certificate of Residency with years of residence indicated4
+7.​ Voter's Certification Record (VCR) of parent or applicant8
+8. Renewal Requirements
+●​ No Failures: No failing or dropped subjects5
+●​ Return Service: None1
+10. Temporal Eligibility Matrix
+Eligibility Status
+11. Structured Eligibility Matrix
+"eligible_year_levels": [1, 2, 3, 4],​
+"incoming_year_only": false,​
+Pasig City Arts and Design Scholarship (ID: 26)
+●​ Official Name: Pasig City Arts and Design Scholarship Program5
+The Pasig City Arts and Design Scholarship Program encourages artistic excellence among
+resident youth by financing their education in specialized Senior High School tracks or creative
+3. Official Eligibility Requirements
+●​ Eligible Year Levels: SHS Grade 11–12 and College Years 1–41
+●​ Incoming Freshman Only?: No1
+●​ Current Enrollment Requirement: Enrolled in Grade 11/12 Arts & Design Track or an
+
+===== DATABASE_V3_GROUPC_OTHER_GOVERNMENT.pdf (73p, 115864c) =====
+
+institutional, and private sectors1. To eliminate false-positive recommendations that direct
+applicants to ineligible programs and false-negative omissions that suppress viable funding,
+this canonical audit establishes the verified ground truth for all Group B database records1.
+Production database updates require deterministic verification: every eligibility parameter must
+Policy and Procedural Guidelines (PPGs), DOST Administrative Orders, and official application
+portals1. Tier 2 covers official announcements, press releases, and direct advisories published
+comprises unverified aggregators, blogs, and student forums, which are permanently excluded
+●​ Official Name: Senior High School Voucher Program (SHS VP)3
+The Senior High School Voucher Program is an institutionalized mechanism of financial
+participating private senior high schools, State Universities and Colleges (SUCs), or Local
+Universities and Colleges (LUCs)3. By expanding student choice and leveraging private sector
+3. Official Eligibility Requirements
+●​ Citizenship: Natural-born or naturalized Filipino citizen5.
+●​ Education Level: Senior High School (Grades 11 and 12)4.
+●​ Eligible Year Levels: Grade 11 (Initial redemption occurs upon entry into Grade 11)4.
+●​ Incoming Freshman Only?: Yes (Applicable to incoming Grade 11 SHS students)4.
+●​ Current Enrollment Requirement: Must be enrolled or accepted in a non-DepEd
+VP-participating Senior High School3.
+●​ Academic Requirements: Successful completion of Grade 10 Junior High School (JHS)4.
+JHSs and private JHS Educational Service Contracting [ESC] grantees are automatically
+●​ School Restrictions: Restricted to VP-participating non-DepEd Senior High Schools
+(Private SHSs, SUCs, and LUCs)3.
+●​ Priority Courses: All DepEd-approved SHS Tracks and Strands (Academic,
+Technical-Vocational-Livelihood [TVL], Sports, Arts and Design)4.
+●​ Sectoral Requirements: None5.
+●​ Good Moral: Certificate of Good Moral Character issued by the originating Junior High
+completers from Public JHSs, SUC/LUC JHSs, and ESC grantees in Private JHSs5.
+schools via Land Bank of the Philippines accounts4.
+●​ Who May Apply: Non-ESC Grade 10 completers from private junior high schools, and
+learners who completed JHS prior to the current school year re-entering basic
+●​ Can current freshmen apply?: Yes (Incoming Grade 11 SHS students)4.
+●​ Can current sophomores apply?: No (Grade 12 voucher renewal is automatic for Grade
+and January)5.
+●​ Closing Date: Specified in the annual policy guidelines (typically February 28 for online
+₱22,500/year; NCR SUC/LUC SHS: ₱17,500/year; Non-NCR Private SHS: up to
+₱17,500/year; Non-NCR SUC/LUC SHS: ₱14,000/year)4.
+●​ Return Service: None4.
+●​ Other Benefits: Voucher validity spans two consecutive years of continuous basic
+education (Grades 11 and 12)4.
+3.​ Certificate of Junior High School Completion4.
+
+===== DATABASE_V3_GROUPC_PRIVATE_FOUNDATIONS_P1.pdf (36p, 72785c) =====
+
+Private Foundation Scholarships for the
+programs across public, institutional, and private sectors in the Philippines. To eliminate
+false-positive recommendations that direct applicants to ineligible programs and false-negative
+truth for all Group B database records that have not yet undergone canonical auditing.
+Enterprise database updates require deterministic verification: every eligibility parameter must
+be validated against Tier 1 primary evidence, mapped to explicit SQL data types, and reconciled
+with governing agency mandates. Where an official provider document or governing policy does
+GSIS Policy and Procedural Guidelines (PPGs), DOST Administrative Orders, and official
+official FAQs, and direct advisories published by scholarship secretariats.
+data cannot override Tier 1 or Tier 2 mandates.
+verification reports (e.g., DOST-SEI Undergraduate and JLSS, CHED BPMSP, CHED CMSP,
+Quezon City Scholarship Program) are assigned to Group A and are excluded from re-research.
+This report presents exhaustive canonical audits for all seven target private foundation
+●​ Application Portal: Official Eligibility Form Portal (sent via email/QR upon eligibility
+The Ayala Foundation U-Go Scholar Grant provides financial assistance and educational
+support to high-potential young women from low-income families enrolled in public or state
+universities and colleges in the Philippines, helping cover living, transportation, and school
+expenses to ensure college completion and promote gender equity in higher education.
+3. Official Eligibility Requirements
+●​ Eligible Year Levels: 1st Year, 2nd Year, 3rd Year (and 4th Year if enrolled in a 5-year
+●​ Incoming Freshman Only?: No
+●​ Current Enrollment Requirement: Enrolled or will enroll in a public or state
+(GWA) of at least 85% with no failing grades; no disciplinary or administrative cases
+threshold, parent ITR, BIR Tax Exemption, or Indigency)
+●​ School Restrictions: Restricted to public or state universities and colleges (SUCs/LUCs) in
+●​ Sectoral Requirements: Must be a female student
+●​ Good Moral: Required (must have no disciplinary or administrative cases)
+●​ Who May Apply: Female Filipino incoming 1st-year, 2nd-year, or 3rd-year college
+students (and 4th-year students taking a 5-year course) enrolled in public or state
+●​ Can current seniors apply?: Yes (Only if taking a 5-year course and entering 4th year;
+●​ Can previous applicants reapply?: Yes, provided they meet all eligibility criteria and hold
+●​ Return Service: None.
+mentoring, and scholar support network access.
+4.​ Proof of financial need (Parents' or guardians' most recent Income Tax Return [ITR], BIR
+Tax Exemption Certificate, Barangay Certificate of Indigency, or OFW/seafarer
+5.​ Proof of college admission or Senior High School diploma (for incoming 1st-year
+6.​ Recent copy of electric or water bill (if available).
+7.​ Official Recommendation Letter (for shortlisted applicants).
+8. Renewal Requirements
+●​ Maintain GWA: Maintain a minimum GWA of 85.00% or equivalent each academic term.
+
+===== DATABASE_V3_GROUPC_PRIVATE_FOUNDATIONS_P2.pdf (30p, 60539c) =====
+
+●​ Official Guidelines: SBFI Scholars for Better Communities Guidelines
+and human capital development initiative established to support academically talented students
+disciplines aligned with corporate operations, the foundation aims to expand access to quality
+education, build leadership capacity within state universities, and provide direct career pathways
+in the banking and finance sector.
+3. Official Eligibility Requirements
+●​ Citizenship: Must be a natural-born or naturalized Filipino citizen.
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen) and limited upperclassmen in specific
+●​ Incoming Freshman Only?: Primary focus is incoming freshmen; limited upperclassmen
+●​ Current Enrollment Requirement: Must be accepted or enrolled in a partner State
+University or College, such as Polytechnic University of the Philippines (PUP).
+at least 93.00% or equivalent, with no subject grade lower than 86.00%, and grades of at
+of financial status via Income Tax Return or Certificate of Indigency; live database records
+Analytics, Communications, and Journalism.
+●​ Sectoral Requirements: Must NOT be a child or dependent of a Security Bank employee,
+and must not have an immediate family member within the second degree of
+consanguinity or affinity holding an active SBFI grant.
+●​ Who May Apply: Graduating Senior High School Grade 12 students entering 1st year
+college and continuing 1st year SUC students.
+●​ Can current sophomores apply?: No (unless applying for designated continuing SUC
+●​ Opening Date: Announced annually (typically Q1/Q2 prior to the academic year opening).
+●​ Closing Date: Specified in annual call for applications.
+●​ Tuition: Full or partial tuition and matriculation fee coverage paid directly to the partner
+academic year.
+●​ Return Service: None mandatory; direct hiring opportunities provided upon graduation.
+placements, and corporate career placement assistance within Security Bank
+3.​ Proof of Admission or Acceptance Letter from partner State University. 4. Proof of
+Financial Status (Latest Parent Income Tax Return, Certificate of Indigency, or OFW
+8. Renewal Requirements
+●​ No Failures: No grade lower than 80.00% (or equivalent) in any academic subject per
+●​ Return Service: None mandatory.
+●​ Being a child or dependent of an employee of Security Bank Corporation or its
+●​ Having an immediate relative within the second degree of consanguinity or affinity holding
+●​ Term GWA dropping below 86.00% or receiving a subject grade below 80.00%.
+●​ Enrolling in a non-partner state university or non-aligned degree program.
+### 10. Temporal Eligibility Matrix
+Eligibility Status
+Incoming Grade 12 SHS (GWA
+Enrolled SUC Freshman
+(entering 2nd Year)
+
+===== DATABASE_V3_GROUPC_UNIFAST_CHED.pdf (25p, 53131c) =====
+
+Report: UniFAST and CHED Priority
+1 primary evidence, including government decrees, joint memorandum circulars, and official
+administered by the Commission on Higher Education (CHED) and the Unified Student
+Financial Assistance System for Tertiary Education (UniFAST): the Tulong Dunong Program (ID
+Estatistikolar Program (ID 119), and the SIKAP Faculty Grant (ID 120).
+●​ Provider: Unified Student Financial Assistance System for Tertiary Education (UniFAST) /
+and deserving Filipino tertiary students enrolled in public or private higher education institutions.
+framework, the program supplements the direct and indirect costs of higher education, including
+living allowances, books, and essential educational expenses.
+3. Official Eligibility Requirements
+●​ Eligible Year Levels: 1st, 2nd, 3rd, 4th, and 5th Year
+●​ Incoming Freshman Only?: No
+State Universities and Colleges (SUCs), CHED-recognized Local Universities and
+Colleges (LUCs) with Certificate of Program Compliance (COPC), or Private Higher
+Education Institutions (HEIs) with COPC or listed in the CHED Registry
+●​ Academic Requirements: Senior High School report card / Form 138 (for incoming
+freshmen) or a certified true copy of grades for the latest semester attended (for ongoing
+●​ Income Ceilings: Combined annual gross family income of parents or legal guardians
+●​ School Restrictions: Restricted to SUCs, CHED-recognized LUCs with COPC, or Private
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE
+government-funded educational grants, except for Free Higher Education under Republic
+Act 10931, DSWD AICS, or Student Monetary Assistance for Recovery and Transition
+●​ Who May Apply: Graduating high school students, incoming college freshmen, and
+●​ Can previous applicants reapply?: Yes (grantees must reapply or re-confirm qualification
+●​ Opening Date: Varies by CHED Regional Office (CHEDRO) and partner institution
+●​ Allowance: ₱15,000.00 per academic year (₱7,500.00 per semester)
+●​ Return Service: None
+(COE) or Certificate of Registration (COR) 3. Certificate of Indigency issued by the Barangay,
+latest BIR Form 2316 / Income Tax Return, BIR Certificate of Tax Exemption, or Social Case
+Study Report 4. Academic Record: Form 138 / SF9 for incoming freshmen, or Certified True
+Copy of Grades for the latest semester attended for ongoing students
+8. Renewal Requirements
+●​ Return Service: None
+●​ Concurrent enjoyment of major national government educational scholarship grants
+(excluding RA 10931 Free Tuition and DSWD AICS)
+●​ Enrollment in non-COPC degree programs or non-recognized private institutions
+●​ Failure to maintain a passing GWA or regular credit load
+10. Temporal Eligibility Matrix
+Eligibility Status
+Graduating Senior High School
+
+===== DATABASE_V3_GROUPC_UNNIVERSITIES.pdf (87p, 128974c) =====
+
+●​ Official Name: Ateneo Senior High School Financial Aid Grant1
+●​ Provider: Ateneo de Manila University (Ateneo Senior High School / Office of Admission
+and Aid)1
+●​ Application Portal: Integrated into the Ateneo Senior High School Admission and Financial
+●​ Official Guidelines: Ateneo Senior High School Financial Aid Guidelines and Primer1
+The Ateneo Senior High School Financial Aid Grant provides financial assistance to
+academically gifted but economically challenged Junior High School graduates from public,
+parochial, and private schools, facilitating equal access to quality secondary education and
+3. Official Eligibility Requirements
+●​ Citizenship: Natural-born or naturalized Filipino citizen4.
+●​ Eligible Year Levels: Grade 111.
+●​ Incoming Freshman Only?: Yes (Senior High School Grade 11 entry)1.
+●​ Current Enrollment Requirement: Must be a graduating Grade 10 student eligible for
+admission to Ateneo Senior High School1.
+●​ Academic Requirements: High academic performance in Junior High School with strong
+●​ Minimum GWA: 90.00% (or equivalent high scholastic standing in JHS)3.
+●​ School Restrictions: Open to graduates of public, parochial, and private Junior High
+●​ Priority Courses: Applicable to all Ateneo Senior High School academic strands (STEM,
+●​ Sectoral Requirements: Priority given to public and parochial high school completers1.
+●​ Other Official Rules: Application for financial aid is evaluated independently of the
+●​ Who May Apply: Graduating Grade 10 Junior High School students1.
+●​ Can current freshmen apply?: No (restricted to incoming Grade 11 SHS applicants)1.
+●​ Closing Date: Concurrent with the ASHS admission deadline (typically
+●​ Tuition: 100%, 75%, 50%, or 25% waiver of tuition and matriculation fees4.
+●​ Allowance: Food and student learning allowance provided based on evaluated need4.
+●​ Book Allowance: Book allowance provided for full-grant recipients4.
+●​ Transportation: Transportation subsidy provided for eligible commuters4.
+●​ Return Service: None required3.
+●​ Other Benefits: Dormitory assistance for qualified provincial scholars4.
+1.​ Parent's Personal Letter detailing household background and financial hardship2.
+2.​ Father's and Mother's Income Tax Return (ITR), Certificate of Employment, or BIR Tax
+3.​ Utility bills (electricity, water, telephone) for the last three months2.
+8. Renewal Requirements
+●​ Maintain GWA: Must maintain required academic and conduct marks specified by ASHS
+●​ No Failures: Zero failing marks or major disciplinary infractions7.
+●​ Return Service: None.
+●​ Submission of fraudulent income documents or altered report cards2.
+●​ Incurring failing grades or severe behavioral reprimands7.
+10. Temporal Eligibility Matrix
+Eligibility Status

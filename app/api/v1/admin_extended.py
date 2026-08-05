@@ -2,7 +2,8 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, Request
+from pydantic import BaseModel, Field
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -13,6 +14,13 @@ from app.limiter import limiter
 from app.utils.timezone import to_philippine_iso
 
 router = APIRouter(tags=["admin-extended"])
+
+FEEDBACK_TRIAGE_STATUSES = frozenset({"new", "triaged", "planned", "in_progress", "shipped", "declined"})
+
+
+class FeedbackTriageUpdate(BaseModel):
+    triage_status: str = Field(..., min_length=1, max_length=32)
+    triage_note: str | None = Field(default=None, max_length=4000)
 
 
 @router.get("/admin/users")
@@ -90,11 +98,54 @@ def admin_list_feedback(
             "category": r.category,
             "message": r.message,
             "contact_email": r.contact_email,
+            "triage_status": getattr(r, "triage_status", "new"),
+            "triage_note": getattr(r, "triage_note", None),
             "created_at": r.created_at.isoformat() if r.created_at else None,
             "ph_created_at": to_philippine_iso(r.created_at) if r.created_at else None,
         }
         for r in rows
     ]
+
+
+@router.patch("/admin/feedback/{feedback_id}")
+@limiter.limit("60/minute")
+def admin_update_feedback_triage(
+    feedback_id: int,
+    request: Request,
+    body: Annotated[FeedbackTriageUpdate, Body()],
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    if body.triage_status not in FEEDBACK_TRIAGE_STATUSES:
+        raise HTTPException(status_code=422, detail="Invalid triage status")
+    row = db.query(models.ProductFeedback).filter(models.ProductFeedback.id == feedback_id).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    row.triage_status = body.triage_status
+    row.triage_note = body.triage_note.strip() if body.triage_note else None
+    db.commit()
+    db.refresh(row)
+    return {
+        "id": row.id,
+        "triage_status": row.triage_status,
+        "triage_note": row.triage_note,
+    }
+
+
+@router.delete("/admin/feedback/{feedback_id}")
+@limiter.limit("60/minute")
+def admin_delete_feedback(
+    feedback_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    row = db.query(models.ProductFeedback).filter(models.ProductFeedback.id == feedback_id).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    db.delete(row)
+    db.commit()
+    return {"deleted": True, "id": feedback_id}
 
 
 @router.get("/admin/staging/stats")

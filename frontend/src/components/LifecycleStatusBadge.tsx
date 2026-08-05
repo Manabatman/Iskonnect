@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import {
   lifecycleStatusBadgeClasses,
   lifecycleStatusLabel,
+  lifecycleStatusTone,
   resolveApplicationStatus,
+  statusGuideHref,
 } from "../utils/scholarshipStatus";
+import { Badge } from "@/components/ui/badge";
 
 interface LifecycleStatusBadgeProps {
   application_status?: string | null;
@@ -11,6 +14,13 @@ interface LifecycleStatusBadgeProps {
   is_active?: boolean | null;
   className?: string;
 }
+
+const toneToVariant = {
+  success: "success",
+  warning: "warning",
+  neutral: "neutral",
+  info: "info",
+} as const;
 
 export function LifecycleStatusBadge({
   application_status,
@@ -21,12 +31,11 @@ export function LifecycleStatusBadge({
   const status = resolveApplicationStatus({ application_status, data_status, is_active });
   const label = lifecycleStatusLabel(status);
   if (!label) return null;
+  const tone = lifecycleStatusTone(status);
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold shadow-sm ${lifecycleStatusBadgeClasses(status)} ${className}`}
-    >
+    <Badge variant={toneToVariant[tone]} className={className}>
       {label}
-    </span>
+    </Badge>
   );
 }
 
@@ -41,13 +50,20 @@ export function LifecycleStatusExample({ statusKey }: LifecycleStatusExampleProp
   );
 }
 
-export function StatusGuideLink({ className = "" }: { className?: string }) {
+export function StatusGuideLink({
+  className = "",
+  statusKey,
+}: {
+  className?: string;
+  statusKey?: string;
+}) {
+  const to = statusKey ? statusGuideHref(statusKey) : "/scholarship-status";
   return (
-    <Link
-      to="/scholarship-status"
-      className={`text-sm font-medium text-primary-600 hover:underline dark:text-primary-400 ${className}`}
-    >
+    <Link to={to} className={`text-sm font-medium text-primary hover:underline ${className}`}>
       What do these labels mean?
     </Link>
   );
 }
+
+/** @deprecated Use Badge variant mapping — kept for any direct class consumers during migration */
+export { lifecycleStatusBadgeClasses };

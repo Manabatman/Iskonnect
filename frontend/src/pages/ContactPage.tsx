@@ -31,7 +31,7 @@ export function ContactPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">What you can reach out about</h2>
             <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
-              <li>Scholarship listing corrections (also available on each opportunity detail page)</li>
+              <li>Scholarship corrections (also available on each scholarship detail page)</li>
               <li>Privacy requests — account export and deletion are in Account Settings</li>
               <li>Bug reports and product feedback</li>
               <li>Partnership or verification inquiries from scholarship providers, LGUs, or institutions</li>

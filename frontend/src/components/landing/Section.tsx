@@ -6,6 +6,7 @@ interface SectionProps {
   className?: string;
   id?: string;
   border?: "top" | "bottom" | "both" | "none";
+  "data-testid"?: string;
 }
 
 export function Section({
@@ -14,6 +15,7 @@ export function Section({
   className = "",
   id,
   border = "none",
+  "data-testid": dataTestId,
 }: SectionProps) {
   const borderClass =
     border === "top"
@@ -32,6 +34,7 @@ export function Section({
   return (
     <section
       id={id}
+      data-testid={dataTestId}
       className={`relative overflow-hidden py-20 sm:py-28 ${borderClass} ${bgClass} ${className}`}
     >
       {variant === "tint" ? (

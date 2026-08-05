@@ -13,7 +13,7 @@ from app.auth import (
 from app.utils.timezone import utc_now_naive
 
 
-def _create_user(Session, email: str, password: str = "password1") -> models.User:
+def _create_user(Session, email: str, password: str = "password1234") -> models.User:
     db = Session()
     try:
         user = models.User(email=email, password_hash=hash_password(password), email_verified=False)
@@ -30,7 +30,7 @@ def test_register_non_enumerating_duplicate(api_with_db):
     _create_user(Session, "dup_user@example.com")
     r = client.post(
         "/api/v1/auth/register",
-        json={"email": "dup_user@example.com", "password": "password2"},
+        json={"email": "dup_user@example.com", "password": "password12345"},
     )
     assert r.status_code == 200
     data = r.json()
@@ -91,10 +91,10 @@ def test_login_unverified_blocked_when_verification_required(api_with_db, monkey
     monkeypatch.setattr("app.config.settings.require_email_verification", True)
     monkeypatch.setattr("app.config.settings.smtp_host", "smtp.example.com")
     monkeypatch.setattr("app.config.settings.email_from", "noreply@example.com")
-    _create_user(Session, "unverified@example.com", "password1")
+    _create_user(Session, "unverified@example.com", "password1234")
     r = client.post(
         "/api/v1/auth/login",
-        json={"email": "unverified@example.com", "password": "password1"},
+        json={"email": "unverified@example.com", "password": "password1234"},
     )
     assert r.status_code == 403
 
@@ -102,10 +102,10 @@ def test_login_unverified_blocked_when_verification_required(api_with_db, monkey
 def test_login_unverified_allowed_when_verification_disabled(api_with_db, monkeypatch):
     client, Session = api_with_db
     monkeypatch.setattr("app.config.settings.require_email_verification", False)
-    _create_user(Session, "beta_user@example.com", "password1")
+    _create_user(Session, "beta_user@example.com", "password1234")
     r = client.post(
         "/api/v1/auth/login",
-        json={"email": "beta_user@example.com", "password": "password1"},
+        json={"email": "beta_user@example.com", "password": "password1234"},
     )
     assert r.status_code == 200
     assert r.json().get("access_token")
@@ -116,7 +116,7 @@ def test_register_auto_verifies_when_verification_disabled(api_with_db, monkeypa
     monkeypatch.setattr("app.config.settings.require_email_verification", False)
     r = client.post(
         "/api/v1/auth/register",
-        json={"email": "auto_verify@example.com", "password": "password1"},
+        json={"email": "auto_verify@example.com", "password": "password1234"},
     )
     assert r.status_code == 200
     assert r.json().get("access_token")
@@ -133,10 +133,47 @@ def test_register_auto_verifies_when_verification_disabled(api_with_db, monkeypa
 def test_auth_me_includes_require_email_verification_flag(api_with_db, monkeypatch):
     client, Session = api_with_db
     monkeypatch.setattr("app.config.settings.require_email_verification", False)
-    user = _create_user(Session, "me_flag@example.com", "password1")
+    user = _create_user(Session, "me_flag@example.com", "password1234")
     from app.auth import create_access_token
 
     token = create_access_token(user.id)
     r = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert r.status_code == 200
     assert r.json().get("require_email_verification") is False
+    assert r.json().get("has_profile") is False
+
+
+def test_login_returns_user_and_has_profile(api_with_db, monkeypatch):
+    client, Session = api_with_db
+    monkeypatch.setattr("app.config.settings.require_email_verification", False)
+    user = _create_user(Session, "login_profile@example.com", "password1234")
+    r = client.post(
+        "/api/v1/auth/login",
+        json={"email": "login_profile@example.com", "password": "password1234"},
+    )
+    assert r.status_code == 200
+    data = r.json()
+    assert data["email"] == "login_profile@example.com"
+    assert data["user_id"] == user.id
+    assert data["has_profile"] is False
+    assert "access_token" in data
+
+    db = Session()
+    try:
+        db.add(
+            models.Student(
+                user_id=user.id,
+                full_name="Test User",
+                email="login_profile@example.com",
+            )
+        )
+        db.commit()
+    finally:
+        db.close()
+
+    r2 = client.post(
+        "/api/v1/auth/login",
+        json={"email": "login_profile@example.com", "password": "password1234"},
+    )
+    assert r2.status_code == 200
+    assert r2.json()["has_profile"] is True

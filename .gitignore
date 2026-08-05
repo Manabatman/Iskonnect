@@ -15,3 +15,16 @@ verification/reports/*.md
 .pytest_cache
 dist
 node_modules
+
+# Local dev / study assets — not part of the product repo
+ENGINEERING_KNOWLEDGE_PORTFOLIO.md
+PROGRAMMING_MASTERY_QUESTION_BANK.md
+PYTHON_SYNTAX_CHEATSHEET.md
+scripts/generate_question_bank.py
+
+# Wave 0 — local hero source assets (extracted from git; not shipped)
+frontend/.hero-sources/
+
+# Coverage artifacts
+.coverage
+htmlcov/

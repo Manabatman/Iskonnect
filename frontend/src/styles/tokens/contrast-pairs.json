@@ -1,0 +1,10 @@
+[
+  { "name": "primary-on-background", "foreground": "hsl(221 83% 53%)", "background": "hsl(0 0% 100%)", "minRatio": 4.5 },
+  { "name": "foreground-on-background", "foreground": "hsl(222 47% 11%)", "background": "hsl(0 0% 100%)", "minRatio": 4.5 },
+  { "name": "primary-foreground-on-primary", "foreground": "hsl(0 0% 100%)", "background": "hsl(221 83% 53%)", "minRatio": 4.5 },
+  { "name": "tone-success-fg-on-bg", "foreground": "hsl(143 64% 24%)", "background": "hsl(141 79% 95%)", "minRatio": 4.5 },
+  { "name": "tone-warning-fg-on-bg", "foreground": "hsl(26 90% 26%)", "background": "hsl(48 96% 92%)", "minRatio": 4.5 },
+  { "name": "tone-danger-fg-on-bg", "foreground": "hsl(0 74% 34%)", "background": "hsl(0 86% 97%)", "minRatio": 4.5 },
+  { "name": "tone-info-fg-on-bg", "foreground": "hsl(224 76% 33%)", "background": "hsl(214 95% 96%)", "minRatio": 4.5 },
+  { "name": "muted-foreground-on-muted", "foreground": "hsl(215 20% 40%)", "background": "hsl(210 40% 96%)", "minRatio": 4.5 }
+]

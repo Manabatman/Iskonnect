@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-08-03T09:09:12.830512+00:00",
+  "output_path": "data\\backups\\pre_remediation_20260803.sql",
+  "table_counts": {
+    "scholarships": 120,
+    "field_evidence": 445,
+    "scholarship_versions": 227,
+    "scholarships_staging": 116,
+    "match_results": 118,
+    "saved_scholarships": 2,
+    "applications": 4,
+    "scholarship_reports": 0,
+    "notifications": 9,
+    "referral_click_daily": 0
+  },
+  "total_rows": 1041
+}

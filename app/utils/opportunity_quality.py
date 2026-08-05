@@ -204,10 +204,11 @@ def compute_opportunity_quality(row: Any, db: Session | None = None) -> Opportun
 
 
 def apply_quality_scores(row: Any, db: Session | None = None) -> OpportunityQualityResult:
-    """Compute unified quality and populate legacy confidence/completeness columns."""
+    """Compute quality metrics and persist publishability-relevant completeness."""
     result = compute_opportunity_quality(row, db)
+    completeness = compute_data_completeness_score(row)
     if hasattr(row, "data_completeness_score"):
-        row.data_completeness_score = result.score
+        row.data_completeness_score = completeness
     if hasattr(row, "confidence_score"):
-        row.confidence_score = round(result.score / 100.0, 3)
+        row.confidence_score = compute_confidence_score(row)
     return result

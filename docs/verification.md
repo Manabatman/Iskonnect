@@ -78,6 +78,21 @@ Field correction CSVs live under `verification/reports/{bundle_id}/field_changes
 3. `hard_filters.py` → `evaluate_eligibility()`
 4. Passing rows scored and ranked with verification badges attached
 
+## Public verification promise (student-facing)
+
+**Adopted:** 2026-08-01 (Track A, milestone A7)
+
+| What we say | What we mean |
+|-------------|--------------|
+| "Verified {date}" on cards and detail pages | That listing matched an official source on that date |
+| "Not yet verified" | No `last_verified_at` recorded — confirm on the provider site |
+| `/verification` page + `GET /api/v1/public/catalog-trust` | Honest aggregate: latest active-listing verification date and count within 90 days |
+| Launch gate (ops) | ≥300 published, **median** verification age &lt;90 days — not a per-listing 30-day SLA |
+
+**Internal only:** `STALE_VERIFICATION_DAYS = 30` flags listings for maintainer review (`catalog_maintenance.py`). This threshold is **not** marketed to students.
+
+Student UI copy is guarded in CI (`npm run audit:verification-copy`) against "verified within 30 days" style strings.
+
 ## Troubleshooting
 
 | Symptom | Check |

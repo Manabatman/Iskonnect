@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Link } from "react-router-dom";
-import { OPPORTUNITY_TYPES } from "../constants/opportunityTypes";
+import { X } from "lucide-react";
+import { OpportunityJourneyTimeline } from "./OpportunityJourneyTimeline";
 
 export interface OpportunityRoadmapDialogProps {
   open: boolean;
@@ -8,49 +8,37 @@ export interface OpportunityRoadmapDialogProps {
 }
 
 export function OpportunityRoadmapDialog({ open, onOpenChange }: OpportunityRoadmapDialogProps) {
-  const comingSoon = OPPORTUNITY_TYPES.filter((t) => !t.available);
-
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm data-[state=open]:animate-overlayFade data-[state=closed]:animate-overlayFadeOut" />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 flex max-h-[85vh] w-[min(100%-2rem,42rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl focus:outline-none dark:border-slate-700 dark:bg-slate-900"
+          className="glass fixed left-1/2 top-1/2 z-50 flex max-h-[85vh] w-[min(100%-2rem,42rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-slate-200/80 shadow-xl focus:outline-none dark:border-slate-700/80"
           aria-describedby="roadmap-dialog-desc"
         >
-          <div className="border-b border-slate-200 px-6 py-4 dark:border-slate-700">
-            <Dialog.Title className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              More opportunity types
-            </Dialog.Title>
-            <Dialog.Description id="roadmap-dialog-desc" className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              ISKONNECT is expanding beyond scholarships. These additional opportunity types are on the roadmap.
-            </Dialog.Description>
+          <div className="border-b border-slate-200/80 px-6 py-4 dark:border-slate-700/80">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <Dialog.Title className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  Your opportunity journey
+                </Dialog.Title>
+                <Dialog.Description id="roadmap-dialog-desc" className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  ISKONNECT is building one place for every student opportunity, starting with scholarships.
+                </Dialog.Description>
+              </div>
+              <Dialog.Close
+                className="focus-visible-ring rounded-lg p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                aria-label="Close"
+              >
+                <X className="size-5" aria-hidden />
+              </Dialog.Close>
+            </div>
           </div>
           <div className="flex-1 overflow-y-auto px-6 py-4">
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {comingSoon.map((t) => (
-                <li key={t.slug}>
-                  <Link
-                    to={`/opportunities/${t.slug}`}
-                    onClick={() => onOpenChange(false)}
-                    className="group block rounded-xl border border-slate-200 bg-slate-50/80 p-3 transition hover:border-primary-300 hover:bg-primary-50/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-600 dark:bg-slate-800/60 dark:hover:border-primary-700 dark:hover:bg-primary-950/30"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="text-sm font-semibold text-slate-900 group-hover:text-primary-700 dark:text-slate-100 dark:group-hover:text-primary-300">
-                        {t.label}
-                      </span>
-                      <span className="shrink-0 rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600 dark:bg-slate-700 dark:text-slate-300">
-                        Soon
-                      </span>
-                    </div>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-400">{t.description}</p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <OpportunityJourneyTimeline linkItems compact />
           </div>
-          <div className="border-t border-slate-200 px-6 py-4 dark:border-slate-700">
-            <Dialog.Close className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500">
+          <div className="border-t border-slate-200/80 px-6 py-4 dark:border-slate-700/80">
+            <Dialog.Close className="inline-flex min-h-11 items-center rounded-xl bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500">
               Back to search
             </Dialog.Close>
           </div>

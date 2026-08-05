@@ -1,0 +1,122 @@
+{
+  "audit_reference": "ISKONNECT Eligibility Migration v1 backfill (canonical verification)",
+  "scholarship_field_updates": [
+    {
+      "id": 73,
+      "fields": {
+        "max_prior_tertiary_units": 0,
+        "eligible_enrollment_status": ["incoming_freshman", "enrolled"],
+        "min_residency_years": 4
+      },
+      "reason": "RC07 zero units + RC48 municipal residency for DOST UG RA 7687 track"
+    },
+    {
+      "id": 76,
+      "fields": {
+        "max_prior_tertiary_units": 0,
+        "academic_gate_mode": "or",
+        "min_gwa_normalized": 95,
+        "max_class_rank": 5,
+        "eligible_enrollment_status": ["incoming_freshman"]
+      },
+      "reason": "RC07 + RC13 BPMSP HE track OR academic gate"
+    },
+    {
+      "id": 77,
+      "fields": {
+        "academic_gate_mode": "or",
+        "min_gwa_normalized": 90,
+        "max_class_rank": 5
+      },
+      "reason": "RC13 BPMSP TVET OR academic gate"
+    },
+    {
+      "id": 10,
+      "fields": {
+        "max_prior_tertiary_units": 0,
+        "eligible_enrollment_status": ["incoming_freshman", "enrolled"]
+      },
+      "reason": "RC07 SM Foundation incoming freshman"
+    },
+    {
+      "id": 104,
+      "fields": {
+        "academic_gate_mode": "or",
+        "max_class_rank": 5
+      },
+      "reason": "RC13 CMSP OR academic gate"
+    },
+    {
+      "id": 5,
+      "fields": {
+        "first_undergraduate_only": true,
+        "max_prior_tertiary_units": 0,
+        "eligible_enrollment_status": ["incoming_freshman", "enrolled"]
+      },
+      "reason": "RC41 TDP first undergraduate only"
+    },
+    {
+      "id": 74,
+      "fields": {
+        "min_work_experience_years": 2
+      },
+      "reason": "RC37 Australia Awards work experience"
+    },
+    {
+      "id": 90,
+      "fields": {
+        "min_work_experience_years": 2
+      },
+      "reason": "RC37 Fulbright-PhilSA work experience"
+    },
+    {
+      "id": 91,
+      "fields": {
+        "min_work_experience_years": 2
+      },
+      "reason": "RC37 Chevening work experience"
+    }
+  ],
+  "consortium_school_updates": [
+    {
+      "title_contains": "ASTHRDP",
+      "eligible_schools": [
+        "university-of-the-philippines-los-banos",
+        "university-of-the-philippines-diliman",
+        "de-la-salle-university",
+        "ateneo-de-manila-university"
+      ],
+      "reason": "RC21 NSC consortium partner schools"
+    },
+    {
+      "title_contains": "ERDT",
+      "eligible_schools": [
+        "university-of-the-philippines-diliman",
+        "university-of-the-philippines-los-banos",
+        "mapua-university",
+        "technological-university-of-the-philippines"
+      ],
+      "reason": "RC21 ERDT consortium partner schools"
+    }
+  ],
+  "conflict_scope_assignments": [
+    {"scholarship_ids": [5, 66, 54, 73, 117, 52, 60], "scope_code": "national_stufap"},
+    {"scholarship_ids": [88, 89], "scope_code": "lgu_grant"}
+  ],
+  "required_affiliation_assignments": [
+    {"scholarship_ids": [117], "affiliation_code": "ncfrs"},
+    {"scholarship_ids": [55], "affiliation_code": "rsbsa"},
+    {"scholarship_ids": [118], "affiliation_code": "sra"},
+    {"scholarship_ids": [78], "affiliation_code": "gsis_member"},
+    {"scholarship_ids": [84], "affiliation_code": "gsis_member"},
+    {"scholarship_ids": [135, 136], "affiliation_code": "hei_faculty"}
+  ],
+  "age_as_of_updates": [
+    {
+      "scholarship_ids": [64, 65, 80, 81, 82, 83],
+      "age_as_of_date": "2004-04-02",
+      "age_as_of_rule": "born_on_or_after",
+      "reason": "RC20 MEXT/GKS birthdate-relative age"
+    }
+  ]
+}

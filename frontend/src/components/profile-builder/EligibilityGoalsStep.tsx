@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { EQUITY_GROUPS, NEEDS_CATEGORIES } from "../../constants/needsCategories";
+import { GlossaryTerm } from "../GlossaryTerm";
 import { NeedsCategoryAccordion } from "../NeedsCategoryAccordion";
 import { SelectedChips } from "../SelectedChips";
 import type { ProfileBuilderState } from "./profileBuilderState";
@@ -81,7 +82,15 @@ export function EligibilityGoalsStep({ state, onChange }: EligibilityStepProps) 
                   onChange={() => toggleEquity(flagName)}
                   className="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
                 />
-                <span>{tag.label}</span>
+                <span>
+                  {tag.id === "4Ps/Listahanan" ? (
+                    <>
+                      <GlossaryTerm term="4Ps">4Ps / Listahanan 2.0</GlossaryTerm>
+                    </>
+                  ) : (
+                    tag.label
+                  )}
+                </span>
               </label>
             );
           })}
@@ -89,6 +98,60 @@ export function EligibilityGoalsStep({ state, onChange }: EligibilityStepProps) 
         <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
           Select any that apply for better matching. These are optional for your profile completion percentage.
         </p>
+      </div>
+
+      <div className="rounded-lg border border-slate-200 p-4 dark:border-slate-600">
+        <span className={labelClass}>Working student &amp; athlete status</span>
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          Optional — helps match working-student and varsity athletic priority programs.
+        </p>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="pb-employment_status" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              Employment status
+            </label>
+            <select
+              id="pb-employment_status"
+              value={state.employment_status}
+              onChange={(e) => onChange("employment_status", e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800"
+            >
+              <option value="">Select</option>
+              <option value="none">Not employed</option>
+              <option value="part-time">Employed part-time</option>
+              <option value="full-time">Employed full-time</option>
+              <option value="self-employed">Self-employed</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="pb-athlete_level" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              Athlete level
+            </label>
+            <select
+              id="pb-athlete_level"
+              value={state.athlete_level}
+              onChange={(e) => onChange("athlete_level", e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800"
+            >
+              <option value="">Not an athlete</option>
+              <option value="club">Club / intramural</option>
+              <option value="varsity">Varsity / university team</option>
+              <option value="regional">Regional team</option>
+              <option value="national">National team</option>
+            </select>
+          </div>
+        </div>
+        <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+          <input
+            type="checkbox"
+            checked={state.evening_weekend_program === "on"}
+            onChange={() =>
+              onChange("evening_weekend_program", state.evening_weekend_program === "on" ? "" : "on")
+            }
+            className="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+          />
+          Enrolled in an evening or weekend program
+        </label>
       </div>
 
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-800/50">

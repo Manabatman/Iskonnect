@@ -1,0 +1,33 @@
+{
+  "iterations": 25,
+  "catalog_active_count": 117,
+  "catalog_publishable_count": 38,
+  "prefilter_candidate_count": 33,
+  "full_scan_ms": {
+    "p50": 3.47,
+    "p95": 3.9,
+    "min": 3.36,
+    "max": 4.63
+  },
+  "prefilter_ms": {
+    "p50": 3.38,
+    "p95": 3.98,
+    "min": 3.19,
+    "max": 4.52
+  },
+  "all_active_scan_ms": {
+    "p50": 10.71,
+    "p95": 11.3
+  },
+  "profile": {
+    "education_level": "College",
+    "region": "National Capital Region",
+    "school_type": "Public",
+    "household_income_annual": 250000,
+    "gwa_normalized": 85,
+    "field_of_study_broad": "STEM",
+    "preferred_courses": [
+      "BS Computer Science"
+    ]
+  }
+}

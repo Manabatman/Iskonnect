@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { FinancialPlannerCard } from "../components/dashboard/FinancialPlannerCard";
@@ -13,8 +15,22 @@ import { formatDateMedium } from "../utils/formatDate";
 import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 import { FreshnessChipRow, freshnessFromScholarship } from "../components/FreshnessChip";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
+import { resolveUserErrorMessage } from "../constants/errorCopy";
+import { resolveApplicationStatus, statusGuideHref } from "../utils/scholarshipStatus";
+import { VerificationStrip } from "../components/VerificationStrip";
 import { TrustCard } from "../components/TrustCard";
-import type { FieldEvidence, QualificationStatus, SavedScholarship, ScholarshipEligibilityDetail, ScholarshipVersionHistoryItem } from "../types";
+import { EligibilitySummaryBlock } from "../components/scholarship/EligibilitySummaryBlock";
+import { RelatedScholarshipsSection } from "../components/scholarship/RelatedScholarshipsSection";
+import { ScholarshipDetailStickyBar } from "../components/scholarship/ScholarshipDetailStickyBar";
+import { BookmarkButton } from "../components/BookmarkButton";
+import { trackOutboundClick } from "../utils/trackOutboundClick";
+import type {
+  FieldEvidence,
+  QualificationStatus,
+  SavedScholarship,
+  ScholarshipEligibilityDetail,
+  ScholarshipVersionHistoryItem,
+} from "../types";
 
 const DOCUMENT_LABELS: Record<string, string> = {
   ITR: "Income Tax Return",
@@ -61,6 +77,11 @@ interface ScholarshipDetail {
   application_open_date?: string | null;
   next_review_date?: string | null;
   field_evidence?: FieldEvidence[];
+  student_verification_status?: string | null;
+  student_verification_label?: string | null;
+  student_verification_message?: string | null;
+  official_website?: string | null;
+  official_website_host?: string | null;
   completeness_label?: string | null;
   academic_year_target?: string | null;
   image_url?: string | null;
@@ -111,6 +132,8 @@ export function ScholarshipDetailPage() {
   const [reportMsg, setReportMsg] = useState<string | null>(null);
   const [reportError, setReportError] = useState(false);
   const [profileId, setProfileId] = useState<number | null>(null);
+  const [adminEvidence, setAdminEvidence] = useState<FieldEvidence[]>([]);
+  const isAdmin = user?.role === "admin";
 
   useEffect(() => {
     if (profileIdFromQuery) {
@@ -154,7 +177,7 @@ export function ScholarshipDetailPage() {
         if (!cancelled) setScholarship(data);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Something went wrong");
+        if (!cancelled) setError(resolveUserErrorMessage(err, "load_failed"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -184,9 +207,12 @@ export function ScholarshipDetailPage() {
   }, [id, profileId, authHeaders]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !isAdmin) {
+      setHistory([]);
+      return;
+    }
     let cancelled = false;
-    apiFetch(`/api/v1/scholarships/${id}/history`)
+    apiFetch(`/api/v1/scholarships/${id}/history`, { headers: authHeaders() })
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         if (!cancelled) setHistory(Array.isArray(data) ? data : []);
@@ -197,7 +223,28 @@ export function ScholarshipDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, isAdmin, authHeaders]);
+
+  useEffect(() => {
+    if (!id || !isAdmin) {
+      setAdminEvidence([]);
+      return;
+    }
+    let cancelled = false;
+    apiFetch(`/api/v1/admin/scholarships/${id}/evidence`, { headers: authHeaders() })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.field_evidence) {
+          setAdminEvidence(Array.isArray(data.field_evidence) ? data.field_evidence : []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setAdminEvidence([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, isAdmin, authHeaders]);
 
   const plannerSaved = useMemo((): SavedScholarship[] => {
     if (!scholarship) return [];
@@ -283,15 +330,18 @@ export function ScholarshipDetailPage() {
     eligibilityDetail?.eligibility_confidence ?? scholarship.eligibility_confidence;
 
   return (
-    <section className="py-12">
+    <section className="py-12 pb-24 md:pb-12">
       <div className="mx-auto max-w-3xl px-4">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
+          className="mb-6"
           onClick={() => navigate(-1)}
-          className="mb-6 inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700"
         >
-          ← Back to results
-        </button>
+          <ChevronLeft className="size-4" aria-hidden />
+          Back to results
+        </Button>
 
         <article className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-md">
           <div
@@ -307,7 +357,12 @@ export function ScholarshipDetailPage() {
               </Link>
               {" · "}
               <Link
-                to="/scholarship-status"
+                to={statusGuideHref(
+                  resolveApplicationStatus({
+                    application_status: scholarship.application_status,
+                    data_status: scholarship.data_status,
+                  })
+                )}
                 className="font-medium underline hover:text-primary-700 dark:hover:text-primary-300"
               >
                 Status guide
@@ -337,26 +392,60 @@ export function ScholarshipDetailPage() {
                 </span>
               ) : null}
               <FreshnessChipRow chips={freshnessFromScholarship(scholarship)} />
-              <VerificationBadge
-                badge={scholarship.verification_badge}
-                label={scholarship.verification_badge_label}
-              />
-              {scholarship.verification_date_label ? (
-                <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
-                  {scholarship.verification_date_label}
-                </span>
-              ) : null}
-              {scholarship.completeness_signal ? (
-                <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
-                  {scholarship.completeness_signal}
+              {isAdmin ? (
+                <>
+                  <VerificationBadge
+                    badge={scholarship.verification_badge}
+                    label={scholarship.verification_badge_label}
+                  />
+                  {scholarship.verification_date_label ? (
+                    <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                      {scholarship.verification_date_label}
+                    </span>
+                  ) : null}
+                  {scholarship.completeness_signal ? (
+                    <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                      {scholarship.completeness_signal}
+                    </span>
+                  ) : null}
+                </>
+              ) : scholarship.student_verification_label ? (
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                    scholarship.student_verification_status === "verified"
+                      ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100"
+                      : scholarship.student_verification_status === "archived"
+                        ? "bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
+                        : "bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-100"
+                  }`}
+                >
+                  {scholarship.student_verification_label}
                 </span>
               ) : null}
             </div>
+
+            <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-100">{scholarship.title}</h1>
+            <p className="mt-1 text-slate-600 dark:text-slate-400">{scholarship.provider}</p>
+
+            <EligibilitySummaryBlock
+              className="mt-4"
+              eligibleLevels={scholarship.eligible_levels}
+              eligibleSchoolTypes={scholarship.eligible_school_types}
+              eligibleCourses={scholarship.eligible_courses_psced}
+              minGwa={scholarship.min_gwa_normalized}
+              maxIncome={scholarship.max_income_threshold}
+              minAge={scholarship.min_age}
+              maxAge={scholarship.max_age}
+              isNationwide={isNationwide}
+              eligibleCities={scholarship.eligible_cities}
+              regions={regions}
+            />
+
             {activeQualification ? (
               <div
                 ref={eligibilityRef}
                 id="eligibility"
-                className="mt-4 scroll-mt-24 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-600 dark:bg-slate-900/40 md:scroll-mt-28"
+                className="mt-4 scroll-mt-24 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-600 dark:bg-slate-900/40 md:scroll-mt-24"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
@@ -382,18 +471,19 @@ export function ScholarshipDetailPage() {
                 ) : null}
               </div>
             ) : null}
+
             {scholarship.image_url ? (
               <img
                 src={scholarship.image_url}
                 alt={scholarship.image_alt?.trim() || scholarship.title}
-                className="mt-4 h-48 w-full rounded-xl object-cover"
+                width={640}
+                height={192}
+                className="mt-4 h-40 w-full rounded-xl object-cover sm:h-48"
                 loading="lazy"
               />
             ) : (
               <p className="mt-4 text-xs text-slate-500">No banner image assigned yet.</p>
             )}
-            <h1 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{scholarship.title}</h1>
-            <p className="mt-1 text-slate-600 dark:text-slate-400">{scholarship.provider}</p>
           </div>
 
           {scholarship.description && (
@@ -402,41 +492,6 @@ export function ScholarshipDetailPage() {
               <p className="mt-2 text-slate-700 dark:text-slate-300">{scholarship.description}</p>
             </div>
           )}
-
-          <div className="mb-8">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Eligibility Summary</h2>
-            <ul className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300">
-              {scholarship.eligible_levels?.length ? (
-                <li>Education level: {scholarship.eligible_levels.join(", ")}</li>
-              ) : null}
-              {scholarship.eligible_school_types?.length ? (
-                <li>School type: {scholarship.eligible_school_types.join(", ")}</li>
-              ) : null}
-              {scholarship.eligible_courses_psced?.length ? (
-                <li>Field of study: {scholarship.eligible_courses_psced.join(", ")}</li>
-              ) : null}
-              {scholarship.min_gwa_normalized != null && (
-                <li>Minimum GWA: {scholarship.min_gwa_normalized}%</li>
-              )}
-              {scholarship.max_income_threshold != null && (
-                <li>Income ceiling: PHP {scholarship.max_income_threshold.toLocaleString()}/year</li>
-              )}
-              {(scholarship.min_age != null || scholarship.max_age != null) && (
-                <li>
-                  Age: {scholarship.min_age != null ? `Min ${scholarship.min_age}` : ""}
-                  {scholarship.min_age != null && scholarship.max_age != null && " • "}
-                  {scholarship.max_age != null ? `Max ${scholarship.max_age}` : ""}
-                </li>
-              )}
-              {isNationwide ? (
-                <li>Region: Nationwide</li>
-              ) : scholarship.eligible_cities?.length ? (
-                <li>City: {scholarship.eligible_cities.join(", ")}</li>
-              ) : regions.length ? (
-                <li>Region: {regions.join(", ")}</li>
-              ) : null}
-            </ul>
-          </div>
 
           <div className="mb-8">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Benefits</h2>
@@ -464,7 +519,7 @@ export function ScholarshipDetailPage() {
             ref={requirementsRef}
             id="requirements"
             className={[
-              "mb-8 scroll-mt-24 rounded-xl p-4 transition-[box-shadow,background-color] duration-500 md:scroll-mt-28",
+              "mb-8 scroll-mt-24 rounded-xl p-4 transition-[box-shadow,background-color] duration-overlay ease-out-custom md:scroll-mt-24",
               requirementsHighlight
                 ? "bg-primary-50/90 shadow-[0_0_0_3px_rgba(59,130,246,0.45)] dark:bg-primary-950/50 dark:shadow-[0_0_0_3px_rgba(96,165,250,0.35)]"
                 : "",
@@ -493,16 +548,32 @@ export function ScholarshipDetailPage() {
             )}
           </div>
 
-          <TrustCard
-            fieldEvidence={scholarship.field_evidence}
-            nextReviewDate={scholarship.next_review_date}
-            verificationBadge={scholarship.verification_badge}
-            verificationBadgeLabel={scholarship.verification_badge_label}
-            completenessLabel={scholarship.completeness_label}
-            lastReviewedLabel={scholarship.verification_date_label}
-            verificationSourceLabel={scholarship.verification_source_label}
-            className="mb-8"
-          />
+          {isAdmin ? (
+            <TrustCard
+              scholarshipId={scholarship.id}
+              fieldEvidence={adminEvidence}
+              nextReviewDate={scholarship.next_review_date}
+              verificationBadge={scholarship.verification_badge}
+              verificationBadgeLabel={scholarship.verification_badge_label}
+              completenessLabel={scholarship.completeness_label}
+              lastReviewedLabel={scholarship.verification_date_label}
+              verificationSourceLabel={scholarship.verification_source_label}
+              className="mb-8"
+            />
+          ) : (
+            <VerificationStrip
+              scholarshipId={scholarship.id}
+              status={scholarship.student_verification_status}
+              label={scholarship.student_verification_label}
+              message={scholarship.student_verification_message}
+              lastVerifiedAt={scholarship.last_verified_at}
+              officialWebsite={scholarship.official_website ?? scholarship.link}
+              officialWebsiteHost={scholarship.official_website_host}
+              verificationSourceLabel={scholarship.verification_source_label}
+              linkStatus={scholarship.link_status}
+              className="mb-8"
+            />
+          )}
 
           <div className="mb-8">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Timeline</h2>
@@ -538,13 +609,13 @@ export function ScholarshipDetailPage() {
             </ul>
           </div>
 
-          {history.length > 0 ? (
+          {isAdmin && history.length > 0 ? (
             <div className="mb-8">
               <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 Change history
               </h2>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Field-level updates we have recorded for this listing.
+                Field-level updates we have recorded for this scholarship.
               </p>
               <ul className="mt-3 space-y-2 text-sm">
                 {history.slice(0, 8).map((item) => (
@@ -682,7 +753,7 @@ export function ScholarshipDetailPage() {
                             const err = await res.json().catch(() => ({}));
                             throw new Error((err as { detail?: string }).detail || "Could not submit report");
                           }
-                          setReportMsg("Thank you — your report was submitted.");
+                          setReportMsg("Thank you. Your report was submitted.");
                           setReportDesc("");
                           setReportError(false);
                         } catch (e) {
@@ -700,25 +771,59 @@ export function ScholarshipDetailPage() {
                 </div>
               </div>
             ) : null}
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Apply</h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            <h2 className="hidden text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 md:block">
+              Apply
+            </h2>
+            <p className="mt-2 hidden text-sm text-slate-600 dark:text-slate-400 md:block">
               Applications are submitted through the official scholarship provider website.
             </p>
             {hasLink ? (
-              <a
-                href={scholarship.link!}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-block rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-              >
-                Apply Now →
-              </a>
+              <div className="mt-4 hidden flex-wrap items-center gap-3 md:flex">
+                {scholarship.last_verified_at ? (
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Last verified {formatDateMedium(scholarship.last_verified_at)}
+                  </p>
+                ) : null}
+                <BookmarkButton scholarshipId={scholarship.id} variant="labeled" />
+                <a
+                  href={scholarship.link!}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() =>
+                    trackOutboundClick({
+                      scholarshipId: scholarship.id,
+                      surface: "detail_page",
+                      linkKind: "apply_official",
+                    })
+                  }
+                  className="inline-block rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                >
+                  Apply Now
+                </a>
+              </div>
             ) : (
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Official link not available. Search for the provider online.</p>
+              <p className="mt-4 hidden text-sm text-slate-500 dark:text-slate-400 md:block">
+                Official link not available. Search for the provider online.
+              </p>
             )}
           </div>
+
+          <RelatedScholarshipsSection
+            scholarshipId={scholarship.id}
+            region={regions[0]}
+            field={scholarship.eligible_courses_psced?.[0]}
+            educationLevel={scholarship.eligible_levels?.[0]}
+            provider={scholarship.provider}
+          />
         </article>
       </div>
+
+      <ScholarshipDetailStickyBar
+        scholarshipId={scholarship.id}
+        title={scholarship.title}
+        link={scholarship.link}
+        lastVerifiedAt={scholarship.last_verified_at}
+      />
     </section>
   );
 }

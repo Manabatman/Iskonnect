@@ -7,7 +7,7 @@ def test_register_login_refresh_logout(api_with_db):
     client, Session = api_with_db
     r = client.post(
         "/api/v1/auth/register",
-        json={"email": "flow_user@example.com", "password": "password1"},
+        json={"email": "flow_user@example.com", "password": "password1234"},
     )
     assert r.status_code == 200
     data = r.json()
@@ -48,7 +48,7 @@ def test_applications_create_and_patch(api_with_db):
 
     reg = client.post(
         "/api/v1/auth/register",
-        json={"email": "app_user@example.com", "password": "password1"},
+        json={"email": "app_user@example.com", "password": "password1234"},
     )
     assert reg.status_code == 200
     token = reg.json()["access_token"]
@@ -154,7 +154,7 @@ def test_two_users_see_only_own_profile_via_profiles_me(api_with_db):
     def register_and_profile(email: str, full_name: str):
         reg = client.post(
             "/api/v1/auth/register",
-            json={"email": email, "password": "password1"},
+            json={"email": email, "password": "password1234"},
         )
         assert reg.status_code == 200
         token = reg.json()["access_token"]

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -59,9 +61,12 @@ export function AdminAnalyticsPage() {
           <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
             {error || "No data"}
           </div>
-          <Link to="/admin" className="mt-4 inline-block text-primary-600 hover:underline">
-            ← Back to admin
-          </Link>
+          <Button variant="ghost" size="sm" asChild className="mt-4">
+            <Link to="/admin">
+              <ChevronLeft className="size-4" aria-hidden />
+              Back to admin
+            </Link>
+          </Button>
         </div>
       </section>
     );

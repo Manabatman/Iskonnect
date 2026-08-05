@@ -56,18 +56,20 @@ def score_income(
 
 def score_field(field_match_level: str) -> float:
     """
-    Field alignment: PSCED-aligned course/discipline match quality.
-    - exact -> 1.0
-    - broad -> 0.75
-    - partial -> 0.4
-    - none -> 0.0
+    Field alignment: PSCED-aligned course/discipline match quality (DATA-03 / B7).
+
+    Canonical levels: exact > sibling > discipline > none.
+    Legacy aliases ``broad`` (→ sibling) and ``partial`` remain accepted (E2).
+    ``none`` floors at 0.2 so field-restricted rows do not collapse total score.
     """
     level = (field_match_level or "").strip().lower()
     mapping = {
         "exact": 1.0,
+        "sibling": 0.75,
         "broad": 0.75,
+        "discipline": 0.6,
         "partial": 0.4,
-        "none": 0.2,  # floor so course-restricted rows don't collapse total score
+        "none": 0.2,
     }
     return mapping.get(level, 0.0)
 
@@ -101,6 +103,11 @@ def score_equity(equity_flags: dict[str, bool], priority_groups: list[str]) -> f
     from app.taxonomy.equity_groups import EQUITY_GROUPS
     from app.taxonomy.priority_groups import resolve_priority_group
 
+    profile_priority_flags = {
+        "Working Student": "working_student",
+        "Student Athlete": "student_athlete",
+    }
+
     if not priority_groups:
         return 0.5
     match_count = 0
@@ -108,6 +115,10 @@ def score_equity(equity_flags: dict[str, bool], priority_groups: list[str]) -> f
         if not group:
             continue
         canon = resolve_priority_group(str(group))
+        profile_flag = profile_priority_flags.get(canon)
+        if profile_flag and equity_flags.get(profile_flag):
+            match_count += 1
+            continue
         info = EQUITY_GROUPS.get(canon, {})
         profile_flag = info.get("profile_flag")
         if profile_flag and equity_flags.get(profile_flag):

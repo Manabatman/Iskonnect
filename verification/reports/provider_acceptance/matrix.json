@@ -1,0 +1,308 @@
+{
+  "generated_at": "2026-08-05T15:08:00.892522+00:00",
+  "legend": {
+    "Q": "qualified",
+    "P": "provisionally_qualified",
+    "A": "almost_qualified",
+    "X": "not_eligible"
+  },
+  "personas": [
+    {
+      "id": "grade12_compeng_ph",
+      "label": "Grade 12 CompEng PH-only"
+    },
+    {
+      "id": "incoming_stem_ncr",
+      "label": "Incoming STEM NCR"
+    },
+    {
+      "id": "gsis_dependent",
+      "label": "GSIS dependent"
+    },
+    {
+      "id": "frontliner_dependent",
+      "label": "Medical frontliner dependent"
+    },
+    {
+      "id": "abroad_only",
+      "label": "Abroad-only preference"
+    },
+    {
+      "id": "both_destinations",
+      "label": "PH + abroad preference"
+    },
+    {
+      "id": "education_major",
+      "label": "Education major intent"
+    },
+    {
+      "id": "enrolled_with_units",
+      "label": "Enrolled with prior units"
+    },
+    {
+      "id": "4ps_ncfrs",
+      "label": "4Ps + NCFRS"
+    },
+    {
+      "id": "minimal_profile",
+      "label": "Minimal profile"
+    }
+  ],
+  "rows": [
+    {
+      "scholarship_id": 73,
+      "title": "DOST-SEI Undergraduate Scholarships (RA 7687 / Merit)",
+      "provider": "DOST-SEI",
+      "cells": {
+        "grade12_compeng_ph": "A",
+        "incoming_stem_ncr": "P",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "X",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "A",
+        "4ps_ncfrs": "A",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 66,
+      "title": "CHED-UniFAST Tertiary Education Subsidy (TES)",
+      "provider": "UniFAST / CHED",
+      "cells": {
+        "grade12_compeng_ph": "A",
+        "incoming_stem_ncr": "P",
+        "gsis_dependent": "P",
+        "frontliner_dependent": "A",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "A",
+        "enrolled_with_units": "P",
+        "4ps_ncfrs": "P",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 76,
+      "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - Higher Education Track",
+      "provider": "Commission on Higher Education",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "A",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "X",
+        "abroad_only": "P",
+        "both_destinations": "A",
+        "education_major": "X",
+        "enrolled_with_units": "X",
+        "4ps_ncfrs": "A",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 10,
+      "title": "SM Foundation College Scholarship",
+      "provider": "SM Foundation",
+      "cells": {
+        "grade12_compeng_ph": "A",
+        "incoming_stem_ncr": "P",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "X",
+        "abroad_only": "X",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "A",
+        "4ps_ncfrs": "A",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 130,
+      "title": "DOST-SEI Junior Level Science Scholarship (JLSS)",
+      "provider": "DOST-SEI",
+      "cells": {
+        "grade12_compeng_ph": "A",
+        "incoming_stem_ncr": "P",
+        "gsis_dependent": "P",
+        "frontliner_dependent": "A",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "P",
+        "4ps_ncfrs": "P",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 84,
+      "title": "GSIS Educational Subsidy Program (GESP)",
+      "provider": "Government Service Insurance System",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "X",
+        "gsis_dependent": "P",
+        "frontliner_dependent": "X",
+        "abroad_only": "X",
+        "both_destinations": "X",
+        "education_major": "X",
+        "enrolled_with_units": "X",
+        "4ps_ncfrs": "X",
+        "minimal_profile": "X"
+      }
+    },
+    {
+      "scholarship_id": 81,
+      "title": "MEXT Scholarship - Undergraduate Track",
+      "provider": "JICC / Embassy of Japan",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "X",
+        "gsis_dependent": "X",
+        "frontliner_dependent": "X",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "X",
+        "4ps_ncfrs": "X",
+        "minimal_profile": "X"
+      }
+    },
+    {
+      "scholarship_id": 65,
+      "title": "Global Korea Scholarship (GKS) Undergraduate",
+      "provider": "NIIED",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "X",
+        "gsis_dependent": "X",
+        "frontliner_dependent": "X",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "X",
+        "4ps_ncfrs": "X",
+        "minimal_profile": "X"
+      }
+    },
+    {
+      "scholarship_id": 16,
+      "title": "PLDT-Smart Foundation Gabay Guro Scholarship",
+      "provider": "PLDT-Smart Foundation",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "A",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "A",
+        "abroad_only": "X",
+        "both_destinations": "P",
+        "education_major": "A",
+        "enrolled_with_units": "P",
+        "4ps_ncfrs": "A",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 14,
+      "title": "BPI Foundation Pagpupugay Scholarship",
+      "provider": "BPI Foundation",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "X",
+        "gsis_dependent": "X",
+        "frontliner_dependent": "X",
+        "abroad_only": "X",
+        "both_destinations": "X",
+        "education_major": "X",
+        "enrolled_with_units": "X",
+        "4ps_ncfrs": "X",
+        "minimal_profile": "X"
+      }
+    },
+    {
+      "scholarship_id": 72,
+      "title": "Gokongwei Brothers Foundation STEM-College Scholarship",
+      "provider": "Gokongwei Brothers Foundation",
+      "cells": {
+        "grade12_compeng_ph": "A",
+        "incoming_stem_ncr": "P",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "X",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "A",
+        "4ps_ncfrs": "A",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 117,
+      "title": "Scholarship Program for Coconut Farmers and their Families (CoScho)",
+      "provider": "Commission on Higher Education (CHED)",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "X",
+        "gsis_dependent": "X",
+        "frontliner_dependent": "X",
+        "abroad_only": "X",
+        "both_destinations": "X",
+        "education_major": "X",
+        "enrolled_with_units": "X",
+        "4ps_ncfrs": "P",
+        "minimal_profile": "X"
+      }
+    },
+    {
+      "scholarship_id": 61,
+      "title": "Megaworld Foundation Scholarship Program",
+      "provider": "Megaworld Foundation",
+      "cells": {
+        "grade12_compeng_ph": "A",
+        "incoming_stem_ncr": "P",
+        "gsis_dependent": "P",
+        "frontliner_dependent": "A",
+        "abroad_only": "P",
+        "both_destinations": "P",
+        "education_major": "X",
+        "enrolled_with_units": "P",
+        "4ps_ncfrs": "P",
+        "minimal_profile": "P"
+      }
+    },
+    {
+      "scholarship_id": 54,
+      "title": "CHED Medical Scholarship and Return Service (MSRS)",
+      "provider": "Commission on Higher Education",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "X",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "A",
+        "abroad_only": "X",
+        "both_destinations": "A",
+        "education_major": "X",
+        "enrolled_with_units": "A",
+        "4ps_ncfrs": "A",
+        "minimal_profile": "A"
+      }
+    },
+    {
+      "scholarship_id": 3,
+      "title": "DOST-SEI Graduate Scholarship Programs (ASTHRDP/CBPSME/ERDT/STRAND)",
+      "provider": "Department of Science and Technology - SEI",
+      "cells": {
+        "grade12_compeng_ph": "X",
+        "incoming_stem_ncr": "A",
+        "gsis_dependent": "A",
+        "frontliner_dependent": "A",
+        "abroad_only": "X",
+        "both_destinations": "A",
+        "education_major": "X",
+        "enrolled_with_units": "A",
+        "4ps_ncfrs": "X",
+        "minimal_profile": "A"
+      }
+    }
+  ]
+}

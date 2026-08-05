@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-08-05T13:27:50.373042+00:00",
+  "active_count": 114,
+  "completeness": {
+    "count": 114,
+    "min": 48,
+    "max": 97,
+    "avg": 75.9,
+    "histogram": {
+      "70": 58,
+      "80": 25,
+      "60": 23,
+      "90": 3,
+      "40": 5
+    }
+  },
+  "confidence": {
+    "count": 114,
+    "min": 0.54,
+    "max": 0.85,
+    "avg": 0.69
+  },
+  "spec13_violation_count": 2,
+  "spec13_violations_sample": [
+    "scholarship 61: consortium/partner program requires non-empty eligible_schools",
+    "scholarship 135: consortium/partner program requires non-empty eligible_schools"
+  ]
+}

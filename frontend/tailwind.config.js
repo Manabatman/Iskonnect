@@ -1,45 +1,96 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from "tailwindcss-animate";
+
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        brand: ["Montserrat", "Inter", "ui-sans-serif", "system-ui", "sans-serif"]
+        sans: ["var(--font-sans)"],
+        display: ["var(--font-sans)"],
+        brand: ["var(--font-brand)"],
       },
-      keyframes: {
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" }
-        },
-        overlayFade: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" }
-        },
-        overlayFadeOut: {
-          "0%": { opacity: "1" },
-          "100%": { opacity: "0" }
-        },
-        /** Match analysis dialog: scale + opacity only (no translate) so sm centering stays stable */
-        matchDialogIn: {
-          "0%": { opacity: "0", transform: "scale(0.95)" },
-          "100%": { opacity: "1", transform: "scale(1)" }
-        },
-        matchDialogOut: {
-          "0%": { opacity: "1", transform: "scale(1)" },
-          "100%": { opacity: "0", transform: "scale(0.95)" }
-        }
+      fontSize: {
+        display: ["3.5rem", { lineHeight: "1.05", fontWeight: "800", letterSpacing: "-0.02em" }],
+        "display-sm": ["2.75rem", { lineHeight: "1.08", fontWeight: "800", letterSpacing: "-0.02em" }],
+        h1: ["2rem", { lineHeight: "1.2", fontWeight: "700", letterSpacing: "-0.02em" }],
+        h2: ["1.5rem", { lineHeight: "1.3", fontWeight: "600" }],
+        h3: ["1.25rem", { lineHeight: "1.4", fontWeight: "600" }],
+        h4: ["1.125rem", { lineHeight: "1.4", fontWeight: "600" }],
+        "body-lg": ["1.125rem", { lineHeight: "1.6", fontWeight: "400" }],
+        body: ["1rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "body-sm": ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+        caption: ["0.75rem", { lineHeight: "1.4", fontWeight: "400" }],
+        overline: ["0.75rem", { lineHeight: "1.4", fontWeight: "600" }],
+        button: ["0.875rem", { lineHeight: "1", fontWeight: "600" }],
+        label: ["0.875rem", { lineHeight: "1.4", fontWeight: "500" }],
       },
-      animation: {
-        marquee: "marquee 40s linear infinite",
-        overlayFade: "overlayFade 200ms ease-out both",
-        overlayFadeOut: "overlayFadeOut 180ms ease-in forwards",
-        matchDialogIn: "matchDialogIn 200ms cubic-bezier(0.16, 1, 0.3, 1) both",
-        matchDialogOut: "matchDialogOut 180ms ease-in forwards"
+      spacing: {
+        "page-gutter": "var(--page-gutter)",
+        "section-gap": "var(--section-gap)",
+        "card-padding": "var(--card-padding)",
+        "stack-gap": "var(--stack-gap)",
+        "nav-mobile": "var(--nav-height-mobile)",
+        sidebar: "var(--sidebar-width-expanded)",
+        "bottom-nav": "var(--bottom-nav-offset)",
+      },
+      borderRadius: {
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+      },
+      boxShadow: {
+        1: "var(--shadow-1)",
+        2: "var(--shadow-2)",
+        3: "var(--shadow-3)",
+        4: "var(--shadow-4)",
+      },
+      transitionDuration: {
+        fast: "var(--duration-fast)",
+        base: "var(--duration-base)",
+        overlay: "var(--duration-overlay)",
+        reveal: "var(--duration-reveal)",
+        celebrate: "var(--duration-celebrate)",
+      },
+      transitionTimingFunction: {
+        standard: "var(--ease-standard)",
+        "ease-out-custom": "var(--ease-out)",
+        "ease-in-custom": "var(--ease-in)",
       },
       colors: {
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#1d4ed8",
+          700: "#1d40af",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
+        },
         accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
           50: "#fff7ed",
           100: "#ffedd5",
           200: "#fed7aa",
@@ -49,7 +100,7 @@ export default {
           600: "#ea580c",
           700: "#c2410c",
           800: "#9a3412",
-          900: "#7c2d12"
+          900: "#7c2d12",
         },
         success: {
           50: "#f0fdf4",
@@ -61,19 +112,7 @@ export default {
           600: "#16a34a",
           700: "#15803d",
           800: "#166534",
-          900: "#14532d"
-        },
-        primary: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#1d4ed8",
-          700: "#1d40af",
-          800: "#1e40af",
-          900: "#1e3a8a"
+          900: "#14532d",
         },
         danger: {
           50: "#fef2f2",
@@ -85,7 +124,7 @@ export default {
           600: "#dc2626",
           700: "#b91c1c",
           800: "#991b1b",
-          900: "#7f1d1d"
+          900: "#7f1d1d",
         },
         highlight: {
           50: "#fefce8",
@@ -97,10 +136,44 @@ export default {
           600: "#ca8a04",
           700: "#a16207",
           800: "#854d0e",
-          900: "#713f12"
-        }
-      }
-    }
+          900: "#713f12",
+        },
+      },
+      keyframes: {
+        overlayFade: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        overlayFadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+        matchDialogIn: {
+          "0%": { opacity: "0", transform: "translate(-50%, -50%) scale(0.95)" },
+          "100%": { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
+        },
+        matchDialogOut: {
+          "0%": { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
+          "100%": { opacity: "0", transform: "translate(-50%, -50%) scale(0.95)" },
+        },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        overlayFade: "overlayFade var(--duration-overlay) var(--ease-out) both",
+        overlayFadeOut: "overlayFadeOut var(--duration-base) var(--ease-in) forwards",
+        matchDialogIn: "matchDialogIn var(--duration-overlay) var(--ease-out) both",
+        matchDialogOut: "matchDialogOut var(--duration-base) var(--ease-in) forwards",
+        "accordion-down": "accordion-down var(--duration-base) var(--ease-out)",
+        "accordion-up": "accordion-up var(--duration-base) var(--ease-in)",
+      },
+    },
   },
-  plugins: []
+  plugins: [tailwindcssAnimate],
 };

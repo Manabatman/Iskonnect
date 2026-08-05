@@ -1,0 +1,163 @@
+{
+  "audit_reference": "Philippine Scholarship Record Verification Audit (2026-08-03)",
+  "merge_pairs": {
+    "1": 129,
+    "10": 131,
+    "61": 132,
+    "75": 128,
+    "124": 127,
+    "54": 125
+  },
+  "archive_ids": [8, 9, 4],
+  "archive_after_split_ids": [3],
+  "umbrella_archive_when_children_exist": {
+    "4": [112, 113, 67],
+    "9": [85, 86, 87, 124],
+    "3": ["ASTHRDP", "ERDT", "CBPSME", "STRAND"]
+  },
+  "dost_graduate_splits": [
+    {
+      "title": "Accelerated Science and Technology Human Resource Development Program (ASTHRDP)",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "provider_type": "Government",
+      "scholarship_type": "Merit-based",
+      "link": "https://asthrdp.science-scholarships.ph/",
+      "description": "MS and PhD scholarships in priority S&T fields through NSC member universities.",
+      "eligible_levels": ["Graduate"],
+      "cycle_type": "semester",
+      "deadline_precision": "not_announced",
+      "source_url": "https://www.science-scholarships.ph/",
+      "evidence_snippet": "ASTHRDP listed as unified MS/PhD human resource program with separate portal asthrdp.science-scholarships.ph"
+    },
+    {
+      "title": "Engineering Research and Development for Technology (ERDT)",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "provider_type": "Government",
+      "scholarship_type": "Merit-based",
+      "link": "https://erdt.science-scholarships.ph/",
+      "description": "Master's and doctorate degrees in engineering fields for high-impact research and qualification upgrade.",
+      "eligible_levels": ["Graduate"],
+      "cycle_type": "semester",
+      "deadline_precision": "not_announced",
+      "source_url": "https://www.science-scholarships.ph/",
+      "evidence_snippet": "ERDT aims to provide master's and doctorate degrees in various engineering fields"
+    },
+    {
+      "title": "Capacity Building Program in Science and Mathematics Education (CBPSME)",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "provider_type": "Government",
+      "scholarship_type": "Merit-based",
+      "link": "https://cbpsme.science-scholarships.ph/",
+      "description": "Master's and doctoral degrees in Science and Mathematics Education for DOST scholar-graduates TEI faculty and qualified educators.",
+      "eligible_levels": ["Graduate"],
+      "cycle_type": "semester",
+      "deadline_precision": "not_announced",
+      "source_url": "https://www.science-scholarships.ph/",
+      "evidence_snippet": "CBPSME scholarships for pursuit of Master's and Doctoral degrees in Science and Mathematics Education"
+    },
+    {
+      "title": "Science and Technology Education for Regional Development (STRAND)",
+      "provider": "Department of Science and Technology - Science Education Institute (DOST-SEI)",
+      "provider_type": "Government",
+      "scholarship_type": "Merit-based",
+      "link": "https://www.science-scholarships.ph/",
+      "description": "Faculty development in science and mathematics education for regional higher education institutions.",
+      "eligible_levels": ["Graduate"],
+      "cycle_type": "semester",
+      "deadline_precision": "not_announced",
+      "source_url": "https://www.science-scholarships.ph/",
+      "evidence_snippet": "STRAND program for faculty development in regional HEIs per DOST-SEI graduate scholarship portfolio"
+    }
+  ],
+  "url_replacements": [
+    {
+      "match_substrings": ["tes.unifast.gov.ph"],
+      "replacement": "https://unifast.gov.ph/",
+      "scholarship_ids": [66]
+    },
+    {
+      "match_substrings": ["scholars.pasigcity.gov.ph"],
+      "replacement": "https://www.pasigcity.gov.ph",
+      "scholarship_ids": [25, 26, 92, 93, 94]
+    },
+    {
+      "match_substrings": ["scholarship.owwa.gov.ph"],
+      "replacement": "https://owwa.gov.ph",
+      "scholarship_ids": [85, 86, 87]
+    },
+    {
+      "match_substrings": ["sm-foundation.org/scholarship"],
+      "replacement": "https://scholarship.sm-foundation.org/",
+      "scholarship_ids": [10]
+    },
+    {
+      "match_substrings": ["megaworldfoundation.com/scholarship"],
+      "replacement": "https://www.megaworldfoundation.com/scholarship/apply/form",
+      "exact_only": true,
+      "scholarship_ids": [61]
+    },
+    {
+      "match_substrings": ["afpeebso.org"],
+      "replacement": "https://www.afp.mil.ph",
+      "scholarship_ids": [56]
+    },
+    {
+      "match_substrings": ["ncip.gov.ph"],
+      "replacement": "https://eais.ncip.gov.ph",
+      "scholarship_ids": [52, 53]
+    },
+    {
+      "match_substrings": ["valenzuela.gov.ph/drpioscholarship"],
+      "replacement": "https://valenzuela.gov.ph/",
+      "scholarship_ids": [33]
+    },
+    {
+      "match_substrings": ["australiaawardsphilippines.org/scholarships"],
+      "replacement": "https://www.australiaawardsphilippines.org/",
+      "scholarship_ids": [74]
+    },
+    {
+      "match_substrings": ["www.securitybank.com"],
+      "replacement": "https://www.securitybank.com/foundation/scholars-for-better-communities",
+      "scholarship_ids": [58],
+      "require_broken": true
+    },
+    {
+      "match_substrings": ["owwa.gov.ph/education-and-livelihood-assistance-program-elap"],
+      "replacement": "https://owwa.gov.ph/education-and-livelihood-assistance-program-elap/",
+      "scholarship_ids": [124]
+    }
+  ],
+  "closed_cycle_updates": [
+    {"id": 43, "application_status": "closed"},
+    {"id": 60, "application_status": "closed"},
+    {"id": 80, "application_status": "closed"},
+    {"id": 74, "application_status": "closed"},
+    {"id": 64, "application_status": "closed"},
+    {"id": 70, "application_status": "closed"},
+    {"id": 35, "application_status": "closed"},
+    {"id": 30, "application_status": "closed"},
+    {"id": 58, "application_status": "closed"},
+    {"id": 72, "application_status": "closed"},
+    {"id": 68, "application_status": "closed"},
+    {"id": 66, "application_status": "needs_verification"},
+    {"id": 8, "application_status": "archived"}
+  ],
+  "field_changes_csv_sources": [
+    "verification/reports/audit_2026_08/field_changes.csv",
+    "verification/reports/ched_unifast/field_changes.csv",
+    "verification/reports/dost/field_changes.csv",
+    "verification/reports/tesda/field_changes.csv",
+    "verification/reports/sm_foundation/field_changes.csv",
+    "verification/reports/megaworld_foundation/field_changes.csv",
+    "verification/reports/owwa_dswd_ncip/field_changes.csv",
+    "verification/reports/gsis_sss/field_changes.csv",
+    "verification/reports/lgu_ncr/field_changes.csv",
+    "verification/reports/universities/field_changes.csv",
+    "verification/reports/private_foundations/field_changes.csv",
+    "verification/reports/military_affiliation/field_changes.csv",
+    "verification/reports/other_government/field_changes.csv",
+    "verification/reports/international/field_changes.csv",
+    "verification/reports/archived_reference/field_changes.csv"
+  ]
+}

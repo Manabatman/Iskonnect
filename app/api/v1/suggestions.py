@@ -15,13 +15,15 @@ from app.db import get_db
 from app.limiter import limiter
 from app.models import Scholarship
 from app.taxonomy.provinces import ALL_PROVINCES, PROVINCES_BY_REGION
-from app.taxonomy.psced_fields import PSCED_SPECIFIC_COURSES
+from app.taxonomy.psced_fields import PSCED_SPECIFIC_COURSES, build_fields_of_study_options
 from app.taxonomy.regions import PHILIPPINE_REGIONS
 from app.taxonomy.schools import PHILIPPINE_SCHOOLS
 from app.taxonomy.profile_constants import (
     ACADEMIC_STAGES,
+    ATHLETE_LEVELS,
     CITIZENSHIP_OPTIONS,
     EDUCATION_LEVELS,
+    EMPLOYMENT_STATUSES,
     ENROLLMENT_STATUSES,
     GWA_SCALES,
     SCHOOL_TYPES,
@@ -52,6 +54,9 @@ def get_profile_options(request: Request):
         "enrollment_statuses": ENROLLMENT_STATUSES,
         "year_levels": YEAR_LEVELS,
         "citizenship_options": CITIZENSHIP_OPTIONS,
+        "employment_statuses": EMPLOYMENT_STATUSES,
+        "athlete_levels": ATHLETE_LEVELS,
+        "fields_of_study": build_fields_of_study_options(),
     }
 
 

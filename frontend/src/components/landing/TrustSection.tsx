@@ -6,11 +6,11 @@ import { Section, SectionHeader, cardClass, IconTile } from "./Section";
 
 export function TrustSection() {
   return (
-    <Section variant="tint" border="bottom">
+    <Section variant="tint" border="bottom" data-testid="landing-trust">
       <SectionHeader
         eyebrow="Why trust us"
         title="Built on transparency, not guesswork."
-        description="Your match score measures eligibility fit—not your chances of winning. Here's exactly what goes into it."
+        description="Your match score measures eligibility fit, not your chances of winning. Here is exactly what goes into it."
       />
 
       <Reveal delay={0.08}>
@@ -20,7 +20,7 @@ export function TrustSection() {
           </p>
           <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             After you pass eligibility checks, five weighted factors combine into a score from 0 to 100. A score of 85
-            means your profile strongly matches the program&apos;s criteria—it does <strong>not</strong> mean you have an
+            means your profile strongly matches the program&apos;s criteria. It does <strong>not</strong> mean you have an
             85% chance of receiving the scholarship.
           </p>
           <div className="mt-6 space-y-4">

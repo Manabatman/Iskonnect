@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
-import { APP_RELEASE_DATE, APP_RELEASE_LABEL } from "../data/changelog";
 
 const productLinks = [
   { to: "/how-it-works", label: "How it works" },
-  { to: "/scholarships/search", label: "Search opportunities" },
+  { to: "/scholarships/search", label: "Scholarships" },
   { to: "/how-we-verify", label: "How we verify" },
   { to: "/transparency", label: "Transparency" },
-  { to: "/contact", label: "Contact" },
   { to: "/scholarship-status", label: "Scholarship status" },
   { to: "/faq", label: "FAQ" },
 ] as const;
@@ -16,7 +14,7 @@ const companyLinks = [
   { to: "/why-iskonnect", label: "Why ISKONNECT" },
   { to: "/terms", label: "Terms" },
   { to: "/privacy", label: "Privacy" },
-  { to: "/settings", label: "Settings" },
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 const footerLinkClass =
@@ -24,16 +22,13 @@ const footerLinkClass =
 
 export function Footer() {
   return (
-    <footer id="about" className="bg-slate-900 py-12 dark:bg-slate-950 sm:py-16">
+    <footer id="site-footer" className="bg-slate-900 py-12 dark:bg-slate-950 sm:py-16">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
-            <p className="font-semibold text-white">Iskonnect</p>
+            <p className="font-brand text-lg font-black tracking-tight text-white">Iskonnect</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
               Connecting Filipino students to scholarship opportunities they actually qualify for.
-            </p>
-            <p className="mt-2 text-xs font-medium text-primary-300">
-              {APP_RELEASE_LABEL} · {APP_RELEASE_DATE}
             </p>
           </div>
 
@@ -82,3 +77,16 @@ export function Footer() {
     </footer>
   );
 }
+
+export const footerProductLinks = productLinks;
+export const footerCompanyLinks = companyLinks;
+export const footerTransparencyLinks = [
+  { to: "/how-matching-works", label: "How matching works" },
+] as const;
+export const footerLegalLinks = [
+  { to: "/terms", label: "Terms" },
+  { to: "/privacy", label: "Privacy" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+  { to: "/faq", label: "FAQ" },
+] as const;

@@ -56,6 +56,21 @@ CITIZENSHIP_OPTIONS: list[dict[str, str]] = [
     {"value": "Foreign National", "label": "Foreign National"},
 ]
 
+EMPLOYMENT_STATUSES: list[dict[str, str]] = [
+    {"value": "none", "label": "Not employed"},
+    {"value": "part-time", "label": "Employed part-time"},
+    {"value": "full-time", "label": "Employed full-time"},
+    {"value": "self-employed", "label": "Self-employed"},
+]
+
+ATHLETE_LEVELS: list[dict[str, str]] = [
+    {"value": "", "label": "Not an athlete"},
+    {"value": "club", "label": "Club / intramural"},
+    {"value": "varsity", "label": "Varsity / university team"},
+    {"value": "regional", "label": "Regional team"},
+    {"value": "national", "label": "National team"},
+]
+
 DEADLINE_PRECISION_LABELS: dict[str, str] = {
     "exact": "Exact date",
     "estimated": "Estimated date",

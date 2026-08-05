@@ -5,7 +5,7 @@ import { primaryButtonClass } from "./Section";
 
 export function FinalCtaSection() {
   return (
-    <section className="border-t border-slate-200 bg-gradient-to-b from-white to-primary-50/50 py-20 dark:border-slate-800 dark:from-slate-900 dark:to-slate-950 sm:py-28">
+    <section className="border-t border-slate-200 bg-gradient-to-b from-white to-primary-50/50 py-20 dark:border-slate-800 dark:from-slate-900 dark:to-slate-950 sm:py-28" data-testid="landing-final-cta">
       <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
         <Reveal>
           <h2 className="text-balance text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">

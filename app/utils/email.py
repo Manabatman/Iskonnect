@@ -26,10 +26,12 @@ def send_email(
     Send an email via SMTP. Returns True on success.
     When SMTP is not configured, logs the message and returns False.
     """
+    recipient_hash = hash(to) % 10_000
+
     if not email_is_configured():
         logger.warning(
-            "email_not_configured to=%s subject=%s (SMTP not configured; message not sent)",
-            to,
+            "email_not_configured recipient_hash=%s subject=%s (SMTP not configured; message not sent)",
+            recipient_hash,
             subject,
         )
         return False
@@ -49,10 +51,15 @@ def send_email(
             if settings.smtp_user and settings.smtp_password:
                 server.login(settings.smtp_user, settings.smtp_password)
             server.sendmail(settings.email_from, [to], msg.as_string())
-        logger.info("email_sent to=%s subject=%s", to, subject)
+        logger.info("email_sent recipient_hash=%s subject=%s", recipient_hash, subject)
         return True
     except Exception as e:
-        logger.exception("email_send_failed to=%s subject=%s err=%s", to, subject, e)
+        logger.exception(
+            "email_send_failed recipient_hash=%s subject=%s err=%s",
+            recipient_hash,
+            subject,
+            e,
+        )
         return False
 
 

@@ -8,7 +8,7 @@ from typing import Annotated, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app import models
 from app.documents.readiness import _normalize_doc_type, _parse_user_docs
@@ -209,14 +209,14 @@ def list_applications(
     uid = _require_uid(user_id)
     rows = (
         db.query(models.Application)
+        .options(joinedload(models.Application.scholarship))
         .filter(models.Application.user_id == uid, models.Application.removed_at.is_(None))
         .order_by(models.Application.updated_at.desc())
         .all()
     )
     out: list[ApplicationOut] = []
     for a in rows:
-        sch = db.query(models.Scholarship).filter(models.Scholarship.id == a.scholarship_id).first()
-        out.append(_application_to_out(a, sch, include_scholarship=include_scholarship))
+        out.append(_application_to_out(a, a.scholarship, include_scholarship=include_scholarship))
     return out
 
 

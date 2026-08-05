@@ -1,18 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, lazy, Suspense } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { MatchResult, OpportunityTimeline, PlanResponse, ProfileCompleteness } from "../types";
-import { apiFetch } from "../api/client";
+import { getNetworkErrorMessage, resolveUserErrorMessage } from "../constants/errorCopy";
+import { NetworkError, apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { OpportunityTimelineView } from "../components/OpportunityTimeline";
 import { OpportunityCalendarView } from "../components/OpportunityCalendarView";
 import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import { ExcludedScholarshipsPanel } from "../components/ExcludedScholarshipsPanel";
-import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import type { MatchDiagnostics } from "../types";
 
-function fetchErrorMessage(err: unknown, fallback: string): string {
-  if (err instanceof Error) return err.message;
-  return fallback;
+const MatchAnalysisModal = lazy(() =>
+  import("../components/MatchAnalysisModal").then((m) => ({ default: m.MatchAnalysisModal }))
+);
+
+function fetchErrorMessage(err: unknown): string {
+  if (err instanceof NetworkError) return getNetworkErrorMessage();
+  return resolveUserErrorMessage(err, "load_failed");
 }
 
 export function OpportunityPlannerPage() {
@@ -49,7 +53,7 @@ export function OpportunityPlannerPage() {
         setDiagnostics(data.diagnostics ?? null);
       })
       .catch((err) => {
-        if (!cancelled) setError(fetchErrorMessage(err, "Something went wrong"));
+        if (!cancelled) setError(fetchErrorMessage(err));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -92,7 +96,7 @@ export function OpportunityPlannerPage() {
   }
 
   return (
-    <section className="py-10">
+    <section className="py-12">
       <div className="mx-auto max-w-6xl space-y-8 px-4">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -118,7 +122,9 @@ export function OpportunityPlannerPage() {
         <ExcludedScholarshipsPanel diagnostics={diagnostics} profileId={profileId} />
       </div>
 
-      <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />
+      <Suspense fallback={null}>
+        <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />
+      </Suspense>
     </section>
   );
 }

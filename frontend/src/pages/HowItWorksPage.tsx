@@ -6,17 +6,17 @@ const steps = [
   {
     n: 1,
     title: "Build your profile once",
-    body: "Tell us your GWA, region, course interests, income range, and household background. You only do this once — every match uses the same profile.",
+    body: "Tell us your GWA, region, course interests, income range, and household background. You only do this once. Every match uses the same profile.",
   },
   {
     n: 2,
     title: "We check actual eligibility rules",
-    body: "Each scholarship has real rules — minimum GWA, income ceiling, region, course, age. We check your profile against every one of them before anything is ranked.",
+    body: "Each scholarship has real rules: minimum GWA, income ceiling, region, course, age. We check your profile against every one of them before anything is ranked.",
   },
   {
     n: 3,
     title: "Programs you don't qualify for are removed",
-    body: "If you can't apply, we don't show it. There's no clutter — only scholarships you're actually eligible for reach your list.",
+    body: "If you can't apply, we don't show it. There's no clutter. Only scholarships you're actually eligible for reach your list.",
   },
   {
     n: 4,
@@ -46,7 +46,7 @@ const faqItems: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Could I be missing scholarships I qualify for?",
-    a: "Hard eligibility filters only remove programs where your profile clearly fails a required rule (like a region restriction). If data is missing from your profile, you may see fewer results — which is why completing your profile matters.",
+    a: "Hard eligibility filters only remove programs where your profile clearly fails a required rule (like a region restriction). If data is missing from your profile, you may see fewer results, which is why completing your profile matters.",
   },
   {
     q: "How is my personal data used?",
@@ -75,7 +75,7 @@ export function HowItWorksPage() {
           We don&apos;t guess. Every match is based on actual program rules and your real profile.
         </p>
 
-        <div className="mt-10 space-y-4">
+        <div className="mt-12 space-y-4">
           {steps.map((s) => (
             <div
               key={s.n}
@@ -96,10 +96,10 @@ export function HowItWorksPage() {
         </div>
 
         <div
-          className="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
+          className="mt-12 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
           aria-hidden
         >
-          <p className="text-center text-sm font-medium text-slate-600 dark:text-slate-300">At a glance</p>
+          <p className="text-center text-sm font-medium text-slate-600 dark:text-slate-300">How it flows</p>
           <div className="mt-4 flex min-w-min flex-nowrap items-center justify-center gap-1 px-1 text-xs font-medium sm:flex-wrap sm:gap-2 sm:text-sm">
             {flowNodes.map((node, i) => (
               <span key={node.label} className="flex shrink-0 items-center gap-1 sm:gap-2">
@@ -110,7 +110,7 @@ export function HowItWorksPage() {
                 </span>
                 {i < flowNodes.length - 1 ? (
                   <span className="text-slate-400" aria-hidden>
-                    →
+                    ›
                   </span>
                 ) : null}
               </span>
@@ -127,21 +127,21 @@ export function HowItWorksPage() {
           </p>
         </div>
 
-        <div className="mt-10" id="scoring">
+        <div className="mt-12" id="scoring">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How scores are built</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            Scores reflect fit across academics, financial need, field of study, location, and priority groups—not a
+            Scores reflect fit across academics, financial need, field of study, location, and priority groups, not a
             black-box AI guess. Higher scores mean stronger alignment with the program&apos;s stated criteria.
           </p>
         </div>
 
-        <div className="mt-10" id="verification">
+        <div className="mt-12" id="verification">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How we verify scholarships</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            Our catalog is built from official provider sources—CHED, DOST, TESDA, LGUs, universities, and foundations.
-            Each listing is reviewed by the ISKONNECT team before publication. We re-check listings on a regular
+            Our catalog is built from official provider sources: CHED, DOST, TESDA, LGUs, universities, and foundations.
+            Each scholarship is reviewed by the ISKONNECT team before publication. We re-check scholarships on a regular
             maintenance schedule and flag stale records for review. Verification means the data matched the official
-            source when we last checked—not a guarantee of funding or acceptance.
+            source when we last checked, not a guarantee of funding or acceptance.
           </p>
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
             Always confirm deadlines and requirements on the provider&apos;s website before applying.{" "}
@@ -159,7 +159,7 @@ export function HowItWorksPage() {
                 key={item.q}
                 className="group rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/40"
               >
-                <summary className="cursor-pointer list-none px-4 py-3 pr-10 text-sm font-semibold text-slate-900 outline-none ring-primary-500 focus-visible:ring-2 dark:text-slate-100 [&::-webkit-details-marker]:hidden">
+                <summary className="cursor-pointer list-none px-4 py-3 pr-12 text-sm font-semibold text-slate-900 outline-none ring-primary-500 focus-visible:ring-2 dark:text-slate-100 [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-2">
                     {item.q}
                     <span
@@ -191,7 +191,7 @@ export function HowItWorksPage() {
             to="/how-we-verify"
             className="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
           >
-            How we verify listings →
+            How we verify scholarships
           </Link>
         </div>
 
@@ -207,7 +207,7 @@ export function HowItWorksPage() {
           .
         </p>
 
-        <div className="mt-10 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <BackNavLink />
         </div>
       </div>

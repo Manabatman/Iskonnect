@@ -8,6 +8,7 @@ GenderOption = Literal["Male", "Female", "Other"]
 SchoolTypeOption = Literal["Public", "Private"]
 ProviderTypeOption = Literal["Government", "Private", "LGU", "Institutional"]
 ScholarshipTypeOption = Literal["Merit-and-Need", "Need", "Affiliation", "Merit-based"]
+StudyDestinationPreference = Literal["PHILIPPINES_ONLY", "ABROAD_ONLY", "BOTH"]
 
 # Pipe-delimited list fields on Scholarship (CSV / staging import).
 _SCHOLARSHIP_LIST_FIELDS = (
@@ -131,6 +132,11 @@ class StudentProfile(BaseModel):
     is_uniformed_service_dependent: Optional[bool] = False
     is_gsis_dependent: Optional[bool] = False
     is_sss_dependent: Optional[bool] = False
+    is_medical_frontliner_dependent: Optional[bool] = False
+    study_destination_preference: StudyDestinationPreference = "PHILIPPINES_ONLY"
+    employment_status: Optional[str] = None
+    evening_weekend_program: Optional[bool] = None
+    athlete_level: Optional[str] = None
     parent_occupation: Optional[str] = None
     guardian_full_name: Optional[str] = Field(default=None, max_length=255)
     guardian_email: Optional[EmailStr] = None
@@ -139,6 +145,17 @@ class StudentProfile(BaseModel):
     # RA 10173 — must be true to submit (validated server-side)
     privacy_consent: bool = False
     privacy_consent_version: Optional[str] = "ra10173-v1"
+    # Eligibility migration v1 — progressive profile inputs
+    prior_tertiary_units: Optional[int] = Field(default=None, ge=0)
+    class_rank: Optional[int] = Field(default=None, ge=1)
+    class_size: Optional[int] = Field(default=None, ge=1)
+    work_experience_years: Optional[int] = Field(default=None, ge=0)
+    marital_status: Optional[str] = None
+    parent_salary_grade: Optional[int] = Field(default=None, ge=1)
+    parent_status: Optional[str] = None
+    is_hei_faculty_or_staff: Optional[bool] = None
+    residency_years_in_locality: Optional[int] = Field(default=None, ge=0)
+    active_grant_scope_codes: Optional[List[str]] = []
 
     @field_validator(
         "education_level",
@@ -259,12 +276,27 @@ class StudentProfileResponse(BaseModel):
     is_uniformed_service_dependent: Optional[bool] = False
     is_gsis_dependent: Optional[bool] = False
     is_sss_dependent: Optional[bool] = False
+    is_medical_frontliner_dependent: Optional[bool] = False
+    study_destination_preference: Optional[str] = "PHILIPPINES_ONLY"
+    employment_status: Optional[str] = None
+    evening_weekend_program: Optional[bool] = None
+    athlete_level: Optional[str] = None
     parent_occupation: Optional[str] = None
     documents: Optional[List[dict]] = []
     privacy_consent_at: Optional[datetime] = None
     privacy_consent_version: Optional[str] = None
     google_drive_folder_url: Optional[str] = None
     profile_access_token: Optional[str] = None
+    prior_tertiary_units: Optional[int] = None
+    class_rank: Optional[int] = None
+    class_size: Optional[int] = None
+    work_experience_years: Optional[int] = None
+    marital_status: Optional[str] = None
+    parent_salary_grade: Optional[int] = None
+    parent_status: Optional[str] = None
+    is_hei_faculty_or_staff: Optional[bool] = None
+    residency_years_in_locality: Optional[int] = None
+    active_grant_scope_codes: Optional[List[str]] = []
 
     class Config:
         from_attributes = True
@@ -332,6 +364,21 @@ class Scholarship(BaseModel):
     type_attributes: Optional[dict[str, Any]] = None
     organization_id: Optional[int] = None
     editorial_state: Optional[str] = None
+    max_prior_tertiary_units: Optional[int] = Field(default=None, ge=0)
+    min_work_experience_years: Optional[int] = Field(default=None, ge=0)
+    max_class_rank: Optional[int] = Field(default=None, ge=1)
+    max_class_percentile: Optional[float] = Field(default=None, ge=0, le=100)
+    academic_gate_mode: Optional[str] = None
+    allow_transferee: Optional[bool] = None
+    allow_shiftee: Optional[bool] = None
+    first_undergraduate_only: Optional[bool] = False
+    min_residency_years: Optional[int] = Field(default=None, ge=0)
+    age_as_of_date: Optional[date] = None
+    age_as_of_rule: Optional[str] = None
+    max_parent_salary_grade: Optional[int] = Field(default=None, ge=1)
+    parent_program_id: Optional[int] = None
+    required_affiliation_codes: Optional[List[str]] = []
+    conflict_scope_codes: Optional[List[str]] = []
 
     @field_validator(*_SCHOLARSHIP_LIST_FIELDS, mode="before")
     @classmethod
@@ -506,15 +553,30 @@ class ScholarshipVersionHistoryItem(BaseModel):
     changes: dict[str, Any]
 
 
+class PrimaryBlockerResponse(BaseModel):
+    key: str
+    title: str
+    changeable: str
+
+
 class ScholarshipEligibilityResponse(BaseModel):
     scholarship_id: int
     profile_id: int
-    qualification_status: str
+    status: str
+    status_label: str
+    summary: str
+    reason: Optional[str] = None
+    application_window: str
+    next_action: str
+    primary_blocker: Optional[PrimaryBlockerResponse] = None
     requirements: list[dict[str, Any]] = Field(default_factory=list)
+    qualification_status: str
+    passes_for_matching: bool = False
     missing_requirements: list[str] = Field(default_factory=list)
     qualifying_requirements: list[str] = Field(default_factory=list)
     eligibility_confidence: Optional[str] = None
-    passes_for_matching: bool = False
+    catalog_status: Optional[str] = None
+    catalog_message: Optional[str] = None
 
 
 ReportIssueType = Literal["broken_link", "wrong_deadline", "outdated_info", "wrong_eligibility", "other"]
@@ -560,6 +622,31 @@ class OrganizationResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CatalogTrustResponse(BaseModel):
+    """Public aggregate verification posture for the active catalog."""
+
+    published_count: int = 0
+    last_catalog_verification_at: Optional[datetime] = None
+    verified_within_90d_count: int = 0
+    verification_fresh_days: int = 90
+
+
+class PublicStatsResponse(BaseModel):
+    """Public landing statistics — every number derived from catalog data or omitted."""
+
+    source: Literal["live", "fallback"] = "live"
+    as_of: datetime
+    verification_fresh_days: int = 90
+    verified_listing_count: Optional[int] = None
+    provider_count: Optional[int] = None
+    last_catalog_verification_at: Optional[datetime] = None
+    region_count: Optional[int] = None
+    regions: Optional[List[str]] = None
+    education_level_count: Optional[int] = None
+    education_levels: Optional[List[str]] = None
+    total_documented_funding_php: Optional[int] = None
 
 
 class ScoringWeightItem(BaseModel):
@@ -654,6 +741,8 @@ class MatchResponse(BaseModel):
     missing_requirements: Optional[List[str]] = None
     eligibility_confidence: Optional[str] = None
     requirements: Optional[List[Any]] = None
+    unverified_requirements: Optional[List[str]] = None
+    provisional_reason: Optional[str] = None
     # Verification / trust display
     verification_badge: Optional[str] = None
     verification_badge_label: Optional[str] = None

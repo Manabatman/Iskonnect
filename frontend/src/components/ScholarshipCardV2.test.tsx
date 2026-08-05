@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { ScholarshipCardV2 } from "./ScholarshipCardV2";
 import type { ScholarshipInfo } from "../types";
@@ -66,6 +66,7 @@ describe("ScholarshipCardV2 lifecycle badge", () => {
       application_status: "needs_verification",
       data_status: "needs_review",
     });
-    expect(screen.getByText("Needs verification")).toBeInTheDocument();
+    const card = screen.getByRole("article");
+    expect(within(card).getAllByText("Needs verification").length).toBeGreaterThanOrEqual(1);
   });
 });

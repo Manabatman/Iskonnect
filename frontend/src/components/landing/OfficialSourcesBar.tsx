@@ -3,7 +3,7 @@ import { Reveal } from "./Reveal";
 
 export function OfficialSourcesBar() {
   return (
-    <section className="border-b border-slate-200 bg-white py-10 dark:border-slate-800 dark:bg-slate-950">
+    <section className="border-b border-slate-200 bg-white py-10 dark:border-slate-800 dark:bg-slate-950" data-testid="landing-sources">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="flex flex-col items-center gap-4">

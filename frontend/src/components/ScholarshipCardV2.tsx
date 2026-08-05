@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { Calendar } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { trackOutboundClick } from "../utils/trackOutboundClick";
 import { Link } from "react-router-dom";
 import type { MatchResult, ScholarshipInfo } from "../types";
 import { BookmarkButton } from "./BookmarkButton";
@@ -6,15 +8,17 @@ import { LifecycleStatusBadge } from "./LifecycleStatusBadge";
 import {
   EligibilityRequirementsList,
   QualificationStatusBadge,
+  UnverifiedRequirementsList,
   VerificationBadge,
 } from "./QualificationStatusBadge";
 import { MatchScoreRing } from "./MatchScoreRing";
+import { FreshnessChipRow, freshnessFromMatch, freshnessFromScholarship } from "./FreshnessChip";
 import { ScholarshipTypeInfoModal } from "./ScholarshipTypeInfoModal";
 import { getCardVisualClasses } from "../utils/cardImages";
 import { getScholarshipHeroImageUrl } from "../utils/scholarshipHeroImage";
 import { formatScholarshipLocation } from "../utils/normalizeLocation";
 import { resolveApplicationStatus } from "../utils/scholarshipStatus";
-import { formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
+import { formatDeadlineCardLine, formatDeadlineDisplay, formatOpenDateDisplay } from "../utils/formatDeadline";
 
 function isMatchResult(s: ScholarshipInfo | MatchResult): s is MatchResult {
   return "score" in s && typeof (s as MatchResult).score === "number";
@@ -41,23 +45,17 @@ function canOpenMatchAnalysis(match: MatchResult): boolean {
   );
 }
 
-function formatVerifiedCompact(iso: string | null | undefined): string | null {
-  if (!iso?.trim()) return null;
-  try {
-    const d = new Date(iso.slice(0, 10));
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return null;
-  }
-}
-
 function formatDeadlineLine(
   deadline: string | null | undefined,
   openDate: string | null | undefined,
   precision?: string | null,
   note?: string | null,
-  verifiedAt?: string | null
+  verifiedAt?: string | null,
+  compact = false,
 ): string {
+  if (compact) {
+    return formatDeadlineCardLine(deadline, openDate, precision, note);
+  }
   const p = (precision ?? "").trim().toLowerCase();
   if (p === "rolling" || p === "not_announced" || p === "institution_dependent") {
     return formatDeadlineDisplay(deadline, precision, note, verifiedAt);
@@ -160,11 +158,12 @@ export function ScholarshipCardV2({
     ("deadline_precision" in base ? base.deadline_precision : undefined) ??
       match?.deadline_precision,
     ("deadline_note" in base ? base.deadline_note : undefined) ?? match?.deadline_note,
-    "last_verified_at" in base ? base.last_verified_at : undefined
+    undefined,
+    true,
   );
-  const lastVerified = formatVerifiedCompact(
-    "last_verified_at" in base ? base.last_verified_at : undefined
-  );
+  const providerLabel =
+    ("provider_display" in base && base.provider_display) || base.provider || "—";
+  const freshnessChips = match ? freshnessFromMatch(match) : freshnessFromScholarship(base);
   const predictedOpen =
     match?.predicted_open ??
     ("predicted_next_open" in base ? base.predicted_next_open : undefined);
@@ -178,6 +177,59 @@ export function ScholarshipCardV2({
   const showSecondaryActionsRow =
     (match && canOpenMatchAnalysis(match) && onShowAnalysis) || (!match && onCheckMatch);
 
+  /** Zone 2 badge priority: Lifecycle → Verification → Qualification → Type (D-09). */
+  const identityBadges = useMemo(() => {
+    const items: { priority: number; key: string; node: ReactNode }[] = [];
+    items.push({
+      priority: 1,
+      key: "lifecycle",
+      node: (
+        <LifecycleStatusBadge
+          application_status={"application_status" in base ? base.application_status : undefined}
+          data_status={"data_status" in base ? base.data_status : undefined}
+          is_active={"is_active" in base ? base.is_active : undefined}
+        />
+      ),
+    });
+    if ("verification_badge_label" in base && base.verification_badge_label && appStatus !== "needs_verification") {
+      items.push({
+        priority: 2,
+        key: "verification",
+        node: <VerificationBadge badge={base.verification_badge} label={base.verification_badge_label} />,
+      });
+    }
+    if (match?.qualification_status) {
+      items.push({
+        priority: 3,
+        key: "qualification",
+        node: <QualificationStatusBadge status={match.qualification_status} className="text-xs" />,
+      });
+    }
+    if (base.scholarship_type) {
+      items.push({
+        priority: 4,
+        key: "type",
+        node: (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setTypeModalOpen(true);
+            }}
+            className="rounded-full bg-slate-100 px-3 py-0.5 text-xs font-medium text-slate-700 underline decoration-dotted underline-offset-2 transition hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+            aria-label={`What does ${base.scholarship_type} mean?`}
+          >
+            {base.scholarship_type}
+          </button>
+        ),
+      });
+    }
+    return items;
+  }, [base, match?.qualification_status]);
+
+  const visibleBadges = identityBadges.slice(0, 3);
+  const hiddenBadgeCount = identityBadges.length - visibleBadges.length;
+
   const handleCardActivate = () => {
     onCardBodyClick?.(info);
   };
@@ -187,21 +239,9 @@ export function ScholarshipCardV2({
   return (
     <>
       <article
-        className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
+        className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-md transition-all duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3 dark:border-slate-700 dark:bg-slate-800 dark:shadow-slate-900/40 ${cardInteractive ? "cursor-pointer" : ""} ${className}`}
         aria-labelledby={`scholarship-card-title-${base.id}`}
-        role={cardInteractive ? "button" : undefined}
-        tabIndex={cardInteractive ? 0 : undefined}
         onClick={cardInteractive ? handleCardActivate : undefined}
-        onKeyDown={
-          cardInteractive
-            ? (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleCardActivate();
-                }
-              }
-            : undefined
-        }
       >
         <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-t-2xl">
           {displayImageUrl ? (
@@ -212,10 +252,12 @@ export function ScholarshipCardV2({
               <img
                 src={displayImageUrl}
                 alt={info.image_alt?.trim() || base.title}
+                width={640}
+                height={360}
                 loading="lazy"
                 decoding="async"
                 className={[
-                  "absolute inset-0 h-full w-full object-cover transition-all duration-300 group-hover:scale-[1.02]",
+                  "absolute inset-0 h-full w-full object-cover",
                   imageLoaded ? "opacity-100" : "opacity-0",
                 ].join(" ")}
                 onLoad={() => setImageLoaded(true)}
@@ -250,36 +292,25 @@ export function ScholarshipCardV2({
 
           {score != null ? (
             <div
-              className="absolute right-3 top-3 z-10 rounded-2xl bg-black/30 px-2 py-2 backdrop-blur-md"
+              className="absolute right-3 top-3 z-10 rounded-2xl bg-black/30 px-2 py-1.5 backdrop-blur-md"
               onClick={(e) => e.stopPropagation()}
             >
-              <MatchScoreRing score={score} size={64} variant="onDark" showMatchLabel />
+              <MatchScoreRing score={score} size={56} variant="onDark" showMatchLabel />
             </div>
           ) : null}
         </div>
 
         <div className="flex flex-1 flex-col px-5 pt-4">
           <div className="flex flex-wrap items-center gap-2">
-            <LifecycleStatusBadge
-              application_status={"application_status" in base ? base.application_status : undefined}
-              data_status={"data_status" in base ? base.data_status : undefined}
-              is_active={"is_active" in base ? base.is_active : undefined}
-            />
-            {base.scholarship_type ? (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setTypeModalOpen(true);
-                }}
-                className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700 underline decoration-dotted underline-offset-2 transition hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
-                aria-label={`What does ${base.scholarship_type} mean?`}
-              >
-                {base.scholarship_type}
-              </button>
-            ) : null}
-            {"verification_badge_label" in base && base.verification_badge_label ? (
-              <VerificationBadge badge={base.verification_badge} label={base.verification_badge_label} />
+            {visibleBadges.map((badge) => (
+              <span key={badge.key} className="inline-flex">
+                {badge.node}
+              </span>
+            ))}
+            {hiddenBadgeCount > 0 ? (
+              <span className="rounded-full bg-slate-100 px-3 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                +{hiddenBadgeCount} more
+              </span>
             ) : null}
           </div>
 
@@ -290,18 +321,28 @@ export function ScholarshipCardV2({
             {base.title}
           </h3>
 
-          {match?.qualification_status ? (
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <QualificationStatusBadge status={match.qualification_status} className="text-xs" />
-              {match.eligibility_confidence ? (
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                  {String(match.eligibility_confidence).replace(/_/g, " ")}
-                </span>
-              ) : null}
-            </div>
-          ) : null}
+          <div className="mt-3 flex h-[3.25rem] flex-col justify-center gap-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 dark:border-slate-600 dark:bg-slate-900/50">
+            <p
+              className="flex items-center gap-1.5 text-sm font-semibold leading-tight text-slate-900 dark:text-slate-100"
+              title={deadlineLine}
+            >
+              <Calendar className="h-3.5 w-3.5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden />
+              <span className="line-clamp-1 min-w-0">{deadlineLine}</span>
+            </p>
+            <p
+              className="flex min-w-0 items-center gap-1.5 text-sm leading-tight text-slate-600 dark:text-slate-400"
+              title={providerLabel}
+            >
+              <IconBuilding className="h-3.5 w-3.5 shrink-0 opacity-80" />
+              <span className="truncate">{providerLabel}</span>
+            </p>
+          </div>
 
-          <p className="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-200">{deadlineLine}</p>
+          {match?.eligibility_confidence ? (
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              {String(match.eligibility_confidence).replace(/_/g, " ")}
+            </p>
+          ) : null}
 
           {"preparation" in base && base.preparation?.documents_total != null && base.preparation.documents_total > 0 ? (
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
@@ -313,24 +354,24 @@ export function ScholarshipCardV2({
             </p>
           ) : null}
 
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600 dark:text-slate-400">
-            <span className="inline-flex min-w-0 items-center gap-1.5">
-              <IconBuilding className="h-4 w-4 shrink-0 opacity-80" />
-              <span className="truncate">{base.provider ?? "—"}</span>
-            </span>
-            {lastVerified ? (
-              <span className="text-xs text-slate-500 dark:text-slate-400">Verified {lastVerified}</span>
-            ) : appStatus !== "needs_verification" ? (
-              <span className="text-xs text-amber-700 dark:text-amber-300">Not yet verified</span>
-            ) : null}
+          <div className="mt-2">
+            <FreshnessChipRow chips={freshnessChips} />
           </div>
 
           {match ? (
-            <EligibilityRequirementsList
-              qualifying={match.qualifying_requirements}
-              missing={match.missing_requirements}
-              compact
-            />
+            <>
+              <UnverifiedRequirementsList
+                unverified={match.unverified_requirements}
+                requirements={match.requirements as Array<{ key?: string; result?: string; label?: string }> | undefined}
+                provisionalReason={match.provisional_reason}
+                compact
+              />
+              <EligibilityRequirementsList
+                qualifying={match.qualifying_requirements}
+                missing={match.missing_requirements}
+                compact
+              />
+            </>
           ) : null}
 
           {match?.gap_reason ? (
@@ -351,7 +392,7 @@ export function ScholarshipCardV2({
                 month: "long",
                 year: "numeric",
               })}
-              . Dates are estimates—confirm on the official site.
+              . Dates are estimates. Confirm on the official site.
             </p>
           ) : null}
 
@@ -387,10 +428,10 @@ export function ScholarshipCardV2({
             ) : null}
           </div>
 
-          <div className="mt-3 flex flex-wrap items-start gap-3 text-xs text-slate-600 dark:text-slate-400">
-            <span className="inline-flex items-center gap-1">
+          <div className="mt-1.5 flex min-h-[1.25rem] flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
+            <span className="inline-flex min-w-0 max-w-full items-center gap-1" title={locationLabel}>
               <IconMapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-              <span>{locationLabel}</span>
+              <span className="truncate">{locationLabel}</span>
             </span>
             {(base.min_age != null || base.max_age != null) && (
               <span className="text-slate-500 dark:text-slate-400">
@@ -419,7 +460,7 @@ export function ScholarshipCardV2({
                   type="button"
                   disabled={checkMatchLoading}
                   onClick={() => onCheckMatch(base.id)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-accent-600 underline-offset-2 transition hover:text-accent-700 hover:underline disabled:cursor-wait disabled:opacity-70 dark:text-accent-400 dark:hover:text-accent-300"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-accent-700 underline-offset-2 transition hover:text-accent-800 hover:underline disabled:cursor-wait disabled:opacity-70 dark:text-accent-400 dark:hover:text-accent-300"
                 >
                   {checkMatchLoading ? (
                     <>
@@ -443,14 +484,38 @@ export function ScholarshipCardV2({
                 href={link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex flex-1 items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-center text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+                onClick={() =>
+                  trackOutboundClick({
+                    scholarshipId: base.id,
+                    surface: "card",
+                    linkKind: "apply_official",
+                  })
+                }
+                className="inline-flex flex-1 items-center justify-center rounded-xl bg-primary-600 px-4 py-3 text-center text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
                 aria-label={`Apply now for ${base.title}`}
               >
                 Apply Now
               </a>
+            ) : hasLink && appStatus === "needs_verification" ? (
+              <a
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() =>
+                  trackOutboundClick({
+                    scholarshipId: base.id,
+                    surface: "card",
+                    linkKind: "check_official",
+                  })
+                }
+                className="inline-flex flex-1 items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-center text-sm font-semibold text-amber-900 transition hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100 dark:hover:bg-amber-950/60 dark:focus:ring-offset-slate-900"
+                aria-label={`Check official site for ${base.title}`}
+              >
+                Check official site
+              </a>
             ) : appStatus !== "open" || match?.deadline_passed ? (
               <span
-                className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400"
+                className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400"
                 title={
                   match?.deadline_passed
                     ? "Application deadline has passed"
@@ -460,13 +525,13 @@ export function ScholarshipCardV2({
                 {appStatus === "expected_reopen" ? "Not open yet" : "Apply when open"}
               </span>
             ) : (
-              <span className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400">
+              <span className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-500 dark:bg-slate-600 dark:text-slate-400">
                 Link unavailable
               </span>
             )}
             <Link
               to={`/scholarship/${base.id}`}
-              className="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:focus:ring-offset-slate-900"
+              className="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:focus:ring-offset-slate-900"
               aria-label={`View details for ${base.title}`}
             >
               View Details

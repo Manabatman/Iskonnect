@@ -12,6 +12,18 @@ import { OfficialSourcesBar } from "../components/landing/OfficialSourcesBar";
 import { ProblemSection } from "../components/landing/ProblemSection";
 import { TrustSection } from "../components/landing/TrustSection";
 
+export const LANDING_SECTION_ORDER = [
+  "hero",
+  "wizard",
+  "sources",
+  "problem",
+  "how-it-works",
+  "trust",
+  "benefits",
+  "faq",
+  "final-cta",
+] as const;
+
 export function LandingPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -39,7 +51,7 @@ export function LandingPage() {
 
   return (
     <LandingMotionProvider>
-      <div className="overflow-hidden">
+      <div className="overflow-hidden" data-testid="landing-page">
         <HeroSection />
         <MiniProfileWizard />
         <OfficialSourcesBar />

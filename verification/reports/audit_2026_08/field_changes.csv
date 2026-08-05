@@ -1,0 +1,24 @@
+id,field,iskconnect_value,official_value,action,change_reason,closure_type,confidence,source_url,evidence_snippet,official_last_updated,announcement_date,verified_at
+8,is_active,true,false,archive,temporary_suspension,,verified,https://www.sss.gov.ph,SSS Educational Loan suspended for new applicants per audit,,,2026-08-03
+8,application_status,needs_verification,archived,archive,temporary_suspension,,verified,https://www.sss.gov.ph,Program suspended; legacy URL broken,,,2026-08-03
+8,link_status,broken,broken,confirm_unchanged,,,verified,https://www.sss.gov.ph,Official page offline/moved,,,2026-08-03
+10,primary_link,https://sm-foundation.org/scholarship,https://scholarship.sm-foundation.org/,update,application_portal_migrated,,verified,https://scholarship.sm-foundation.org/,Legacy path broken; verified portal subdomain,,,2026-08-03
+10,link_status,broken,ok,update,application_portal_migrated,,verified,https://scholarship.sm-foundation.org/,Relocated dedicated portal,,,2026-08-03
+56,primary_link,https://afpeebso.org,https://www.afp.mil.ph,update,application_portal_migrated,,verified,https://www.afp.mil.ph,Legacy afpeebso.org offline; integrated into AFP portal,,,2026-08-03
+56,link_status,broken,ok,update,application_portal_migrated,,verified,https://www.afp.mil.ph,Main DND/AFP portal active,,,2026-08-03
+66,primary_link,https://tes.unifast.gov.ph,https://unifast.gov.ph/,update,application_portal_migrated,,verified,https://unifast.gov.ph/,tes.unifast.gov.ph offline; central portal,,,2026-08-03
+66,link_status,broken,ok,update,application_portal_migrated,,verified,https://unifast.gov.ph/,Re-routed to central UniFAST portal,,,2026-08-03
+25,primary_link,https://scholars.pasigcity.gov.ph,https://www.pasigcity.gov.ph,update,application_portal_migrated,,partially_verified,https://www.pasigcity.gov.ph,DNS failure on scholars subdomain; fallback to main LGU,,,2026-08-03
+52,primary_link,https://ncip.gov.ph,https://eais.ncip.gov.ph,update,application_portal_migrated,,verified,https://eais.ncip.gov.ph,NCIP EAIS portal migration,,,2026-08-03
+53,primary_link,https://ncip.gov.ph,https://eais.ncip.gov.ph,update,application_portal_migrated,,verified,https://eais.ncip.gov.ph,NCIP EAIS portal migration,,,2026-08-03
+85,primary_link,https://scholarship.owwa.gov.ph/,https://owwa.gov.ph,update,application_portal_migrated,,partially_verified,https://owwa.gov.ph,Subdomain timeout; main agency portal functional,,,2026-08-03
+86,primary_link,https://scholarship.owwa.gov.ph/,https://owwa.gov.ph,update,application_portal_migrated,,partially_verified,https://owwa.gov.ph,Subdomain timeout; main agency portal functional,,,2026-08-03
+87,primary_link,https://scholarship.owwa.gov.ph/,https://owwa.gov.ph,update,application_portal_migrated,,partially_verified,https://owwa.gov.ph,Subdomain timeout; main agency portal functional,,,2026-08-03
+124,primary_link,https://owwa.gov.ph/education-and-livelihood-assistance-program-elap/,https://owwa.gov.ph/education-and-livelihood-assistance-program-elap/,confirm_unchanged,,,verified,https://owwa.gov.ph/education-and-livelihood-assistance-program-elap/,Verified ELAP sub-page,,,2026-08-03
+61,primary_link,https://www.megaworldfoundation.com,https://www.megaworldfoundation.com/scholarship/apply/form,update,application_portal_migrated,,verified,https://www.megaworldfoundation.com/scholarship/apply/form,Direct application path,,,2026-08-03
+33,primary_link,https://valenzuela.gov.ph/drpioscholarship,https://valenzuela.gov.ph/,update,website_redesign,,verified,https://valenzuela.gov.ph/,Path shift; main LGU landing active,,,2026-08-03
+74,primary_link,https://www.australiaawardsphilippines.org/scholarships,https://www.australiaawardsphilippines.org/,update,website_redesign,,partially_verified,https://www.australiaawardsphilippines.org/,DNS issues on scholarships path; root domain reference,,,2026-08-03
+57,cycle_type,,rolling,update,policy_revision,,verified,https://www.dswd.gov.ph,Rolling crisis intake; no fixed annual deadline,,,2026-08-03
+57,deadline_precision,,rolling,update,policy_revision,,verified,https://www.dswd.gov.ph,Continuous rolling assistance,,,2026-08-03
+112,deadline_precision,,rolling,update,policy_revision,,verified,https://tesda.gov.ph,TWSP rolling regional intake,,,2026-08-03
+113,deadline_precision,,rolling,update,policy_revision,,verified,https://tesda.gov.ph,STEP rolling community intake,,,2026-08-03

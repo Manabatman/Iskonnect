@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
 import { apiFetch } from "../api/client";
@@ -77,15 +79,15 @@ function Toggle({
       aria-label={label}
       disabled={disabled}
       onClick={() => onChange(!checked)}
-      className={[
-        "relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
+        className={[
+        "relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
         disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
         checked ? "bg-primary-600" : "bg-slate-200 dark:bg-slate-600",
       ].join(" ")}
     >
       <span
         className={[
-          "pointer-events-none inline-block h-5 w-5 translate-y-0.5 rounded-full bg-white shadow transition",
+          "pointer-events-none inline-block h-5 w-5 translate-y-0.5 rounded-full bg-white shadow transition-transform duration-fast ease-out-custom",
           checked ? "translate-x-5" : "translate-x-0.5",
         ].join(" ")}
       />
@@ -110,6 +112,7 @@ export function SettingsPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [notifyDeadline, setNotifyDeadline] = useState(true);
   const [notifyNewMatch, setNotifyNewMatch] = useState(true);
+  const [notifyWeeklyDigest, setNotifyWeeklyDigest] = useState(true);
   const [prefsLoading, setPrefsLoading] = useState(true);
   const [prefsSaving, setPrefsSaving] = useState(false);
   const [prefsError, setPrefsError] = useState<string | null>(null);
@@ -118,7 +121,11 @@ export function SettingsPage() {
   const [exportError, setExportError] = useState<string | null>(null);
 
   const savePref = useCallback(
-    async (patch: { notify_deadline_reminders?: boolean; notify_new_matches?: boolean }) => {
+    async (patch: {
+      notify_deadline_reminders?: boolean;
+      notify_new_matches?: boolean;
+      notify_weekly_digest?: boolean;
+    }) => {
       setPrefsSaving(true);
       setPrefsError(null);
       try {
@@ -131,10 +138,12 @@ export function SettingsPage() {
         const data = (await res.json()) as {
           notify_deadline_reminders: boolean;
           notify_new_matches: boolean;
+          notify_weekly_digest: boolean;
           notifications_globally_enabled: boolean;
         };
         setNotifyDeadline(data.notify_deadline_reminders);
         setNotifyNewMatch(data.notify_new_matches);
+        setNotifyWeeklyDigest(data.notify_weekly_digest);
         setNotificationsEnabled(data.notifications_globally_enabled);
       } catch (e) {
         setPrefsError(e instanceof Error ? e.message : "Could not save settings");
@@ -161,6 +170,7 @@ export function SettingsPage() {
         if (cancelled || !data) return;
         setNotifyDeadline(Boolean(data.notify_deadline_reminders));
         setNotifyNewMatch(Boolean(data.notify_new_matches));
+        setNotifyWeeklyDigest(Boolean(data.notify_weekly_digest));
         setNotificationsEnabled(Boolean(data.notifications_globally_enabled));
       })
       .catch(() => {
@@ -174,14 +184,51 @@ export function SettingsPage() {
     };
   }, [user, authHeaders]);
 
-  const alertsActive = notifyDeadline || notifyNewMatch;
+  const alertsActive = notifyDeadline || notifyNewMatch || notifyWeeklyDigest;
 
   const email = user?.email ?? "";
-  const displayName = email ? emailToDisplayName(email) : "";
-  const showNameEmpty = !displayName && !email;
+  const [profileName, setProfileName] = useState<string | null>(null);
+  const [profileNameLoading, setProfileNameLoading] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setProfileName(null);
+      setProfileNameLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setProfileNameLoading(true);
+    apiFetch("/api/v1/profiles/me", { headers: authHeaders() })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { full_name?: string } | null) => {
+        if (!cancelled) setProfileName(data?.full_name?.trim() || null);
+      })
+      .catch(() => {
+        if (!cancelled) setProfileName(null);
+      })
+      .finally(() => {
+        if (!cancelled) setProfileNameLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authHeaders]);
+
+  const displayName = profileName || (profileNameLoading ? "" : email ? emailToDisplayName(email) : "");
+  const avatarInitials = profileName
+    ? profileName
+        .split(/\s+/)
+        .map((p) => p[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : email
+      ? initialsFromEmail(email)
+      : "?";
+  const showNameEmpty = !profileName && !email;
 
   return (
-    <section className="py-10">
+    <section className="py-12">
       <div className="mx-auto max-w-2xl space-y-6 px-4">
         <header>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Your Account</h1>
@@ -198,10 +245,15 @@ export function SettingsPage() {
               className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-100 text-lg font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300"
               aria-hidden
             >
-              {email ? initialsFromEmail(email) : "?"}
+              {avatarInitials}
             </div>
             <div className="min-w-0 flex-1">
-              {showNameEmpty ? (
+              {profileNameLoading ? (
+                <div className="space-y-2" aria-busy="true" aria-label="Loading profile">
+                  <div className="h-5 w-40 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+                  <div className="h-4 w-56 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
+                </div>
+              ) : showNameEmpty ? (
                 <p className="italic text-slate-400 dark:text-slate-500">
                   Complete your profile to see your name here
                 </p>
@@ -222,9 +274,9 @@ export function SettingsPage() {
           </p>
           <Link
             to="/profile-builder"
-            className="mt-4 inline-flex items-center rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
+            className="mt-4 inline-flex items-center rounded-xl bg-primary-600 px-4 py-3 text-sm font-semibold text-white hover:bg-primary-700"
           >
-            Update Your Profile →
+            Update Your Profile
           </Link>
         </Card>
 
@@ -242,7 +294,7 @@ export function SettingsPage() {
                   type="button"
                   onClick={() => setTheme(id)}
                   className={[
-                    "inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition",
+                    "inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition",
                     selected
                       ? "border-primary-500 bg-primary-50 text-primary-800 ring-2 ring-primary-500 dark:border-primary-500 dark:bg-primary-900/30 dark:text-primary-200"
                       : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
@@ -317,6 +369,23 @@ export function SettingsPage() {
                 onChange={(next) => {
                   setNotifyNewMatch(next);
                   void savePref({ notify_new_matches: next });
+                }}
+              />
+            </label>
+            <label className="flex items-start justify-between gap-4">
+              <span>
+                <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">Weekly digest</span>
+                <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                  In-app summary of opportunities and reopening programs once per week
+                </span>
+              </span>
+              <Toggle
+                label="Weekly digest"
+                checked={notifyWeeklyDigest}
+                disabled={prefsLoading || prefsSaving || !notificationsEnabled}
+                onChange={(next) => {
+                  setNotifyWeeklyDigest(next);
+                  void savePref({ notify_weekly_digest: next });
                 }}
               />
             </label>
@@ -425,7 +494,7 @@ export function SettingsPage() {
               </Link>
             </li>
             <li>
-              <Link to="/transparency" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              <Link to="/how-matching-works" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 Transparency
               </Link>
             </li>
@@ -433,12 +502,12 @@ export function SettingsPage() {
         </Card>
 
         <div>
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
-          >
-            ← Back to Dashboard
-          </Link>
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/dashboard">
+              <ChevronLeft className="size-4" aria-hidden />
+              Back to Dashboard
+            </Link>
+          </Button>
         </div>
         {email ? (
           <DeleteAccountModal open={deleteModalOpen} onOpenChange={setDeleteModalOpen} userEmail={email} />

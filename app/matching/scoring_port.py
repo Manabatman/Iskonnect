@@ -15,7 +15,7 @@ class ScoringPayload:
     gwa_normalized: float | None
     household_income_annual: int | None
     income_bracket: str | None
-    field_match_level: str  # exact | broad | partial | none
+    field_match_level: str  # exact | sibling | discipline | partial | none (+ legacy broad)
     geographic_match_level: str  # city | region | island_group | none
     equity_flags: dict[str, bool]
 
@@ -30,6 +30,7 @@ class ScoringPayload:
     eligible_cities: list | None = None
     has_geographic_restriction: bool = True
     has_field_restriction: bool = True
+    is_provisional: bool = False
 
 
 @dataclass

@@ -20,10 +20,9 @@ export function ScholarshipTypeInfoModal({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm data-[state=open]:animate-overlayFade data-[state=closed]:animate-overlayFadeOut" />
         <Dialog.Content
-          className="fixed inset-0 z-[101] flex max-h-full w-full items-center justify-center p-4 outline-none data-[state=open]:animate-matchDialogIn data-[state=closed]:animate-matchDialogOut sm:p-6"
+          className="fixed left-1/2 top-1/2 z-[101] max-h-[min(85vh,100%-2rem)] w-[min(100%-2rem,28rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl outline-none data-[state=open]:animate-matchDialogIn data-[state=closed]:animate-matchDialogOut dark:border-slate-700 dark:bg-slate-900"
           aria-describedby="scholarship-type-modal-desc"
         >
-          <div className="max-h-[85vh] w-full max-w-md overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-900">
             <Dialog.Title className="text-lg font-bold text-slate-900 dark:text-slate-100">
               {guide.title}
             </Dialog.Title>
@@ -47,7 +46,6 @@ export function ScholarshipTypeInfoModal({
                 Got it
               </Dialog.Close>
             </div>
-          </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

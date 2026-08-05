@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   createContext,
@@ -9,6 +10,7 @@ import {
 } from "react";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
+import { validateEmail } from "../utils/validateEmail";
 
 export type FeedbackCategory = "bug" | "suggestion" | "experience";
 
@@ -140,6 +142,13 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
 
   const handleSubmit = async () => {
     if (!category || !message.trim()) return;
+    if (email.trim()) {
+      const emailCheck = validateEmail(email);
+      if (!emailCheck.valid) {
+        setSubmitError(emailCheck.message ?? "Enter a valid email address.");
+        return;
+      }
+    }
     setSubmitting(true);
     setSubmitError(null);
     try {
@@ -173,11 +182,10 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm data-[state=open]:animate-overlayFade data-[state=closed]:animate-overlayFadeOut dark:bg-black/60" />
         <Dialog.Content
-          className="fixed inset-0 z-[101] flex max-h-full w-full items-center justify-center p-4 outline-none data-[state=open]:animate-matchDialogIn data-[state=closed]:animate-matchDialogOut sm:p-6"
+          className="fixed left-1/2 top-1/2 z-[101] flex max-h-[min(90vh,100%-2rem)] w-[min(100%-2rem,32rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none data-[state=open]:animate-matchDialogIn data-[state=closed]:animate-matchDialogOut dark:border-slate-700 dark:bg-slate-900"
           aria-describedby="feedback-modal-desc"
         >
-          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
-            <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-5 py-4 dark:border-slate-700">
+          <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-5 py-4 dark:border-slate-700">
               <div className="min-w-0">
                 <Dialog.Title className="text-lg font-bold text-slate-900 dark:text-slate-100">
                   Share feedback
@@ -207,12 +215,16 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
                     Thank you for helping us improve
                   </p>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                    Your feedback was received. We read every message.
+                    Your feedback was received. We read every message and triage suggestions in our{" "}
+                    <Link to="/changelog" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+                      changelog
+                    </Link>
+                    .
                   </p>
                   <Dialog.Close asChild>
                     <button
                       type="button"
-                      className="mt-6 inline-flex rounded-xl bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
+                      className="mt-6 inline-flex rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-700"
                     >
                       Back to Iskonnect
                     </button>
@@ -306,13 +318,12 @@ export function FeedbackModal({ open, onOpenChange, initialCategory }: FeedbackM
                   type="button"
                   disabled={!message.trim() || submitting}
                   onClick={handleSubmit}
-                  className="rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {submitting ? "Sending…" : "Send Feedback"}
                 </button>
               </div>
             ) : null}
-          </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

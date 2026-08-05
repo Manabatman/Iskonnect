@@ -5,7 +5,7 @@ import { Section, SectionHeader } from "./Section";
 
 export function FaqSection() {
   return (
-    <Section variant="tint" border="bottom" id="faq">
+    <Section variant="tint" border="bottom" id="faq" data-testid="landing-faq">
       <SectionHeader
         eyebrow="FAQ"
         title="Common questions"
@@ -40,7 +40,7 @@ export function FaqSection() {
                   </>
                 ) : item.q === "Where does scholarship information come from?" ? (
                   <>
-                    From official public sources—CHED, DOST-SEI, TESDA, LGUs, universities, and foundations. Read{" "}
+                    From official public sources (CHED, DOST-SEI, TESDA, LGUs, universities, and foundations). Read{" "}
                     <Link
                       to="/how-we-verify"
                       className="font-medium text-primary-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-primary-400"
@@ -58,7 +58,7 @@ export function FaqSection() {
         ))}
         <p className="pt-4 text-center text-sm">
           <Link to="/faq" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
-            View all FAQs →
+            View all FAQs
           </Link>
         </p>
       </div>

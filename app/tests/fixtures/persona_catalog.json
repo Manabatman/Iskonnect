@@ -1,0 +1,2594 @@
+{
+  "scholarships": [
+    {
+      "id": 101,
+      "title": "Nationwide STEM Merit",
+      "provider": "Test",
+      "link": "https://example.com/stem",
+      "description": "STEM college merit",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_school_types": [
+        "Public",
+        "Private"
+      ],
+      "eligible_courses_psced": [
+        "STEM"
+      ],
+      "min_gwa_normalized": 85,
+      "max_income_threshold": 500000,
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 102,
+      "title": "Visayas Region Only",
+      "provider": "Test",
+      "link": "https://example.com/visayas",
+      "description": "Region restricted",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "Region VI - Western Visayas"
+      ],
+      "eligible_school_types": [
+        "Public",
+        "Private"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 103,
+      "title": "Low Income Need Grant",
+      "provider": "Test",
+      "link": "https://example.com/need",
+      "description": "Need-based",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "max_income_threshold": 250000,
+      "scholarship_type": "Need",
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 104,
+      "title": "High GWA Merit Only",
+      "provider": "Test",
+      "link": "https://example.com/gwa",
+      "description": "Merit GWA 95+",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "min_gwa_normalized": 95,
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 105,
+      "title": "Grade 11 Senior High",
+      "provider": "Test",
+      "link": "https://example.com/shs",
+      "description": "SHS only",
+      "eligible_levels": [
+        "Grade 11",
+        "Grade 12"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 106,
+      "title": "Closed Cycle Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/106",
+      "description": "Closed Cycle Grant",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "closed",
+      "application_deadline": "2024-01-01"
+    },
+    {
+      "id": 107,
+      "title": "Previous Cycle Reference",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/107",
+      "description": "Previous Cycle Reference",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "previous_cycle",
+      "last_close_date": "2023-05-01",
+      "academic_year_target": "2023-2024"
+    },
+    {
+      "id": 108,
+      "title": "Expected Reopen Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/108",
+      "description": "Expected Reopen Grant",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "expected_reopen",
+      "cycle_type": "annual",
+      "last_open_date": "2024-03-01",
+      "last_close_date": "2024-05-01"
+    },
+    {
+      "id": 109,
+      "title": "Archived Program",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/109",
+      "description": "Archived Program",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "archived"
+    },
+    {
+      "id": 110,
+      "title": "Unverified Listing",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/110",
+      "description": "Unverified Listing",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "needs_review",
+      "application_status": "needs_verification"
+    },
+    {
+      "id": 111,
+      "title": "Nationwide STEM Needs Review",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/111",
+      "description": "Nationwide STEM Needs Review",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "needs_review",
+      "application_status": "open",
+      "eligible_courses_psced": [
+        "STEM"
+      ],
+      "min_gwa_normalized": 85,
+      "max_income_threshold": 500000,
+      "last_verified_at": null
+    },
+    {
+      "id": 112,
+      "title": "Merit Only No Cap",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/112",
+      "description": "Merit Only No Cap",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "scholarship_type": "Merit-based",
+      "min_gwa_normalized": 90
+    },
+    {
+      "id": 113,
+      "title": "Hybrid Merit Need",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/113",
+      "description": "Hybrid Merit Need",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "scholarship_type": "Merit-and-Need",
+      "min_gwa_normalized": 85,
+      "max_income_threshold": 400000
+    },
+    {
+      "id": 114,
+      "title": "BARMM Residents",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/114",
+      "description": "BARMM Residents",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "BARMM"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 115,
+      "title": "Iloilo City LGU",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/115",
+      "description": "Iloilo City LGU",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "Region VI - Western Visayas"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_cities": [
+        "Iloilo City"
+      ]
+    },
+    {
+      "id": 116,
+      "title": "Public HEI Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/116",
+      "description": "Public HEI Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_school_types": [
+        "Public"
+      ]
+    },
+    {
+      "id": 117,
+      "title": "Private HEI Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/117",
+      "description": "Private HEI Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_school_types": [
+        "Private"
+      ]
+    },
+    {
+      "id": 118,
+      "title": "UP Diliman Named",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/118",
+      "description": "UP Diliman Named",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_schools": [
+        "university-of-the-philippines-diliman"
+      ]
+    },
+    {
+      "id": 119,
+      "title": "UP System Schools",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/119",
+      "description": "UP System Schools",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_school_systems": [
+        "up-system"
+      ]
+    },
+    {
+      "id": 120,
+      "title": "Business Broad Field",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/120",
+      "description": "Business Broad Field",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_courses_psced": [
+        "Business"
+      ]
+    },
+    {
+      "id": 121,
+      "title": "Accountancy Specific",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/121",
+      "description": "Accountancy Specific",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_courses_specific": [
+        "BS Accountancy"
+      ]
+    },
+    {
+      "id": 122,
+      "title": "GWA Percentage Gate",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/122",
+      "description": "GWA Percentage Gate",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "min_gwa_normalized": 85,
+      "_gwa_threshold_scale": "percentage"
+    },
+    {
+      "id": 123,
+      "title": "GWA Five Point Gate",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/123",
+      "description": "GWA Five Point Gate",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "min_gwa_normalized": 90,
+      "_gwa_threshold_scale": "5.0_scale"
+    },
+    {
+      "id": 124,
+      "title": "GWA Four Point Gate",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/124",
+      "description": "GWA Four Point Gate",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "min_gwa_normalized": 88,
+      "_gwa_threshold_scale": "4.0_scale"
+    },
+    {
+      "id": 125,
+      "title": "Need 400k Ceiling",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/125",
+      "description": "Need 400k Ceiling",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "scholarship_type": "Need",
+      "max_income_threshold": 400000
+    },
+    {
+      "id": 126,
+      "title": "Need 500k Ceiling",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/126",
+      "description": "Need 500k Ceiling",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "scholarship_type": "Need",
+      "max_income_threshold": 500000
+    },
+    {
+      "id": 127,
+      "title": "PWD Priority Boost",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/127",
+      "description": "PWD Priority Boost",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "PWD"
+      ]
+    },
+    {
+      "id": 128,
+      "title": "IP Priority Boost",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/128",
+      "description": "IP Priority Boost",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "IP"
+      ]
+    },
+    {
+      "id": 129,
+      "title": "Solo Parent Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/129",
+      "description": "Solo Parent Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "Solo Parent Dependent"
+      ]
+    },
+    {
+      "id": 130,
+      "title": "OFW Dependent Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/130",
+      "description": "OFW Dependent Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "OFW Dependent"
+      ]
+    },
+    {
+      "id": 131,
+      "title": "Farmer Fisher Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/131",
+      "description": "Farmer Fisher Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "Farmer/Fisher Dependent"
+      ]
+    },
+    {
+      "id": 132,
+      "title": "4Ps Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/132",
+      "description": "4Ps Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "4Ps/Listahanan"
+      ]
+    },
+    {
+      "id": 133,
+      "title": "Underprivileged Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/133",
+      "description": "Underprivileged Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "Underprivileged"
+      ]
+    },
+    {
+      "id": 134,
+      "title": "Military Dependent Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/134",
+      "description": "Military Dependent Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "Military Dependents"
+      ]
+    },
+    {
+      "id": 135,
+      "title": "Uniformed Service Priority",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/135",
+      "description": "Uniformed Service Priority",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "priority_groups": [
+        "Uniformed Service Dependents"
+      ]
+    },
+    {
+      "id": 136,
+      "title": "GSIS Members Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/136",
+      "description": "GSIS Members Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "members_only": true,
+      "priority_groups": [
+        "GSIS Dependent"
+      ]
+    },
+    {
+      "id": 137,
+      "title": "SSS Members Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/137",
+      "description": "SSS Members Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "members_only": true,
+      "priority_groups": [
+        "SSS Dependent"
+      ]
+    },
+    {
+      "id": 138,
+      "title": "Adult Learners 25 Plus",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/138",
+      "description": "Adult Learners 25 Plus",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "min_age": 25
+    },
+    {
+      "id": 139,
+      "title": "Youth Max 17",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/139",
+      "description": "Youth Max 17",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "max_age": 17
+    },
+    {
+      "id": 140,
+      "title": "Third Year Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/140",
+      "description": "Third Year Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_year_levels": [
+        3
+      ]
+    },
+    {
+      "id": 141,
+      "title": "Transferee Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/141",
+      "description": "Transferee Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_enrollment_status": [
+        "transferee"
+      ]
+    },
+    {
+      "id": 142,
+      "title": "Passed Deadline Open Row",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/142",
+      "description": "Passed Deadline Open Row",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "application_deadline": "2020-01-15"
+    },
+    {
+      "id": 143,
+      "title": "TESDA Welding NC II",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/143",
+      "description": "TESDA Welding NC II",
+      "eligible_levels": [
+        "TVET"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "min_gwa_normalized": null
+    },
+    {
+      "id": 144,
+      "title": "Graduate Research Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/144",
+      "description": "Graduate Research Grant",
+      "eligible_levels": [
+        "Graduate"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 145,
+      "title": "Filipino Citizenship Required",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/145",
+      "description": "Filipino Citizenship Required",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "citizenship_required": "Filipino"
+    },
+    {
+      "id": 146,
+      "title": "SUC Category Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/146",
+      "description": "SUC Category Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "eligible_school_categories": [
+        "SUC"
+      ]
+    },
+    {
+      "id": 147,
+      "title": "Davao Region Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/147",
+      "description": "Davao Region Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "Region XI - Davao Region"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 148,
+      "title": "NCR Metro Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/148",
+      "description": "NCR Metro Only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "National Capital Region"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 149,
+      "title": "High Merit Above 500k",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/149",
+      "description": "High Merit Above 500k",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "scholarship_type": "Merit-based",
+      "min_gwa_normalized": 92
+    },
+    {
+      "id": 150,
+      "title": "SHS General Assistance",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/150",
+      "description": "Senior high open grant",
+      "eligible_levels": [
+        "Grade 11",
+        "Grade 12"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open",
+      "max_income_threshold": 300000
+    },
+    {
+      "id": 151,
+      "title": "Engineering Field Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/151",
+      "description": "Engineering PSCED restriction",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_courses_psced": [
+        "Engineering"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 152,
+      "title": "Communication Field Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/152",
+      "description": "Communication sub-discipline restriction",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_courses_psced": [
+        "Communication"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 153,
+      "title": "Medical Health Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/153",
+      "description": "Medical broad restriction",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_courses_psced": [
+        "Medical"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 154,
+      "title": "Agriculture Rural Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/154",
+      "description": "Agriculture broad restriction",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_courses_psced": [
+        "Agriculture"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 155,
+      "title": "Arts Humanities Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/155",
+      "description": "Arts broad restriction",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_courses_psced": [
+        "Arts"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 156,
+      "title": "CALABARZON Regional",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/156",
+      "description": "Region IV-A only",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "Region IV-A - CALABARZON"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 157,
+      "title": "Athletic Merit Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/157",
+      "description": "Merit for student athletes (talent)",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "scholarship_type": "Merit-based",
+      "min_gwa_normalized": 75,
+      "priority_groups": [
+        "Student Athlete"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 163,
+      "title": "Working Student Priority Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/163",
+      "description": "Priority for employed students and evening/weekend enrollees",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "priority_groups": [
+        "Working Student"
+      ],
+      "members_only": true,
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 158,
+      "title": "Incoming Freshman Only",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/158",
+      "description": "First-year college entrants",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_year_levels": [
+        1
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 159,
+      "title": "Nursing Specific Course",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/159",
+      "description": "BS Nursing specific",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [],
+      "eligible_courses_specific": [
+        "BS Nursing"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 160,
+      "title": "Region II Cagayan Valley",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/160",
+      "description": "Region II geographic grant",
+      "eligible_levels": [
+        "College"
+      ],
+      "eligible_regions": [
+        "Region II - Cagayan Valley"
+      ],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 161,
+      "title": "Graduate Open Fellowship",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/161",
+      "description": "Second graduate fixture for ranking invariants",
+      "eligible_levels": [
+        "Graduate"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    },
+    {
+      "id": 162,
+      "title": "TVET Skills Grant",
+      "provider": "Fixture",
+      "link": "https://example.com/fixture/162",
+      "description": "Second TVET fixture for ranking invariants",
+      "eligible_levels": [
+        "TVET"
+      ],
+      "eligible_regions": [],
+      "is_active": true,
+      "data_status": "active",
+      "application_status": "open"
+    }
+  ],
+  "personas": [
+    {
+      "id": "maria_freshman_stem",
+      "pr_ids": [
+        "PR-01"
+      ],
+      "label": "Maria — STEM freshman, NCR, low income",
+      "profile": {
+        "age": 18,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "city_municipality": "Quezon City",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        103
+      ],
+      "must_exclude": [
+        102,
+        105
+      ],
+      "notes": "Nationwide STEM and need grant; excluded from Visayas-only and SHS-only",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "105": "almost_qualified",
+        "102": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "visayas_student",
+      "pr_ids": [
+        "PR-09"
+      ],
+      "label": "Juan — Visayas resident",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region VI - Western Visayas",
+        "city_municipality": "Iloilo City",
+        "school_type": "Public",
+        "household_income_annual": 300000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        102
+      ],
+      "must_exclude": [],
+      "notes": "Eligible for nationwide and regional grants",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "102": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 102
+        }
+      ]
+    },
+    {
+      "id": "high_income_merit",
+      "pr_ids": [
+        "PR-12"
+      ],
+      "label": "High income — need grant excluded",
+      "profile": {
+        "age": 20,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Private",
+        "household_income_annual": 800000,
+        "gwa_normalized": 92,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        148,
+        157
+      ],
+      "must_exclude": [
+        103
+      ],
+      "notes": "Income above need grant ceiling; STEM merit may also exclude at 800k depending on thresholds",
+      "expected_status": {
+        "148": "provisionally_qualified",
+        "157": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "103": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 148,
+          "below": 107
+        }
+      ]
+    },
+    {
+      "id": "missing_gwa",
+      "pr_ids": [
+        "PR-16"
+      ],
+      "label": "No GWA — provisional matches allowed",
+      "profile": {
+        "age": 18,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        103,
+        104
+      ],
+      "must_exclude": [
+        102,
+        105
+      ],
+      "notes": "Missing GWA fails open — high GWA merit still shown provisionally (MATCH-01 will disclose)",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "103": "provisionally_qualified",
+        "104": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "102": "not_eligible",
+        "105": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "grade11_shs",
+      "pr_ids": [
+        "PR-02"
+      ],
+      "label": "Grade 11 SHS student",
+      "profile": {
+        "age": 16,
+        "education_level": "Grade 11",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 150000,
+        "preferred_courses": []
+      },
+      "must_include": [
+        105
+      ],
+      "must_exclude": [
+        101
+      ],
+      "notes": "College-only grants excluded for SHS",
+      "expected_status": {
+        "105": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "101": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 150,
+          "below": 105
+        }
+      ]
+    },
+    {
+      "id": "low_gwa",
+      "pr_ids": [
+        "PR-14"
+      ],
+      "label": "GWA below high merit threshold",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 80,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        103
+      ],
+      "must_exclude": [
+        104
+      ],
+      "notes": "GWA 80 below nationwide STEM min 85; need grant still matches",
+      "expected_status": {
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "104": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 103,
+          "below": 127
+        }
+      ]
+    },
+    {
+      "id": "income_at_ceiling",
+      "pr_ids": [
+        "PR-11"
+      ],
+      "label": "Income exactly at need ceiling",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 250000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        103
+      ],
+      "must_exclude": [],
+      "notes": "At income ceiling — should still qualify for need grant",
+      "expected_status": {
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 103,
+          "below": 124
+        }
+      ]
+    },
+    {
+      "id": "ncr_no_city",
+      "pr_ids": [
+        "PR-21"
+      ],
+      "label": "Region only, no city",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101
+      ],
+      "must_exclude": [
+        102
+      ],
+      "notes": "Nationwide OK; Visayas restricted excluded",
+      "expected_status": {
+        "101": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "102": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 126
+        }
+      ]
+    },
+    {
+      "id": "private_school",
+      "pr_ids": [
+        "PR-18"
+      ],
+      "label": "Private school student",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Private",
+        "household_income_annual": 350000,
+        "gwa_normalized": 91,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101
+      ],
+      "must_exclude": [],
+      "notes": "Public and private eligible scholarships",
+      "expected_status": {
+        "101": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 157
+        }
+      ]
+    },
+    {
+      "id": "non_stem_field",
+      "pr_ids": [
+        "PR-29"
+      ],
+      "label": "Business field student",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "Business",
+        "preferred_courses": []
+      },
+      "must_include": [
+        103
+      ],
+      "must_exclude": [],
+      "notes": "STEM-restricted may score lower but need grant has no field restriction",
+      "expected_status": {
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 103,
+          "below": 122
+        }
+      ]
+    },
+    {
+      "id": "young_age",
+      "pr_ids": [
+        "PR-34"
+      ],
+      "label": "Working student — part-time, evening program",
+      "profile": {
+        "age": 16,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 350000,
+        "income_bracket": "250k_400k",
+        "employment_status": "part-time",
+        "evening_weekend_program": true,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        163
+      ],
+      "must_exclude": [],
+      "notes": "Working student priority (DATA-08)",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "163": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 126
+        }
+      ]
+    },
+    {
+      "id": "minimal_profile",
+      "pr_ids": [
+        "PR-07"
+      ],
+      "label": "Sparse profile — region and level only",
+      "profile": {
+        "education_level": "College",
+        "region": "National Capital Region",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        103
+      ],
+      "must_exclude": [
+        102,
+        105
+      ],
+      "notes": "Sparse profile fails open on unknowns; hard region/level gates still apply",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "105": "almost_qualified",
+        "102": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 110
+        }
+      ]
+    },
+    {
+      "id": "ana_accountancy_2nd_year",
+      "pr_ids": [
+        "PR-03"
+      ],
+      "label": "Ana — 2nd year accountancy, private NCR, 5.0-scale GWA",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "current_year_level": 2,
+        "region": "National Capital Region",
+        "city_municipality": "Manila",
+        "school_type": "Private",
+        "household_income_annual": 325000,
+        "gwa_normalized": 93.75,
+        "field_of_study_broad": "Accountancy",
+        "preferred_courses": [
+          "BS Accountancy"
+        ]
+      },
+      "must_include": [
+        120,
+        121,
+        125,
+        112
+      ],
+      "must_exclude": [
+        103,
+        116
+      ],
+      "notes": "5.0-scale 1.75 equivalent; need 250k excluded; public-only excluded",
+      "expected_status": {
+        "120": "provisionally_qualified",
+        "121": "provisionally_qualified",
+        "125": "provisionally_qualified",
+        "112": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "116": "not_eligible",
+        "103": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 121,
+          "below": 125
+        },
+        {
+          "above": 125,
+          "below": 112
+        }
+      ]
+    },
+    {
+      "id": "miguel_graduating_civil",
+      "pr_ids": [
+        "PR-04"
+      ],
+      "label": "Miguel — graduating civil engineering, Region VII",
+      "profile": {
+        "age": 21,
+        "education_level": "College",
+        "current_year_level": 4,
+        "enrollment_status": "graduating",
+        "region": "Region VII - Central Visayas",
+        "city_municipality": "Cebu City",
+        "school_type": "Public",
+        "household_income_annual": 320000,
+        "gwa_normalized": 85,
+        "field_of_study_broad": "Civil Engineering",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        151
+      ],
+      "must_exclude": [
+        158
+      ],
+      "notes": "Engineering matches STEM via hierarchy; incoming-freshman-only excluded",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "151": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "158": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 127
+        }
+      ]
+    },
+    {
+      "id": "grace_graduate_ms",
+      "pr_ids": [
+        "PR-05"
+      ],
+      "label": "Grace — graduate MS Biology, NCR",
+      "profile": {
+        "age": 24,
+        "education_level": "Graduate",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 450000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "Biology",
+        "preferred_courses": []
+      },
+      "must_include": [
+        144,
+        161
+      ],
+      "must_exclude": [
+        101,
+        105
+      ],
+      "notes": "Graduate-only vs undergraduate/SHS fixtures",
+      "expected_status": {
+        "144": "provisionally_qualified",
+        "161": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "101": "almost_qualified",
+        "105": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 144,
+          "below": 161
+        }
+      ]
+    },
+    {
+      "id": "ben_tvet_welding",
+      "pr_ids": [
+        "PR-06"
+      ],
+      "label": "Ben — TVET welding trainee, Region XII",
+      "profile": {
+        "age": 18,
+        "education_level": "TVET",
+        "current_academic_stage": "TVET",
+        "region": "Region XII - SOCCSKSARGEN",
+        "school_type": "Public",
+        "household_income_annual": 120000,
+        "field_of_study_broad": "Shielded Metal Arc Welding NC II",
+        "preferred_courses": []
+      },
+      "must_include": [
+        143,
+        162
+      ],
+      "must_exclude": [
+        101,
+        104
+      ],
+      "notes": "TVET path; college GWA-gated merit excluded",
+      "expected_status": {
+        "143": "provisionally_qualified",
+        "162": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "104": "almost_qualified",
+        "101": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 143,
+          "below": 162
+        }
+      ]
+    },
+    {
+      "id": "carlo_transferee_it",
+      "pr_ids": [
+        "PR-08"
+      ],
+      "label": "Carlo — transferee 3rd year IT, CALABARZON",
+      "profile": {
+        "age": 20,
+        "education_level": "College",
+        "current_year_level": 3,
+        "enrollment_status": "transferee",
+        "region": "Region IV-A - CALABARZON",
+        "city_municipality": "Los Baños",
+        "school_type": "Private",
+        "household_income_annual": 330000,
+        "gwa_normalized": 86,
+        "field_of_study_broad": "Information Technology",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        141,
+        156
+      ],
+      "must_exclude": [
+        103
+      ],
+      "notes": "Transferee-only fixture included; 5.0-scale 2.25 normalized",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "141": "provisionally_qualified",
+        "156": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "103": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 122
+        }
+      ]
+    },
+    {
+      "id": "paolo_middle_income",
+      "pr_ids": [
+        "PR-10"
+      ],
+      "label": "Paolo — middle income marketing student, NCR private",
+      "profile": {
+        "age": 20,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Private",
+        "household_income_annual": 380000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "Marketing Management",
+        "preferred_courses": []
+      },
+      "must_include": [
+        125,
+        112,
+        120
+      ],
+      "must_exclude": [
+        103
+      ],
+      "notes": "380k above 250k need ceiling; 400k ceiling grants OK",
+      "expected_status": {
+        "125": "provisionally_qualified",
+        "112": "provisionally_qualified",
+        "120": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "103": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 125,
+          "below": 112
+        }
+      ]
+    },
+    {
+      "id": "high_gwa_mathematics",
+      "pr_ids": [
+        "PR-13"
+      ],
+      "label": "High GWA mathematics, low income, Region II",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region II - Cagayan Valley",
+        "school_type": "Public",
+        "household_income_annual": 180000,
+        "gwa_normalized": 96,
+        "field_of_study_broad": "Mathematics",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        103,
+        104,
+        160
+      ],
+      "must_exclude": [],
+      "notes": "Near-max academic and need components; regional fixture",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "103": "provisionally_qualified",
+        "104": "provisionally_qualified",
+        "160": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 103
+        },
+        {
+          "above": 103,
+          "below": 104
+        }
+      ]
+    },
+    {
+      "id": "gwa_scale_parity",
+      "pr_ids": [
+        "PR-15"
+      ],
+      "label": "GWA scale parity anchor (percentage baseline)",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        122
+      ],
+      "must_exclude": [
+        104
+      ],
+      "notes": "PR-15 also guarded by test_pr15_gwa_scale_equivalence",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "122": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "104": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 122
+        }
+      ]
+    },
+    {
+      "id": "public_university_student",
+      "pr_ids": [
+        "PR-17"
+      ],
+      "label": "Public university student",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        116,
+        101
+      ],
+      "must_exclude": [
+        117
+      ],
+      "notes": "Public-only vs private-only school type gates",
+      "expected_status": {
+        "116": "provisionally_qualified",
+        "101": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "117": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 116,
+          "below": 118
+        }
+      ]
+    },
+    {
+      "id": "up_diliman_named_school",
+      "pr_ids": [
+        "PR-19"
+      ],
+      "label": "UP Diliman named-school match",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "school": "UP Diliman",
+        "school_id": "university-of-the-philippines-diliman",
+        "household_income_annual": 250000,
+        "gwa_normalized": 92,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        118,
+        119
+      ],
+      "must_exclude": [],
+      "notes": "Named school and UP system registry normalization",
+      "expected_status": {
+        "118": "provisionally_qualified",
+        "119": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 118,
+          "below": 119
+        }
+      ]
+    },
+    {
+      "id": "suc_category_student",
+      "pr_ids": [
+        "PR-20"
+      ],
+      "label": "SUC category student",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region III - Central Luzon",
+        "school_type": "Public",
+        "school": "PUP",
+        "school_id": "polytechnic-university-of-the-philippines",
+        "household_income_annual": 200000,
+        "gwa_normalized": 87,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        146
+      ],
+      "must_exclude": [
+        117
+      ],
+      "notes": "SUC category gate via school registry",
+      "expected_status": {
+        "146": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "117": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 146,
+          "below": 158
+        }
+      ]
+    },
+    {
+      "id": "mindanao_davao",
+      "pr_ids": [
+        "PR-22"
+      ],
+      "label": "Mindanao Davao Region XI resident",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region XI - Davao Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        147,
+        101
+      ],
+      "must_exclude": [
+        114
+      ],
+      "notes": "Davao regional vs BARMM-only exclusion",
+      "expected_status": {
+        "147": "provisionally_qualified",
+        "101": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "114": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 147,
+          "below": 107
+        }
+      ]
+    },
+    {
+      "id": "barmm_resident",
+      "pr_ids": [
+        "PR-23"
+      ],
+      "label": "BARMM resident",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "BARMM",
+        "school_type": "Public",
+        "household_income_annual": 150000,
+        "gwa_normalized": 86,
+        "field_of_study_broad": "Education",
+        "preferred_courses": []
+      },
+      "must_include": [
+        114
+      ],
+      "must_exclude": [
+        147
+      ],
+      "notes": "BARMM alias handling",
+      "expected_status": {
+        "114": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "147": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 114,
+          "below": 107
+        }
+      ]
+    },
+    {
+      "id": "calabarzon_alias",
+      "pr_ids": [
+        "PR-24"
+      ],
+      "label": "CALABARZON region alias student",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "CALABARZON",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        156,
+        101
+      ],
+      "must_exclude": [
+        102
+      ],
+      "notes": "Region alias robustness; detailed alias variants in test_pr24_region_aliases",
+      "expected_status": {
+        "156": "provisionally_qualified",
+        "101": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "102": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 156,
+          "below": 107
+        }
+      ]
+    },
+    {
+      "id": "engineering_student",
+      "pr_ids": [
+        "PR-25"
+      ],
+      "label": "Civil engineering vs field restrictions",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 220000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "Civil Engineering",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        151
+      ],
+      "must_exclude": [
+        120
+      ],
+      "notes": "Engineering + STEM hierarchy; business-only excluded",
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "151": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "120": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 151
+        }
+      ]
+    },
+    {
+      "id": "devcom_student",
+      "pr_ids": [
+        "PR-26"
+      ],
+      "label": "Development Communication — taxonomy before/after proof",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "Development Communication",
+        "preferred_courses": [
+          "BA Development Communication"
+        ]
+      },
+      "must_include": [
+        155,
+        152,
+        103
+      ],
+      "must_exclude": [
+        101
+      ],
+      "notes": "DevCom matches Communication and Arts ancestors; STEM-only excluded",
+      "expected_status": {
+        "155": "provisionally_qualified",
+        "152": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "101": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 152,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "nursing_student",
+      "pr_ids": [
+        "PR-27"
+      ],
+      "label": "BS Nursing health sciences",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "Nursing",
+        "preferred_courses": [
+          "BS Nursing"
+        ]
+      },
+      "must_include": [
+        153,
+        159,
+        103
+      ],
+      "must_exclude": [
+        151
+      ],
+      "notes": "Medical broad + nursing specific; engineering excluded",
+      "expected_status": {
+        "153": "provisionally_qualified",
+        "159": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "151": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 159,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "agriculture_student",
+      "pr_ids": [
+        "PR-28"
+      ],
+      "label": "Agriculture student, Region II",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region II - Cagayan Valley",
+        "school_type": "Public",
+        "household_income_annual": 180000,
+        "gwa_normalized": 87,
+        "field_of_study_broad": "Agriculture",
+        "preferred_courses": []
+      },
+      "must_include": [
+        154,
+        160
+      ],
+      "must_exclude": [
+        101
+      ],
+      "notes": "Agriculture-restricted + regional overlap",
+      "expected_status": {
+        "154": "provisionally_qualified",
+        "160": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "101": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 154,
+          "below": 160
+        }
+      ]
+    },
+    {
+      "id": "arts_literature",
+      "pr_ids": [
+        "PR-30"
+      ],
+      "label": "BA Literature arts and humanities",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "Literature",
+        "preferred_courses": [
+          "BA Literature"
+        ]
+      },
+      "must_include": [
+        155,
+        103
+      ],
+      "must_exclude": [
+        101
+      ],
+      "notes": "Arts broad; must not over-match STEM-restricted fixtures",
+      "expected_status": {
+        "155": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "101": "almost_qualified"
+      },
+      "ranking_invariants": [
+        {
+          "above": 155,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "pwd_priority_student",
+      "pr_ids": [
+        "PR-31"
+      ],
+      "label": "PWD priority equity student",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region III - Central Luzon",
+        "school_type": "Public",
+        "household_income_annual": 180000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "is_pwd": true,
+        "preferred_courses": []
+      },
+      "must_include": [
+        127,
+        103
+      ],
+      "must_exclude": [],
+      "notes": "PWD-priority fixture; equity component ranking invariant",
+      "ranking_invariants": [
+        {
+          "above": 127,
+          "below": 103
+        }
+      ],
+      "expected_status": {
+        "127": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {}
+    },
+    {
+      "id": "ip_priority_student",
+      "pr_ids": [
+        "PR-32"
+      ],
+      "label": "Indigenous Peoples priority, Region XI",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region XI - Davao Region",
+        "school_type": "Public",
+        "household_income_annual": 150000,
+        "gwa_normalized": 86,
+        "field_of_study_broad": "Education",
+        "is_indigenous_people": true,
+        "preferred_courses": []
+      },
+      "must_include": [
+        128,
+        147
+      ],
+      "must_exclude": [],
+      "notes": "IP priority + Mindanao regional",
+      "expected_status": {
+        "128": "provisionally_qualified",
+        "147": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 128,
+          "below": 147
+        }
+      ]
+    },
+    {
+      "id": "solo_parent_dependent",
+      "pr_ids": [
+        "PR-33"
+      ],
+      "label": "Solo-parent dependent, NCR",
+      "profile": {
+        "age": 18,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 180000,
+        "gwa_normalized": 87,
+        "field_of_study_broad": "STEM",
+        "is_solo_parent_dependent": true,
+        "preferred_courses": []
+      },
+      "must_include": [
+        129,
+        103
+      ],
+      "must_exclude": [],
+      "notes": "Solo-parent priority (RA 11861)",
+      "expected_status": {
+        "129": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 129,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "student_athlete",
+      "pr_ids": [
+        "PR-35"
+      ],
+      "label": "Varsity athlete — Student Athlete priority",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Private",
+        "household_income_annual": 400000,
+        "gwa_normalized": 80,
+        "field_of_study_broad": "Sports Science",
+        "athlete_level": "varsity",
+        "preferred_courses": []
+      },
+      "must_include": [
+        157
+      ],
+      "must_exclude": [
+        103
+      ],
+      "notes": "Student Athlete priority via athlete_level (DATA-08)",
+      "expected_status": {
+        "157": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "103": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 157,
+          "below": 126
+        }
+      ]
+    },
+    {
+      "id": "ofw_dependent",
+      "pr_ids": [
+        "PR-36"
+      ],
+      "label": "OFW dependent priority",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "is_ofw_dependent": true,
+        "preferred_courses": []
+      },
+      "must_include": [
+        130,
+        103
+      ],
+      "must_exclude": [],
+      "notes": "OFW-priority fixture",
+      "expected_status": {
+        "130": "provisionally_qualified",
+        "103": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 130,
+          "below": 103
+        }
+      ]
+    },
+    {
+      "id": "farmer_fisher_dependent",
+      "pr_ids": [
+        "PR-37"
+      ],
+      "label": "Farmer/fisher dependent, Region VI",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "Region VI - Western Visayas",
+        "school_type": "Public",
+        "household_income_annual": 160000,
+        "gwa_normalized": 86,
+        "field_of_study_broad": "Agriculture",
+        "is_farmer_fisher_dependent": true,
+        "preferred_courses": []
+      },
+      "must_include": [
+        131,
+        102,
+        154
+      ],
+      "must_exclude": [],
+      "notes": "Agricultural-family priority + Visayas regional",
+      "expected_status": {
+        "131": "provisionally_qualified",
+        "102": "provisionally_qualified",
+        "154": "provisionally_qualified"
+      },
+      "expected_detail_status": {},
+      "ranking_invariants": [
+        {
+          "above": 131,
+          "below": 102
+        }
+      ]
+    },
+    {
+      "id": "gsis_dependent_member",
+      "pr_ids": [
+        "PR-38"
+      ],
+      "label": "GSIS members-only dependent",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 300000,
+        "gwa_normalized": 88,
+        "field_of_study_broad": "STEM",
+        "is_gsis_dependent": true,
+        "preferred_courses": []
+      },
+      "must_include": [
+        136
+      ],
+      "must_exclude": [
+        137
+      ],
+      "notes": "GSIS members-only vs SSS-only",
+      "expected_status": {
+        "136": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "137": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 136,
+          "below": 126
+        }
+      ]
+    },
+    {
+      "id": "passed_deadline_visible",
+      "pr_ids": [
+        "PR-39"
+      ],
+      "label": "Passed-deadline row remains visible, sorted last",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        142,
+        101
+      ],
+      "must_exclude": [],
+      "notes": "142 returned with deadline_passed; sorted below open rows",
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 126
+        }
+      ],
+      "expected_status": {
+        "142": "provisionally_qualified",
+        "101": "provisionally_qualified"
+      },
+      "expected_detail_status": {}
+    },
+    {
+      "id": "needs_review_penalty",
+      "pr_ids": [
+        "PR-40"
+      ],
+      "label": "needs_review data_status scoring penalty",
+      "profile": {
+        "age": 19,
+        "education_level": "College",
+        "region": "National Capital Region",
+        "school_type": "Public",
+        "household_income_annual": 200000,
+        "gwa_normalized": 90,
+        "field_of_study_broad": "STEM",
+        "preferred_courses": []
+      },
+      "must_include": [
+        101,
+        111
+      ],
+      "must_exclude": [],
+      "notes": "111 (needs_review) scores lower than clean 101",
+      "ranking_invariants": [
+        {
+          "above": 101,
+          "below": 111
+        }
+      ],
+      "expected_status": {
+        "101": "provisionally_qualified",
+        "111": "provisionally_qualified"
+      },
+      "expected_detail_status": {}
+    },
+    {
+      "id": "over_constrained_near_miss",
+      "pr_ids": [
+        "PR-41"
+      ],
+      "label": "Over-constrained profile still gets near-miss explanations",
+      "profile": {
+        "age": 30,
+        "education_level": "College",
+        "region": "BARMM",
+        "school_type": "Private",
+        "household_income_annual": 900000,
+        "gwa_normalized": 70,
+        "field_of_study_broad": "Law",
+        "preferred_courses": []
+      },
+      "must_include": [
+        114
+      ],
+      "must_exclude": [
+        103
+      ],
+      "notes": "Never an unexplained empty list — near-misses with reasons",
+      "expected_status": {
+        "114": "provisionally_qualified"
+      },
+      "expected_detail_status": {
+        "103": "not_eligible"
+      },
+      "ranking_invariants": [
+        {
+          "above": 114,
+          "below": 107
+        }
+      ]
+    }
+  ]
+}

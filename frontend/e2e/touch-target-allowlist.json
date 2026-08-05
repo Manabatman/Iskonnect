@@ -1,0 +1,615 @@
+{
+  "description": "Justified touch-target exceptions (< 44px). Each entry requires a comment.",
+  "entries": [
+    {
+      "route": "/",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Sign in",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Grade 12CollegeTVETGraduate",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "NCRRegion IV-A - CALABARZONRegion III - Central LuzonRegion ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "EngineeringEducationBusinessHealthAgriculture",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Browse Grade 12",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Browse College",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Browse TVET",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Browse Graduate",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "See the full process",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Why these weights exist",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "See how scores are built",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "View all FAQs →",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Why ISKONNECT exists",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "FAQ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "Terms",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/",
+      "text": "By Mark Justin S. Manabat.",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "Forgot password?",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "Register",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "FAQ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "Terms",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/login",
+      "text": "By Mark Justin S. Manabat.",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "Sign in",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "FAQ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "Terms",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/register",
+      "text": "By Mark Justin S. Manabat.",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "More Opportunity Types",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "What do these labels mean?",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Need",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Check my match",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Apply Now",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "View Details",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Save",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Merit-and-Need",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Merit-based",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Affiliation",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Next",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "FAQ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "Terms",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarships/search",
+      "text": "By Mark Justin S. Manabat.",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "how we verify scholarships",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "← Back to home",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "FAQ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "Terms",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/scholarship-status",
+      "text": "By Mark Justin S. Manabat.",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "why ISKONNECT exists",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "how matching works",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "← Back to home",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "FAQ",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "Terms",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/faq",
+      "text": "By Mark Justin S. Manabat.",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Dashboard",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Search opportunities",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Applications",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Opportunity planner",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Documents",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Profile",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Account Settings",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Browse opportunities",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Current school",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Current year level",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Enrollment status",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/dashboard",
+      "text": "Find My Matches",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Dashboard",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Search opportunities",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Applications",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Opportunity planner",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Documents",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Profile",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Account Settings",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Account settings",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Personal",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Education",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Location",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Skills",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Goals",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "SelectMaleFemaleOther",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/profile-builder",
+      "text": "Next",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Skip to main content",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Dashboard",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Search opportunities",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Applications",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Opportunity planner",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Documents",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Profile",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Account Settings",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Update Your Profile →",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Light",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Dark",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "System",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Terms of Service",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Privacy Policy",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Download my data",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Delete account",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Changelog",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "About",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "How it works",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "Transparency",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    },
+    {
+      "route": "/settings",
+      "text": "← Back to Dashboard",
+      "comment": "MOB-01 baseline debt — shrink during Phase 2 touch-target cleanup"
+    }
+  ]
+}

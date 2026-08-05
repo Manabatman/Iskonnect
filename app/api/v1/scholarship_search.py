@@ -7,7 +7,7 @@ import json
 import logging
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Response
 from sqlalchemy import and_, case, func, or_
 from sqlalchemy.orm import Session
 
@@ -27,6 +27,7 @@ from app.utils.application_status import (
     TIMING_FILTER_MAP,
 )
 from app.utils.jsonb_filters import json_list_contains, json_list_empty, json_list_pattern
+from app.utils.server_timing import ServerTiming
 from app.taxonomy.regions import canonical_region_label, region_search_literals
 
 router = APIRouter(prefix="/scholarships", tags=["scholarship-search"])
@@ -208,13 +209,45 @@ def _status_priority_order(today: date | None = None):
     )
 
 
-def _apply_search_ordering(query, today: date | None = None):
+def _apply_search_ordering(query, sort: str = "relevance", today: date | None = None):
+    """Apply browse sort. Unknown values fall back to relevance."""
     today = today or date.today()
-    priority = _status_priority_order(today)
+    sort_key = (sort or "relevance").strip().lower()
+    if sort_key not in ("relevance", "deadline", "title", "verified"):
+        sort_key = "relevance"
+
     deadline_sort = case(
         (models.Scholarship.application_deadline.is_(None), 1),
         else_=0,
     )
+
+    if sort_key == "deadline":
+        return query.order_by(
+            deadline_sort.asc(),
+            models.Scholarship.application_deadline.asc(),
+            models.Scholarship.title.asc(),
+            models.Scholarship.id.asc(),
+        )
+
+    if sort_key == "title":
+        return query.order_by(
+            models.Scholarship.title.asc(),
+            models.Scholarship.id.asc(),
+        )
+
+    if sort_key == "verified":
+        verified_sort = case(
+            (models.Scholarship.last_verified_at.is_(None), 1),
+            else_=0,
+        )
+        return query.order_by(
+            verified_sort.asc(),
+            models.Scholarship.last_verified_at.desc(),
+            models.Scholarship.title.asc(),
+            models.Scholarship.id.asc(),
+        )
+
+    priority = _status_priority_order(today)
     return query.order_by(
         priority.asc(),
         deadline_sort.asc(),
@@ -248,12 +281,21 @@ def get_search_filter_options(
     """Return distinct filter values for search UI dropdowns."""
     logger.info("scholarship_search_filters")
     rows = _base_search_query(db).all()
-    providers = set()
+    org_names = {
+        name
+        for (name,) in db.query(models.Organization.canonical_name)
+        .join(models.Scholarship, models.Scholarship.organization_id == models.Organization.id)
+        .filter(models.Scholarship.is_active == True)  # noqa: E712
+        .distinct()
+        .all()
+        if name and str(name).strip()
+    }
+    providers = set(org_names)
     education_levels = set()
     regions = set()
     fields_of_study = set()
     for s in rows:
-        if s.provider and str(s.provider).strip():
+        if s.provider and str(s.provider).strip() and not s.organization_id:
             providers.add(str(s.provider).strip())
         for level in _parse_json(s.eligible_levels):
             if level and str(level).strip():
@@ -278,6 +320,7 @@ def get_search_filter_options(
 @limiter.limit("60/minute")
 def search_scholarships(
     request: Request,
+    response: Response,
     query: str = "",
     region: str = "",
     field: str = "",
@@ -288,6 +331,7 @@ def search_scholarships(
     timing: str = "",
     life_stage: str = "",
     include_archived: bool = False,
+    sort: str = "relevance",
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -296,7 +340,9 @@ def search_scholarships(
     Search scholarships with optional filters and pagination.
     Does not run the matching algorithm - browse-only.
     Use ``timing=closed`` or ``include_archived`` for lifecycle-specific views.
+    ``sort`` may be relevance (default), deadline, title, or verified.
     """
+    timing_hdr = ServerTiming()
     logger.info(
         "scholarship_search query=%s region=%s field=%s page=%s",
         query[:50] if query else "",
@@ -309,62 +355,76 @@ def search_scholarships(
     offset = (page - 1) * limit
 
     show_archived = include_archived
-    q = _base_search_query(db, include_archived=show_archived)
+    with timing_hdr.measure("filter-build"):
+        q = _base_search_query(db, include_archived=show_archived)
 
-    if timing and timing.strip():
-        q = apply_timing_filter(q, timing)
+        if timing and timing.strip():
+            q = apply_timing_filter(q, timing)
 
-    if life_stage and life_stage.strip():
-        q = apply_life_stage_filter(q, life_stage)
+        if life_stage and life_stage.strip():
+            q = apply_life_stage_filter(q, life_stage)
 
-    if query and query.strip():
-        pattern = f"%{query.strip()}%"
-        q = q.filter(
-            or_(
-                models.Scholarship.title.ilike(pattern),
-                models.Scholarship.description.ilike(pattern),
-                models.Scholarship.provider.ilike(pattern),
+        if query and query.strip():
+            pattern = f"%{query.strip()}%"
+            q = q.filter(
+                or_(
+                    models.Scholarship.title.ilike(pattern),
+                    models.Scholarship.description.ilike(pattern),
+                    models.Scholarship.provider.ilike(pattern),
+                )
             )
-        )
 
-    if region and region.strip():
-        q = apply_region_browse_filter(q, region)
+        if region and region.strip():
+            q = apply_region_browse_filter(q, region)
 
-    if field and field.strip():
-        q = apply_field_browse_filter(q, field)
+        if field and field.strip():
+            q = apply_field_browse_filter(q, field)
 
-    if education_level and education_level.strip():
-        q = apply_education_level_browse_filter(q, education_level)
+        if education_level and education_level.strip():
+            q = apply_education_level_browse_filter(q, education_level)
 
-    if provider and provider.strip():
-        pattern = f"%{provider.strip()}%"
-        q = q.filter(models.Scholarship.provider.ilike(pattern))
-
-    if school and school.strip():
-        pattern = f"%{school.strip()}%"
-        q = q.filter(
-            or_(
-                models.Scholarship.title.ilike(pattern),
-                models.Scholarship.provider.ilike(pattern),
-                models.Scholarship.description.ilike(pattern),
-                json_list_pattern(models.Scholarship.eligible_school_types, pattern),
+        if provider and provider.strip():
+            pattern = f"%{provider.strip()}%"
+            q = q.outerjoin(
+                models.Organization,
+                models.Scholarship.organization_id == models.Organization.id,
+            ).filter(
+                or_(
+                    models.Organization.canonical_name.ilike(pattern),
+                    models.Scholarship.provider.ilike(pattern),
+                )
             )
-        )
 
-    if max_income is not None and max_income >= 0:
-        q = q.filter(
-            or_(
-                models.Scholarship.max_income_threshold.is_(None),
-                models.Scholarship.max_income_threshold >= max_income,
+        if school and school.strip():
+            pattern = f"%{school.strip()}%"
+            q = q.filter(
+                or_(
+                    models.Scholarship.title.ilike(pattern),
+                    models.Scholarship.provider.ilike(pattern),
+                    models.Scholarship.description.ilike(pattern),
+                    json_list_pattern(models.Scholarship.eligible_school_types, pattern),
+                )
             )
-        )
 
-    q = _apply_search_ordering(q)
-    total = q.count()
-    scholarships = q.offset(offset).limit(limit).all()
-    results = [_public_scholarship_payload(s) for s in scholarships]
+        if max_income is not None and max_income >= 0:
+            q = q.filter(
+                or_(
+                    models.Scholarship.max_income_threshold.is_(None),
+                    models.Scholarship.max_income_threshold >= max_income,
+                )
+            )
+
+        q = _apply_search_ordering(q, sort=sort)
+
+    with timing_hdr.measure("count"):
+        total = q.count()
+    with timing_hdr.measure("fetch"):
+        scholarships = q.offset(offset).limit(limit).all()
+    with timing_hdr.measure("serialize"):
+        results = [_public_scholarship_payload(s) for s in scholarships]
     total_pages = (total + limit - 1) // limit if total > 0 else 0
 
+    timing_hdr.attach(response)
     return schemas.ScholarshipSearchResponse(
         results=results,
         total=total,
@@ -388,6 +448,7 @@ def search_scholarships_semantic(
     timing: str = "",
     life_stage: str = "",
     include_archived: bool = False,
+    sort: str = "relevance",
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -428,7 +489,15 @@ def search_scholarships_semantic(
 
     if provider and provider.strip():
         pattern = f"%{provider.strip()}%"
-        q = q.filter(models.Scholarship.provider.ilike(pattern))
+        q = q.outerjoin(
+            models.Organization,
+            models.Scholarship.organization_id == models.Organization.id,
+        ).filter(
+            or_(
+                models.Organization.canonical_name.ilike(pattern),
+                models.Scholarship.provider.ilike(pattern),
+            )
+        )
 
     if school and school.strip():
         pattern = f"%{school.strip()}%"
@@ -449,7 +518,7 @@ def search_scholarships_semantic(
             )
         )
 
-    q = _apply_search_ordering(q)
+    q = _apply_search_ordering(q, sort=sort)
     total = q.count()
     scholarships = q.offset(offset).limit(limit).all()
     results = [_public_scholarship_payload(s) for s in scholarships]

@@ -26,6 +26,8 @@ from app.api.v1 import (
     matches,
     notifications,
     organizations,
+    public_catalog,
+    public_stats,
     product_features,
     profiles,
     reports,
@@ -88,10 +90,12 @@ async def lifespan(app: FastAPI):
     setup_logging(settings.structured_logging)
     settings.validate_for_production()
     logger.warning(
-        "[startup] environment=%s database=%s cors_origins=%s",
-        settings.environment,
+        "[startup] validation_environment=%s bind_host=%s database=%s cors_origins=%s active_guards=%s",
+        settings.resolved_validation_environment(),
+        settings.bind_host,
         _db_label(settings.database_url),
         settings.cors_origins_list,
+        ",".join(settings.active_guards()),
     )
     if settings.auth_disabled:
         logger.warning(
@@ -191,6 +195,8 @@ app.include_router(saved_scholarships.router, prefix="/api/v1")
 app.include_router(suggestions.router, prefix="/api/v1")
 app.include_router(reports.router, prefix="/api/v1")
 app.include_router(organizations.router, prefix="/api/v1")
+app.include_router(public_catalog.router, prefix="/api/v1")
+app.include_router(public_stats.router, prefix="/api/v1")
 app.include_router(scoring_admin.router, prefix="/api/v1")
 app.include_router(audit_routes.router, prefix="/api/v1")
 app.include_router(notifications.router, prefix="/api/v1")

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import type { OrganizationProfile } from "../types";
 import { apiFetch } from "../api/client";
 import { BackNavLink } from "../components/BackNavLink";
+import { resolveUserErrorMessage } from "../constants/errorCopy";
 
 export function OrganizationPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,7 +29,7 @@ export function OrganizationPage() {
         if (!cancelled) setOrg(data);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Something went wrong");
+        if (!cancelled) setError(resolveUserErrorMessage(err, "load_failed"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -42,7 +43,7 @@ export function OrganizationPage() {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-3xl px-4">
-          <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-10 dark:border-slate-700 dark:bg-slate-800">
+          <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-12 dark:border-slate-700 dark:bg-slate-800">
             <div className="h-8 w-2/3 rounded bg-slate-200 dark:bg-slate-700" />
             <div className="mt-4 h-4 w-full rounded bg-slate-100 dark:bg-slate-700" />
           </div>
@@ -73,6 +74,8 @@ export function OrganizationPage() {
               <img
                 src={org.logo_url}
                 alt=""
+                width={64}
+                height={64}
                 className="h-16 w-16 rounded-lg border border-slate-200 object-contain dark:border-slate-600"
               />
             ) : (
@@ -134,7 +137,7 @@ export function OrganizationPage() {
             <Link to="/scholarships/search" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
               scholarship search
             </Link>
-            . Counts reflect active listings on ISKONNECT, not guaranteed availability on the provider&apos;s site.
+            . Counts reflect active scholarships on ISKONNECT, not guaranteed availability on the provider&apos;s site.
           </p>
         </article>
 

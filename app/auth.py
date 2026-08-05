@@ -67,6 +67,11 @@ def _redis_client():
         return None
 
 
+def _revocation_fail_closed() -> bool:
+    """True when missing/unreachable Redis must reject tokens (non-development)."""
+    return not settings.is_development_environment()
+
+
 def revoke_access_token(token: str) -> None:
     """Add access token jti to denylist until natural expiry (logout / password reset)."""
     try:
@@ -82,6 +87,10 @@ def revoke_access_token(token: str) -> None:
             return
         r = _redis_client()
         if r is None:
+            if _revocation_fail_closed():
+                logger.error(
+                    "revoke_access_token_failed: Redis unavailable — token not denylisted"
+                )
             return
         ttl = max(int(exp) - int(datetime.now(timezone.utc).timestamp()), 1)
         r.setex(f"auth:revoked:{jti}", ttl, "1")
@@ -94,10 +103,21 @@ def _access_token_revoked(jti: str | None) -> bool:
         return False
     r = _redis_client()
     if r is None:
+        if _revocation_fail_closed():
+            logger.error(
+                "access_token_revocation_check: Redis unavailable — failing closed (token rejected)"
+            )
+            return True
         return False
     try:
         return bool(r.get(f"auth:revoked:{jti}"))
     except Exception:
+        if _revocation_fail_closed():
+            logger.error(
+                "access_token_revocation_check: Redis error — failing closed (token rejected)"
+            )
+            return True
+        logger.warning("access_token_revocation_check_failed")
         return False
 
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import { apiFetch, NetworkError } from "../api/client";
+import { resolveUserErrorMessage } from "../constants/errorCopy";
 import { formatDateTimeLong } from "../utils/formatDate";
 import { formatDeadlineDisplay } from "../utils/formatDeadline";
 
@@ -61,7 +62,7 @@ function StatusChip({ status }: { status: string }) {
   };
   const cls = palette[status] ?? "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200";
   return (
-    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${cls}`}>
+    <span className={`inline-flex rounded-full px-3 py-0.5 text-xs font-medium ${cls}`}>
       {statusLabel(status)}
     </span>
   );
@@ -91,7 +92,7 @@ export function ApplicationsPage() {
       setApplications(Array.isArray(appData) ? appData : []);
     } catch (e) {
       if (e instanceof NetworkError) setError("Could not reach the server.");
-      else setError(e instanceof Error ? e.message : "Something went wrong.");
+      else setError(resolveUserErrorMessage(e, "load_failed"));
       setApplications([]);
     } finally {
       setLoading(false);
@@ -271,12 +272,11 @@ export function ApplicationsPage() {
 
           {applications.length === 0 ? (
             <p className="mt-8 text-slate-600 dark:text-slate-400">
-              No applications yet. Save scholarships from search, then use{" "}
-              <strong className="text-slate-800 dark:text-slate-200">Track application</strong> above, or browse{" "}
+              No applications tracked yet.{" "}
               <Link to="/scholarships/search" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
-                scholarships
-              </Link>
-              .
+                Save a scholarship
+              </Link>{" "}
+              to start tracking.
             </p>
           ) : (
             <div className="mt-8 space-y-3">
@@ -363,7 +363,7 @@ export function ApplicationsPage() {
                             {evs.map((ev) => (
                               <li key={ev.id} className="text-sm text-slate-700 dark:text-slate-300">
                                 <span className="font-medium text-slate-900 dark:text-slate-100">
-                                  {ev.from_status ? `${statusLabel(ev.from_status)} → ` : ""}
+                                  {ev.from_status ? `${statusLabel(ev.from_status)} to ` : ""}
                                   {statusLabel(ev.to_status)}
                                 </span>
                                 <span className="ml-2 text-xs text-slate-500">

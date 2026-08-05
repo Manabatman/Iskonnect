@@ -24,6 +24,7 @@ export function MatchScoreRing({
   showMatchLabel = false,
 }: MatchScoreRingProps) {
   const pct = clamp(Math.round(score), 0, 100);
+  const scoreMeaning = `${pct}% eligibility fit`;
   const stroke = size >= 80 ? 6 : 5;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
@@ -76,11 +77,12 @@ export function MatchScoreRing({
       <div
         className={`relative inline-flex shrink-0 flex-col items-center justify-center ${className}`}
         style={{ width: size, height: size + 18 }}
-        title={`${pct}% match`}
+        role="img"
+        aria-label={scoreMeaning}
       >
         {ringBlock}
         <span className="mt-1 text-center text-[9px] font-bold uppercase tracking-wide text-white drop-shadow">
-          Match Score
+          Eligibility fit
         </span>
       </div>
     );
@@ -90,7 +92,8 @@ export function MatchScoreRing({
     <div
       className={`relative inline-flex shrink-0 items-center justify-center ${className}`}
       style={{ width: size, height: size }}
-      title={`${pct}% match`}
+      role="img"
+      aria-label={scoreMeaning}
     >
       {ringBlock}
     </div>

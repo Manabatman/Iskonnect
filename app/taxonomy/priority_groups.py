@@ -14,6 +14,15 @@ PRIORITY_GROUP_ALIASES: dict[str, str] = {
     "Indigenous Peoples (IP)": "IP",
     "IP Academic Achievers": "IP",
     "CAR Indigenous Youth": "IP",
+    "working student": "Working Student",
+    "working students": "Working Student",
+    "employed student": "Working Student",
+    "student athlete": "Student Athlete",
+    "student athletes": "Student Athlete",
+    "athlete": "Student Athlete",
+    "athletes": "Student Athlete",
+    "varsity": "Student Athlete",
+    "varsity athlete": "Student Athlete",
 }
 
 

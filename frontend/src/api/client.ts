@@ -2,11 +2,11 @@ const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string; PR
 const _apiBase = _env?.VITE_API_BASE_URL?.trim();
 const _isProd = Boolean(_env?.PROD);
 
-if (_isProd && !_apiBase) {
-  throw new Error(
-    "VITE_API_BASE_URL must be set in production builds. Configure it in your hosting provider (e.g. Vercel) environment variables.",
-  );
-}
+/** Set when production build is missing VITE_API_BASE_URL — checked in main.tsx before mount. */
+export const API_CONFIG_ERROR =
+  _isProd && !_apiBase
+    ? "This app is not configured correctly. The server address is missing. Please contact support or try again later."
+    : null;
 
 export const API_BASE_URL = _apiBase ?? "http://localhost:8000";
 if (!_apiBase && typeof console !== "undefined") {
@@ -17,6 +17,27 @@ if (!_apiBase && typeof console !== "undefined") {
 
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_REFRESH_KEY = "auth_refresh_token";
+
+/** Dispatched when refresh token fails after a 401 — SessionExpiryHandler listens (UX-15). */
+export const AUTH_SESSION_EXPIRED_EVENT = "iskonnect-auth-session-expired";
+
+const PERF_LOG_PATHS = [
+  "/auth/login",
+  "/auth/me",
+  "/profiles/me",
+  "/match-runs",
+  "/plan/",
+  "/saved-scholarships",
+];
+
+function maybeLogServerTiming(path: string, res: Response): void {
+  if (_isProd || typeof console === "undefined") return;
+  const shouldLog = PERF_LOG_PATHS.some((p) => path.includes(p));
+  if (!shouldLog) return;
+  const header = res.headers.get("Server-Timing");
+  if (!header) return;
+  console.debug(`[API perf] ${path} Server-Timing:`, header);
+}
 
 /** Long enough for Render free-tier cold starts (often 50s+ after spin-down). */
 const FETCH_TIMEOUT_MS = 70_000;
@@ -90,6 +111,9 @@ async function refreshAccessToken(): Promise<string | null> {
     if (!res.ok) {
       localStorage.removeItem(AUTH_REFRESH_KEY);
       localStorage.removeItem(AUTH_TOKEN_KEY);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+      }
       return null;
     }
     const data = (await res.json()) as { access_token?: string; refresh_token?: string };
@@ -156,8 +180,11 @@ export async function apiFetch(path: string, options?: RequestInit): Promise<Res
         const newToken = await refreshAccessToken();
         if (newToken) {
           res = await attempt(withBearerToken(options, newToken));
+        } else if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
         }
       }
+      maybeLogServerTiming(path, res);
       return res;
     } catch (first) {
       if (!(first instanceof NetworkError)) throw first;

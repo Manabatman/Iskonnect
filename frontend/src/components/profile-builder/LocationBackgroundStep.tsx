@@ -3,7 +3,7 @@ import { PHILIPPINE_REGIONS } from "../../constants/regions";
 import { AutocompleteInput } from "../AutocompleteInput";
 import type { ProfileBuilderState } from "./profileBuilderState";
 import type { StepProps } from "./PersonalInfoStep";
-import { inputClass, labelClass } from "./profileBuilderConstants";
+import { inputClass, labelClass, fieldHintClass } from "./profileBuilderConstants";
 
 export function LocationBackgroundStep({ state, onChange }: StepProps) {
   return (
@@ -24,6 +24,7 @@ export function LocationBackgroundStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-region" className={labelClass}>
             Region
           </label>
+          <p className={fieldHintClass}>Where you currently live — many programs are region-locked.</p>
           <select
             id="pb-region"
             value={state.region}
@@ -81,6 +82,7 @@ export function LocationBackgroundStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-household_income_annual" className={labelClass}>
             Household income (PHP/year)
           </label>
+          <p className={fieldHintClass}>Annual family income — used for need-based income ceilings.</p>
           <input
             id="pb-household_income_annual"
             type="number"

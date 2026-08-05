@@ -1,0 +1,1403 @@
+Comprehensive Canonical Scholarship 
+Verification Report: ISKONNECT 
+Production Database Audit 
+Security Bank Foundation State Universities 
+Scholarship (ID: 58) 
+1. Scholarship Identity 
+●​ Official Name: Security Bank Foundation State Universities Scholarship (Scholars for 
+Better Communities Program) 
+●​ Provider: Security Bank Foundation, Inc. (SBFI) 
+●​ Category: Private / Corporate Foundation / Merit-and-Need 
+●​ Official Website: https://www.securitybank.com/foundation 
+●​ Application Portal: https://www.securitybank.com/foundation 
+●​ Official Guidelines: SBFI Scholars for Better Communities Guidelines 
+●​ Current Status: Active 
+2. Purpose 
+The Security Bank Foundation State Universities Scholarship is a corporate financial assistance 
+and human capital development initiative established to support academically talented students 
+entering designated public higher education institutions. By financing tertiary degrees in 
+disciplines aligned with corporate operations, the foundation aims to expand access to quality 
+education, build leadership capacity within state universities, and provide direct career pathways 
+in the banking and finance sector. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a natural-born or naturalized Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Undergraduate / College. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen) and limited upperclassmen in specific 
+partner SUCs. 
+●​ Incoming Freshman Only?: Primary focus is incoming freshmen; limited upperclassmen 
+entry exists per SUC slot allocation. 
+●​ Existing College Students?: Yes (limited slots at specific partner State Universities and 
+Colleges). 
+●​ Graduate Students?: Ineligible. 
+●​ Current Enrollment Requirement: Must be accepted or enrolled in a partner State 
+University or College, such as Polytechnic University of the Philippines (PUP). 
+●​ Academic Requirements: Must possess a Grade 12 General Weighted Average (GWA) of 
+
+at least 93.00% or equivalent, with no subject grade lower than 86.00%, and grades of at 
+least 90.00% in high school subjects aligned with the chosen college degree. 
+●​ Minimum GWA: 93.00% (Entry GWA cutoff). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Requires documentary proof 
+of financial status via Income Tax Return or Certificate of Indigency; live database records 
+a PHP 350,000.00 ceiling). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Strictly restricted to designated partner State Universities and 
+Colleges. 
+●​ Priority Courses: Degree programs aligned with bank operations, including Accountancy, 
+Business Administration, Finance, Information Technology, Computer Science, Data 
+Analytics, Communications, and Journalism. 
+●​ Sectoral Requirements: Must NOT be a child or dependent of a Security Bank employee, 
+and must not have an immediate family member within the second degree of 
+consanguinity or affinity holding an active SBFI grant. 
+●​ Good Moral: Required (Certificate of Good Moral Character from high school). - Health 
+Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must carry the full academic load prescribed by the university 
+curriculum per term. 
+4. Application Timing 
+●​ Who May Apply: Graduating Senior High School Grade 12 students entering 1st year 
+college and continuing 1st year SUC students. 
+●​ Can current freshmen apply?: Yes. 
+●​ Can current sophomores apply?: No (unless applying for designated continuing SUC 
+slots). 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: NOT SPECIFIED IN OFFICIAL SOURCE. 
+5. Application Window 
+●​ Opening Date: Announced annually (typically Q1/Q2 prior to the academic year opening). 
+●​ Closing Date: Specified in annual call for applications. 
+●​ Application Cycle: Fixed / Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+### 6. Benefits 
+●​ Tuition: Full or partial tuition and matriculation fee coverage paid directly to the partner 
+state university. 
+●​ Monthly Stipend: Integrated into the annual educational grant package. 
+●​ Allowance: Financial assistance package up to PHP 50,000.00 – PHP 60,000.00 per 
+academic year. 
+●​ Book Allowance: Integrated into the educational grant package. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None mandatory; direct hiring opportunities provided upon graduation. 
+●​ Other Benefits: Scholar development workshops, leadership training, internship 
+placements, and corporate career placement assistance within Security Bank 
+Corporation. 
+7. Required Documents 
+1.​ Duly accomplished SBFI Online Application Form. 
+2.​ High School Transcript of Records / Grade 12 Report Card showing final GWA. 
+3.​ Proof of Admission or Acceptance Letter from partner State University. 4. Proof of 
+Financial Status (Latest Parent Income Tax Return, Certificate of Indigency, or OFW 
+Contract). 
+4.​ PSA Birth Certificate of student applicant. 6. Certificate of Good Moral Character. 
+5.​ School Grading System documentation (if non-percentage system). 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain a General Weighted Average (GWA) of at least 86.00% or 
+equivalent by the end of each academic term. - Regular Load: Enrolled in the full unit load 
+prescribed by the university curriculum. 
+●​ No Failures: No grade lower than 80.00% (or equivalent) in any academic subject per 
+term. 
+●​ Return Service: None mandatory. 
+9. Disqualifying Conditions 
+●​ Being a child or dependent of an employee of Security Bank Corporation or its 
+subsidiaries. 
+●​ Having an immediate relative within the second degree of consanguinity or affinity holding 
+an active SBFI scholarship. 
+●​ Term GWA dropping below 86.00% or receiving a subject grade below 80.00%. 
+●​ Enrolling in a non-partner state university or non-aligned degree program. 
+### 10. Temporal Eligibility Matrix 
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+Incoming Grade 12 SHS (GWA 
+\ge 93%) 
+Eligible Now 
+Apply through SBFI external 
+application portal upon 
+acceptance at partner SUC. 
+Enrolled SUC Freshman 
+(entering 2nd Year) 
+Conditionally Eligible 
+Eligible only if continuing SUC 
+slots are available for the target 
+institution. 
+Child of Security Bank 
+Employee 
+Never Eligible 
+Ineligible for External Track; 
+must apply under 
+Internal/RMKK Track. 
+
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Entry GWA 
+\ge 93.00% 
+"Must have a 
+General Weighted 
+Average (GWA) of 
+at least 93% or its 
+equivalent" 
+PhilScholar / SBFI Tier 2 
+Subject Floor 
+\ge 86.00% (Entry) 
+/ \ge 80.00% 
+(Renewal) 
+"Must have no 
+subject grade 
+below 86%... 
+minimum grade of 
+80% per subject 
+by the end of each 
+term" 
+PhilScholar / SBFI Tier 2 
+Affiliation Bar 
+Non-Employee 
+Child 
+"Must not be a 
+child of a Security 
+Bank employee" 
+PhilScholar / SBFI Tier 2 
+12. Production Database Mapping 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2],​
+  "incoming_year_only": fals[span_67](start_span)[span_67](end_span)e,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 93.00,​
+  "renewal_gwa": 86.00,​
+  "income_limit": null,​
+  "partner_school_restricted": true,​
+  "priority_courses": [​
+    "ACCOUNTANCY",​
+    "FINANCE",​
+    "BUSINESS_ADMINISTRATION",​
+    "INFORMATION_TECHNOLOGY",​
+    "COMPUTER_SCIENCE",​
+    "DATA_ANALYTICS",​
+    "COMMUNICATIONS",​
+    "JOURNALISM"​
+  ],​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "02-01", "close": "05-31"},​
+  "deadline_type": "estimated",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+
+}​
+ 
+13. Matching Risks 
+●​ Academic Cutoff Discrepancy: The live production database records a minimum GWA of 
+85.00%. Relying on 85.00% yields false-positive matches for candidates who fail the 
+mandatory 93.00% entry threshold established in provider guidelines. 
+●​ Institutional Restriction: Candidates admitted to non-partner public universities will be 
+rejected during screening despite satisfying academic marks. 
+14. Verification Summary 
+●​ Verification Status: Verified. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.securitybank.com/foundation, 
+https://integratedreport.securitybank.com. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 88/100. 
+Caritas Manila YSLEP Scholarship Program (ID: 59) 
+1. Scholarship Identity 
+●​ Official Name: Youth Servant Leadership and Education Program (YSLEP) 
+●​ Provider: Caritas Manila, Inc. 
+●​ Category: Private / Faith-Based / Need-and-Merit 
+●​ Official Website: https://caritasmanila.org.ph 
+●​ Application Portal: Caritas Manila YSLEP Secretariat / Partner Diocesan Offices / NDMU 
+CMRE Office 
+●​ Official Guidelines: Caritas Manila YSLEP Application Guidelines and Servant Leadership 
+Formation Manual 
+●​ Current Status: Active 
+2. Purpose 
+YSLEP serves as the flagship human development initiative of Caritas Manila, operating on the 
+principle that education coupled with values formation provides an effective pathway out of 
+systemic poverty. The program finances tertiary and technical-vocational education while 
+instilling Christian values, civic responsibility, and servant leadership to transform scholars into 
+productive, ethically grounded community leaders. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a Filipino citizen. 
+●​ Residency: Resident of Metro Manila (Archdiocese of Manila) or any of the 53 partner 
+dioceses nationwide. 
+
+●​ Education Level: Tertiary (College Undergraduate) and Technical-Vocational (TVET). 
+●​ Eligible Year Levels: Years 1, 2, 3, 4, and 5. 
+●​ Incoming Freshman Only?: No. 
+●​ Existing College Students?: Yes. 
+●​ Graduate Students?: Ineligible. 
+●​ Current Enrollment Requirement: Enrolled or accepted in an accredited university, 
+college, or TVET institution. 
+●​ Academic Requirements: Senior High School overall GWA of at least 85.00% or 
+equivalent. 
+●​ Minimum GWA: 85.00% (Entry and retention cutoff). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Requires a Certificate of 
+Indigency from the Barangay or DSWD verifying financial distress; live database specifies 
+PHP 180,000.00). 
+●​ Age Restrictions: Must be between 18 and 25 years old at the time of application. 
+●​ School Restrictions: Accredited partner institutions within participating dioceses. 
+●​ Priority Courses: Open to all degree programs; includes a dedicated track 
+(YSLEP-GEN129) prioritizing Agriculture degrees and sustainable farming. 
+●​ Sectoral Requirements: Must be single; must be an active member of a Basic Ecclesial 
+Community (GKK) or Parish Youth Ministry. 
+●​ Good Moral: Required (Certificate of Good Moral Character). 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Zero-tolerance policy regarding vices (smoking, alcohol 
+consumption, substance abuse, gambling, and computer game addiction); must NOT hold 
+a Grant-in-Aid Working Student (GIA/WS) award from the school. 
+4. Application Timing 
+●​ Who May Apply: Single Senior High School graduates and continuing college or TVET 
+students aged 18 to 25. 
+●​ Can current freshmen apply?: Yes. 
+●​ Can current sophomores apply?: Yes. 
+●​ Can current juniors apply?: Yes. 
+●​ Can current seniors apply?: Yes. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes. 
+### 5. Application Window 
+●​ Opening Date: Set annually by local diocesan YSLEP secretariats. 
+●​ Closing Date: Determined per participating diocese. 
+●​ Application Cycle: Fixed / Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Direct financial grant covering matriculation and tuition fees. 
+●​ Monthly Stipend: Integrated into the overall annual educational allowance. 
+●​ Allowance: Annual financial support package valued at approximately PHP 30,000.00 – 
+PHP 35,000.00 per scholar. 
+
+●​ Book Allowance: Integrated into the annual grant package. 
+●​ Transportation: Integrated into the annual grant package. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Post-graduation pledge ("Balik-Handog"): Join the Caritas YSL Alumni 
+Association (CAMASA) and donate 1% of gross monthly salary (or a minimum of PHP 
+100.00/month) upon employment to finance future scholars. 
+●​ Other Benefits: Monthly Servant Leadership formation workshops, spiritual retreats, and 
+community volunteerism programs. 
+7. Required Documents 
+1.​ Accomplished Caritas Manila YSLEP Application Form. 
+2.​ Photocopy of SHS Report Card / College Transcript showing GWA \ge 85.00%. 
+3.​ Certificate of Good Moral Character. 
+4.​ PSA Birth Certificate or Baptismal Certificate. 
+5.​ Certificate of Indigency from Barangay or DSWD. 
+6.​ Parents' Marriage Certificate (photocopy). 
+7.​ Two (2) 2x2 ID photos. 
+8.​ Interview clearance from local Screening Committee. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain a general average of at least 85.00% per academic term. 
+●​ Regular Load: Full-time credit load; shifting degree programs without approval is barred. 
+●​ No Failures: Passing grades in all enrolled subjects. 
+●​ Return Service: Must attend monthly YSL formation workshops and render 50 hours of 
+volunteer work per school year in parish or community apostolates. 
+9. Disqualifying Conditions 
+●​ Marriage, pregnancy, or exceeding 25 years of age. 
+●​ Engagement in vices (smoking, alcohol, gambling, illegal drugs, or gaming addiction). 
+●​ Holding a school Grant-in-Aid Working Student (GIA/WS) grant or major external award. 
+●​ Term GWA dropping below 85.00% or unapproved shifting of degree program. 
+●​ Failure to attend mandatory monthly YSL formation workshops or complete 50 annual 
+volunteer hours. 
+10. Temporal Eligibility Matrix 
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+SHS Graduate / College 
+Student (Age 18–25, GWA \ge 
+85%) 
+Eligible Now 
+Apply through local parish 
+YSLEP coordinator or Caritas 
+Manila portal. 
+Working Student Grantee 
+Never Eligible 
+Ineligible under YSLEP 
+
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+(GIA/WS) 
+dual-grant policy. 
+Married or Aged 26+ 
+Never Eligible 
+Exceeds age and civil status 
+limits. 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Academic Floor 
+GWA \ge 85.00% "Senior High 
+School Graduate 
+with a General 
+Weighted Average 
+of 85" 
+Caritas Guidelines Tier 1 
+Age Cap 
+18–25 years old 
+"Age level 
+between 18-25 
+years old" 
+Caritas Guidelines Tier 1 
+Post-Grad Pledge 1% Gross Income "When employed, 
+he/she shall 
+donate 1% of 
+his/her gross 
+salary to Caritas 
+Manila" 
+Caritas Guidelines Tier 1 
+12. Production Database Mapping 
+{​
+  "education_level": ["College", 
+"TV[span_263](start_span)[span_263](end_span)ET"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "renewal_gwa": 85.00,​
+  "income_limit": null,​
+  "age_limit": 25,​
+  "sectoral_restriction": "PARISH_YOUTH_MINISTRY_MEMBER",​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "annual_notice", "close": 
+"annual_notice"},​
+  "deadline_type": "estimated",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+
+13. Matching Risks 
+●​ Database GWA Understatement: Live production database lists min_gwa: 80. Official 
+guidelines mandate a strict 85.00% cutoff, generating false positives for applicants in the 
+80.00%–84.99% bracket. 
+●​ Civil Status and Behavioral Constraints: Engine matching must validate user age <= 25, 
+civil status == 'Single', and parish activity. 
+14. Verification Summary 
+●​ Verification Status: Verified. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://caritasmanila.org.ph, 
+https://caritasmanila.org.ph/programs/yslep/. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 96/100. 
+AFPSLAI Educational Grant Program (ID: 62) 
+1. Scholarship Identity 
+●​ Official Name: AFPSLAI Educational Grant Program (EGP) — Non-Business Track 
+●​ Provider: Armed Forces and Police Savings and Loan Association, Inc. (AFPSLAI) 
+●​ Category: Private / Affiliation / Need-and-Merit 
+●​ Official Website: https://www.afpslai.com.ph 
+●​ Application Portal: Physical submission at nearest AFPSLAI branch office (forms 
+downloadable online) 
+●​ Official Guidelines: AFPSLAI Educational Grant Program (EGP) Policy Guidelines & Form 
+EGP 
+●​ Current Status: Active 
+2. Purpose 
+The AFPSLAI Educational Grant Program (EGP) is a corporate social responsibility initiative 
+designed to assist active, retired, and deceased military and police personnel by subsidizing the 
+tertiary education of their legal dependents. The program focuses on non-business degree 
+programs to promote diverse professional development among military families. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Undergraduate / College. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen), Year 2 (Sophomores), and Year 3 
+(Juniors). 
+●​ Incoming Freshman Only?: No. 
+●​ Existing College Students?: Yes (2nd and 3rd year college students; 4th year students are 
+
+strictly barred). 
+●​ Graduate Students?: Ineligible. 
+●​ Current Enrollment Requirement: Accepted or enrolled in a non-business baccalaureate 
+degree program. 
+●​ Academic Requirements: Proof of highest educational attainment demonstrating passing 
+academic standing. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Passing academic standing 
+required; live database records 85.00%). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Total annual gross family income of the sponsor must not exceed PHP 
+1,000,000.00. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Recognized Philippine colleges and universities. 
+●​ Priority Courses: Restricted EXCLUSIVELY to non-business baccalaureate courses (e.g., 
+Computer Science, IT, Engineering, Social Sciences, Agriculture, Science). 
+Business-related courses are covered under the separate Scholarship Apprentice 
+Program). 
+●​ Sectoral Requirements: Sponsor must be an active, retired, or deceased Regular Member 
+of AFPSLAI in good standing. Applicant must be a legitimate, illegitimate, or legally 
+adopted child. If sponsor is single/unmarried without children, a legitimate/adopted sibling 
+may apply. 
+●​ Good Moral: Required (Certificate of Good Moral Character). 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Strictly limited to ONE (1) grantee per sponsor/family; applicant must 
+NOT hold any other external scholarship grant (except school merit tuition discounts). 
+4. Application Timing 
+●​ Who May Apply: Dependents (children or qualified siblings) of regular AFPSLAI members 
+who are incoming freshmen, 2nd-year, or 3rd-year college students. 
+●​ Can current freshmen apply?: Yes. 
+●​ Can current sophomores apply?: Yes. 
+●​ Can current juniors apply?: Yes. 
+●​ Can current seniors apply?: No (4th-year students are ineligible). 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No (if another family member was a prior grantee). 
+5. Application Window 
+●​ Opening Date: Announced annually (typically May/June). 
+●​ Closing Date: Specified per cycle (e.g., June 26 or July 15). 
+●​ Application Cycle: Fixed / Annual. - Current AY Covered: AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Up to PHP 30,000.00 per school term (and up to PHP 10,000.00 for mandatory 
+summer/midyear terms). 
+●​ Monthly Stipend: PHP 4,000.00 per month. 
+
+●​ Allowance: ROTC incentive of PHP 2,000.00 per month during terms when ROTC is 
+enrolled. 
+●​ Book Allowance: Up to PHP 2,000.00 per school term (reimbursement basis). 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None required for EGP track (unlike the SAP business track which 
+requires a 6-to-11 month service bond). 
+●​ Other Benefits: Board and lodging subsidy up to PHP 2,000.00/month for SUC students 
+when necessary. 
+7. Required Documents 
+1.​ Duly accomplished AFPSLAI EGP Application Form. 
+2.​ PSA Birth Certificate of applicant. 
+3.​ Report Cards / Certified True Copy of Grades / TOR. 
+4.​ Certificate of Good Moral Character. 
+5.​ Valid Police Clearance or NBI Clearance of applicant (Barangay clearance strictly barred). 
+6. Parent/Sponsor Proof of Income: Latest payslip / Certificate of Pension (COP) AND 
+latest Income Tax Return (ITR) for both parents. 
+6.​ Official Local Government Certificate of No Income / Affidavit if parent is unemployed. 
+7.​ PSA CENOMAR and Affidavit of No Child (if sponsor is a sibling). 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain passing academic standing per university curriculum. 
+●​ Regular Load: Full-time credit enrollment. 
+●​ No Failures: No failing or dropped subjects. - Return Service: None. 
+9. Disqualifying Conditions 
+●​ Total gross annual family income exceeding PHP 1,000,000.00. 
+●​ Being in the 4th year level or pursuing a graduate degree. 
+●​ Enrolling in a business-related degree program under the EGP track. 
+●​ Application where a family member / sibling was a previous AFPSLAI scholar. 
+●​ Dual enjoyment of external non-school scholarship grants. 
+●​ Submission of Barangay clearance instead of Police/NBI clearance. 
+10. Temporal Eligibility Matrix 
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+Dependent of AFPSLAI 
+Member (Years 1–3, 
+Non-Business Course) 
+Eligible Now 
+Submit physical documentary 
+requirements to nearest 
+AFPSLAI branch office. 
+4th-Year College Student 
+Never Eligible 
+Program strictly restricted to 
+
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+entry years 1, 2, and 3. 
+Student Enrolled in BS 
+Accountancy / Business 
+Ineligible for EGP 
+Must apply under the SAP track 
+(requires service bond). 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Sponsor Income 
+Cap 
+\le PHP 
+1,000,000.00 
+"total annual family 
+income must not 
+exceed 
+₱1,000,000.00" 
+PhilScholar / 
+AFPSLAI 
+Tier 2 
+Year Level Cutoff Years 1, 2, and 3 "incoming 
+freshman... a 
+second-year, or a 
+third-year college 
+student" 
+PhilScholar / 
+AFPSLAI 
+Tier 2 
+Single Beneficiary 
+Clause 
+1 Grantee / Family "allows only one 
+(1) grantee per 
+sponsor/family" 
+AFPSLAI Form 
+EGP 
+Tier 1 
+12. Production Database Mapping 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  
+[span_282](start_span)[span_282](end_span)[span_291](start_span)[span_
+291](end_span)"minimum_gwa": null,​
+  "income_limit": 1000000,​
+  "parent_employment_restriction": "AFPSLAI_REGULAR_MEMBER",​
+  "course_track_restriction": 
+"NON_BUSIN[span_306](start_span)[span_306](end_span)ESS_COURSES",​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "05-01", "close": "06-26"},​
+  "de[span_307](start_span)[span_307](end_span)adline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+
+●​ Income Limit Discrepancy: Live production database lists max_income: 500000. Updated 
+official guidelines set the cap at PHP 1,000,000.00, resulting in valid applicants (income 
+PHP 500k–1M) being improperly filtered out. 
+●​ Course Track Misclassification: System logic must route business students to SAP and 
+non-business students to EGP. 
+14. Verification Summary 
+●​ Verification Status: Verified. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.afpslai.com.ph, 
+https://www.afpslai.com.ph/About/csr/educgrant. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 95/100. 
+Security Bank External Scholarship Program (ID: 71) 
+1. Scholarship Identity 
+●​ Official Name: Security Bank Foundation Scholars for Better Communities Scholarship 
+Program (External) 
+●​ Provider: Security Bank Foundation, Inc. (SBFI) 
+●​ Category: Private / Corporate Foundation / Merit-and-Need 
+●​ Official Website: https://www.securitybank.com/foundation 
+●​ Application Portal: https://www.securitybank.com/foundation 
+●​ Official Guidelines: SBFI External Scholarship Program Guidelines 
+●​ Current Status: Active 
+2. Purpose 
+The External Scholarship Program provides financial assistance to high-performing students 
+enrolled in SBFI partner private and public higher education institutions. The program targets 
+courses directly supporting banking, corporate management, technology, and communications, 
+cultivating talent for the national economy and Security Bank's workforce pipeline. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE (Live database records NCR region 
+filter). 
+●​ Education Level: Undergraduate / College. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen) and limited upperclassmen in 
+designated partner HEIs. 
+●​ Incoming Freshman Only?: Primary entry is incoming 1st year; limited upperclassmen 
+slots exist per university. 
+●​ Existing College Students?: Yes (limited slots). 
+●​ Graduate Students?: Ineligible. 
+
+●​ Current Enrollment Requirement: Accepted or enrolled in any of SBFI's 8 partner 
+universities (Ateneo de Manila University, De La Salle University, Far Eastern University, 
+Polytechnic University of the Philippines, University of Santo Tomas, etc.). 
+●​ Academic Requirements: High school Grade 12 GWA of at least 93.00% or equivalent; no 
+subject grade lower than 86.00%; grades of 90.00%+ in subjects aligned with college 
+course. 
+●​ Minimum GWA: 93.00% (Entry) / 86.00% (Continuation). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Requires parent ITR, 
+Indigency Certificate, or OFW Contract). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Strictly restricted to SBFI's 8 partner universities. - Priority Courses: 
+Business Administration, Finance, Accountancy, Financial Management, Information 
+Technology, Computer Science, Data Analytics, Communications, and Journalism. 
+●​ Sectoral Requirements: Must NOT be a child of a Security Bank employee, and must not 
+have an active SBFI scholar relative within the second degree. 
+●​ Good Moral: Required. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must maintain full-time credit enrollment per term. 
+4. Application Timing 
+●​ Who May Apply: Graduating SHS Grade 12 students and continuing 1st-year students at 
+partner HEIs. 
+●​ Can current freshmen apply?: Yes. 
+●​ Can current sophomores apply?: No (unless occupying open continuing slots). 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. - Can previous applicants reapply?: NOT SPECIFIED IN 
+OFFICIAL SOURCE. 
+5. Application Window 
+●​ Opening Date: Announced per annual cycle. 
+●​ Closing Date: Announced per annual cycle. 
+●​ Application Cycle: Fixed / Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full or partial tuition and matriculation fee coverage paid directly to the university. 
+●​ Monthly Stipend: Integrated into educational grant package. 
+●​ Allowance: Annual educational allowance package provided. 
+●​ Book Allowance: Integrated into grant package. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None mandatory. 
+●​ Other Benefits: Scholar development sessions, leadership workshops, direct internship, 
+and career opportunities within Security Bank Corporation. 
+7. Required Documents 
+1.​ Accomplished SBFI External Scholarship Online Application Form. 
+2.​ High School Transcript / Grade 12 Report Card showing final GWA. 
+3.​ Acceptance / Admission Letter from partner university. 
+4.​ Proof of Financial Status (Parent ITR, Indigency Certificate, or OFW Contract). 
+5.​ PSA Birth Certificate. 
+6.​ Certificate of Good Moral Character. 7. School Grading System and Course Curriculum. 
+8. Renewal Requirements 
+●​ Maintain GWA: Term GWA of at least 86.00%. 
+●​ Regular Load: Enrolled in prescribed full unit load per term. 
+●​ No Failures: No grade lower than 80.00% in any subject. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Parent being an employee of Security Bank Corporation or its affiliates. 
+●​ Having a relative within the second degree of consanguinity/affinity actively holding an 
+SBFI scholarship. 
+●​ Term GWA dropping below 86.00% or subject grade below 80.00%. 
+●​ Enrolling in a non-partner university or non-priority program. 
+10. Temporal Eligibility Matrix 
+| Profile Status | Eligibility Status | Actionable Guidance | | :--- | :--- | :--- | | Incoming Grade 12 
+Student (Admitted to Partner HEI, GWA \ge 93%) | Eligible Now | Apply online via SBFI external 
+portal. | | Child of Security Bank Staff | Never Eligible | Ineligible for External Track; apply via 
+Internal/RMKK Track. | 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Entry GWA 
+\ge 93.00% 
+"Must have a 
+General Weighted 
+Average (GWA) of 
+at least 93%" 
+PhilScholar / SBFI Tier 2 
+Partner University 8 Designated HEIs "enrolled in any of 
+the 8 partner 
+universities" 
+PhilScholar / SBFI Tier 2 
+
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Non-Employee 
+Clause 
+Non-Child of 
+Employee 
+"Must not be a 
+child of a Security 
+Bank employee" 
+PhilScholar / SBFI Tier 2 
+12. Production Database Mapping 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2],​
+[span_97](start_span)[span_97](end_span)  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 
+93.[span_9](start_span)[span_9](end_span)[span_22](start_span)[span_22
+](end_span)00,​
+  "renewal_gwa": 86.00,​
+  "income_limit": null,​
+  "partner_school_restricted": true,​
+  "priority_courses": [​
+   
+[span_10](start_span)[span_10](end_span)[span_23](start_span)[span_23]
+(end_span) "ACCOUNTANCY",​
+    "FINANCE",​
+    "BUSINESS_ADMI[span_98](start_span)[span_98](end_span)NISTRATION",​
+    "INFORMATION_TECHNOLOGY",​
+    "COMPUTER_SCIENCE",​
+ [span_99](start_span)[span_99](end_span)   "DATA_ANALYTICS",​
+    "COMMUNICATIONS",​
+    "JOURNALISM[span_100](start_span)[span_100](end_span)"​
+  ],​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "02-01", 
+"clos[span_101](start_span)[span_101](end_span)e": "05-31"},​
+  "deadline_[span_102](start_span)[span_102](end_span)type": 
+"estimated",​
+  "cycle_type": "ann[span_103](start_span)[span_103](end_span)ual",​
+  "renewable": true,​
+  "first_time_only": [span_104](start_span)[span_104](end_span)true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Database URL Corruption: Live database lists an incorrect portal URL 
+(https://www.securitybank.com/agency-scholarships-program-[span_107](start_span)[spa
+n_107](end_span)dnd/). Canonical URL is https://www.securitybank.com/foundation. 
+
+●​ Entry GWA Misclassification: Live database specifies min_gwa: 86 (the renewal cutoff). 
+Entry GWA is 93.00%. 
+14. Verification Summary 
+●​ Verification Status: Verified. - Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.securitybank.com/foundation. 
+●​ Broken Links: Database URL mismatched; updated to canonical portal. 
+●​ Overall Confidence Score: 92/100. 
+Security Bank Foundation Agency Personnel 
+Scholarship (ID: 111) 
+1. Scholarship Identity 
+●​ Official Name: Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency 
+Personnel Track) 
+●​ Provider: Security Bank Foundation, Inc. (SBFI) 
+●​ Category: Private / Corporate CSR / Affiliation-and-Need 
+●​ Official Website: https://www.securitybank.com/foundation 
+●​ Application Portal: SBFI Internal / Agency Personnel Application Portal 
+●​ Official Guidelines: SBFI Regalo Mo, Kinabukasan Ko Program Guidelines 
+●​ Current Status: Active 
+2. Purpose 
+The Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program provides educational 
+assistance to third-party agency personnel (security guards, janitorial, maintenance, and 
+messengerial staff) deployed across Security Bank offices and their dependents. The initiative 
+supports scholars from elementary through college, promoting socio-economic mobility and 
+offering direct bank employment upon graduation. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Elementary, High School, Senior High School, and College. 
+●​ Eligible Year Levels: College Years 1, 2, 3, and 4. 
+●​ Incoming Freshman Only?: No. 
+●​ Existing College Students?: Yes. 
+●​ Graduate Students?: Ineligible. 
+●​ Current Enrollment Requirement: Enrolled in an accredited educational institution. 
+●​ Academic Requirements: Passing GWA (typically \ge 80.00% or equivalent). 
+●​ Minimum GWA: 80.00%. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Targeted at low-income third-party agency staff assigned to Security 
+
+Bank; live database records a PHP 250,000.00 income cap. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Recognized schools, colleges, and universities. 
+●​ Priority Courses: Open to various undergraduate degree programs (e.g., Business 
+Administration, Marketing Management, Education). 
+●​ Sectoral Requirements: Sponsor must be an active third-party agency staff member (e.g., 
+security guard, janitor) assigned to Security Bank Corporation or a legitimate 
+child/dependent. 
+●​ Good Moral: Required. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Agency personnel sponsor must be in active service with Security 
+Bank's accredited staffing agencies. 
+4. Application Timing 
+●​ Who May Apply: Security Bank agency personnel and their legitimate children. 
+●​ Can current freshmen apply?: Yes. 
+●​ Can current sophomores apply?: Yes. 
+●​ Can current juniors apply?: Yes. 
+●​ Can current seniors apply?: Yes. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Announced annually via SBFI CSR advisories. 
+●​ Closing Date: Specified in internal notices. 
+●​ Application Cycle: Fixed / Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Direct educational assistance grant credited toward tuition/fees. 
+●​ Monthly Stipend: Integrated into educational support grant. 
+●​ Allowance: Tiered annual financial assistance: Elementary (PHP 25,000.00), High School 
+(PHP 27,000.00), Senior High School (PHP 30,000.00), College (PHP 60,000.00 per 
+year). 
+●​ Book Allowance: Integrated into grant package. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None; direct employment preference at Security Bank upon graduation. 
+●​ Other Benefits: Priority employment opportunities within Security Bank Group (scholars 
+employed as Bank Tellers or Account Officers upon graduation). 
+
+7. Required Documents 
+1.​ Accomplished SBFI RMKK Application Form. 
+2.​ Certificate of Employment of Agency Personnel parent from accredited Security Bank 
+agency. 
+3.​ PSA Birth Certificate of student applicant. 
+4.​ Report Card / College Transcript of Records showing passing grades. 
+5.​ Certificate of Enrollment / Registration Card. 
+6.​ Certificate of Good Moral Character. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain passing GWA (\ge 80.00%) each academic year. 
+●​ Regular Load: Continuous enrollment. 
+●​ No Failures: Passing grades in all enrolled subjects. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Separation or termination of the sponsor agency personnel from Security Bank 
+assignment. 
+●​ Failure to maintain passing academic grades. 
+●​ Fraudulent representation of employment or dependency. 
+10. Temporal Eligibility Matrix 
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+Child of Security Bank Agency 
+Staff (Security Guard, Janitor) 
+Eligible Now 
+Apply through SBFI RMKK 
+portal or CSR desk. 
+Child of Regular Security Bank 
+Corporate Employee 
+Ineligible for RMKK 
+Must apply under Internal 
+Employee Dependent Track. 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Target Beneficiary Agency Personnel 
+/ Children 
+"helps agency 
+personnel and 
+their children get 
+their diploma" 
+SBFI Portal 
+Tier 2 
+College Award 
+Value 
+PHP 60,000.00 / 
+year 
+"College – PHP 
+60,000" 
+SBFI Portal 
+Tier 2 
+Employment 
+Pathway 
+Priority Bank 
+Hiring 
+"Four (4) of them 
+have already been 
+employed in 
+Security Bank" 
+SBFI Portal 
+Tier 2 
+### 12. Production Database Mapping 
+
+{​
+  "education_level": ["Elementary", "High School", "Senior High 
+School", "College"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 80.00,​
+  "income_limit": 250000,​
+  "sectoral_restriction": "SECURITY_BANK_AGENCY_PERSONNEL_DEPENDENT",​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "annual_notice", "close": 
+"annual_notice"},​
+  "deadline_type": "estimated",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Benefit Understatement: Live database lists total_value: 30000. Official college award 
+value is PHP 60,000.00 per year (PHP 30,000 is the SHS grant value). 
+●​ Missing Agency Tag: System logic must verify user parent employment as third-party 
+agency staff. 
+14. Verification Summary 
+●​ Verification Status: Verified. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.securitybank.com/foundation/donatenow/. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 94/100. 
+Gokongwei Brothers Foundation STEM-College 
+Scholarship (ID: 72) 
+1. Scholarship Identity 
+●​ Official Name: GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM 
+Scholarship for Excellence) 
+●​ Provider: Gokongwei Brothers Foundation, Inc. (GBF) 
+●​ Category: Private / Corporate Foundation / Merit-and-Need 
+●​ Official Website: https://www.gokongweibrothersfoundation.org 
+
+●​ Application Portal: https://bit.ly/GBFSTEMCollege 
+●​ Official Guidelines: GBF STEM-College Scholarship Program Guidelines 
+●​ Current Status: Active 
+2. Purpose 
+The GBF STEM-College Scholarship supports academically outstanding Filipino students 
+pursuing higher education in Science, Technology, Engineering, and Mathematics (STEM). By 
+combining direct financial grants with leadership development and employment opportunities 
+across Gokongwei Group business units, the program seeks to build STEM expertise and 
+advance national industrial competitiveness. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a natural-born or naturalized Filipino citizen. 
+●​ Residency: Resident of the Philippines. 
+●​ Education Level: Undergraduate / College. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen) and Year 2+ (Continuing College 
+Students). 
+●​ Incoming Freshman Only?: No. 
+●​ Existing College Students?: Yes (2nd year and above). 
+●​ Graduate Students?: Ineligible for College Track (Separate TeachSTEM Master's exists). 
+●​ Current Enrollment Requirement: Enrolled or planning to enroll in a priority STEM degree 
+program in a recognized Philippine university. 
+●​ Academic Requirements: Minimum overall General Weighted Average (GWA) of 85.00% 
+or 2.0 (or equivalent); incoming freshmen must belong to the Top 10% of their Senior High 
+School graduating batch. 
+●​ Minimum GWA: 85.00% or 2.0. 
+●​ Alternative Class Rank: Top 10% of SHS batch for incoming freshmen. 
+●​ Income Ceilings: Must demonstrate financial need; proof of annual household income 
+required (Live database specifies PHP 400,000.00 cap). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Philippine colleges and universities offering accredited priority STEM 
+programs. 
+●​ Priority Courses: GBF Priority STEM Courses including Chemical Engineering, Civil 
+Engineering, Computer Engineering, Electrical Engineering, Electronics Engineering, 
+Industrial Engineering, Mechanical Engineering, Materials Engineering, Mining 
+Engineering, Geodetic Engineering, Computer Science, Information Technology, Data 
+Science, Chemistry, Accountancy, Animal Science, and Avionics Technology. 
+●​ Sectoral Requirements: None. 
+●​ Good Moral: Required (Certificate of Good Moral Character). 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must have NO failing (5.0), dropped, or incomplete (INC) grades in 
+high school or prior college semesters; must not hold another major corporate scholarship 
+grant. 
+4. Application Timing 
+
+●​ Who May Apply: Graduating Grade 12 SHS students and continuing college students 
+(2nd year and above) enrolled in priority STEM programs. 
+●​ Can current freshmen apply?: Yes (as incoming 1st year or entering 2nd year). 
+●​ Can current sophomores apply?: Yes. 
+●​ Can current juniors apply?: Yes. 
+●​ Can current seniors apply?: Yes. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Announced annually (typically Q1/Q2). 
+●​ Closing Date: May 31, 2026 (for AY 2026–2027 cycle). 
+●​ Application Cycle: Fixed / Annual. 
+●​ Current AY Covered: AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Covered as part of the direct financial grant package. 
+●​ Monthly Stipend: Integrated into the annual financial grant. 
+●​ Allowance: Direct annual financial grant of PHP 80,000.00 to PHP 120,000.00 per year 
+(depending on the university, directly credited to scholar's bank account). 
+●​ Book Allowance: Integrated into grant package. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Mandatory return service obligation (render service in the Philippines or 
+within Gokongwei Group companies equal to scholarship period). 
+●​ Other Benefits: Leadership training, upskilling programs, OJT/internship placement within 
+Gokongwei Group partner companies, and priority employment opportunities upon 
+graduation. 
+7. Required Documents 
+1.​ Certified True Copy of Grade 12 Report Card (for Freshmen) OR Certified True Copy of 
+Grades for last 2 consecutive semesters (for Upperclassmen). 
+2.​ Certificate of Class Rank (Top 10% certification for incoming freshmen). 
+3.​ Notice of Admission or Proof of University Application. 
+4.​ Certificate of Good Moral Character. 
+5.​ Proof of Household Income (Parent ITR, Certificate of Employment with salary, OFW 
+contract, or BIR Tax Exemption Certificate). 
+6.​ Proof of Billing (Utility bill matching residence address). 
+7.​ Recommender's email address (Non-relative reference). 
+### 8. Renewal Requirements 
+●​ Maintain GWA: Maintain a term GWA of at least 85.00% or 2.0. 
+●​ Regular Load: Full-time credit enrollment in approved STEM program. 
+
+●​ No Failures: Zero failing, incomplete, or dropped grades. 
+●​ Return Service: Compliance with post-graduation return service agreement. 
+9. Disqualifying Conditions 
+●​ Enrolling in non-STEM degree programs. 
+●​ Term GWA dropping below 85.00% or receiving a failing, dropped, or incomplete mark. 
+●​ Failure to submit proof of top 10% class rank for incoming freshman entry. 
+●​ Holding an overlapping major corporate scholarship. 
+10. Temporal Eligibility Matrix 
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+Incoming Freshmen (STEM, 
+Top 10% SHS Rank, GWA \ge 
+85%) 
+Eligible Now 
+Apply online via official GBF 
+portal before May 31, 2026. 
+Continuing College Student 
+(Years 2–4, STEM, GWA 
+[span_466](start_span)ge 85%) 
+Eligible Now 
+Submit TOR for last 2 terms via 
+GBF portal. 
+Non-STEM College Student 
+Never Eligible 
+Program strictly restricted to 
+priority STEM fields. 
+11. Structured Eligibility Matrix 
+| Requirement | Value | Official Evidence Quote | Source | Confidence | | :--- | :--- | :--- | :--- | :--- | 
+| Academic GWA | \ge 85.00% or 2.0 | "general weighted average (GWA) of at least 85% (2.0 or 
+equivalent)" | GBF / GovPH | Tier 2 | | Freshmen Rank | Top 10% Batch | "must belong to the 
+top 10% of their senior high school batch" | PhilScholar / GBF | Tier 2 | | Annual Value | PHP 
+80k–120k | "₱80,000 to ₱120,000 annual financial assistance" | GovPH / GBF | Tier 2 | 
+12. Production Database Mapping 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "renewal_gwa": 85.00,​
+  "rank_cutoff_alternative": 10,​
+  "income_limit": 400000,​
+  "priority_courses": [​
+    [span_468](start_span)[span_468](end_span)"CHEMICAL_ENGINEERING",​
+    "CIVIL_ENGINEERING",​
+    "COMPUTER_ENGINEERING",​
+    "ELECTRICAL_ENGINEERING",​
+    "ELECTRONICS_ENGINEERING",​
+    "INDUSTRIAL_ENGINEERING",​
+
+    "MECHANICAL_ENGINEERING",​
+    "COMPUTER_SCIENCE",​
+    
+"INFO[span_457](start_span)[span_457](end_span)RMAT[span_469](start_sp
+an)[span_469](end_span)ION_TECHNOLOGY",​
+    "DATA_SCIENCE",​
+    "CHEMISTRY",​
+    "ACCOUNTANCY"​
+  ],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "01-15", "close": "05-31"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Database Portal URL Correction: Live database link points to aggregator 
+https://philscholar.com/gbf-stem-college-scholarship/. URL must be updated to official 
+portal https://www.gokongweibrothersfoundation.org. 
+●​ GWA Mismatch: Live database records min_gwa: 92. Canonical cutoff is 85.00% (2.0), 
+creating false-negative exclusions. 
+14. Verification Summary 
+●​ Verification Status: Verified. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.gokongweibrothersfoundation.org, 
+https://bit.ly/GBFSTEMCollege. 
+●​ Broken Links: Aggregator link replaced with official portal. 
+●​ Overall Confidence Score: 95/100. 
+Aboitiz Brights / Aboitiz Future Leaders Scholarship 
+(ID: 75) 
+1. Scholarship Identity 
+●​ Official Name: Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights 
+●​ Provider: Aboitiz Foundation, Inc. 
+●​ Category: Private / Corporate Foundation / Merit-based 
+
+●​ Official Website: https://aboitiz.com/aboitiz-foundation/aboitiz-future-leaders-scholarship 
+●​ Application Portal: 
+https://sites.google.com/aboitiz.com/aboitiz-future-leaders-scholar/home AND University 
+Scholarship Portals (e.g., UP SIKAP portal https://sikap.upd.edu.ph) 
+●​ Official Guidelines: Aboitiz Future Leaders Scholarship Program Guidelines AY 
+2025–2026 / AY 2026–2027 
+●​ Current Status: Active 
+2. Purpose 
+The Aboitiz Future Leaders Scholarship Program, established in 2000, serves as the flagship 
+college scholarship program of the Aboitiz Foundation. Aligned with UN Sustainable 
+Development Goal 4, the program provides full financial support, executive mentorship, 
+leadership development, and internship opportunities to develop high-potential university 
+sophomores into ethical leaders. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Must be a Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Undergraduate / College. 
+●​ Eligible Year Levels: Year 2 (Incoming Sophomores ONLY). 
+●​ Incoming Freshman Only?: NO (Incoming Freshmen are strictly INELIGIBLE). 
+●​ Existing College Students?: YES (Strictly restricted to incoming 2nd-year college 
+students). 
+●​ Graduate Students?: Ineligible. 
+●​ Current Enrollment Requirement: Enrolled as an incoming sophomore student at a 
+designated partner university. 
+●​ Academic Requirements: First-year college GWA/GPA of at least 88.00% or 2.0 (or 
+equivalent); NO dropped subjects, NO failing grades (5.0), and NO unremoved 
+incomplete (INC) or 4.0 grades in any academic subject. 
+●​ Minimum GWA: 88.00% or 2.00. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Requires submission of 
+household financial proof or Affidavit of Income). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to designated partner universities: Ateneo de 
+Manila University, De La Salle University, Mapúa University, University of Santo Tomas, 
+UP Diliman, UP Baguio, UP Cebu, UP Los Baños, and UP Mindanao. 
+●​ Priority Courses: Engineering (Electrical, Industrial, Civil, Chemical, Computer, 
+Mechanical, Materials, Mining, Geodetic, Electronics), Data Science, Computer Science, 
+BA Communication / Journalism, BS Agriculture, BS Forestry, BS Psychology. 
+●​ Sectoral Requirements: None. 
+●​ Good Moral: Required (Certificate of Good Moral Character; no record of any form of 
+disciplinary action). 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Applicants receiving scholarships from other corporate foundations 
+are ineligible (CHED and DOST scholars are allowed). 
+
+4. Application Timing 
+●​ Who May Apply: Incoming 2nd-year college (sophomore) students enrolled in 
+pre-identified courses at partner universities. 
+●​ Can current freshmen apply?: No (Must complete 1st year to apply as an incoming 
+sophomore). 
+●​ Can current sophomores apply?: Yes (Primary and exclusive target applicant cohort). 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes (if entering sophomore year). 
+5. Application Window 
+●​ Opening Date: August 1 annually. 
+●​ Closing Date: September 1 annually. 
+●​ Application Cycle: Fixed / Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full 100% tuition and matriculation fee coverage. 
+●​ Monthly Stipend: PHP 10,000.00 per month. 
+●​ Allowance: Board Exam Review Fee allowance of PHP 15,000.00. 
+●​ Book Allowance: Integrated into monthly stipend package. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: PHP 15,000.00 one-time review grant. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: Incentives for academic honors: 
+○​ Academic Excellence Incentive: PHP 20,000.00 (One-time). 
+○​ Latin Honor Incentive: Summa Cum Laude (PHP 10,000.00), Magna Cum Laude 
+(PHP 7,000.00), Cum Laude (PHP 5,000.00). 
+○​ Board Topnotcher Incentive: Provided. 
+●​ Return Service: No mandatory employment return service bond; scholars must complete 
+a mandatory 400-hour internship within Aboitiz Group business units and attend 
+leadership development sessions. 
+●​ Other Benefits: Mentorship from Aboitiz executives, learning development sessions, and 
+networking opportunities. 
+7. Required Documents 
+1.​ Copy of Student ID. 
+2.​ Certificate of Good Moral Character. 
+3.​ Certified True Copy of Grades / Transcript of Records covering full 1st year college. 
+4.​ Certificate of Enrollment / Registration Form for 1st and 2nd term of current SY. 
+5.​ Copy of Certificates of College Leadership, Awards, or Seminars. 
+
+6.​ Proof of Household Income / Affidavit of Income Source. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required term GWA (at least 88.00% / 2.0). 
+●​ Regular Load: Full credit load per term. 
+●​ No Failures: Zero failing grades (5.0), dropped marks (DRP), or unremoved incomplete 
+(INC/4.0) grades. 
+●​ Return Service: Complete mandatory 400-hour Aboitiz Group internship and participate in 
+leadership events. 
+9. Disqualifying Conditions 
+●​ Being an incoming freshman, 3rd-year, or 4th-year college student. 
+●​ Enrolling in a non-partner university or non-identified degree program. 
+●​ Having any grade of 5.0, DRP, or unremoved INC/4.0 mark in 1st year college. 
+●​ Holding an active scholarship grant from another corporate foundation. 
+●​ First-year GWA dropping below 88.00% or 2.0. 
+10. Temporal Eligibility Matrix 
+Profile Status 
+Eligibility Status 
+Actionable Guidance 
+Incoming Sophomore (Partner 
+HEI, Priority Course, GWA \ge 
+88%) 
+Eligible Now 
+Apply online via university 
+scholarship portal between Aug 
+1 and Sept 1. 
+Incoming Freshman / High 
+School Senior 
+Never Eligible 
+Ineligible; program exclusively 
+accepts sophomores. 
+3rd or 4th Year College Student Never Eligible 
+Ineligible; entry restricted 
+strictly to Year 2. 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Target Year Level Year 2 
+Sophomores 
+ONLY 
+"The scholarship is 
+only open for 
+incoming 
+SOPHOMORE 
+STUDENTS" 
+Aboitiz Portal 
+Tier 1 
+GWA Threshold 
+\ge 88.00% or 2.0 "first-year college 
+GPA/GWA of at 
+least 88% or the 
+equivalent" 
+Aboitiz Portal 
+Tier 1 
+Grade Record 
+Zero DRP / INC / 
+5.0 
+"with no dropped 
+subject, failing 
+and/or incomplete 
+grade" 
+Aboitiz Portal 
+Tier 1 
+Monthly Stipend 
+PHP 10,000.00 / 
+"Stipend | Monthly UP SIKAP Portal Tier 1 
+
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+month 
+| Php 10000" 
+12. Production Database Mapping 
+{​
+  "education_level": 
+[span_651](start_span)[span_651](end_span)[span_662](start_span)[span_
+662](end_span)["College"],​
+  "eligible_year_levels": [2],​
+  "incoming_year_only": false,​
+  
+"requires_curre[span_609](start_span)[span_609](end_span)nt_enrollment
+": true,​
+  "minimum_gwa": 88.00,​
+  "renewal_gwa": 88.00,​
+  "income_limit": null,​
+  "partner_school_restricted": true,​
+  "priority_courses": [​
+    "ELECTRICAL_ENGINEERING",​
+    "INDUSTRIAL_ENGINEERING",​
+    "CIVIL_ENGINEERING",​
+    "CHEMICAL_ENGINEERING",​
+    "COMPUTER_ENGINEERING",​
+    "MECHANICAL_ENGINEERING",​
+    "MATERIALS_ENGINEERING",​
+    "MINING_ENGINEERING",​
+    "GEODETIC_ENGINEERING",​
+    "ELECTRONICS_ENGINEERING",​
+    "DATA_SCIENCE",​
+    "COMPUTER_SCIENCE",​
+    "COMMUNICATION",​
+    "JOURNALISM",​
+    "AGRICULTURE",​
+    "FORESTRY",​
+    "PSYCHOLOGY"​
+  ],​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-01", "close": "09-01"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "return_service_required": false,​
+  "needs_manual_review": true​
+}​
+
+ 
+13. Matching Risks 
+●​ Critical GWA & Year Level Database Error: Live production database lists min_gwa: 75 
+and defaults eligible_year_levels to Year 1. Provider rules mandate Year 2 entry and a 
+minimum 1st-year GWA of 88.00%. Failure to update causes severe false-positive 
+recommendations. 
+●​ Partner School Exclusion: Applicants from non-partner HEIs must be filtered out. 
+14. Verification Summary 
+●​ Verification Status: Verified. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: 
+https://aboitiz.com/aboitiz-foundation/aboitiz-future-leaders-scholar, 
+https://sikap.upd.edu.ph. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+Works cited 
+1. Security Bank External Scholarship (2026 Guide) - PhilScholar, 
+https://philscholar.com/security-bank-external-scholarship/ 2. At the heart of everything we do, is 
+- Security Bank Integrated Report 2025 |, 
+https://integratedreport.securitybank.com/wp-content/uploads/2025/07/042325-SBC-IR-2024-fin
+al-digital-v2.pdf 3. Members News - League of Corporate Foundations, 
+https://lcf.org.ph/category/members-news/ 4. Our Stories | Security Bank Foundation, Inc. | 
+Security Bank Philippines, https://www.securitybank.com/foundation/our-stories/ 5. How to 
+Donate | Security Bank Philippines, https://www.securitybank.com/foundation/donatenow/ 6. 
+YSLEP Scholarship Application Guidelines | PDF - Scribd, 
+https://www.scribd.com/document/653338959/Caritas-Quali-and-Req 7. YSLEP - Caritas 
+Manila, https://caritasmanila.org.ph/programs/yslep/ 8. Contact Us - Caritas Manila, 
+https://caritasmanila.org.ph/contact-us/ 9. Programs - Caritas Manila, 
+https://caritasmanila.org.ph/programs/ 10. AFPSLAI Scholarship & Educational Assistance 
+(SEAP) 2026: Complete Guide - PhilScholar, 
+https://philscholar.com/afpslai-scholarship-educational-assistance/ 11. Scholarship and 
+Educational Assistance Program (SEAP) - afpslai, 
+https://www.afpslai.com.ph/About/csr/educgrant 12. AFPSLAI EDUCATIONAL GRANT 
+PROGRAM APPLICATION FORM (FOR AY 2024-2025), 
+https://www.afpslai.com.ph/assets/forms/EGP.pdf 13. Application form - EGP - afpslai, 
+https://www.afpslai.com.ph/assets/forms/Application%20form%20-%20EGP.pdf 14. Armed 
+Forces and Police Savings and Loans Association, Inc. - afpslai, 
+https://www.afpslai.com.ph/About/communications/news 15. How to avail the PNP Scholarship 
+Program 2024? - Life of Maharlika, 
+https://thelifeofmaharlika.com/how-to-avail-the-pnp-scholarship-program-2021/ 16. Annual 
+Report 2025 - FEU Investor Relations, 
+https://investors.feu.edu.ph/reports%20new%20format/2025/11052025/ANNUAL%20REPORT
+
+%202025%20FINAL.pdf 17. GBF STEM-College Scholarship 2026 | Application Now Open - 
+PhilScholar, https://philscholar.com/gbf-stem-college-scholarship/ 18. Page 26 - DepED SDO 
+Dasmarinas City, 
+https://www.depeddasma.edu.ph/page/26/?ak_action=reject_mobile&q=%2F2018%2F11%2F09
+%2F07%2Fum-submission-of-early-language-literacy-and-numeracy-elln-school-profiling%2F 
+19. GBF STEM Scholarship 2026–2027: Requirements, Benefits, and How to Apply, 
+https://governmentph.com/gbf-scholarship/ 20. 
+DM-NO.-420-s.-2023-CALL-FOR-APPLICATION-OF-THE-TEACHSTEM-MASTERS-SCHOLAR
+SHIP-PROGRAM-OF-THE-GOKONGWEI-BROTHERS-FOUNDATION-INC.-GBF.pdf - Deped 
+Tagbilaran, 
+https://depedtagbilaran.org/wp-content/uploads/2023/09/DM-NO.-420-s.-2023-CALL-FOR-APPL
+ICATION-OF-THE-TEACHSTEM-MASTERS-SCHOLARSHIP-PROGRAM-OF-THE-GOKONGW
+EI-BROTHERS-FOUNDATION-INC.-GBF.pdf 21. Call for Application for Aboitiz Future Leaders 
+("Scholarship Program") - SIKAP - UP Diliman, https://sikap.upd.edu.ph/posts/scholarships/64/ 
+22. Aboitiz Future Leaders Scholarship, 
+https://aboitiz.com/aboitiz-foundation/aboitiz-future-leaders-scholarship 23. Aboitiz Future 
+Leaders Scholarship Program AY 2025-2026 - PhilScholar, 
+https://philscholar.com/aboitiz-future-leaders-scholarship-program/ 24. Aboitiz Future Leaders 
+scholarship program accepting sophomores - Daily Tribune, 
+https://tribune.net.ph/2025/08/10/aboitiz-future-leaders-scholarship-program-accepting-sophom
+ores 25. Aboitiz Foundation, https://aboitiz.com/aboitiz-foundation 26. Scholarship Catalog - 
+ISKOLARPH - Scholarship Aggregator for the Philippines - Cloudflare Pages, 
+https://iskolarph.pages.dev/catalog/ 27. Applications for the Aboitiz Future Leaders Scholarship 
+- Welcome - UST OSA, 
+https://manila.ust.edu.ph/osawebapp/osainfo-announcement-detail?aId=4887DCE4A3F94BCC
+CB11FF8BE9F9C332 

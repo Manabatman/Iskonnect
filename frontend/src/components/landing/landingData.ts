@@ -22,23 +22,23 @@ export const officialSources = [
 export const heroTrustChips = [
   "Free for students",
   "Official sources only",
-  "Plan ahead—not just search",
+  "Plan ahead, not just search",
 ] as const;
 
 export const problemItems = [
   {
     title: "Scattered across dozens of sites",
-    body: "Government portals, university pages, LGU announcements, and Facebook posts—each with different formats and no single place to search.",
+    body: "Government portals, university pages, LGU announcements, and Facebook posts, each with different formats and no single place to search.",
     Icon: Globe,
   },
   {
     title: "Unclear if you even qualify",
-    body: "Most listings don't tell you upfront whether your GWA, region, income, or course fits. You waste time on programs you can't apply for.",
+    body: "Most scholarships do not tell you upfront whether your GWA, region, income, or course fits. You waste time on programs you cannot apply for.",
     Icon: HelpCircle,
   },
   {
     title: "Deadlines missed in the noise",
-    body: "Application windows close while you're still digging through outdated posts and broken links—or before you've gathered documents.",
+    body: "Application windows close while you are still digging through outdated posts and broken links, or before you have gathered documents.",
     Icon: CalendarX,
   },
 ] as const;
@@ -53,13 +53,13 @@ export const howItWorksSteps = [
   {
     n: 2,
     title: "We check real eligibility rules",
-    body: "Each scholarship has actual rules—minimum GWA, income ceiling, region, course. We check your profile against every one before anything is ranked.",
+    body: "Each scholarship has actual rules: minimum GWA, income ceiling, region, and course. We check your profile against every one before anything is ranked.",
     Icon: ShieldCheck,
   },
   {
     n: 3,
-    title: "See your plan—not just matches",
-    body: "Programs you don't qualify for are filtered out. What's left is ranked, timed, and organized so you know what to apply for now, prepare for, or watch for next cycle.",
+    title: "See your plan, not just matches",
+    body: "Programs you do not qualify for are filtered out. What is left is ranked, timed, and organized so you know what to apply for now, prepare for, or watch for next cycle.",
     Icon: Sparkles,
   },
 ] as const;
@@ -76,7 +76,7 @@ export const scoringFactors = [
 export const trustPoints = [
   {
     title: "Verified against official sources",
-    body: "We show when listings were last checked and link you to the provider's site so you can confirm details yourself.",
+    body: "We show when scholarships were last checked and link you to the provider's site so you can confirm details yourself.",
     Icon: ShieldCheck,
   },
   {
@@ -94,17 +94,17 @@ export const trustPoints = [
 export const benefitItems = [
   {
     title: "Find scholarships you're actually eligible for",
-    body: "We rank programs against real rules—region, level, income, and field—so your list reflects what you can genuinely apply for.",
+    body: "We rank programs against real rules (region, level, income, and field) so your list reflects what you can genuinely apply for.",
     Icon: Sparkles,
   },
   {
     title: "Prepare before deadlines arrive",
-    body: "See future eligibility, document checklists, and upcoming openings—so you're ready when applications open.",
+    body: "See future eligibility, document checklists, and upcoming openings so you are ready when applications open.",
     Icon: ClipboardList,
   },
   {
     title: "One profile, your whole scholarship plan",
-    body: "Build your profile once and reuse it across government, university, LGU, and private programs—matches, saves, and reminders in one place.",
+    body: "Build your profile once and reuse it across government, university, LGU, and private programs: matches, saves, and reminders in one place.",
     Icon: CalendarX,
   },
 ] as const;
@@ -118,18 +118,18 @@ export const faqItems: FaqItem[] = [
   },
   {
     q: "Where does scholarship information come from?",
-    a: "From publicly available official sources—CHED, DOST-SEI, TESDA, LGUs, universities, and private foundations. Every listing links to the provider's site.",
+    a: "From publicly available official sources (CHED, DOST-SEI, TESDA, LGUs, universities, and private foundations). Every scholarship links to the provider's site.",
   },
   {
     q: "Why show closed or past-cycle scholarships?",
-    a: "So you can learn typical requirements, compare benefits, and prepare early for the next cycle. Closed listings are labeled clearly—you won't be misled into thinking you can apply today.",
+    a: "So you can learn typical requirements, compare benefits, and prepare early for the next cycle. Closed scholarships are labeled clearly so you will not be misled into thinking you can apply today.",
   },
   {
     q: "What is future eligibility?",
-    a: "Some scholarships you don't qualify for yet—maybe you need a higher grade level or GWA. ISKONNECT flags these so you can plan ahead instead of discovering them too late.",
+    a: "Some scholarships you do not qualify for yet, maybe because you need a higher grade level or GWA. ISKONNECT flags these so you can plan ahead instead of discovering them too late.",
   },
   {
-    q: "How do I report a problem with a listing?",
+    q: "How do I report a problem with a scholarship?",
     a: "Open the scholarship page and tap \"Report an issue.\" Tell us about broken links, wrong deadlines, or outdated info. Our team reviews every report.",
   },
   {
@@ -138,7 +138,7 @@ export const faqItems: FaqItem[] = [
   },
   {
     q: "Could I be missing scholarships I qualify for?",
-    a: "If your profile is incomplete—missing income, GWA, or field of study—you may see fewer results. We only remove programs where you clearly fail a required rule, like a region restriction.",
+    a: "If your profile is incomplete (missing income, GWA, or field of study), you may see fewer results. We only remove programs where you clearly fail a required rule, like a region restriction.",
   },
   {
     q: "How is my personal data used?",

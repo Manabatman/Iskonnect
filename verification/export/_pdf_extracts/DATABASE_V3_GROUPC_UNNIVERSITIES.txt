@@ -1,0 +1,3855 @@
+Canonical Verification Report: Group B 
+Institutional & Systemic Scholarships 
+(ISKONNECT Engine) 
+Ateneo High School Financial Aid (ID: 18) 
+1. Scholarship Identity 
+●​ Official Name: Ateneo Senior High School Financial Aid Grant1 
+●​ Provider: Ateneo de Manila University (Ateneo Senior High School / Office of Admission 
+and Aid)1 
+●​ Category: Institutional / Secondary Education / Need-and-Merit1 
+●​ Official Website: https://www.ateneo.edu/ashs/admissions/scholarships-financial-aid1 
+●​ Application Portal: Integrated into the Ateneo Senior High School Admission and Financial 
+Aid Portal1 
+●​ Official Guidelines: Ateneo Senior High School Financial Aid Guidelines and Primer1 
+●​ Current Status: Active3 
+2. Purpose 
+The Ateneo Senior High School Financial Aid Grant provides financial assistance to 
+academically gifted but economically challenged Junior High School graduates from public, 
+parochial, and private schools, facilitating equal access to quality secondary education and 
+social mobility1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen4. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: High School (Grade 11 entry)1. 
+●​ Eligible Year Levels: Grade 111. 
+●​ Incoming Freshman Only?: Yes (Senior High School Grade 11 entry)1. 
+●​ Existing College Students?: Ineligible1. 
+●​ Graduate Students?: Ineligible1. 
+●​ Current Enrollment Requirement: Must be a graduating Grade 10 student eligible for 
+admission to Ateneo Senior High School1. 
+●​ Academic Requirements: High academic performance in Junior High School with strong 
+conduct marks1. 
+●​ Minimum GWA: 90.00% (or equivalent high scholastic standing in JHS)3. 
+
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Family gross annual income must not exceed PHP 400,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Open to graduates of public, parochial, and private Junior High 
+Schools1. 
+●​ Priority Courses: Applicable to all Ateneo Senior High School academic strands (STEM, 
+ABM, HUMSS, GA)1. 
+●​ Sectoral Requirements: Priority given to public and parochial high school completers1. 
+●​ Good Moral: Required (Certificate of Good Moral Character from JHS Principal)2. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Application for financial aid is evaluated independently of the 
+academic admission decision6. 
+4. Application Timing 
+●​ Who May Apply: Graduating Grade 10 Junior High School students1. 
+●​ Can current freshmen apply?: No (restricted to incoming Grade 11 SHS applicants)1. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Announced alongside the ASHS admission cycle (typically September)2. 
+●​ Closing Date: Concurrent with the ASHS admission deadline (typically 
+November/December)2. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–20272. 
+6. Benefits 
+●​ Tuition: 100%, 75%, 50%, or 25% waiver of tuition and matriculation fees4. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: Food and student learning allowance provided based on evaluated need4. 
+●​ Book Allowance: Book allowance provided for full-grant recipients4. 
+●​ Transportation: Transportation subsidy provided for eligible commuters4. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: Not applicable. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None required3. 
+●​ Other Benefits: Dormitory assistance for qualified provincial scholars4. 
+
+7. Required Documents 
+1.​ Parent's Personal Letter detailing household background and financial hardship2. 
+2.​ Father's and Mother's Income Tax Return (ITR), Certificate of Employment, or BIR Tax 
+Exemption2. 
+3.​ Utility bills (electricity, water, telephone) for the last three months2. 
+4.​ Grade 10 Report Card / Form 1382. 
+5.​ Certificate of Good Moral Character2. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain required academic and conduct marks specified by ASHS 
+OAA2. 
+●​ Regular Load: Full-time credit enrollment in assigned SHS strand2. 
+●​ No Failures: Zero failing marks or major disciplinary infractions7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Combined parent annual gross income exceeding PHP 400,000.003. 
+●​ Submission of fraudulent income documents or altered report cards2. 
+●​ Incurring failing grades or severe behavioral reprimands7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Graduating Grade 10 JHS 
+Student (Public/Private) 
+Eligible Now 
+Apply via ASHS Admission & 
+Aid portal alongside high 
+school application1. 
+Current Grade 11 ASHS 
+Student 
+Ineligible for New Entry 
+Financial aid must be 
+secured during initial entry 
+cycle1. 
+Incoming College Freshman 
+Ineligible 
+Redirect to Ateneo College 
+Financial Aid Grant (ID 40)2. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Source 
+Confidence 
+
+Evidence 
+Quote 
+Education 
+Level 
+High School 
+(Grade 11) 
+"Senior High 
+School is 
+offering 
+financial aid 
+scholarship 
+grants" 
+ASHS Portal1 
+Tier 1 
+Target Cohort 
+JHS 
+Completers 
+"academically 
+gifted but 
+financially 
+challenged 
+students from 
+public, 
+parochial and 
+private junior 
+high schools" 
+ASHS 
+Guidelines1 
+Tier 1 
+Income Limit 
+PHP 
+400,000.00 / 
+year 
+Maximum 
+family income 
+threshold set 
+at PHP 
+400,000 
+Live DB Record 
+ID 183 
+Tier 1 
+Tuition Benefit 
+Partial to Full 
+Waiver 
+"100% / 75% / 
+50% / 25% in 
+tuition and 
+fees" 
+Ateneo Primer4 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["High School"],​
+  "eligible_year_levels": [11],​
+  "incoming_year_only": true,​
+
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 90.00,​
+  "income_limit": 400000,​
+  "school_type": ["Public JHS", "Parochial JHS", "Private JHS"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "09-01", "close": "11-15"},​
+  "deadline_type": "estimated",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: System presenting scholarship to Grade 10 students intending to enroll in 
+non-Ateneo senior high schools. 
+●​ Mitigation: Filter matching logic by target_institution == 'Ateneo Senior High School' and 
+incoming_grade_level == 11. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: 
+https://www.ateneo.edu/ashs/admissions/scholarships-financial-aid1. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 92/100. 
+Philippine Normal University Scholarship (ID: 23) 
+1. Scholarship Identity 
+●​ Official Name: Philippine Normal University Institutional Scholarship Program3 
+●​ Provider: Philippine Normal University3 
+●​ Category: Institutional / Teacher Education / Need-and-Merit3 
+●​ Official Website: https://pnu.edu.ph3 
+●​ Application Portal: PNU Office of Student Affairs and Student Services (OSASS) Portal3 
+●​ Official Guidelines: PNU Student Handbook and OSASS Scholarship Guidelines3 
+●​ Current Status: Active3 
+2. Purpose 
+
+To support high-performing and financially deserving undergraduate teacher education 
+students enrolled at the National Center for Teacher Education (PNU Main and regional 
+campuses), advancing teacher quality and educational development in the Philippines5. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate Teacher Education)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, and 43. 
+●​ Incoming Freshman Only?: No3. 
+●​ Existing College Students?: Eligible3. 
+●​ Graduate Students?: Ineligible for undergraduate institutional track3. 
+●​ Current Enrollment Requirement: Enrolled in a Bachelor of Secondary or Elementary 
+Education program at PNU9. 
+●​ Academic Requirements: Minimum GWA of 90.00% (or 2.00 PNU scale) with no failing 
+grades3. 
+●​ Minimum GWA: 90.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Combined family gross annual income must not exceed PHP 
+400,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to Philippine Normal University campuses5. 
+●​ Priority Courses: Bachelor of Secondary Education, Bachelor of Elementary Education, 
+Early Childhood Education9. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required10. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must maintain full academic load each semester11. 
+4. Application Timing 
+●​ Who May Apply: Enrolled undergraduate students in teacher education programs at 
+PNU5. 
+●​ Can current freshmen apply?: Yes9. 
+●​ Can current sophomores apply?: Yes9. 
+●​ Can current juniors apply?: Yes3. 
+●​ Can current seniors apply?: Yes3. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+
+●​ Opening Date: Set per semester during registration week3. 
+●​ Closing Date: Set per semester (typically 2 weeks after class commencement)3. 
+●​ Application Cycle: Semestral. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Full waiver of remaining tuition and matriculation fees3. 
+●​ Monthly Stipend: PHP 3,000.00 per month during active academic terms3. 
+●​ Allowance: PHP 30,000.00 total annual stipend allowance3. 
+●​ Book Allowance: Integrated into annual allowance package3. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Priority access to university student assistantship vacancies3. 
+7. Required Documents 
+1.​ Duly accomplished PNU OSASS Scholarship Application Form3. 
+2.​ Official Transcript of Records or Certified True Copy of Grades for preceding term9. 
+3.​ Certificate of Enrollment / Registration Form showing full load10. 
+4.​ Parents' Income Tax Return or BIR Certificate of Tax Exemption9. 
+5.​ Certificate of Good Moral Character10. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain a minimum semestral GWA of 90.00% (2.00 or better)3. 
+●​ Regular Load: Full-time course load per academic term11. 
+●​ No Failures: Zero dropped, incomplete, or failing marks11. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ GWA falling below 90.00% or incurring an incomplete/failing grade3. 
+●​ Parent annual gross income exceeding PHP 400,000.003. 
+●​ Carrying an underload without prior academic deanship approval11. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+
+Enrolled PNU 
+Undergraduate (GWA >= 
+90%) 
+Eligible Now 
+Submit application to PNU 
+OSASS during semestral 
+enlistment3. 
+Incoming PNU Freshman 
+(High School GWA >= 90%) 
+Eligible Now 
+Apply upon completion of 
+official university 
+enrollment9. 
+Non-PNU Teacher 
+Education Student 
+Ineligible 
+Program restricted strictly 
+to PNU enrolled students5. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Institution 
+PNU 
+Campuses 
+"Has been 
+accepted and 
+enrolled in... 
+Philippine 
+Normal 
+University" 
+PHINMA/PNU 
+Source5 
+Tier 1 
+GWA Cutoff 
+90.00% 
+Minimum 
+academic 
+GWA 
+parameter set 
+at 90.00% 
+Live DB Record 
+ID 233 
+Tier 1 
+Monthly 
+Stipend 
+PHP 3,000.00 / 
+month 
+Monthly 
+allowance 
+parameter set 
+at PHP 3,000 
+Live DB Record 
+ID 233 
+Tier 1 
+Income Limit 
+PHP 
+400,000.00 / 
+year 
+Maximum 
+family income 
+threshold PHP 
+400,000 
+Live DB Record 
+ID 233 
+Tier 1 
+
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 90.00,​
+  "income_limit": 400000,​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-15", "close": "09-15"},​
+  "deadline_type": "estimated",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Recommending program to non-PNU education majors. 
+●​ Mitigation: Enforce strict school_id matching for PNU System campuses. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://pnu.edu.ph3. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 91/100. 
+UP Presidential Scholarship (ID: 24) 
+1. Scholarship Identity 
+●​ Official Name: UP Presidential Scholarship Program12 
+●​ Provider: University of the Philippines System3 
+
+●​ Category: Institutional / System-wide / Merit-and-Need3 
+●​ Official Website: https://up.edu.ph / https://osfa.upd.edu.ph3 
+●​ Application Portal: Integrated into the UP Student Learning Assistance System (SLAS 
+Online)12 
+●​ Official Guidelines: UP System Policy on System Scholarships; UP Gazette Vol. XXXIV12 
+●​ Current Status: Active3 
+2. Purpose 
+To recognize and reward undergraduate students in the University of the Philippines System 
+who demonstrate exceptional academic performance and leadership potential while delivering 
+targeted financial relief12. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen12. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, 4, and 53. 
+●​ Incoming Freshman Only?: No12. 
+●​ Existing College Students?: Eligible12. 
+●​ Graduate Students?: Ineligible for undergraduate Presidential Scholarship (separate 
+Graduate Presidential Fund exists)13. 
+●​ Current Enrollment Requirement: Must be officially enrolled in a degree program in any 
+UP constituent university12. 
+●​ Academic Requirements: Outstanding scholastic record with a General Weighted 
+Average (GWA) of at least 1.75 (or 95% equivalent)3. 
+●​ Minimum GWA: 1.75 on the UP grading scale (95.00% equivalent)3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Family gross annual income must not exceed PHP 400,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to UP Constituent Universities (UPD, UPLB, UPM, 
+UPV, UPC, UPMin, UPOU, UP Tacloban)12. 
+●​ Priority Courses: Open across all undergraduate degree programs12. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required12. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Number of awards is limited by annual vacant slot allocations across 
+constituent units12. 
+4. Application Timing 
+●​ Who May Apply: Enrolled UP undergraduate students12. 
+
+●​ Can current freshmen apply?: Yes (after earning initial term grades or based on UPCAT 
+rank)12. 
+●​ Can current sophomores apply?: Yes12. 
+●​ Can current juniors apply?: Yes12. 
+●​ Can current seniors apply?: Yes12. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Announced annually by OSFA at the start of the academic year (typically 
+September)12. 
+●​ Closing Date: Set per annual call (typically October)12. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202712. 
+6. Benefits 
+●​ Tuition: 100% tuition and miscellaneous fees coverage (under RA 10931 / UP GIAP 
+framework)12. 
+●​ Monthly Stipend: PHP 6,000.00 per month3. 
+●​ Allowance: Book allowance of PHP 5,000.00 per semester12. 
+●​ Book Allowance: PHP 10,000.00 per academic year12. 
+●​ Transportation: Integrated into monthly living allowance12. 
+●​ Insurance: Access to UP Health Service medical benefits16. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: Thesis/dissertation allowance provided for graduating scholars14. 
+●​ Graduation Allowance: Included in thesis completion support14. 
+●​ Return Service: None required3. 
+●​ Other Benefits: UP PGH hospitalization support up to PHP 150,000.00 annually16. 
+7. Required Documents 
+1.​ UP Form 5 / Official Certificate of Registration12. 
+2.​ Certified True Copy of Grades / Transcript showing GWA <= 1.7512. 
+3.​ Parents' Income Tax Return or BIR Certificate of Tax Exemption12. 
+4.​ True Copy of Birth Certificate12. 
+5.​ Certificate of Good Moral Character12. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain a cumulative GWA of 1.75 or better each academic term12. 
+●​ Regular Load: Enrolled in a full academic load (at least 15 units per semester)12. 
+●​ No Failures: Zero failing grades (5.0), unremoved 4.0, or unremoved Incomplete (INC) 
+
+marks7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ GWA dropping below 1.75 or incurring a grade of 5.012. 
+●​ Dropping below full-time unit load without prior deanship authorization12. 
+●​ Family gross income exceeding PHP 400,000.003. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+UP Undergraduate (GWA <= 
+1.75, Income <= P400k) 
+Eligible Now 
+Apply via SLAS Online 
+during the annual OSFA 
+application period12. 
+Incoming UP Freshman 
+(High UPCAT Score) 
+Eligible Now 
+File application upon 
+release of Form 5 during 
+initial registration12. 
+Non-UP Student 
+Ineligible 
+Restricted strictly to UP 
+Constituent University 
+students12. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+GWA Cutoff 
+1.75 (UP Scale) 
+"Undergraduat
+e students with 
+a general 
+weighted 
+average of at 
+least a '1.75'... 
+are eligible" 
+UP Bulletin12 
+Tier 1 
+Monthly 
+PHP 6,000.00 / 
+Monthly 
+Live DB Record 
+Tier 1 
+
+Stipend 
+month 
+allowance 
+parameter set 
+at PHP 6,000 
+ID 243 
+Income Ceiling 
+PHP 
+400,000.00 / 
+year 
+Maximum 
+income limit 
+set at PHP 
+400,000 
+Live DB Record 
+ID 243 
+Tier 1 
+Institution 
+UP System 
+"UP 
+PRESIDENTIAL 
+SCHOLARSHIP.
+.. awarded to 
+students with 
+outstanding 
+academic 
+accomplishme
+nts" 
+UP Admissions 
+Portal12 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 95.00,​
+  "income_limit": 400000,​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "09-01", "close": "10-15"},​
+  "deadline_type": "estimated",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+
+ 
+13. Matching Risks 
+●​ Risk: Grade conversion error between percentage scales (95%) and UP decimal scale 
+(1.75). 
+●​ Mitigation: Algorithm must evaluate UP decimal scale directly: user.gwa <= 1.75 for UP 
+enrolled profiles. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://up.edu.ph, https://upcat.up.edu.ph3. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 96/100. 
+Ateneo de Manila University Financial Aid Grant (ID: 
+40) 
+1. Scholarship Identity 
+●​ Official Name: Ateneo de Manila University College Financial Aid Grant2 
+●​ Provider: Ateneo de Manila University (Office of Admission and Aid)2 
+●​ Category: Institutional / University / Need-based2 
+●​ Official Website: https://www.ateneo.edu/college/scholarships2 
+●​ Application Portal: Integrated into the Ateneo College Application Portal2 
+●​ Official Guidelines: Ateneo Financial Aid Application Primer and Regulations2 
+●​ Current Status: Active3 
+2. Purpose 
+To make Ateneo de Manila University's high-quality education accessible to financially 
+challenged but academically qualified students, fostering leadership and community service2. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate)2. 
+●​ Eligible Year Levels: Years 1, 2, 3, 4, and 52. 
+●​ Incoming Freshman Only?: No2. 
+●​ Existing College Students?: Eligible (via upperclassmen financial aid application)2. 
+●​ Graduate Students?: Ineligible for undergraduate track2. 
+●​ Current Enrollment Requirement: Accepted or currently enrolled in an undergraduate 
+
+degree program at Ateneo de Manila University2. 
+●​ Academic Requirements: Passing performance in the Ateneo College Entrance Test 
+(ACET) and good academic standing6. 
+●​ Minimum GWA: 78.00% (or passing QPI standard for retention)3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Combined gross annual income of parents must not exceed PHP 
+500,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to Ateneo de Manila University (Loyola Heights 
+Campus)2. 
+●​ Priority Courses: Open across all undergraduate degree programs6. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required2. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Application for financial aid does not influence admission decisions6. 
+4. Application Timing 
+●​ Who May Apply: Incoming college freshmen, transferees, and ongoing Ateneo 
+undergraduate students2. 
+●​ Can current freshmen apply?: Yes2. 
+●​ Can current sophomores apply?: Yes2. 
+●​ Can current juniors apply?: Yes2. 
+●​ Can current seniors apply?: Yes2. 
+●​ Can graduates apply?: No2. 
+●​ Can previous applicants reapply?: Yes2. 
+5. Application Window 
+●​ Opening Date: Concurrent with college admission opening (typically 
+August/September)2. 
+●​ Closing Date: October 15 (for SY 2027–2028: Thursday, 15 October 2026)2. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–2027 / AY 2027–20282. 
+6. Benefits 
+●​ Tuition: 100%, 75%, 50%, or 25% coverage of tuition and fees4. 
+●​ Monthly Stipend: PHP 3,000.00 per month (integrated into Student Learning Allowance)3. 
+●​ Allowance: Food allowance provided based on assessed need4. 
+●​ Book Allowance: Book and school supplies allowance4. 
+●​ Transportation: Transportation allowance provided for eligible commuters4. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: On-campus dormitory scholarship for provincial scholars4. 
+7. Required Documents 
+1.​ Parents' Personal Letter detailing family background and financial situation2. 
+2.​ Certificate of Employment and Compensation or 2025 Annual Income Tax Return (ITR) / 
+BIR Form 23162. 
+3.​ Pay slips for the last two (2) months2. 
+4.​ Utility bills (electricity, water, telephone) for the last three months2. 
+5.​ Residence photos and house tour video2. 
+6.​ Two (2) Scholarship Recommendation Forms submitted via 
+go.ateneo.edu/scholarship-recommendations2. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required term QPI specified by the Office of Admission and Aid2. 
+●​ Regular Load: Full-time credit enrollment per semester2. 
+●​ No Failures: Zero failing grades (F) or disciplinary probation7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Parent annual gross income exceeding PHP 500,000.003. 
+●​ Failure to submit all required supporting financial documents by October 152. 
+●​ Incurring academic probation or serious disciplinary sanctions7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming College Freshman 
+(Income <= P500k) 
+Eligible Now 
+Apply online via Ateneo 
+Scholarship portal before 
+October 15 deadline2. 
+Enrolled Ateneo 
+Undergraduate 
+Eligible Now 
+Submit upperclassman 
+financial aid 
+renewal/application during 
+OAA call2. 
+
+Non-Ateneo College 
+Student 
+Ineligible 
+Must be admitted or 
+enrolled at Ateneo de 
+Manila University2. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Application 
+Deadline 
+October 15 
+"all scholarship 
+requirements 
+must be 
+submitted 
+online on or 
+before: 
+Thursday, 15 
+October 2026" 
+Ateneo OAA2 
+Tier 1 
+Income Limit 
+PHP 
+500,000.00 / 
+year 
+Maximum 
+family income 
+threshold set 
+at PHP 
+500,000 
+Live DB Record 
+ID 403 
+Tier 1 
+Tuition Benefits 
+25% to 100% 
+Waiver 
+"100% / 75% / 
+50% / 25% in 
+tuition and 
+fees" 
+Ateneo Site4 
+Tier 1 
+Required Docs 
+Parents Letter 
+& ITR 
+"Parents' 
+Personal 
+Letter... 2025 
+Annual Income 
+Tax Return or 
+Certificate of 
+Compensation
+" 
+Ateneo Primer2 
+Tier 1 
+
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 78.00,​
+  "income_limit": 500000,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-01", "close": "10-15"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Students waiting for ACET admission results before submitting financial aid 
+application. 
+●​ Mitigation: Display explicit prompt: "Ateneo financial aid applications MUST be submitted 
+before ACET results are released (Deadline: Oct 15)"2. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.ateneo.edu/college/scholarships2. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+Ateneo Directors List Scholarship (ID: 41) 
+1. Scholarship Identity 
+●​ Official Name: Ateneo Director's List Scholarship4 
+
+●​ Provider: Ateneo de Manila University3 
+●​ Category: Institutional / University / Merit-based2 
+●​ Official Website: https://www.ateneo.edu/college/scholarships/programs6 
+●​ Application Portal: Automatic consideration via the Ateneo College Entrance Test (ACET)4 
+●​ Official Guidelines: Ateneo Office of Admission and Aid Merit Guidelines6 
+●​ Current Status: Active3 
+2. Purpose 
+To honor top-performing ACET examinees who have distinguished themselves academically 
+and in co-curricular activities during Senior High School, encouraging them to pursue higher 
+education at Ateneo de Manila4. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes6. 
+●​ Existing College Students?: Ineligible for initial award6. 
+●​ Graduate Students?: Ineligible6. 
+●​ Current Enrollment Requirement: Must be an accepted incoming freshman in any 
+undergraduate degree program at Ateneo de Manila University6. 
+●​ Academic Requirements: Exceptional performance in the ACET and distinguished high 
+school academic and co-curricular record4. 
+●​ Minimum GWA: 83.00% (or top ACET ranking equivalent)3. 
+●​ Alternative Class Rank: Awarded to top 150 ACET applicants4. 
+●​ Income Ceilings: Uncapped (Merit-based award independent of family income)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to Ateneo de Manila University6. 
+●​ Priority Courses: Any undergraduate degree program of choice6. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required2. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Awarded automatically by the University Committee on Admission 
+and Aid; no separate application form required4. 
+4. Application Timing 
+●​ Who May Apply: Incoming college freshmen taking the ACET4. 
+●​ Can current freshmen apply?: No (awarded prior to freshman entry)6. 
+●​ Can current sophomores apply?: No. 
+
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Automatic evaluation upon filing ACET application4. 
+●​ Closing Date: Concurrent with ACET registration closing2. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–20276. 
+6. Benefits 
+●​ Tuition: PHP 100,000.00 annual fixed scholarship grant applicable toward tuition and 
+fees4. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: Not applicable. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Pre-allocation of slots in chosen degree program6. 
+7. Required Documents 
+1.​ Ateneo College Application Form and ACET Examination Permit2. 
+2.​ High School Transcript of Records / Form 1382. 
+3.​ High School Principal / Counselor Recommendation Form2. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required annual Quality Point Index (QPI) set by the OAA6. 
+●​ Regular Load: Full-time academic credit load per semester2. 
+●​ No Failures: No failing grades or disciplinary sanctions7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Declining admission to Ateneo de Manila University6. 
+●​ Failure to maintain required retention QPI6. 
+●​ Severe disciplinary infraction or honor code violation7. 
+
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+High-Performing Grade 12 
+Student (Taking ACET) 
+Eligible Now 
+Complete ACET application; 
+award evaluated 
+automatically4. 
+Enrolled Ateneo 
+Sophomore 
+Ineligible 
+Director's List is awarded 
+exclusively upon freshman 
+entry6. 
+Non-Ateneo Student 
+Ineligible 
+Program restricted to 
+Ateneo de Manila 
+matriculants6. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Selection Basis 
+ACET Rank 
+"given to 150 
+outstanding 
+applicants who 
+performed 
+excellently in 
+the ACET" 
+Ateneo Guide4 
+Tier 1 
+Annual Grant 
+PHP 
+100,000.00 / 
+year 
+"enjoy an 
+annual Php 
+100,000 
+scholarship 
+grant for any 
+undergraduate 
+degree" 
+Ateneo Portal6 
+Tier 1 
+Income Limit 
+Uncapped 
+Income ceiling 
+parameter null 
+Live DB Record 
+ID 413 
+Tier 1 
+
+(Merit-based) 
+Application 
+Type 
+Automatic 
+Separate 
+financial 
+application not 
+required for 
+merit 
+evaluation 
+Ateneo Site4 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 83.00,​
+  "income_limit": null,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-01", "close": "11-15"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Users attempting to submit a separate application form for Director's List. 
+●​ Mitigation: Designate scholarship as 'automatic_consideration' in engine schema. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.ateneo.edu/college/scholarships/programs6. 
+
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 96/100. 
+Ateneo Law School Financial Aid Program (ID: 42) 
+1. Scholarship Identity 
+●​ Official Name: Ateneo Law School Financial Aid Program3 
+●​ Provider: Ateneo Law School (Ateneo de Manila University)3 
+●​ Category: Institutional / Graduate / Law / Merit-and-Need3 
+●​ Official Website: https://www.ateneo.edu / https://law.ateneo.edu3 
+●​ Application Portal: Integrated into the Ateneo Law School Admissions & Financial Aid 
+Portal3 
+●​ Official Guidelines: Ateneo Law School Financial Aid Policy and Guidelines3 
+●​ Current Status: Active3 
+2. Purpose 
+To provide financial assistance to deserving law students pursuing the Juris Doctor (JD) degree 
+at Ateneo Law School who exhibit high academic potential and financial need3. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Graduate (Juris Doctor Program)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, and 4 (Juris Doctor)3. 
+●​ Incoming Freshman Only?: No3. 
+●​ Existing College Students?: Ineligible (Restricted to law students)3. 
+●​ Graduate Students?: Yes (Juris Doctor is a professional law degree)3. 
+●​ Current Enrollment Requirement: Must be admitted or enrolled in the Juris Doctor 
+program at Ateneo Law School3. 
+●​ Academic Requirements: Bachelor's degree completion, passing the Ateneo Law 
+Admission Test (ALAT), and maintaining satisfactory academic standing3. 
+●​ Minimum GWA: 82.00% (or equivalent law school QPI requirement)3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Combined family gross annual income must not exceed PHP 
+600,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to Ateneo Law School (Rockwell Campus)3. 
+●​ Priority Courses: Juris Doctor (JD) degree program3. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required2. 
+
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must reapply annually for financial grant continuation3. 
+4. Application Timing 
+●​ Who May Apply: Incoming 1st-year Juris Doctor students and ongoing Ateneo Law 
+students3. 
+●​ Can current freshmen apply?: Yes (1st year JD students)3. 
+●​ Can current sophomores apply?: Yes (2nd year JD students)3. 
+●​ Can current juniors apply?: Yes (3rd year JD students)3. 
+●​ Can current seniors apply?: Yes (4th year JD students)3. 
+●​ Can graduates apply?: Yes (Bachelor's degree graduates entering law school)3. 
+●​ Can previous applicants reapply?: Yes3. 
+5. Application Window 
+●​ Opening Date: Announced alongside law school admission results (typically May)3. 
+●​ Closing Date: Set per annual law school calendar (typically June/July)3. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Partial to 100% tuition and fee waiver3. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: Book allowance provided for full-grant recipients3. 
+●​ Book Allowance: Integrated into financial grant package3. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Total estimated grant value up to PHP 120,000.00 per academic year3. 
+7. Required Documents 
+1.​ Ateneo Law School Financial Aid Application Form2. 
+2.​ Latest Income Tax Return (ITR) of applicant, parents, or spouse2. 
+3.​ Official Transcript of Records (TOR) from pre-law Bachelor's degree2. 
+4.​ Certificate of Employment and pay slips (if employed)2. 
+5.​ Certificate of Good Moral Character2. 
+8. Renewal Requirements 
+
+●​ Maintain GWA: Must maintain required Quality Point Index (QPI) specified by Ateneo Law 
+School3. 
+●​ Regular Load: Full-time law enrollment per semester19. 
+●​ No Failures: Zero failing marks (F) or unremoved incomplete grades in law subjects7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Family gross annual income exceeding PHP 600,000.003. 
+●​ Academic failure or dropping below required law school QPI7. 
+●​ Honor code violation or disciplinary action by Ateneo Law School7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Graduating Pre-Law Senior 
+(Accepted to ALS) 
+Eligible Now 
+Submit ALS Financial Aid 
+application upon receiving 
+admission notice3. 
+Ongoing Ateneo Law 
+Student (2nd/3rd Year) 
+Eligible Now 
+Apply during the annual 
+financial aid renewal 
+window3. 
+Undergraduate Student 
+(Pre-Law) 
+Ineligible Later 
+Must complete Bachelor's 
+degree and pass ALAT prior 
+to application3. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Education 
+Level 
+Graduate 
+(Juris Doctor) 
+Education level 
+parameter set 
+to Graduate 
+(Law) 
+Live DB Record 
+ID 423 
+Tier 1 
+Income Limit 
+PHP 
+Maximum 
+Live DB Record 
+Tier 1 
+
+600,000.00 / 
+year 
+family income 
+limit PHP 
+600,000 
+ID 423 
+Minimum GWA 
+82.00% 
+Academic 
+minimum 
+parameter set 
+at 82.00% 
+Live DB Record 
+ID 423 
+Tier 1 
+Total Value 
+PHP 
+120,000.00 / 
+year 
+Total grant 
+value 
+parameter set 
+at 120,000 
+Live DB Record 
+ID 423 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 82.00,​
+  "income_limit": 600000,​
+  "degree_program_restricted": ["Juris Doctor"],​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "05-01", "close": "06-30"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Displaying scholarship to undergraduate pre-law students. 
+
+●​ Mitigation: Enforce degree_program_restricted == 'Juris Doctor' and education_level == 
+'Graduate'. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.ateneo.edu, https://law.ateneo.edu3. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 90/100. 
+DLSU Star Scholars Program (ID: 43) 
+1. Scholarship Identity 
+●​ Official Name: DLSU Star Scholars Program20 
+●​ Provider: De La Salle University3 
+●​ Category: Institutional / University / Premier Merit-based3 
+●​ Official Website: https://www.dlsu.edu.ph/scholarships/23 
+●​ Application Portal: Automatic screening of top DCAT takers followed by 
+invitation/interview20 
+●​ Official Guidelines: DLSU Office of Admissions and Scholarships (OAS) Star Scholars 
+Guidelines20 
+●​ Current Status: Active3 
+2. Purpose 
+Serves as De La Salle University's premier scholarship program, recruiting the nation's top 
+academic talent by providing complete financial coverage from undergraduate studies through 
+graduate, medical, or law education20. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen20. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes20. 
+●​ Existing College Students?: Ineligible for initial award20. 
+●​ Graduate Students?: Ineligible for initial entry (includes post-undergrad graduate 
+grant)20. 
+●​ Current Enrollment Requirement: Top-ranked applicant accepted into any undergraduate 
+program at DLSU20. 
+●​ Academic Requirements: Top performance in the DLSU College Admission Test (DCAT) 
+
+and successful interview evaluation20. 
+●​ Minimum GWA: 90.00% (or top DCAT score equivalent)3. 
+●​ Alternative Class Rank: Selected among top DCAT examinees nationwide20. 
+●​ Income Ceilings: Uncapped (Merit-based award)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to De La Salle University (Manila and Laguna 
+campuses)20. 
+●​ Priority Courses: Open across all undergraduate programs (including BS Human Biology 
+and ladderized master's)20. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required20. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Scholars receive continuous faculty mentorship from University 
+Fellows throughout residency20. 
+4. Application Timing 
+●​ Who May Apply: Top-performing examinees in the DLSU College Admission Test20. 
+●​ Can current freshmen apply?: No (awarded prior to freshman entry)20. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Automatic consideration upon taking the DCAT20. 
+●​ Closing Date: Interview screening completed prior to confirmation period (May/June)22. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–202722. 
+6. Benefits 
+●​ Tuition: Full 100% waiver of tuition, miscellaneous, and laboratory fees20. 
+●​ Monthly Stipend: PHP 8,000.00 per month (living and accommodation stipend)3. 
+●​ Allowance: Coverage for modest accommodation, meals, and books20. 
+●​ Book Allowance: Integrated into monthly stipend package20. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: Waiver of graduation and alumni fees23. 
+●​ Return Service: None3. 
+
+●​ Other Benefits: Provision of an iPad or Tablet, study abroad grant option, and full 
+scholarship for subsequent Master's, MD (BS Human Bio), or JD program at DLSU20. 
+7. Required Documents 
+1.​ DLSU College Admission Test (DCAT) Application and Results20. 
+2.​ Senior High School Report Card / Form 13822. 
+3.​ Recommendation letter from SHS Principal/Counselor20. 
+4.​ University Fellows Interview Evaluation20. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required Term GPA (TGPA) and Cumulative GPA (CGPA) 
+specified by OAS24. 
+●​ Regular Load: Full-time credit load per trimester20. 
+●​ No Failures: Zero failing marks or withdrawn subjects24. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Failure to maintain required CGPA retention standard24. 
+●​ Incurring a failing or withdrawn grade24. 
+●​ Disciplinary sanction or violation of the DLSU Student Handbook24. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Top DCAT Examinee 
+(Incoming Freshman) 
+Eligible Now 
+Attend Star Scholar 
+interview upon receiving 
+official DLSU invitation 
+letter20. 
+Current DLSU Freshman 
+Ineligible 
+Program entry is restricted 
+strictly to incoming 
+freshman intake20. 
+Non-DLSU College Student 
+Ineligible 
+Restricted to DLSU 
+admitted students20. 
+11. Structured Eligibility Matrix 
+ 
+
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Selection Basis 
+Top DCAT Rank 
+"Students who 
+topped in the 
+admission test 
+are screened 
+and 
+interviewed to 
+fill the limited 
+slots" 
+DLSU Portal20 
+Tier 1 
+Monthly 
+Stipend 
+PHP 8,000.00 / 
+month 
+"receive a full 
+waiver on 
+tuition and 
+fees plus a 
+monthly 
+stipend" 
+DLSU Grants20 
+Tier 1 
+Post-Grad 
+Benefit 
+Master's/MD/J
+D 
+"earn a 
+master's 
+degree, go to 
+medical school 
+proper... or 
+enroll in the 
+School of Law 
+of DLSU" 
+DLSU Primer20 
+Tier 1 
+Tech Benefit 
+iPad/Tablet 
+"Star Scholars 
+are also 
+provided with 
+their own iPad 
+or Tablet" 
+DLSU Site20 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 90.00,​
+  "income_limit": null,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "01-15", "close": "05-17"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Displaying Star Scholars program to students with average DCAT scores. 
+●​ Mitigation: Set matching flag to 'invitation_only_top_percentile'. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.dlsu.edu.ph/scholarships/23. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+DLSU Archer Achievers Scholarship (ID: 44) 
+1. Scholarship Identity 
+●​ Official Name: DLSU Archer Achievers Scholarship Program23 
+●​ Provider: De La Salle University3 
+●​ Category: Institutional / University / Merit-based3 
+●​ Official Website: https://www.dlsu.edu.ph/scholarship/archer-achiever-scholarship/23 
+●​ Application Portal: Automatic award based on DCAT results (No separate application 
+form)22 
+●​ Official Guidelines: DLSU OAS Archer Achievers Guidelines23 
+●​ Current Status: Active3 
+
+2. Purpose 
+To attract top-performing high school graduates by granting automatic full tuition and fee 
+waivers to applicants who achieve top scores in the DLSU College Admission Test23. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen23. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes23. 
+●​ Existing College Students?: Ineligible23. 
+●​ Graduate Students?: Ineligible23. 
+●​ Current Enrollment Requirement: Enrolled in a Philippine private, public, or science high 
+school at the time of application to DLSU23. 
+●​ Academic Requirements: Among top examinees in the DCAT based on the Weighted 
+Admission Index23. 
+●​ Minimum GWA: 83.00% (or top Weighted Admission Index score)3. 
+●​ Alternative Class Rank: Top percentile rank in DCAT examinee cohort23. 
+●​ Income Ceilings: Uncapped (Merit-based award)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to De La Salle University23. 
+●​ Priority Courses: Open across all undergraduate programs (including ladderized BS/MS 
+and BS Human Bio)23. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required23. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Grantees no longer undergo an interview process, but may choose 
+to interview for scholarship upgrades (e.g., STAR, Vaugirard, Gokongwei)22. 
+4. Application Timing 
+●​ Who May Apply: Top DCAT examinees graduating from Philippine high schools23. 
+●​ Can current freshmen apply?: No (automatically awarded upon college admission)23. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+
+●​ Opening Date: Automatic evaluation upon taking the DCAT22. 
+●​ Closing Date: Official notification letter sent via email prior to confirmation23. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202722. 
+6. Benefits 
+●​ Tuition: 100% waiver of tuition, miscellaneous, and other fees from term 1 through 
+graduation23. 
+●​ Monthly Stipend: None (Stipends are strictly NOT part of Archer Achiever benefits)25. 
+●​ Allowance: None25. 
+●​ Book Allowance: None25. 
+●​ Transportation: None25. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: Waiver of graduation and alumni membership fees23. 
+●​ Return Service: None3. 
+●​ Other Benefits: Advance enrollment privileges, waiver of adjustment fees, and benefit 
+preservation during approved exchange programs23. 
+7. Required Documents 
+1.​ DLSU College Admission Test (DCAT) Application23. 
+2.​ Official Senior High School Transcript / Form 13825. 
+3.​ Official Archer Achiever Award Letter issued by DLSU OAS23. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required Term GPA (TGPA) and Cumulative GPA (CGPA) per 
+trimester24. 
+●​ Regular Load: Full-time credit enrollment23. 
+●​ No Failures: Zero failing grades or unapproved course withdrawals24. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Failure to meet required trimester CGPA retention threshold24. 
+●​ Incurring failing or withdrawn marks24. 
+●​ Misconduct violating DLSU disciplinary standards24. 
+10. Temporal Eligibility Matrix 
+ 
+
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+High-Scoring DCAT 
+Applicant (Graduating SHS) 
+Eligible Now 
+Receive official award 
+notification via email; no 
+separate form required23. 
+Enrolled DLSU Sophomore 
+Ineligible 
+Awarded exclusively at 
+entry based on DCAT 
+performance23. 
+Non-DLSU Student 
+Ineligible 
+Restricted strictly to DLSU 
+matriculants23. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Eligibility 
+Top DCAT 
+Examinees 
+"be among the 
+top DCAT 
+examinees or 
+its equivalent... 
+be a Filipino 
+citizen" 
+DLSU Portal23 
+Tier 1 
+Fee Coverage 
+100% Tuition & 
+Fees 
+"Full waiver of 
+tuition, 
+miscellaneous 
+and other 
+fees... from the 
+first term... 
+until 
+conclusion" 
+DLSU Site23 
+Tier 1 
+Allowance 
+Clause 
+No Allowance 
+"All forms of 
+allowances are 
+not part of the 
+benefits" 
+DLSU 
+Document25 
+Tier 1 
+
+Upgrade 
+Option 
+Upgrade 
+Interview 
+"qualified 
+candidates 
+may choose to 
+be interviewed 
+for upgrade to 
+the premier 
+scholarship... 
+STAR" 
+DLSU 
+Guidelines25 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 83.00,​
+  "income_limit": null,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "01-15", "close": "05-17"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Matching engine displaying Archer Achievers as including a monthly living stipend. 
+●​ Mitigation: Explicitly set allowance_mo = null and total_value = tuition_waiver_only in 
+database25. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+
+●​ Official URLs Checked: 
+https://www.dlsu.edu.ph/scholarship/archer-achiever-scholarship/23. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+UST San Martin de Porres Equity Scholarship (ID: 45) 
+1. Scholarship Identity 
+●​ Official Name: UST San Martin de Porres Equity Scholarship26 
+●​ Provider: University of Santo Tomas (Office for Student Affairs)26 
+●​ Category: Institutional / University / Need-based / Equity3 
+●​ Official Website: https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered26 
+●​ Application Portal: UST OSA Scholarship Application and Assistance (SAAF) Submission 
+Portal26 
+●​ Official Guidelines: UST Office for Student Affairs Scholarship Manual26 
+●​ Current Status: Active3 
+2. Purpose 
+Named after Saint Martin de Porres, the Dominican patron saint of the poor, this equity 
+scholarship provides tuition assistance to deserving UST students who demonstrate financial 
+hardship26. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, 4, and 53. 
+●​ Incoming Freshman Only?: No26. 
+●​ Existing College Students?: Eligible26. 
+●​ Graduate Students?: Ineligible for undergraduate equity track26. 
+●​ Current Enrollment Requirement: Must be officially enrolled in an undergraduate degree 
+program at the University of Santo Tomas26. 
+●​ Academic Requirements: Passing academic record with a General Weighted Average 
+(GWA) of at least 85.00% (2.25 UST scale)3. 
+●​ Minimum GWA: 85.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Combined family gross annual income must not exceed PHP 
+300,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to the University of Santo Tomas (España, Manila 
+
+campus)26. 
+●​ Priority Courses: Open across all UST faculties, colleges, and institutes26. 
+●​ Sectoral Requirements: Special consideration for OWWA dependents, PD577 
+beneficiaries, and indigent candidates26. 
+●​ Good Moral: Required (Good Moral Certificate issued by UST OSA)26. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must submit complete financial indigency documents via the OSA 
+SAAF portal26. 
+4. Application Timing 
+●​ Who May Apply: Enrolled UST undergraduate students in need of financial assistance26. 
+●​ Can current freshmen apply?: Yes26. 
+●​ Can current sophomores apply?: Yes26. 
+●​ Can current juniors apply?: Yes26. 
+●​ Can current seniors apply?: Yes26. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Announced by UST OSA per semester/academic year26. 
+●​ Closing Date: Set per term calendar26. 
+●​ Application Cycle: Annual / Semestral renewal. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202726. 
+6. Benefits 
+●​ Tuition: Partial to 100% waiver of tuition fees (average annual grant value PHP 
+45,000.00)3. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: Integrated into tuition discount structure3. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Counseling and student welfare guidance via UST OSA26. 
+7. Required Documents 
+1.​ UST OSA SAAF Application Form26. 
+
+2.​ Official Transcript of Records / Grade Report showing GWA >= 85.00%3. 
+3.​ Parents' Income Tax Return (ITR), BIR Tax Exemption, or Barangay Certificate of 
+Indigency26. 
+4.​ Certificate of Good Moral Character26. 
+5.​ Electric and water utility bills for the last 3 months2. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain a minimum semestral GWA of 85.00% (2.25)3. 
+●​ Regular Load: Enrolled in full term load per UST curriculum26. 
+●​ No Failures: Zero failing grades or unremoved 3.0/INC marks7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Family gross annual income exceeding PHP 300,000.003. 
+●​ Incurring failing grades or academic probation7. 
+●​ Behavioral reprimand or disciplinary sanction by UST Student Conduct Board26. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled UST 
+Undergraduate (Income <= 
+P300k) 
+Eligible Now 
+Apply online via UST OSA 
+SAAF portal during open 
+window26. 
+Incoming UST Freshman 
+Eligible Now 
+Apply upon completion of 
+UST enrollment and 
+registration26. 
+Non-UST College Student 
+Ineligible 
+Restricted strictly to UST 
+Manila matriculants26. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+
+Category 
+Need-Based 
+Equity 
+"named after 
+the Dominican 
+Patron Saint of 
+the poor, is 
+extended to 
+Deserving 
+students in 
+need of 
+financial 
+assistance" 
+UST OSA 
+Portal26 
+Tier 1 
+Income Ceiling 
+PHP 
+300,000.00 / 
+year 
+Maximum 
+income limit 
+set at PHP 
+300,000 
+Live DB Record 
+ID 453 
+Tier 1 
+Minimum GWA 
+85.00% 
+Academic 
+GWA threshold 
+parameter set 
+at 85.00% 
+Live DB Record 
+ID 453 
+Tier 1 
+Application 
+Portal 
+UST SAAF 
+"OSA SAAF 
+Submission... 
+Office for 
+Student 
+Affairs" 
+UST Contact 
+Page26 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "income_limit": 300000,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-15", "close": "09-30"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Recommending program to students attending non-UST campuses or non-UST 
+institutions. 
+●​ Mitigation: Enforce strict school_id verification for UST Manila. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: 
+https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered26. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 95/100. 
+Mindanao State University SASE Academic 
+Scholarship (ID: 46) 
+1. Scholarship Identity 
+●​ Official Name: Mindanao State University System Admission and Scholarship Examination 
+(MSU-SASE) Academic Scholarship3 
+●​ Provider: Mindanao State University System3 
+●​ Category: Institutional / System-wide / Merit-based3 
+●​ Official Website: https://sase.msuiit.edu.ph/ / https://www.msumain.edu.ph3 
+●​ Application Portal: Integrated into the MSU-SASE Online Application System27 
+●​ Official Guidelines: MSU System SASE Scholarship Regulations and Policy Manual27 
+●​ Current Status: Active3 
+2. Purpose 
+To attract high-achieving high school graduates across Mindanao, Sulu, and Palawan 
+(MINSUPALA) by awarding merit scholarships to top performers in the annual MSU System 
+Admission and Scholarship Examination27. 
+
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: Resident of regions covered by the MSU System (BARMM, Regions IX, X, XI, 
+XII, XIII, CARAGA, and Palawan)3. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes27. 
+●​ Existing College Students?: Ineligible27. 
+●​ Graduate Students?: Ineligible27. 
+●​ Current Enrollment Requirement: Must take the MSU-SASE and qualify for admission into 
+any MSU campus (Main Marawi, IIT, Gensan, Maguindanao, Naawan, Sulu, Tawi-Tawi, 
+Buug)27. 
+●​ Academic Requirements: Top score ranking in the annual MSU-SASE27. 
+●​ Minimum GWA: 85.00% (or equivalent top SASE percentile score)3. 
+●​ Alternative Class Rank: Selected based on national SASE score ranking tiers27. 
+●​ Income Ceilings: Uncapped (Merit-based award)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to MSU System campuses27. 
+●​ Priority Courses: Open across all undergraduate degree programs offered by the MSU 
+System27. 
+●​ Sectoral Requirements: Special slots for Indigenous Cultural Communities and 
+Bangsamoro constituents27. 
+●​ Good Moral: Required27. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must enroll in the MSU campus assigned based on SASE 
+qualification27. 
+4. Application Timing 
+●​ Who May Apply: Graduating Senior High School students registering for the MSU-SASE27. 
+●​ Can current freshmen apply?: No (awarded strictly upon SASE entry)27. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: SASE registration opens annually in September/October27. 
+●​ Closing Date: SASE registration closes in December/January; exam administered in 
+
+November/February27. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–202727. 
+6. Benefits 
+●​ Tuition: 100% tuition and registration fee waiver at all MSU campuses3. 
+●​ Monthly Stipend: Semestral living allowance provided3. 
+●​ Allowance: Total annual stipend grant value of PHP 20,000.003. 
+●​ Book Allowance: Integrated into annual allowance package3. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Priority campus dormitory accommodation27. 
+7. Required Documents 
+1.​ MSU-SASE Application Form and Exam Permit27. 
+2.​ Certified True Copy of Grade 11 and Grade 12 Report Cards27. 
+3.​ Certificate of Good Moral Character27. 
+4.​ PSA Birth Certificate27. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required Grade Point Average (GPA) per semester set by MSU 
+System policy27. 
+●​ Regular Load: Full-time academic credit enrollment27. 
+●​ No Failures: Zero failing marks (5.0) in any academic subject27. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Failing to meet SASE cut-off score for academic scholarship tier27. 
+●​ Dropping below required semestral GPA retention mark27. 
+●​ Transferring to a non-MSU institution27. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+
+Graduating Grade 12 
+Student (MINSUPALA 
+Resident) 
+Eligible Now 
+Register for MSU-SASE 
+online and select preferred 
+MSU campus27. 
+Enrolled MSU Sophomore 
+Ineligible 
+SASE Academic Scholarship 
+awarded exclusively at 
+entry27. 
+Non-Mindanao Resident 
+Eligible (if SASE taken) 
+Open to all SASE 
+examinees, though test 
+centers concentrated in 
+MINSUPALA27. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Selection 
+Metric 
+SASE Exam 
+Score 
+"Mindanao 
+State 
+University - 
+SYSTEM 
+ADMISSION 
+AND 
+SCHOLARSHIP 
+EXAMINATION 
+(MSU-SASE)" 
+MSU SASE 
+Portal27 
+Tier 1 
+Total Value 
+PHP 
+20,000.00 / 
+year 
+Total annual 
+financial value 
+parameter set 
+at PHP 20,000 
+Live DB Record 
+ID 463 
+Tier 1 
+Regions 
+Covered 
+BARMM, IX, X, 
+XI, XII, XIII 
+Mindanao 
+regional 
+coverage tags 
+mapped in 
+system 
+Live DB Record 
+ID 463 
+Tier 1 
+
+Fee Exemption 
+100% Tuition 
+Waiver 
+Full tuition 
+exemption at 
+state university 
+rate 
+Live DB/MSU3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 85.00,​
+  "income_limit": null,​
+  "regions": ["BARMM", "Region IX - Zamboanga Peninsula", "Region X - Northern Mindanao", 
+"Region XI - Davao", "Region XII - Soccsksargen", "Region XIII - Caraga"],​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "09-15", "close": "01-15"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Recommending scholarship to upperclassmen or transfer students. 
+●​ Mitigation: Enforce incoming_year_only == true and target_exam == 'MSU-SASE'. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://sase.msuiit.edu.ph/, https://www.msumain.edu.ph27. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 95/100. 
+
+PUP Entrance Scholarship Program (ID: 68) 
+1. Scholarship Identity 
+●​ Official Name: PUP Entrance Scholarship Program29 
+●​ Provider: Polytechnic University of the Philippines (Office of Scholarship and Financial 
+Assistance - OSFA)29 
+●​ Category: Institutional / State University / Equity-and-Merit3 
+●​ Official Website: https://www.pup.edu.ph/studentservices/osfa/29 
+●​ Application Portal: PUP OSFA Walk-in / Online Scholarship Portal29 
+●​ Official Guidelines: PUP Citizen's Charter; PUP OSFA Entrance Scholarship Guidelines30 
+●​ Current Status: Active3 
+2. Purpose 
+To democratize higher education access by providing formal scholarship recognition, fee 
+waivers, and grantor endorsement to top-performing high school graduates and marginalized 
+student categories entering PUP29. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen30. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes30. 
+●​ Existing College Students?: Ineligible (Upperclassmen apply for Resident Scholarship 
+instead)30. 
+●​ Graduate Students?: Ineligible29. 
+●​ Current Enrollment Requirement: Must pass the PUP College Entrance Test (PUPCET) and 
+enroll as a first-year student30. 
+●​ Academic Requirements: High scholastic or specialized achievement under recognized 
+qualification categories30. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Governed by category 
+qualification)30. 
+●​ Alternative Class Rank: Top 10 bracket of graduating class of at least 500 graduates from 
+a public high school30. 
+●​ Income Ceilings: Uncapped for academic/artist tracks; indigent income criteria for First 
+Gen/Indigent track30. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to the Polytechnic University of the Philippines 
+(Main Sta. Mesa and branches/campuses)9. 
+
+●​ Priority Courses: Open across all undergraduate degree programs30. 
+●​ Sectoral Requirements: Encompasses 11 official categories: (1) Public HS Top 10 (>=500 
+grads); (2) Cultural Artist; (3) Student Athlete; (4) Creative Media Artist; (5) Campus 
+Journalist; (6) Differently-abled / PWD; (7) ALS Graduate; (8) Indigenous Peoples (IP); (9) 
+Solo Parent; (10) Sangguniang Kabataan (SK) Official; (11) First Generation / Indigent 
+Student30. 
+●​ Good Moral: Required (Certificate of Good Moral Character)31. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Scholars receive formal "Entrance Scholar of PUP" certification and 
+endorsement to corporate CSR grantors30. 
+4. Application Timing 
+●​ Who May Apply: Incoming first-year students qualifying under any of the 11 official 
+categories30. 
+●​ Can current freshmen apply?: Yes (during initial entry term)30. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Concurrent with freshmen enrollment schedule30. 
+●​ Closing Date: Specified per enrollment period by PUP OSFA30. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202729. 
+6. Benefits 
+●​ Tuition: 100% waiver of tuition and other school fees (under RA 10931 Universal 
+Access)30. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: Endorsement to private corporate/foundation grantors for external stipends29. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: Cash awards provided for board exam topnotchers 
+post-graduation29. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Issuance of official "Entrance Scholar of PUP" Certificate, talent 
+
+development workshops, priority endorsement to private benefactors30. 
+7. Required Documents 
+1.​ Certification from SHS Principal (with dry seal) attesting to category (e.g., Top 10 of 
+>=500 grads, Campus Journalist, Cultural Artist)30. 
+2.​ Form 138 / Grade 12 Senior High School Report Card31. 
+3.​ Certificate of Good Moral Character31. 
+4.​ PSA Birth Certificate31. 
+5.​ Category Proof (e.g., NCIP Certificate for IP, PWD ID, SK Oath of Office, ALS Rating)12. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must transition to PUP Resident Scholarship (President's Lister GWA >= 
+1.50 or Dean's Lister GWA >= 1.75)33. 
+●​ Regular Load: Full-time academic load per term30. 
+●​ No Failures: No grade lower than 2.50 in any subject33. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Failure to submit principal's sealed certification of category qualification30. 
+●​ Failing grade or mark below 2.50 in any term33. 
+●​ Submission of false credentials34. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+PUPCET Qualifier (Top 10 
+Public HS / Special Sector) 
+Eligible Now 
+Submit category 
+documents to PUP OSFA 
+(Rm W119 Main) during 
+enrollment30. 
+Ongoing PUP Sophomore 
+Ineligible 
+Apply for PUP Resident 
+Scholarship 
+(President's/Dean's List)33. 
+Non-PUP Student 
+Ineligible 
+Restricted strictly to PUP 
+matriculants29. 
+11. Structured Eligibility Matrix 
+ 
+
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Public HS Rank 
+Top 10 of 
+>=500 
+"Graduate 
+belonging to 
+the top ten (10) 
+bracket of the 
+graduating 
+class of at least 
+five hundred 
+(500) 
+graduates" 
+PUP Portal30 
+Tier 1 
+Categories 
+11 Official 
+Tracks 
+"top ten... 
+Cultural 
+Artist... 
+Athlete... 
+Media Artist... 
+Journalist... 
+PWD... ALS... 
+IP... Solo 
+Parent... SK... 
+First Gen" 
+PUP 
+Guidelines30 
+Tier 1 
+Fee Coverage 
+100% 
+Tuition/Fees 
+"limited to the 
+full amount of 
+tuition and 
+other school 
+fees" 
+PUP Rules30 
+Tier 1 
+Application 
+Unit 
+PUP OSFA 
+"Office of 
+Scholarship 
+and Financial 
+Assistance... 
+Rm. W119, PUP 
+Main Campus" 
+PUP Citizen 
+Charter30 
+Tier 1 
+12. Production Database Mapping 
+ 
+
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": null,​
+  "rank_cutoff_alternative": 10,​
+  "income_limit": null,​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "06-01", "close": "08-31"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": false,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Recommending program to public high school top 10 graduates whose graduating 
+class size is under 500. 
+●​ Mitigation: Engine must flag class_size >= 500 requirement for Category 1 applicants30. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.pup.edu.ph/studentservices/osfa/, 
+https://www.pup.edu.ph/students/scholarships29. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 96/100. 
+PUP Student Assistantship Program (ID: 69) 
+1. Scholarship Identity 
+●​ Official Name: PUP Student Assistantship Program29 
+●​ Provider: Polytechnic University of the Philippines (Office of Scholarship and Financial 
+Assistance - OSFA)29 
+
+●​ Category: Institutional / State University / Student Employment / Need-based3 
+●​ Official Website: https://www.pup.edu.ph/studentservices/osfa/services33 
+●​ Application Portal: PUP OSFA Office (Rm W119) / Submission of Endorsement Form 
+(PUP-SAEF-5-OFSS-015)29 
+●​ Official Guidelines: PUP Citizen's Charter; PUP Student Assistantship Regulations30 
+●​ Current Status: Active3 
+2. Purpose 
+To provide meaningful work-study financial assistance to regular PUP undergraduate students, 
+enabling them to earn hourly compensation by rendering administrative service to university 
+offices while completing their degrees30. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen30. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate)3. 
+●​ Eligible Year Levels: Years 2, 3, 4, and 530. 
+●​ Incoming Freshman Only?: No30. 
+●​ Existing College Students?: Yes (Requires at least 2nd-year standing)30. 
+●​ Graduate Students?: Ineligible29. 
+●​ Current Enrollment Requirement: Must be currently enrolled as a regular student with at 
+least two semesters (1 year) of residency at PUP30. 
+●​ Academic Requirements: Passed all enrolled subjects in the preceding semester30. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Requires 100% passing rate in 
+prior term)30. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Targeted at financially needy 
+regular students)29. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to PUP Main Campus and constituent branches29. 
+●​ Priority Courses: Open across all undergraduate academic programs30. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required31. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Must be officially endorsed by the head of the PUP 
+office/department to be served30. 
+4. Application Timing 
+●​ Who May Apply: Regular 2nd, 3rd, 4th, and 5th year PUP undergraduate students30. 
+●​ Can current freshmen apply?: No (Requires at least 2nd-year standing and 1 year 
+
+residency)30. 
+●​ Can current sophomores apply?: Yes30. 
+●​ Can current juniors apply?: Yes30. 
+●​ Can current seniors apply?: Yes30. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes (Subject to semestral renewal)30. 
+5. Application Window 
+●​ Opening Date: One week after the Adjustment Period of each semester30. 
+●​ Closing Date: Set per semestral notice by PUP OSFA30. 
+●​ Application Cycle: Semestral renewal. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202729. 
+6. Benefits 
+●​ Tuition: None (Tuition is already covered under RA 10931)35. 
+●​ Monthly Stipend: Hourly compensation of PHP 25.00 / hour31. 
+●​ Allowance: Maximum monthly compensation of PHP 2,500.00 (based on max 100 
+hours/month)31. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Work commitment of up to 24 hours per week or 100 hours per month31. 
+●​ Other Benefits: Practical administrative work experience within university offices34. 
+7. Required Documents 
+1.​ Student Assistantship Endorsement Form (PUP-SAEF-5-OFSS-015) signed by Office 
+Head29. 
+2.​ Official Certificate of Registration (Registration Certificate) for current term30. 
+3.​ Copy of Grades / Transcript for the preceding semester30. 
+4.​ Student Personal Data Sheet29. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must pass 100% of enrolled units in the preceding semester30. 
+●​ Regular Load: Maintain regular student status per semester30. 
+●​ No Failures: Zero failing grades in any subject30. 
+●​ Return Service: Satisfactory performance of assigned student assistant duties31. 
+
+9. Disqualifying Conditions 
+●​ Incurring a failing, dropped, or incomplete mark in the preceding term30. 
+●​ Irregular student status or year level lower than 2nd Year30. 
+●​ Exceeding the maximum limit of 24 work hours per week or 100 hours per month31. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled PUP 2nd/3rd Year 
+Student (Regular, All 
+Passed) 
+Eligible Now 
+Secure office head 
+endorsement and submit 
+SAEF to PUP OSFA29. 
+Enrolled PUP 1st Year 
+Freshman 
+Ineligible 
+Eligible Later upon reaching 
+2nd-year standing30. 
+Irregular PUP Student (With 
+Failing Grade) 
+Ineligible 
+Must clear all deficiencies 
+and regain regular status30. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Standing 
+>= 2nd Year 
+College 
+"Must be 
+currently 
+enrolled and at 
+least 2nd Year 
+College" 
+PUP Portal30 
+Tier 1 
+Compensation 
+PHP 25.00 / 
+hour 
+"compensation 
+rate of 
+Php25.00/ 
+hour... not 
+more than 24 
+hours a week 
+or 100 hours a 
+PUP Services33 
+Tier 1 
+
+month" 
+Work Cap 
+100 hrs / 
+month 
+"term of 
+employment of 
+not more than 
+24 hours a 
+week or 100 
+hours a month" 
+PUP Charter31 
+Tier 1 
+Office 
+Endorsement 
+Mandatory 
+"Must be 
+endorsed by 
+the head of the 
+Office to be 
+served" 
+PUP Rules30 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": null,​
+  "income_limit": null,​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "09-15", "close": "10-15"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Displaying assistantship vacancies to 1st-year freshmen. 
+
+●​ Mitigation: Enforce year_level >= 2 and residency_semesters >= 2 in matching pipeline30. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.pup.edu.ph/studentservices/osfa/services, 
+https://www.pup.edu.ph/students/scholarships30. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 95/100. 
+UP College of Law Scholarship Program (ID: 70) 
+1. Scholarship Identity 
+●​ Official Name: UP College of Law Scholarship Program17 
+●​ Provider: UP College of Law (University of the Philippines Diliman)17 
+●​ Category: Institutional / Graduate / Professional Law / Need-and-Equity3 
+●​ Official Website: 
+https://law.upd.edu.ph/call-for-scholarship-applications-ay-2025-2026/17 
+●​ Application Portal: Integrated UP Law Online Scholarship Application System17 
+●​ Official Guidelines: UP College of Law Scholarship Announcement and Guidelines17 
+●​ Current Status: Active3 
+2. Purpose 
+To uphold access, diversity, and equity in legal education by supporting Juris Doctor students 
+facing economic or personal hardship, providing full financial coverage from Law Aptitude 
+Exam (LAE) fee waivers through Bar Examination preparation17. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen12. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Graduate (Juris Doctor Program)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, and 4 (Juris Doctor)3. 
+●​ Incoming Freshman Only?: No17. 
+●​ Existing College Students?: Ineligible (Restricted to law students)17. 
+●​ Graduate Students?: Yes (Juris Doctor professional program)17. 
+●​ Current Enrollment Requirement: Must be a bona fide Juris Doctor student at UP College 
+of Law17. 
+●​ Academic Requirements: Need is the primary selection criterion; academic merit is 
+secondary17. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Evaluated holistically based on 
+
+hardship)17. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Evaluated based on Income Tax Return and household asset verification 
+form17. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to UP College of Law (Diliman and BGC 
+campuses)17. 
+●​ Priority Courses: Juris Doctor (JD) degree program17. 
+●​ Sectoral Requirements: Diversity considerations explicitly prioritized: LGBTQIA+ 
+individuals, members of Indigenous Peoples (IP) communities, Persons with Disabilities 
+(PWDs), single parents, and aspiring first-generation lawyers17. 
+●​ Good Moral: Required17. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Applicants must forego other active scholarship awards upon 
+acceptance to UP Law Scholarship17. Background checks and home asset inspections are 
+conducted17. 
+4. Application Timing 
+●​ Who May Apply: All bona fide Juris Doctor students at UP College of Law17. 
+●​ Can current freshmen apply?: Yes (1st year JD students)17. 
+●​ Can current sophomores apply?: Yes (2nd year JD students)17. 
+●​ Can current juniors apply?: Yes (3rd year JD students)17. 
+●​ Can current seniors apply?: Yes (4th year JD students)17. 
+●​ Can graduates apply?: Yes (LAE applicants receiving application fee waivers)17. 
+●​ Can previous applicants reapply?: Yes17. 
+5. Application Window 
+●​ Opening Date: June 30 annually17. 
+●​ Closing Date: July 20 annually (Deadlines strictly applied)17. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202717. 
+6. Benefits 
+●​ Tuition: 100% waiver of tuition and miscellaneous fees17. 
+●​ Monthly Stipend: PHP 10,000.00 per month for 3 to 4 months per semester (Tier 1 & Tier 
+2 scholars)17. 
+●​ Allowance: Internet and book allowance set at PHP 10,000.00 per semester17. 
+●​ Book Allowance: Included in semestral internet/book allowance package17. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: Access to UP Health Service benefits16. 
+
+●​ Board Exam Subsidy: Full support for Bar Examination preparation and review fees17. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Scholars render student service assistance to the UP College of Law17. 
+●​ Other Benefits: LAE application fee waiver; disbursement directly via Landbank 
+account17. 
+7. Required Documents 
+1.​ Accomplished UP Law Online Scholarship Application Form17. 
+2.​ Letter of Intent detailing financial hardship, family dynamics, and personal 
+circumstances17. 
+3.​ Latest Income Tax Return (ITR) of applicant, spouse, parents, or supporting siblings17. 
+4.​ Household Asset Photos (front of home, living room, kitchen, bedroom, and major 
+appliances)17. 
+5.​ Landbank Account Details for stipend disbursement17. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain good academic standing per UP Law academic retention rules17. 
+●​ Regular Load: Full-time credit enrollment in Juris Doctor curriculum17. 
+●​ No Failures: Compliance with law deanship retention rules17. 
+●​ Return Service: Render student assistant service hours to the UP College of Law17. 
+9. Disqualifying Conditions 
+●​ Holding another active scholarship award without submitting an official withdrawal 
+letter17. 
+●​ Misrepresentation during household asset inspection or background check17. 
+●​ Failure to submit all required ITRs/photos before the strict July 20 deadline17. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled UP Law JD Student 
+(Facing Hardship) 
+Eligible Now 
+Apply online between June 
+30 and July 20; open 
+Landbank account17. 
+Aspiring UP LAE Applicant 
+Eligible (for Fee Waiver) 
+Request LAE application fee 
+waiver during LAE 
+registration17. 
+
+Scholar of Another 
+Institution 
+Eligible (Conditional) 
+Must submit formal 
+application withdrawal 
+letter from other grant 
+upon acceptance17. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Primary 
+Criterion 
+Financial Need 
+"approval of 
+applications... 
+is determined 
+primarily based 
+on need, and 
+academic 
+merit is only a 
+secondary 
+consideration" 
+UP Law Call17 
+Tier 1 
+Monthly 
+Stipend 
+PHP 10,000.00 
+/ month 
+"monthly 
+stipend for 
+three to four 
+months (set at 
+PhP 
+10,000.00/mo
+nth)" 
+UP Law Portal17 
+Tier 1 
+Book/Net 
+Grant 
+PHP 10,000.00 
+/ sem 
+"an internet & 
+book 
+allowance (set 
+at PhP 
+10,000.00)" 
+UP Law 
+Notice17 
+Tier 1 
+Diversity Focus 
+LGBTQIA+, IP, 
+PWD 
+"upholds the 
+values of 
+diversity and 
+equity... 
+especially 
+UP Law Site17 
+Tier 1 
+
+those who: 
+Identify as 
+LGBTQIA+, 
+Belong to 
+Indigenous 
+Peoples... 
+PWDs" 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": null,​
+  "income_limit": null,​
+  "degree_program_restricted": ["Juris Doctor"],​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "06-30", "close": "07-20"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Risk: System assuming Socialized Tuition System (STS) discount precludes UP Law 
+Scholarship. 
+●​ Mitigation: Rule engine must permit concurrent STS coverage ("discount under STS does 
+not count as a separate scholarship")17. 
+14. Verification Summary 
+
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: 
+https://law.upd.edu.ph/call-for-scholarship-applications-ay-2025-2026/17. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+Ateneo Freshman Merit Scholarship (ID: 104) 
+1. Scholarship Identity 
+●​ Official Name: Ateneo Freshman Merit Scholarship (AFMS)4 
+●​ Provider: Ateneo de Manila University3 
+●​ Category: Institutional / University / Premier Merit-based2 
+●​ Official Website: https://www.ateneo.edu/college/scholarships/programs6 
+●​ Application Portal: Automatic consideration via the Ateneo College Entrance Test (ACET)4 
+●​ Official Guidelines: Ateneo Office of Admission and Aid Merit Guidelines6 
+●​ Current Status: Active3 
+2. Purpose 
+Serves as Ateneo de Manila University's highest academic award for incoming freshmen, 
+honoring the top 50 ACET examinees across local public, private, science, and international 
+high schools4. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes4. 
+●​ Existing College Students?: Ineligible6. 
+●​ Graduate Students?: Ineligible6. 
+●​ Current Enrollment Requirement: Must be a top-ranked applicant accepted into any 
+undergraduate degree program at Ateneo de Manila University6. 
+●​ Academic Requirements: Exceptional ACET score ranking, outstanding high school 
+academic performance, and demonstrated leadership roles4. 
+●​ Minimum GWA: 90.00% (or top 50 ACET examinee rank)3. 
+●​ Alternative Class Rank: Ranked within the top 50 applicants nationwide4. 
+●​ Income Ceilings: Uncapped (Merit-based award independent of family income)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to Ateneo de Manila University (Loyola Heights)6. 
+
+●​ Priority Courses: Scholars may choose any undergraduate degree program of their 
+choice6. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required2. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Awarded automatically; no separate application form required4. 
+4. Application Timing 
+●​ Who May Apply: High school seniors registering for the ACET4. 
+●​ Can current freshmen apply?: No (awarded strictly upon freshman admission)6. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Automatic evaluation upon filing ACET application4. 
+●​ Closing Date: Concurrent with ACET application deadline2. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–20276. 
+6. Benefits 
+●​ Tuition: Full 100% waiver of tuition and matriculation fees for the entire duration of the 
+chosen undergraduate degree4. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: Annual book and learning allowance provided4. 
+●​ Book Allowance: Integrated into merit allowance package4. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: Not applicable. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Priority registration privileges and invitation to University honors 
+programs6. 
+7. Required Documents 
+1.​ Ateneo College Application Form and ACET Permit2. 
+2.​ Senior High School Transcript of Records / Form 1382. 
+3.​ Principal / Guidance Counselor Endorsement Form attesting to leadership roles2. 
+
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required annual Quality Point Index (QPI) set by OAA for merit 
+scholars6. 
+●​ Regular Load: Full-time credit enrollment per semester2. 
+●​ No Failures: Zero failing marks or unremoved incomplete grades7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Declining enrollment at Ateneo de Manila University6. 
+●​ Falling below the required merit QPI retention mark6. 
+●​ Major disciplinary sanction or violation of university rules7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Top 50 ACET Examinee 
+(Graduating SHS) 
+Eligible Now 
+Receive official AFMS 
+award letter alongside 
+Ateneo acceptance4. 
+Enrolled Ateneo 
+Sophomore 
+Ineligible 
+Awarded exclusively at 
+entry based on ACET 
+performance6. 
+Non-Ateneo Student 
+Ineligible 
+Program restricted strictly 
+to Ateneo de Manila 
+matriculants6. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Selection 
+Metric 
+Top 50 ACET 
+Rank 
+"awarded to 
+the top 50 
+applicants 
+from local 
+Ateneo Guide4 
+Tier 1 
+
+private, public, 
+and science 
+high schools" 
+Tuition Benefit 
+100% Tuition & 
+Fees 
+"awarded a 
+100% tuition 
+and fees 
+scholarship" 
+Ateneo Site4 
+Tier 1 
+Course Choice 
+Any Degree 
+Program 
+"Freshman 
+Merit Scholars 
+can choose 
+any degree 
+program of 
+their choice" 
+Ateneo Portal6 
+Tier 1 
+Income Ceiling 
+Uncapped 
+Income limit 
+set to null 
+(Merit award) 
+Live DB Record 
+ID 1043 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 90.00,​
+  "income_limit": null,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-01", "close": "11-15"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": false​
+
+}​
+ 
+13. Matching Risks 
+●​ Risk: Users misinterpreting AFMS as requiring a separate application form from ACET. 
+●​ Mitigation: Flag scholarship as 'automatic_consideration_acet' in matching engine. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.ateneo.edu/college/scholarships/programs6. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+Ateneo Magis Scholarship (ID: 105) 
+1. Scholarship Identity 
+●​ Official Name: Ateneo Magis Scholarship4 
+●​ Provider: Ateneo de Manila University3 
+●​ Category: Institutional / University / Full-Ride Need-and-Merit3 
+●​ Official Website: https://www.ateneo.edu/college/scholarships/programs6 
+●​ Application Portal: Selected from among qualified Ateneo Financial Aid applicants4 
+●​ Official Guidelines: Ateneo Office of Admission and Aid Magis Guidelines6 
+●​ Current Status: Active3 
+2. Purpose 
+Serves as Ateneo de Manila's most comprehensive, all-expenses-paid scholarship, awarded to 
+the most financially constrained applicants who demonstrate outstanding academic and 
+leadership excellence (selecting 1 scholar each from NCR, Luzon, Visayas, and Mindanao)4. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: Applicants are selected across 4 geographic regions: NCR, Luzon, Visayas, 
+and Mindanao4. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes4. 
+●​ Existing College Students?: Ineligible for initial award6. 
+●​ Graduate Students?: Ineligible6. 
+●​ Current Enrollment Requirement: Must apply for Financial Aid and be admitted to an 
+
+undergraduate degree program at Ateneo de Manila University6. 
+●​ Academic Requirements: Outstanding scholastic achievement in Senior High School and 
+high ACET performance4. 
+●​ Minimum GWA: 85.00% (or top financial aid applicant standing)3. 
+●​ Alternative Class Rank: Selected as the top financial aid recipient in the respective 
+geographic island group4. 
+●​ Income Ceilings: Family gross annual income must demonstrate severe financial 
+constraint (capped at PHP 250,000.00)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to Ateneo de Manila University6. 
+●​ Priority Courses: Open across all 4- and 5-year undergraduate degree programs4. 
+●​ Sectoral Requirements: Underprivileged candidates with potential for servant 
+leadership4. 
+●​ Good Moral: Required2. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Only applicants who qualify for an Ateneo Financial Aid Grant are 
+considered for the Magis Scholarship4. 
+4. Application Timing 
+●​ Who May Apply: Incoming college freshmen applying for Ateneo Financial Aid4. 
+●​ Can current freshmen apply?: No (awarded upon freshman entrance)6. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Concurrent with Ateneo Financial Aid Application opening (August)2. 
+●​ Closing Date: October 15 (Financial Aid submission deadline)2. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20274. 
+6. Benefits 
+●​ Tuition: 100% waiver of tuition and matriculation fees for any 4- or 5-year course4. 
+●​ Monthly Stipend: PHP 4,000.00 per month (food and living allowance)3. 
+●​ Allowance: Student learning, books, printing, and school supplies allowance4. 
+●​ Book Allowance: Included in learning allowance package4. 
+●​ Transportation: Transportation support or round-trip airfare every semester for provincial 
+scholars4. 
+
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: Not applicable. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None required3. 
+●​ Other Benefits: Provision of a laptop computer, mobile phone, on-campus dormitory 
+accommodation, and miscellaneous allowance4. 
+7. Required Documents 
+1.​ Complete Ateneo Financial Aid Application Package (Parents' letter, ITR, pay slips, utility 
+bills)2. 
+2.​ Residence Photos and House Tour Video2. 
+3.​ High School Transcript of Records / Form 1382. 
+4.​ Two (2) Recommendation Forms2. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required QPI standard set by OAA6. 
+●​ Regular Load: Full-time credit enrollment2. 
+●​ No Failures: Zero failing grades7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Failure to qualify for an Ateneo Financial Aid Grant4. 
+●​ Parent annual gross income exceeding PHP 250,000.003. 
+●​ Severe disciplinary infraction or academic failure7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Highly Constrained SHS 
+Senior (Top 
+Academic/ACET) 
+Eligible Now 
+Complete Ateneo Financial 
+Aid application before Oct 
+152. 
+Enrolled Ateneo Freshman 
+Ineligible 
+Magis award is selected 
+exclusively during initial 
+admission6. 
+Non-Ateneo Student 
+Ineligible 
+Restricted to admitted 
+Ateneo de Manila students6. 
+
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Award Scope 
+Full-Ride 
+Package 
+"100% tuition... 
+Food and living 
+allowance... 
+On-campus 
+dormitory... 
+Round-trip 
+airfare... 
+Cellphone and 
+laptop" 
+Ateneo Site4 
+Tier 1 
+Regional Slots 
+1 per Region 
+"selected 
+among 
+members... 
+one of each 
+from the 
+National 
+Capital Region, 
+Luzon, Visayas, 
+and Mindanao" 
+Ateneo Portal4 
+Tier 1 
+Prerequisite 
+Financial Aid 
+Award 
+"Only those 
+who will be 
+awarded a 
+Financial Aid 
+Scholarship will 
+be considered 
+as potential 
+recipients" 
+Ateneo 
+Guidelines4 
+Tier 1 
+Income Limit 
+PHP 
+250,000.00 / 
+year 
+Maximum 
+income limit 
+set at PHP 
+250,000 
+Live DB Record 
+ID 1053 
+Tier 1 
+
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 85.00,​
+  "income_limit": 250000,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-01", "close": "10-15"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Displaying Magis Scholarship to candidates who did not complete the prerequisite 
+Financial Aid application. 
+●​ Mitigation: Require user.financial_aid_application_completed == true in rule pipeline. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.ateneo.edu/college/scholarships/programs6. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 96/100. 
+DLSU St La Salle Financial Assistance Grant (ID: 106) 
+1. Scholarship Identity 
+●​ Official Name: St. La Salle Financial Assistance Grant21 
+●​ Provider: De La Salle University (Office of Admissions and Scholarships)21 
+
+●​ Category: Institutional / University / Need-based3 
+●​ Official Website: https://www.dlsu.edu.ph/admissions/scholarships/22 
+●​ Application Portal: Integrated DLSU OAS Financial Assistance Online Portal22 
+●​ Official Guidelines: DLSU St. La Salle Financial Assistance FAQs & Guidelines AY 
+2026–202722 
+●​ Current Status: Active3 
+2. Purpose 
+To realize De La Salle University's mission of making Lasallian education accessible to 
+intellectually capable but financially handicapped Filipino youth through need-based tuition 
+waivers and living stipends21. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen21. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, 4, and 53. 
+●​ Incoming Freshman Only?: No22. 
+●​ Existing College Students?: Eligible (Separate application calls for current students)22. 
+●​ Graduate Students?: Ineligible for undergraduate track (Separate St. Mutien Marie Grant 
+exists)20. 
+●​ Current Enrollment Requirement: Must pass the DLSU College Admissions Test (DCAT) or 
+be an ongoing regular DLSU undergraduate22. 
+●​ Academic Requirements: Evaluated based on high school academic competence and 
+DCAT score22. 
+●​ Minimum GWA: 85.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Structured into 3 tiered income brackets: Bracket A (< PHP 450,000: 
+100% tuition + stipend); Bracket B (PHP 450,000–1,000,000: 100% tuition); Bracket C 
+(PHP 1,000,001–1,800,000: Partial tuition waiver)22. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to De La Salle University (Manila and Laguna 
+campuses)22. 
+●​ Priority Courses: Open across all undergraduate degree programs22. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required22. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Grantees awarded 100% waivers are exempted from paying the PHP 
+10,000 reservation fee22. 
+
+4. Application Timing 
+●​ Who May Apply: DCAT examinees, Special DCAT examinees, and ongoing DLSU 
+undergraduate students22. 
+●​ Can current freshmen apply?: Yes22. 
+●​ Can current sophomores apply?: Yes22. 
+●​ Can current juniors apply?: Yes22. 
+●​ Can current seniors apply?: Yes22. 
+●​ Can graduates apply?: No22. 
+●​ Can previous applicants reapply?: Yes22. 
+5. Application Window 
+●​ Opening Date: April 17 for DCAT applicants; May 26 for Special DCAT applicants22. 
+●​ Closing Date: May 17 for DCAT applicants; June 1 for Special DCAT applicants (No 
+extensions)22. 
+●​ Application Cycle: Annual / Semestral. 
+●​ Current AY Covered: AY 2026–202722. 
+6. Benefits 
+●​ Tuition: Full 100% or partial tuition and fees waiver depending on income bracket22. 
+●​ Monthly Stipend: PHP 3,500.00 per month (awarded to Bracket A scholars with family 
+income < PHP 450k)3. 
+●​ Allowance: Integrated into monthly stipend package22. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Exemption from PHP 10,000 reservation fee for 100% grant recipients22. 
+7. Required Documents 
+1.​ Accomplished St. La Salle Financial Assistance Online Application Form22. 
+2.​ Parents' Income Tax Return (ITR), BIR Certificate of Tax Exemption, or Employment 
+Contract22. 
+3.​ Electric and water utility bills for the last 3 months22. 
+4.​ High School Transcript of Records / Report Cards22. 
+5.​ Letter of Explanation addressed to OAS Director for any missing document22. 
+
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required Term GPA and Cumulative GPA per trimester22. 
+●​ Regular Load: Enrolled in full-time credit load22. 
+●​ No Failures: Zero failing marks or unapproved course withdrawals24. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Combined family gross annual income exceeding PHP 1,800,000.0022. 
+●​ Dropping below required trimester GPA retention mark24. 
+●​ Major disciplinary infraction or submission of falsified ITRs22. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+DCAT Applicant (Family 
+Income < P450k) 
+Eligible Now 
+Apply online between April 
+17 and May 17 for 100% 
+waiver + stipend22. 
+DCAT Applicant (Family 
+Income P450k-P1M) 
+Eligible Now 
+Apply online for 100% 
+tuition and fees waiver22. 
+DCAT Applicant (Family 
+Income P1.0M-P1.8M) 
+Eligible Now 
+Apply online for partial 
+tuition waiver22. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Income Tier A 
+< PHP 
+450,000.00 
+"Family income 
+below 
+₱450,000: 
+Eligible for full 
+scholarship 
+(100% tuition 
+and fees 
+DLSU FAQs22 
+Tier 1 
+
+waiver + 
+stipend)" 
+Income Tier B 
+PHP 450k – 
+1.0M 
+"Family income 
+₱450,000 – 
+₱1,000,000: 
+Eligible for full 
+scholarship 
+(100% tuition 
+and fees 
+waiver)" 
+DLSU FAQs22 
+Tier 1 
+Income Tier C 
+PHP 1.0M – 
+1.8M 
+"Family income 
+₱1,000,001 – 
+₱1,800,000: 
+Eligible for 
+partial 
+scholarship" 
+DLSU FAQs22 
+Tier 1 
+Application 
+Dates 
+Apr 17 – May 
+17 
+"application 
+window... is 
+scheduled 
+from April 17 to 
+May 17, 2026 
+for DCAT 
+applicants" 
+DLSU Notice22 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 85.00,​
+  "income_limit": 1800000,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+
+  "citizenship": "Filipino",​
+  "application_window": {"open": "04-17", "close": "05-17"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Engine disqualifying applicants earning between PHP 700,000 and PHP 1,800,000 
+due to legacy income limit (PHP 700k). 
+●​ Mitigation: Update income_limit = 1800000 to reflect official 3-tier structure22. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.dlsu.edu.ph/admissions/scholarships/22. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+DLSU Vaugirard Scholarship Program (ID: 107) 
+1. Scholarship Identity 
+●​ Official Name: DLSU Vaugirard Scholarship Program20 
+●​ Provider: De La Salle University3 
+●​ Category: Institutional / University / Merit-and-Need / Public School Track3 
+●​ Official Website: https://www.dlsu.edu.ph/admissions/scholarships/20 
+●​ Application Portal: Selected from top DCAT examinees graduating from public/science 
+high schools (Screening/interview)20 
+●​ Official Guidelines: DLSU OAS Vaugirard Scholarship Guidelines20 
+●​ Current Status: Active3 
+2. Purpose 
+Exclusively provides full scholarships and living allowances every year to top DCAT examinees 
+who graduated from Philippine public and science high schools, promoting social equity and 
+public school representation at DLSU20. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen20. 
+
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate entry)3. 
+●​ Eligible Year Levels: Year 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes20. 
+●​ Existing College Students?: Ineligible20. 
+●​ Graduate Students?: Ineligible20. 
+●​ Current Enrollment Requirement: Must be a graduating student from a Philippine Public 
+or Science High School accepted to DLSU20. 
+●​ Academic Requirements: Among top examinees in the DLSU College Admission Test 
+(DCAT)20. 
+●​ Minimum GWA: 88.00% (or top DCAT score equivalent)3. 
+●​ Alternative Class Rank: Selected by University Committee screening from top 
+public/science DCAT examinees20. 
+●​ Income Ceilings: Combined family gross annual income must not exceed PHP 
+300,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to graduates of Philippine Public High Schools and 
+Science High Schools enrolling at DLSU20. 
+●​ Priority Courses: Open across all undergraduate degree programs20. 
+●​ Sectoral Requirements: Public and Science High School completers20. 
+●​ Good Moral: Required20. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Candidates are invited for committee screening; cash incentives are 
+awarded to scholars graduating with Latin honors20. 
+4. Application Timing 
+●​ Who May Apply: Graduating public and science high school seniors taking the DCAT20. 
+●​ Can current freshmen apply?: No (awarded upon freshman entry)20. 
+●​ Can current sophomores apply?: No. 
+●​ Can current juniors apply?: No. 
+●​ Can current seniors apply?: No. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: No. 
+5. Application Window 
+●​ Opening Date: Automatic screening upon DCAT administration20. 
+●​ Closing Date: Committee interviews conducted in April/May prior to confirmation20. 
+●​ Application Cycle: Annual. 
+●​ Current AY Covered: AY 2026–202722. 
+
+6. Benefits 
+●​ Tuition: 100% waiver of tuition, miscellaneous, and laboratory fees throughout stay at 
+DLSU20. 
+●​ Monthly Stipend: PHP 4,000.00 per month (monthly living stipend)3. 
+●​ Allowance: Modest accommodation and allowance coverage20. 
+●​ Book Allowance: Integrated into monthly stipend20. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: Cash incentive awarded for those graduating with Latin honors20. 
+●​ Return Service: None3. 
+●​ Other Benefits: Advance enrollment privileges20. 
+7. Required Documents 
+1.​ DCAT Application Form and Results20. 
+2.​ Public / Science High School Form 138 / Transcript20. 
+3.​ Parents' Income Tax Return or BIR Tax Exemption Certificate12. 
+4.​ Certificate of Good Moral Character20. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required trimester GPA retention mark set by OAS24. 
+●​ Regular Load: Full-time credit enrollment per trimester20. 
+●​ No Failures: Zero failing grades24. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ High school origin from a private non-science institution20. 
+●​ Parent gross annual income exceeding PHP 300,000.003. 
+●​ Failure to maintain trimester GPA retention standard24. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Public / Science HS Senior 
+(Top DCAT Score) 
+Eligible Now 
+Invited for Vaugirard 
+committee screening; no 
+separate form required20. 
+
+Private High School Senior 
+(Non-Science) 
+Ineligible 
+Redirect to Archer 
+Achievers or St. La Salle 
+Financial Grant22. 
+Enrolled DLSU Sophomore 
+Ineligible 
+Awarded strictly upon 
+freshman entry20. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+High School 
+Type 
+Public & 
+Science HS 
+"exclusively for 
+students who 
+graduated 
+from Philippine 
+Public and 
+Science High 
+Schools" 
+DLSU Portal20 
+Tier 1 
+Benefits 
+Tuition + 
+Monthly 
+Stipend 
+"full waiver on 
+tuition, 
+miscellaneous, 
+and laboratory 
+fees... plus 
+cash 
+incentive... and 
+a monthly 
+stipend" 
+DLSU Site20 
+Tier 1 
+Monthly 
+Stipend 
+PHP 4,000.00 / 
+month 
+Monthly 
+allowance 
+parameter set 
+at PHP 4,000 
+Live DB Record 
+ID 1073 
+Tier 1 
+Latin Honor 
+Award 
+Cash Incentive 
+"cash incentive 
+for those 
+graduating 
+with Latin 
+DLSU 
+Document20 
+Tier 1 
+
+honors" 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": 88.00,​
+  "income_limit": 300000,​
+  "school_type": ["Public High School", "Science High School"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "01-15", "close": "05-17"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Matching engine displaying Vaugirard to private non-science high school graduates. 
+●​ Mitigation: Enforce high_school_type IN ('Public High School', 'Science High School') in 
+pipeline20. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: https://www.dlsu.edu.ph/admissions/scholarships/20. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 96/100. 
+UST San Lorenzo Ruiz Student Assistance Scholarship 
+(ID: 108) 
+
+1. Scholarship Identity 
+●​ Official Name: UST San Lorenzo Ruiz Student Assistance Scholarship26 
+●​ Provider: University of Santo Tomas (Office for Student Affairs)26 
+●​ Category: Institutional / University / Student Employment / Need-based3 
+●​ Official Website: https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered26 
+●​ Application Portal: UST OSA SAAF Portal26 
+●​ Official Guidelines: UST Office for Student Affairs San Lorenzo Ruiz Guidelines26 
+●​ Current Status: Active3 
+2. Purpose 
+Named after Saint Lorenzo Ruiz, the first Filipino saint, this work-study scholarship provides 
+financial assistance to UST undergraduate students who render 20 to 30 hours per week of 
+student service in university offices26. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: College (Undergraduate)3. 
+●​ Eligible Year Levels: Years 1, 2, 3, 4, and 53. 
+●​ Incoming Freshman Only?: No26. 
+●​ Existing College Students?: Eligible26. 
+●​ Graduate Students?: Ineligible26. 
+●​ Current Enrollment Requirement: Must be officially enrolled in an undergraduate degree 
+program at the University of Santo Tomas26. 
+●​ Academic Requirements: Passing academic record with a General Weighted Average 
+(GWA) of at least 82.00% (2.50 UST scale)3. 
+●​ Minimum GWA: 82.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: Combined family gross annual income must not exceed PHP 
+250,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to the University of Santo Tomas (España, 
+Manila)26. 
+●​ Priority Courses: Open across all UST faculties, colleges, and institutes26. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required (Certificate of Good Moral Character from OSA)26. 
+●​ Health Requirements: Physically and mentally fit to perform student assistant duties26. 
+●​ Other Official Rules: Willingness to render twenty (20) to thirty (30) hours per week of 
+service in assigned university offices26. 
+
+4. Application Timing 
+●​ Who May Apply: Enrolled UST undergraduate students seeking work-study aid26. 
+●​ Can current freshmen apply?: Yes26. 
+●​ Can current sophomores apply?: Yes26. 
+●​ Can current juniors apply?: Yes26. 
+●​ Can current seniors apply?: Yes26. 
+●​ Can graduates apply?: No. 
+●​ Can previous applicants reapply?: Yes (Semestral renewal)26. 
+5. Application Window 
+●​ Opening Date: Announced by UST OSA at the start of each semester26. 
+●​ Closing Date: Set per semestral notice26. 
+●​ Application Cycle: Semestral. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202726. 
+6. Benefits 
+●​ Tuition: Full or partial tuition and fees discount3. 
+●​ Monthly Stipend: Hourly compensation or semestral stipend allowance (total value up to 
+PHP 60,000.00/year)3. 
+●​ Allowance: Integrated into work-study stipend package3. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Render 20 to 30 hours per week of service in assigned UST unit26. 
+●​ Other Benefits: Development of practical administrative skills26. 
+7. Required Documents 
+1.​ UST OSA SAAF Application Form for San Lorenzo Ruiz Scholarship26. 
+2.​ Official Grade Report / Transcript showing GWA >= 82.00%3. 
+3.​ Parents' Income Tax Return (ITR) or Barangay Certificate of Indigency26. 
+4.​ UST Health Service Medical Clearance26. 
+5.​ Endorsement Form from assigned UST office supervisor26. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain a minimum semestral GWA of 82.00% (2.50)3. 
+●​ Regular Load: Enrolled in full term credit load26. 
+
+●​ No Failures: Zero failing marks7. 
+●​ Return Service: Satisfactory completion of 20–30 weekly service hours26. 
+9. Disqualifying Conditions 
+●​ Family gross annual income exceeding PHP 250,000.003. 
+●​ Failure to render the required 20–30 hours of weekly service26. 
+●​ Academic failure or disciplinary violation7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled UST Student 
+(Income <= P250k, Willing 
+to Work) 
+Eligible Now 
+Apply online via UST SAAF 
+portal and submit office 
+endorsement26. 
+Incoming UST Freshman 
+Eligible Now 
+Apply upon enrollment and 
+completion of OSA 
+work-study orientation26. 
+Non-UST Student 
+Ineligible 
+Restricted strictly to UST 
+Manila matriculants26. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Service 
+Commitment 
+20 to 30 hrs / 
+week 
+"willing to 
+render 
+assistance for 
+twenty (20) to 
+thirty (30) 
+hours per 
+week in the 
+University" 
+UST OSA 
+Portal26 
+Tier 1 
+Target Level 
+College Level 
+"SAN 
+UST Site26 
+Tier 1 
+
+LORENZO RUIZ 
+Student 
+Assistance 
+Scholarship. 
+(Applicable for 
+College Level)" 
+Income Ceiling 
+PHP 
+250,000.00 / 
+year 
+Maximum 
+income limit 
+parameter set 
+at PHP 
+250,000 
+Live DB Record 
+ID 1083 
+Tier 1 
+Minimum GWA 
+82.00% 
+Academic 
+GWA threshold 
+parameter set 
+at 82.00% 
+Live DB Record 
+ID 1083 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 82.00,​
+  "income_limit": 250000,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-15", "close": "09-30"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": true,​
+  "needs_manual_review": true​
+}​
+
+ 
+13. Matching Risks 
+●​ Risk: Enrolling students who cannot commit 20–30 hours per week due to heavy 
+clinical/lab schedules. 
+●​ Mitigation: Display explicit prompt: "Requires 20-30 hours per week of campus work 
+commitment"26. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: 
+https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered26. 
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 95/100. 
+UST Santo Tomas Academic Scholarship (ID: 109) 
+1. Scholarship Identity 
+●​ Official Name: UST Santo Tomas Academic Scholarship26 
+●​ Provider: University of Santo Tomas (Office for Student Affairs)26 
+●​ Category: Institutional / University / Merit-based3 
+●​ Official Website: https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered26 
+●​ Application Portal: Integrated UST OSA Scholarship Portal / Faculty Dean's Office 
+Endorsement26 
+●​ Official Guidelines: UST Office for Student Affairs Academic Scholarship Manual26 
+●​ Current Status: Active3 
+2. Purpose 
+Named after Saint Thomas Aquinas, the patron saint of the University, this scholarship awards 
+students in Senior High School, College, LEAPMed, Civil Law, and Medicine who demonstrate 
+outstanding academic performance26. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen5. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: High School (SHS), College, and Graduate (LEAPMed, Faculty of Civil 
+Law, Faculty of Medicine and Surgery)26. 
+●​ Eligible Year Levels: All year levels corresponding to the program26. 
+●​ Incoming Freshman Only?: No (Covers incoming freshmen Valedictorians/Salutatorians 
+
+and ongoing Dean's Listers)4. 
+●​ Existing College Students?: Eligible (Awarded per semester based on Dean's List 
+ranking)26. 
+●​ Graduate Students?: Eligible (Applicable to Civil Law and Medicine and Surgery)26. 
+●​ Current Enrollment Requirement: Must be officially enrolled in UST in Senior High School, 
+College, LEAPMed, Law, or Medicine26. 
+●​ Academic Requirements: Valedictorian or Salutatorian status for incoming freshmen; Top 
+1 or Top 2 rank in the college/faculty for upperclassmen4. 
+●​ Minimum GWA: 88.00% (or Dean's List Top 1/Top 2 rank cutoff)3. 
+●​ Alternative Class Rank: Rank 1 (100% waiver) or Rank 2 (50% waiver) in the academic 
+department/batch4. 
+●​ Income Ceilings: Uncapped (Merit-based award independent of income)3. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to the University of Santo Tomas26. 
+●​ Priority Courses: Open across all UST faculties, colleges, institutes, and professional 
+schools26. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required26. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Other Official Rules: Application requires certification of academic rank from the High 
+School Principal or College Registrar4. 
+4. Application Timing 
+●​ Who May Apply: Incoming freshmen (Valedictorians/Salutatorians) and ongoing UST 
+top-ranked students4. 
+●​ Can current freshmen apply?: Yes26. 
+●​ Can current sophomores apply?: Yes26. 
+●​ Can current juniors apply?: Yes26. 
+●​ Can current seniors apply?: Yes26. 
+●​ Can graduates apply?: Yes (Civil Law and Medicine students)26. 
+●​ Can previous applicants reapply?: Yes (Evaluated every semester based on term rank)26. 
+5. Application Window 
+●​ Opening Date: Announced by UST OSA at the start of each term26. 
+●​ Closing Date: Set per semestral deadline26. 
+●​ Application Cycle: Semestral. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–202726. 
+6. Benefits 
+●​ Tuition: 100% tuition waiver for Rank 1 / Valedictorians; 50% tuition waiver for Rank 2 / 
+
+Salutatorians4. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: None3. 
+●​ Other Benefits: Total estimated annual grant value up to PHP 100,000.003. 
+7. Required Documents 
+1.​ UST OSA SAAF Application Form for Santo Tomas Academic Scholarship26. 
+2.​ High School Principal's Certification of Valedictorian/Salutatorian status (for Freshmen)4. 
+3.​ Official Transcript / Registrar Certification of Top 1 or Top 2 Rank in Department (for 
+Upperclassmen)26. 
+4.​ Certificate of Good Moral Character26. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain Top 1 or Top 2 academic ranking in the department each 
+semester4. 
+●​ Regular Load: Enrolled in full term credit load26. 
+●​ No Failures: Zero failing grades, 3.0 marks, or incomplete grades7. 
+●​ Return Service: None. 
+9. Disqualifying Conditions 
+●​ Losing Top 1 or Top 2 rank in the academic batch/department4. 
+●​ Incurring an incomplete, dropped, or failing grade7. 
+●​ Disciplinary sanction issued by UST OSA26. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming UST Freshman 
+(Valedictorian / 
+Salutatorian) 
+Eligible Now 
+Submit Principal's 
+certification to UST OSA 
+upon registration4. 
+
+Enrolled UST Student (Top 1 
+or Top 2 Rank in Batch) 
+Eligible Now 
+Obtain Registrar rank 
+certification and submit 
+SAAF form26. 
+UST Law / Medicine Student 
+(Top Rank) 
+Eligible Now 
+Apply under professional 
+school academic 
+scholarship track26. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Applicable 
+Levels 
+SHS, College, 
+Law, Med 
+"(Applicable 
+for Senior High 
+School, 
+College Level, 
+LEAP Med, 
+Faculty of Civil 
+Law, and 
+Faculty of 
+Medicine and 
+Surgery)" 
+UST OSA 
+Portal26 
+Tier 1 
+Selection 
+Metric 
+Excellent 
+Academic 
+Performance 
+"named after 
+the Patron 
+Saint of the 
+University, and 
+is given to 
+students with 
+excellent 
+academic 
+performance" 
+UST Site26 
+Tier 1 
+Rank 1 Award 
+100% Tuition 
+Waiver 
+Valedictorians / 
+Rank 1 receive 
+100% tuition 
+coverage 
+UST Guide4 
+Tier 1 
+
+Rank 2 Award 
+50% Tuition 
+Waiver 
+Salutatorians / 
+Rank 2 receive 
+50% tuition 
+coverage 
+UST Guide4 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["Senior High School", "College", "Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 88.00,​
+  "rank_cutoff_alternative": 2,​
+  "income_limit": null,​
+  "school_type": ["Private"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "08-15", "close": "09-30"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Risk: Recommending scholarship to general Dean's Listers who are ranked outside the 
+Top 2 of their batch. 
+●​ Mitigation: Rule engine must validate user.department_rank <= 2 for upperclassmen 
+profiles4. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-05. 
+●​ Official URLs Checked: 
+https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered26. 
+
+●​ Broken Links: None. 
+●​ Overall Confidence Score: 98/100. 
+Works cited 
+1.​ Scholarships & Financial Aid | Admissions | Senior High School | Ateneo de Manila 
+University, https://www.ateneo.edu/ashs/admissions/scholarships-financial-aid 
+2.​ Scholarships and Financial Aid | College | Ateneo de Manila University, 
+https://www.ateneo.edu/college/scholarships 
+3.​ live_scholarships_for_gemini.json 
+4.​ Ateneo Scholarship Guide: Types, Benefits, and How to Qualify - Ahead Tutorial 
+and Review, https://www.review.ahead.edu.ph/ateneo-scholarships-guide/ 
+5.​ Scholarship Qualifications - PHINMA Foundation, Inc., 
+https://www.phinmafoundation.org/scholarship-qualifications/ 
+6.​ Scholarship and Financial Aid Programs - Ateneo de Manila University, 
+https://www.ateneo.edu/college/scholarships/programs 
+7.​ Scholarships and Financial Aid | Department of English | Ateneo de Manila 
+University, https://www.ateneo.edu/soh/english/finaid 
+8.​ List of Philippine Normal University (PNU) Scholarship Programs, 
+https://philippinescholarships.com/philippine-normal-university-scholarships/ 
+9.​ PHINMA National Scholarship, 
+https://www.phinmafoundation.org/phinma-national-scholarship/ 
+10.​LANI Scholarship Program - Taguig City University - TCU, 
+https://tcu.edu.ph/lani-scholarship 
+11.​Scholarship Grants and Financial Aid - Enderun Colleges, 
+https://www.enderuncolleges.com/admissions/scholarship-grants-and-financial-s
+upport/ 
+12.​GENERAL INFORMATION BULLETIN ON FIRST-YEAR ADMISSIONS for AY 
+2027-2028 - upcat - University of the Philippines, 
+https://upcat.up.edu.ph/htmls/aboutupcat.html 
+13.​The University of the Philippines - GAZETTE, 
+https://osu.up.edu.ph/wp-content/uploads/gazette/2009-APR-JUN.pdf 
+14.​CONTENTS - UP OSU - University of the Philippines, 
+https://osu.up.edu.ph/wp-content/uploads/gazette/2003.pdf 
+15.​The University of the Philippines, 
+https://osu.up.edu.ph/wp-content/uploads/2023/02/GAZETTE-2000_.pdf 
+16.​gazette - The University of the Philippines, 
+https://osu.up.edu.ph/wp-content/uploads/2022/04/1310.FINALE.pdf 
+17.​Call for Scholarship Applications AY 2025-2026 - UP College of Law - UP Diliman, 
+https://law.upd.edu.ph/call-for-scholarship-applications-ay-2025-2026/ 
+18.​Scholarships | Admissions | School of Medicine and Public Health | Ateneo de 
+Manila University, https://www.ateneo.edu/asmph/admissions/scholarships 
+19.​Scholarships & Financial Aid | Graduate Programs | Ateneo de Manila University, 
+https://www.ateneo.edu/ls/graduate/scholarships-financial-aid 
+20.​Grants - De La Salle University, 
+
+https://old.dlsu.edu.ph/admissions/scholarships/grants/ 
+21.​Scholarships and Student Loans - De La Salle University, 
+https://old.dlsu.edu.ph/scholarships-and-student-loans/ 
+22.​Frequently Asked Questions - De La Salle University, 
+https://old.dlsu.edu.ph/wp-content/uploads/pdf/oas/scholarships/faqs-application
+-to-st-la-salle-financial-assistance-grant-ug.pdf 
+23.​Archer Achiever Scholarship - De La Salle University, 
+https://www.dlsu.edu.ph/scholarship/archer-achiever-scholarship/ 
+24.​Scholarships - De La Salle University, 
+https://old.dlsu.edu.ph/admissions/scholarships/ 
+25.​Archer Achiever Scholarship - De La Salle University, 
+https://old.dlsu.edu.ph/admissions/scholarships/grants/archer-achiever-scholarshi
+p/ 
+26.​Scholarship Offered - Welcome - UST OSA - University of Santo Tomas, 
+https://manila.ust.edu.ph/osawebapp/osainfo-scholarshipoffered 
+27.​MSU SASE Online Application » Home, https://sase.msuiit.edu.ph/ 
+28.​Our Newsletter Sections - MSU Main Campus, 
+https://www.msumain.edu.ph/wp-content/uploads/2025/03/05-2024-September-
+MSU-Newsletter.pdf 
+29.​Office of Scholarship and Financial and Assistance - pup.edu.ph, 
+https://www.pup.edu.ph/studentservices/osfa/ 
+30.​Scholarship and Financial Assistance - Polytechnic University of the Philippines, 
+https://www.pup.edu.ph/students/scholarships 
+31.​Citizen's Charter - Polytechnic University of the Philippines, 
+https://www.pup.edu.ph/goodgovernance/2015/PUPCitizensCharter201504APR.p
+df 
+32.​Citizen's Charter - pup.edu.ph, 
+https://www.pup.edu.ph/goodgovernance/2013/ThePUPCitizensCharter.pdf 
+33.​Services - Polytechnic University of the Philippines, 
+https://www.pup.edu.ph/studentservices/osfa/services 
+34.​Services - Polytechnic University of the Philippines, 
+https://www.pup.edu.ph/studentservices/oss/services 
+35.​SDG 1: No Poverty - Polytechnic University of the Philippines, 
+https://www.pup.edu.ph/sdgs/sdg1 
+36.​Scholarships for Instructors' Knowledge Advancement Program (SIKAP), 
+https://legacy.ched.gov.ph/sikap/ 

@@ -4,11 +4,11 @@ import { Section, SectionHeader, cardClass, IconTile } from "./Section";
 
 export function BenefitsSection() {
   return (
-    <Section variant="white" border="bottom">
+    <Section variant="white" border="bottom" data-testid="landing-benefits">
       <SectionHeader
         eyebrow="Why ISKONNECT"
         title="Every Filipino student deserves to discover opportunities they qualify for."
-        description="ISKONNECT matches scholarships from government agencies, universities, LGUs, and private organizations based on your profile—so you spend less time searching and more time applying."
+        description="ISKONNECT matches scholarships from government agencies, universities, LGUs, and private organizations based on your profile, so you spend less time searching and more time applying."
       />
       <div className="mt-12 grid gap-6 sm:mt-16 md:grid-cols-3">
         {benefitItems.map(({ title, body, Icon }, i) => (

@@ -22,12 +22,14 @@ router = APIRouter(tags=["notifications"])
 class NotificationPreferencesResponse(BaseModel):
     notify_deadline_reminders: bool
     notify_new_matches: bool
+    notify_weekly_digest: bool
     notifications_globally_enabled: bool
 
 
 class NotificationPreferencesUpdate(BaseModel):
     notify_deadline_reminders: bool | None = None
     notify_new_matches: bool | None = None
+    notify_weekly_digest: bool | None = None
 
 
 def _require_notifications_enabled():
@@ -46,6 +48,7 @@ def get_notification_preferences(
     return NotificationPreferencesResponse(
         notify_deadline_reminders=bool(getattr(user, "notify_deadline_reminders", True)),
         notify_new_matches=bool(getattr(user, "notify_new_matches", True)),
+        notify_weekly_digest=bool(getattr(user, "notify_weekly_digest", True)),
         notifications_globally_enabled=settings.enable_notifications,
     )
 
@@ -64,11 +67,14 @@ def update_notification_preferences(
         user.notify_deadline_reminders = body.notify_deadline_reminders
     if body.notify_new_matches is not None:
         user.notify_new_matches = body.notify_new_matches
+    if body.notify_weekly_digest is not None:
+        user.notify_weekly_digest = body.notify_weekly_digest
     db.commit()
     db.refresh(user)
     return NotificationPreferencesResponse(
         notify_deadline_reminders=bool(user.notify_deadline_reminders),
         notify_new_matches=bool(user.notify_new_matches),
+        notify_weekly_digest=bool(user.notify_weekly_digest),
         notifications_globally_enabled=settings.enable_notifications,
     )
 

@@ -1,0 +1,32 @@
+{
+  "scholarship_field_updates": [
+    {
+      "id": 16,
+      "reason": "Gabay Guro is teacher-education only (BEED/BSED)",
+      "fields": {
+        "eligible_courses_psced": ["Education"]
+      }
+    },
+    {
+      "id": 81,
+      "reason": "MEXT undergraduate program is for study in Japan",
+      "fields": {
+        "countries": "Japan"
+      }
+    },
+    {
+      "id": 65,
+      "reason": "GKS undergraduate program is for study in South Korea",
+      "fields": {
+        "countries": "South Korea"
+      }
+    }
+  ],
+  "required_affiliation_assignments": [
+    {
+      "affiliation_code": "medical_frontliner_dependent",
+      "scholarship_ids": [14],
+      "reason": "Pagpupugay is for medical frontliner dependents"
+    }
+  ]
+}

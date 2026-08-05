@@ -36,7 +36,7 @@ from app.utils.scholarship_versioning import (
     record_scholarship_version,
     snapshot_scholarship_row,
 )
-from app.utils.quality_score import compute_confidence_score
+from app.utils.opportunity_quality import apply_quality_scores
 from app.utils.timezone import utc_now_naive
 
 logger = logging.getLogger(__name__)
@@ -56,11 +56,12 @@ router = APIRouter()
 
 def _build_all_scholarship_dicts(db: Session, *, publishable_only: bool = False) -> list[dict]:
     from app.utils.data_completeness import is_publishable
+    from app.matching.scholarship_enrichment import enrich_scholarship_dicts
 
     scholarships = db.query(models.Scholarship).filter(
         models.Scholarship.is_active != False  # noqa: E712
     ).all()
-    dicts = [_scholarship_to_dict(s) for s in scholarships]
+    dicts = enrich_scholarship_dicts(db, [_scholarship_to_dict(s) for s in scholarships])
     if publishable_only:
         dicts = [d for d in dicts if is_publishable(d)]
     return dicts
@@ -75,22 +76,68 @@ from app.serialization.scholarship import (
     scholarship_to_api_payload as _scholarship_to_response,
     scholarship_to_catalog_dict as _scholarship_to_dict,
 )
-from app.auth import assert_can_read_profile, get_optional_user_id, get_profile_access_token
+from app.auth import assert_can_read_profile, get_current_user, get_optional_user_id, get_profile_access_token
 from app.api.v1.profiles import get_profile_dict
 from app.matching.eligibility_result import evaluate_eligibility
+from app.matching.eligibility_explanation import build_eligibility_explanation
 from app.matching.preparation import compute_application_readiness
+from app.matching.scholarship_enrichment import attach_scholarship_join_fields
 from app.utils.freshness_chips import build_freshness_chips
 from app.utils.verification_display import attach_verification_fields
-from app.utils.field_evidence import list_public_field_evidence
+
+_STUDENT_INTERNAL_STRIP = (
+    "verification_badge",
+    "verification_badge_label",
+    "completeness_label",
+    "completeness_tier",
+    "completeness_signal",
+    "last_reviewed_label",
+    "_has_field_evidence",
+    "field_evidence",
+    "confidence_score",
+    "data_completeness_score",
+)
 
 
-def _public_scholarship_payload(row) -> dict:
-    """Student-facing scholarship payload without internal completeness score."""
+def _public_scholarship_payload(row, db: Session | None = None) -> dict:
+    """Student-facing scholarship payload without internal completeness or evidence."""
     data = dict(_scholarship_to_response(row))
     data.pop("confidence_score", None)
     data.pop("data_completeness_score", None)
     data["freshness_chips"] = build_freshness_chips(data)
-    return attach_verification_fields(data)
+    if db is not None and row.id:
+        data["_has_field_evidence"] = (
+            db.query(models.FieldEvidence)
+            .filter(
+                models.FieldEvidence.scholarship_id == row.id,
+                models.FieldEvidence.superseded_at.is_(None),
+            )
+            .first()
+            is not None
+        )
+    attach_verification_fields(data)
+    for key in _STUDENT_INTERNAL_STRIP:
+        data.pop(key, None)
+    return data
+
+
+def _admin_scholarship_payload(row, db: Session | None = None) -> dict:
+    """Admin/reviewer payload retains internal verification and completeness fields."""
+    data = dict(_scholarship_to_response(row))
+    data["freshness_chips"] = build_freshness_chips(data)
+    if db is not None and row.id:
+        data["_has_field_evidence"] = (
+            db.query(models.FieldEvidence)
+            .filter(
+                models.FieldEvidence.scholarship_id == row.id,
+                models.FieldEvidence.superseded_at.is_(None),
+            )
+            .first()
+            is not None
+        )
+    attach_verification_fields(data)
+    data.pop("_has_field_evidence", None)
+    return data
 
 
 def persist_scholarship_from_schema(
@@ -170,24 +217,42 @@ def get_scholarship(
     db: Session = Depends(get_db),
     user_id: Annotated[int | None, Depends(get_optional_user_id)] = None,
     profile_token: Annotated[str | None, Depends(get_profile_access_token)] = None,
+    user: Annotated[models.User | None, Depends(get_current_user)] = None,
 ):
     s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
     if not s:
         logger.warning("scholarships_get_not_found scholarship_id=%s", scholarship_id)
         raise HTTPException(status_code=404, detail="Scholarship not found")
-    payload = dict(_scholarship_to_response(s))
-    payload.pop("confidence_score", None)
-    payload.pop("data_completeness_score", None)
-    payload["freshness_chips"] = build_freshness_chips(payload)
-    payload["field_evidence"] = list_public_field_evidence(db, scholarship_id)
+    is_admin = user is not None and getattr(user, "role", "student") == "admin"
+    payload = _admin_scholarship_payload(s, db) if is_admin else _public_scholarship_payload(s, db)
     if profile_id is not None:
         assert_can_read_profile(profile_id, db, user_id, profile_token)
         profile = get_profile_dict(profile_id, db)
         if profile:
-            sch_dict = _scholarship_to_dict(s)
+            sch_dict = attach_scholarship_join_fields(db, _scholarship_to_dict(s))
             payload["preparation"] = compute_application_readiness(sch_dict, profile)
             payload.update(evaluate_eligibility(profile, sch_dict).to_dict())
-    return attach_verification_fields(payload)
+    return payload
+
+
+@router.get("/admin/scholarships/{scholarship_id}/evidence")
+@limiter.limit("60/minute")
+def get_scholarship_evidence_admin(
+    request: Request,
+    scholarship_id: int,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    """Admin-only field evidence trail for catalog review."""
+    s = db.query(models.Scholarship).filter(models.Scholarship.id == scholarship_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    from app.utils.field_evidence import list_admin_field_evidence
+
+    return {
+        "scholarship_id": scholarship_id,
+        "field_evidence": list_admin_field_evidence(db, scholarship_id),
+    }
 
 
 @router.get("/scholarships/{scholarship_id}/history", response_model=list[schemas.ScholarshipVersionHistoryItem])
@@ -242,18 +307,13 @@ def get_scholarship_eligibility(
     profile = get_profile_dict(profile_id, db)
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
-    sch_dict = _scholarship_to_dict(s)
+    sch_dict = attach_scholarship_join_fields(db, _scholarship_to_dict(s))
     elig = evaluate_eligibility(profile, sch_dict)
-    data = elig.to_dict()
+    explanation = build_eligibility_explanation(profile, sch_dict, elig)
     return {
         "scholarship_id": scholarship_id,
         "profile_id": profile_id,
-        "qualification_status": data.get("qualification_status", "not_eligible"),
-        "requirements": data.get("requirements") or [],
-        "missing_requirements": data.get("missing_requirements") or [],
-        "qualifying_requirements": data.get("qualifying_requirements") or [],
-        "eligibility_confidence": data.get("eligibility_confidence"),
-        "passes_for_matching": elig.passes_for_matching,
+        **explanation,
     }
 
 
@@ -279,7 +339,7 @@ def update_scholarship(
         is_import=False,
     )
     s.last_verified_at = utc_now_naive()
-    s.confidence_score = compute_confidence_score(s)
+    apply_quality_scores(s, db)
     new_snap = snapshot_scholarship_row(s)
     diff = diff_snapshots(old_snap, new_snap)
     if diff:

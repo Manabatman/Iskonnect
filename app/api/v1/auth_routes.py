@@ -4,7 +4,7 @@ import logging
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, Response, status
 from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel, EmailStr, field_validator
 from sqlalchemy.orm import Session
@@ -28,8 +28,13 @@ from app.config import settings
 from app.db import get_db
 from app.limiter import limiter
 from app import models
+from app.utils.client_ip import get_client_ip
 from app.utils.email import send_email_verification_email, send_password_reset_email
 from app.utils.email_abuse import can_send_transactional_email, record_transactional_email_sent
+from app.utils.email_validation import validate_email_format
+from app.utils.login_lockout import clear_failed_logins, is_login_locked, record_failed_login
+from app.utils.server_timing import ServerTiming
+from app.utils.turnstile import require_turnstile_or_400
 from app.utils.timezone import utc_now_naive
 
 router = APIRouter()
@@ -39,18 +44,31 @@ logger = logging.getLogger(__name__)
 class RegisterRequest(BaseModel):
     email: EmailStr
     password: str
+    turnstile_token: str | None = None
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format_field(cls, v: str) -> str:
+        validate_email_format(str(v))
+        return v
 
     @field_validator("password")
     @classmethod
     def password_min_length(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
+        if len(v) < 10:
+            raise ValueError("Password must be at least 10 characters")
         return v
 
 
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format_field(cls, v: str) -> str:
+        validate_email_format(str(v))
+        return v
 
 
 class TokenResponse(BaseModel):
@@ -59,6 +77,10 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
     user_id: int
     role: str
+    email: str
+    email_verified: bool = False
+    require_email_verification: bool = True
+    has_profile: bool = False
 
 
 class RegisterResponse(BaseModel):
@@ -70,6 +92,10 @@ class RegisterResponse(BaseModel):
     token_type: str = "bearer"
     user_id: int | None = None
     role: str | None = None
+    email: str | None = None
+    email_verified: bool = False
+    require_email_verification: bool = True
+    has_profile: bool = False
 
 
 class RefreshRequest(BaseModel):
@@ -83,6 +109,12 @@ class LogoutRequest(BaseModel):
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
 
+    @field_validator("email")
+    @classmethod
+    def validate_email_format_field(cls, v: str) -> str:
+        validate_email_format(str(v))
+        return v
+
 
 class ResetPasswordRequest(BaseModel):
     token: str
@@ -91,8 +123,8 @@ class ResetPasswordRequest(BaseModel):
     @field_validator("new_password")
     @classmethod
     def password_min_length(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
+        if len(v) < 10:
+            raise ValueError("Password must be at least 10 characters")
         return v
 
 
@@ -106,6 +138,7 @@ class UserMeResponse(BaseModel):
     role: str
     email_verified: bool = False
     require_email_verification: bool = True
+    has_profile: bool = False
 
 
 def _maybe_send_verification_email(to_email: str, token: str) -> None:
@@ -115,7 +148,7 @@ def _maybe_send_verification_email(to_email: str, token: str) -> None:
         if send_email_verification_email(to_email, token):
             record_transactional_email_sent("verify", to_email)
     else:
-        logger.warning("email_verify_throttled to=%s", to_email)
+        logger.warning("email_verify_throttled")
 
 
 def _maybe_send_password_reset_email(to_email: str, token: str) -> None:
@@ -123,7 +156,29 @@ def _maybe_send_password_reset_email(to_email: str, token: str) -> None:
         if send_password_reset_email(to_email, token):
             record_transactional_email_sent("reset", to_email)
     else:
-        logger.warning("email_reset_throttled to=%s", to_email)
+        logger.warning("email_reset_throttled")
+
+
+def _token_response(
+    db: Session,
+    user: models.User,
+    access: str,
+    refresh: str,
+) -> TokenResponse:
+    has_profile = (
+        db.query(models.Student).filter(models.Student.user_id == user.id).first() is not None
+    )
+    verified = bool(getattr(user, "email_verified", False))
+    return TokenResponse(
+        access_token=access,
+        refresh_token=refresh,
+        user_id=user.id,
+        role=getattr(user, "role", "student"),
+        email=user.email,
+        email_verified=verified,
+        require_email_verification=settings.require_email_verification,
+        has_profile=has_profile,
+    )
 
 
 def _tokens_for_user(db: Session, user: models.User) -> TokenResponse:
@@ -131,12 +186,7 @@ def _tokens_for_user(db: Session, user: models.User) -> TokenResponse:
     access = create_access_token(user.id, role=role)
     refresh = issue_refresh_token(db, user.id)
     db.commit()
-    return TokenResponse(
-        access_token=access,
-        refresh_token=refresh,
-        user_id=user.id,
-        role=role,
-    )
+    return _token_response(db, user, access, refresh)
 
 
 @router.post("/auth/register", response_model=RegisterResponse)
@@ -147,6 +197,8 @@ def register(
     db: Session = Depends(get_db),
 ):
     """Register a new user. Returns tokens for new accounts; generic 200 if email already exists."""
+    client_ip = get_client_ip(request)
+    require_turnstile_or_400(register_req.turnstile_token, client_ip)
     existing = db.query(models.User).filter(models.User.email == register_req.email).first()
     if existing:
         logger.warning("auth_register_failed user_hash=%s reason=already_registered", hash(register_req.email) % 10_000)
@@ -180,7 +232,8 @@ def register(
     tokens = _tokens_for_user(db, user)
     logger.info("auth_register_ok user_id=%s", user.id)
     register_detail = (
-        "Account created. You can sign in now."
+        "Welcome to the ISKONNECT Public Beta! Your account is ready. Email verification is temporarily "
+        "disabled while we validate the platform — please register with a valid email address."
         if auto_verify
         else "Account created. Check your email to verify your address."
     )
@@ -190,6 +243,10 @@ def register(
         refresh_token=tokens.refresh_token,
         user_id=tokens.user_id,
         role=tokens.role,
+        email=tokens.email,
+        email_verified=tokens.email_verified,
+        require_email_verification=tokens.require_email_verification,
+        has_profile=tokens.has_profile,
     )
 
 
@@ -198,23 +255,42 @@ def register(
 def login(
     request: Request,
     req: Annotated[LoginRequest, Body()],
+    response: Response,
     db: Session = Depends(get_db),
 ):
     """Login with email and password."""
-    user = db.query(models.User).filter(models.User.email == req.email).first()
-    if not user or not verify_password(req.password, user.password_hash):
+    timing = ServerTiming()
+    if is_login_locked(req.email):
+        logger.warning("auth_login_failed user_hash=%s reason=locked", hash(req.email) % 10_000)
+        timing.attach(response)
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many failed sign-in attempts. Please wait 15 minutes and try again.",
+        )
+    with timing.measure("db_lookup"):
+        user = db.query(models.User).filter(models.User.email == req.email).first()
+    with timing.measure("bcrypt", desc="password verify"):
+        password_ok = user is not None and verify_password(req.password, user.password_hash)
+    if not user or not password_ok:
+        record_failed_login(req.email)
         logger.warning("auth_login_failed user_hash=%s reason=invalid_credentials", hash(req.email) % 10_000)
+        timing.attach(response)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
+    clear_failed_logins(req.email)
     if settings.require_email_verification and not bool(getattr(user, "email_verified", False)):
         logger.info("auth_login_blocked_unverified user_id=%s", user.id)
+        timing.attach(response)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Please verify your email before signing in. Check your inbox or request a new verification link.",
         )
-    return _tokens_for_user(db, user)
+    with timing.measure("token_issue"):
+        tokens = _tokens_for_user(db, user)
+    timing.attach(response)
+    return tokens
 
 
 @router.post("/auth/refresh", response_model=TokenResponse)
@@ -230,11 +306,11 @@ def refresh_tokens(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired refresh token")
     user, new_refresh = out
     role = getattr(user, "role", "student")
-    return TokenResponse(
-        access_token=create_access_token(user.id, role=role),
-        refresh_token=new_refresh,
-        user_id=user.id,
-        role=role,
+    return _token_response(
+        db,
+        user,
+        create_access_token(user.id, role=role),
+        new_refresh,
     )
 
 
@@ -261,6 +337,7 @@ def logout(
 def get_me(
     request: Request,
     user: Annotated[models.User | None, Depends(get_current_user)],
+    db: Session = Depends(get_db),
 ):
     """Return current authenticated user info."""
     if user is None:
@@ -271,12 +348,16 @@ def get_me(
             headers={"WWW-Authenticate": "Bearer"},
         )
     verified = bool(getattr(user, "email_verified", False))
+    has_profile = (
+        db.query(models.Student).filter(models.Student.user_id == user.id).first() is not None
+    )
     return UserMeResponse(
         id=user.id,
         email=user.email,
         role=getattr(user, "role", "student"),
         email_verified=verified,
         require_email_verification=settings.require_email_verification,
+        has_profile=has_profile,
     )
 
 

@@ -1,70 +1,137 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import {
+  Archive,
+  CalendarClock,
+  CheckCircle2,
+  ClipboardList,
+  Clock,
+  HelpCircle,
+  History,
+  Lock,
+  TrendingUp,
+} from "lucide-react";
 import { BackNavLink } from "../components/BackNavLink";
 import { LifecycleStatusExample } from "../components/LifecycleStatusBadge";
-import { LIFECYCLE_STATUS_GUIDE, UI_ELIGIBILITY_GUIDE } from "../utils/scholarshipStatus";
+import {
+  LIFECYCLE_STATUS_GUIDE,
+  UI_ELIGIBILITY_GUIDE,
+  type ScholarshipLifecycleStatus,
+  type UiEligibilityState,
+} from "../utils/scholarshipStatus";
 
-const toneClasses = {
-  success: "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950/30",
-  warning: "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30",
-  neutral: "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50",
-  info: "border-primary-200 bg-primary-50 dark:border-primary-800 dark:bg-primary-950/30",
-} as const;
+const lifecycleIcons: Record<ScholarshipLifecycleStatus, ReactNode> = {
+  open: <CheckCircle2 className="h-5 w-5" />,
+  closed: <Lock className="h-5 w-5" />,
+  previous_cycle: <History className="h-5 w-5" />,
+  expected_reopen: <CalendarClock className="h-5 w-5" />,
+  archived: <Archive className="h-5 w-5" />,
+  needs_verification: <HelpCircle className="h-5 w-5" />,
+};
 
-function StatusCard({
-  statusKey,
+const eligibilityIcons: Record<UiEligibilityState, ReactNode> = {
+  eligible_now: <CheckCircle2 className="h-5 w-5" />,
+  opening_soon: <Clock className="h-5 w-5" />,
+  prepare_ahead: <ClipboardList className="h-5 w-5" />,
+  future_eligibility: <TrendingUp className="h-5 w-5" />,
+};
+
+function StatusRow({
   label,
   shortDescription,
   whatToDo,
-  tone,
+  icon,
+  badge,
 }: {
-  statusKey?: string;
   label: string;
   shortDescription: string;
   whatToDo: string;
-  tone: keyof typeof toneClasses;
+  icon: ReactNode;
+  badge?: ReactNode;
 }) {
   return (
-    <article className={`rounded-xl border p-5 ${toneClasses[tone]}`}>
-      <div className="flex flex-wrap items-center gap-3">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{label}</h3>
-        {statusKey ? <LifecycleStatusExample statusKey={statusKey} /> : null}
+    <details className="group rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60">
+      <summary className="cursor-pointer list-none px-4 py-3 pr-12 outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 [&::-webkit-details-marker]:hidden">
+        <span className="flex items-start gap-3">
+          <span className="mt-0.5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden>
+            {icon}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="font-semibold text-slate-900 dark:text-slate-100">{label}</span>
+              {badge}
+            </span>
+            <span className="mt-1 block text-sm text-slate-600 dark:text-slate-400">{shortDescription}</span>
+          </span>
+          <span className="shrink-0 text-slate-400 transition motion-safe:group-open:rotate-180" aria-hidden>
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </span>
+      </summary>
+      <div className="border-t border-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-600 dark:border-slate-700 dark:text-slate-400">
+        {whatToDo}
       </div>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{shortDescription}</p>
-      <p className="mt-3 text-sm font-medium text-slate-800 dark:text-slate-200">
-        What to do: <span className="font-normal text-slate-700 dark:text-slate-300">{whatToDo}</span>
-      </p>
-    </article>
+    </details>
   );
 }
 
 export function ScholarshipStatusPage() {
+  const lifecycleItems = Object.entries(LIFECYCLE_STATUS_GUIDE).map(([key, entry]) => ({
+    id: key,
+    label: entry.label,
+    shortDescription: entry.shortDescription,
+    whatToDo: entry.whatToDo,
+    icon: lifecycleIcons[key as ScholarshipLifecycleStatus],
+    badge: <LifecycleStatusExample statusKey={key} />,
+  }));
+
+  const eligibilityItems = Object.entries(UI_ELIGIBILITY_GUIDE).map(([key, entry]) => ({
+    id: key,
+    label: entry.label,
+    shortDescription: entry.shortDescription,
+    whatToDo: entry.whatToDo,
+    icon: eligibilityIcons[key as UiEligibilityState],
+  }));
+
   return (
     <section className="py-12">
       <div className="mx-auto max-w-3xl px-4">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Scholarship status guide</h1>
         <p className="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-400">
-          ISKONNECT uses clear labels so you know whether to apply now, prepare for later, or use a listing for
-          reference. Here&apos;s what each label means and what we suggest you do next.
+          Quick labels tell you whether to apply now, prepare for later, or use a scholarship for reference. Expand any
+          row for what to do next.
         </p>
 
-        <div className="mt-6 rounded-xl border border-primary-200 bg-primary-50/80 p-5 dark:border-primary-800 dark:bg-primary-950/30">
-          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Our approach</p>
-          <ul className="mt-2 list-inside list-disc space-y-1 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            <li>Closed scholarships stay visible so you can plan for the next cycle—they are not silently removed.</li>
-            <li>“Needs verification” means we are still confirming details; always check the official provider site.</li>
-            <li>Labels tell you what to do next, not just how our database is organized.</li>
-          </ul>
-          <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">Last updated: June 2026</p>
+        <div
+          className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-800 dark:bg-amber-950/40"
+          role="note"
+          data-testid="status-guide-disclaimer"
+        >
+          <p className="text-sm font-semibold text-amber-950 dark:text-amber-100">Important</p>
+          <p className="mt-2 text-sm leading-relaxed text-amber-900/90 dark:text-amber-100/90">
+            Labels are guides based on the information we have. Scholarship providers make the final call on eligibility
+            and deadlines. &quot;Needs verification&quot; means you should confirm details on the official provider site
+            before applying. ISKONNECT does not guarantee funding or acceptance.
+          </p>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-12">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Application cycle status</h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-            These describe whether a scholarship is currently accepting applications.
+            Whether a scholarship is accepting applications right now.
           </p>
-          <div className="mt-6 space-y-4">
-            {Object.entries(LIFECYCLE_STATUS_GUIDE).map(([key, entry]) => (
-              <StatusCard key={key} statusKey={key} {...entry} />
+          <div className="mt-4 space-y-2">
+            {lifecycleItems.map(({ id, label, shortDescription, whatToDo, icon, badge }) => (
+              <StatusRow
+                key={id}
+                label={label}
+                shortDescription={shortDescription}
+                whatToDo={whatToDo}
+                icon={icon}
+                badge={badge}
+              />
             ))}
           </div>
         </div>
@@ -74,17 +141,22 @@ export function ScholarshipStatusPage() {
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
             When you&apos;re signed in, cards may also show how you fit based on your profile.
           </p>
-          <div className="mt-6 space-y-4">
-            {Object.values(UI_ELIGIBILITY_GUIDE).map((entry) => (
-              <StatusCard key={entry.label} {...entry} />
+          <div className="mt-4 space-y-2">
+            {eligibilityItems.map(({ id, label, shortDescription, whatToDo, icon }) => (
+              <StatusRow
+                key={id}
+                label={label}
+                shortDescription={shortDescription}
+                whatToDo={whatToDo}
+                icon={icon}
+              />
             ))}
           </div>
         </div>
 
         <div className="mt-12 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800/80">
           <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            Labels are guides based on the information we have. Scholarship providers make the final call on eligibility
-            and deadlines. Read{" "}
+            Closed scholarships stay visible so you can plan for the next cycle. Read{" "}
             <Link to="/how-we-verify" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
               how we verify scholarships
             </Link>{" "}

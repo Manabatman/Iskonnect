@@ -202,6 +202,30 @@ def generate_profiles() -> list[dict]:
             "gt_region_canonical": region,
         })
 
+    # --- 3b. Targeted sparse profiles for strict-oracle coverage ---
+    _sparse_base = {
+        "age": 19,
+        "education_level": "College",
+        "current_academic_stage": "College",
+        "school_type": "Public",
+        "household_income_annual": 200_000,
+        "gwa_normalized": 88.0,
+        "gwa_raw": "88.0",
+        "field_of_study_broad": "Engineering",
+        "field_of_study_specific": "BS Civil Engineering",
+        "preferred_courses": ["BS Civil Engineering"],
+        "region": "Metro Manila",
+        "city_municipality": "Quezon City",
+        "school": "Polytechnic University of the Philippines",
+        "needs": [],
+        **_empty_equity(),
+        "gt_region_canonical": "NCR",
+    }
+    add({**_sparse_base, "gwa_normalized": None, "gwa_raw": None, "gt_sparse": "missing_gwa"})
+    add({**_sparse_base, "household_income_annual": None, "income_bracket": None, "gt_sparse": "missing_income"})
+    add({**_sparse_base, "region": None, "city_municipality": None, "gt_region_canonical": None, "gt_sparse": "missing_region"})
+    add({**_sparse_base, "school": None, "school_id": None, "gt_sparse": "missing_school"})
+
     # --- 4. Edge personas that target known engine risks ---
     # Architecture student (substring 'it' in 'architecture' risk)
     add({

@@ -1,10 +1,56 @@
+import { useEffect, useState } from "react";
 import { NEEDS_CATEGORIES } from "../../constants/needsCategories";
+import { FIELDS_OF_STUDY_FALLBACK, type FieldOfStudyGroup } from "../../constants/profileOptions";
 import { AutocompleteInput } from "../AutocompleteInput";
+import { GlossaryTerm } from "../GlossaryTerm";
+import { apiFetch } from "../../api/client";
 import type { ProfileBuilderState } from "./profileBuilderState";
 import type { StepProps } from "./PersonalInfoStep";
 import { inputClass, labelClass } from "./profileBuilderConstants";
 
+function normalizeFieldGroups(raw: unknown): FieldOfStudyGroup[] {
+  if (!Array.isArray(raw)) return FIELDS_OF_STUDY_FALLBACK;
+  const groups: FieldOfStudyGroup[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== "object") continue;
+    const row = item as { label?: string; options?: unknown };
+    if (!row.label || !Array.isArray(row.options)) continue;
+    const options = row.options
+      .map((opt) => {
+        if (!opt || typeof opt !== "object") return null;
+        const o = opt as { value?: string; label?: string };
+        if (!o.value || !o.label) return null;
+        return { value: String(o.value), label: String(o.label) };
+      })
+      .filter((x): x is { value: string; label: string } => x != null);
+    if (options.length > 0) {
+      groups.push({ label: row.label, options });
+    }
+  }
+  return groups.length > 0 ? groups : FIELDS_OF_STUDY_FALLBACK;
+}
+
 export function FieldOfStudyStep({ state, onChange }: StepProps) {
+  const [fieldGroups, setFieldGroups] = useState<FieldOfStudyGroup[]>(FIELDS_OF_STUDY_FALLBACK);
+
+  useEffect(() => {
+    let cancelled = false;
+    apiFetch("/api/v1/suggestions/profile-options")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        setFieldGroups(
+          normalizeFieldGroups((data as { fields_of_study?: unknown }).fields_of_study)
+        );
+      })
+      .catch(() => {
+        /* keep static fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="space-y-4">
       <div>
@@ -21,7 +67,7 @@ export function FieldOfStudyStep({ state, onChange }: StepProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor="pb-field_of_study_broad" className={labelClass}>
-            Field of study (broad)
+            Field of study (broad) — <GlossaryTerm term="PSCED">PSCED</GlossaryTerm> categories
           </label>
           <select
             id="pb-field_of_study_broad"
@@ -30,20 +76,15 @@ export function FieldOfStudyStep({ state, onChange }: StepProps) {
             className={inputClass}
           >
             <option value="">Select</option>
-            <optgroup label="STEM (Science, Technology, Engineering, Math)">
-              <option value="STEM">STEM</option>
-              <option value="Engineering">Engineering</option>
-              <option value="IT">IT / Computer Science</option>
-              <option value="Science">Natural Sciences</option>
-              <option value="Mathematics">Mathematics / Statistics</option>
-            </optgroup>
-            <optgroup label="Other fields">
-              <option value="Medical">Medical / Health Sciences</option>
-              <option value="Business">Business / Accountancy</option>
-              <option value="Education">Education</option>
-              <option value="Agriculture">Agriculture / Forestry</option>
-              <option value="Arts">Arts / Humanities</option>
-            </optgroup>
+            {fieldGroups.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((opt) => (
+                  <option key={`${group.label}-${opt.value}`} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
         </div>
         <div className="sm:col-span-2">

@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
+import { SkipLink } from "../a11y/SkipLink";
 import { Navbar } from "../Navbar";
 import { Footer } from "../Footer";
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -15,8 +16,9 @@ interface PublicShellProps {
 export function PublicShell({ children }: PublicShellProps) {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+      <SkipLink />
       <Navbar />
-      <main className="bg-slate-50 dark:bg-slate-900">
+      <main id="main-content" className="bg-slate-50 dark:bg-slate-900">
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
       <Footer />

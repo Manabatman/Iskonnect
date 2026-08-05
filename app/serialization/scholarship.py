@@ -86,6 +86,21 @@ SCHOLARSHIP_CATALOG_EXTRA_KEYS: tuple[str, ...] = (
     "type_attributes",
     "organization_id",
     "editorial_state",
+    "max_prior_tertiary_units",
+    "min_work_experience_years",
+    "max_class_rank",
+    "max_class_percentile",
+    "academic_gate_mode",
+    "allow_transferee",
+    "allow_shiftee",
+    "first_undergraduate_only",
+    "min_residency_years",
+    "age_as_of_date",
+    "age_as_of_rule",
+    "max_parent_salary_grade",
+    "parent_program_id",
+    "required_affiliation_codes",
+    "conflict_scope_codes",
 )
 
 MATCH_SCORING_KEYS: tuple[str, ...] = (
@@ -105,6 +120,8 @@ MATCH_SCORING_KEYS: tuple[str, ...] = (
     "missing_requirements",
     "eligibility_confidence",
     "requirements",
+    "unverified_requirements",
+    "provisional_reason",
 )
 
 MATCH_MINIMAL_EXTRA_KEYS: tuple[str, ...] = (
@@ -138,6 +155,17 @@ def _resolved_regions(row: Any) -> list:
     return regions or []
 
 
+def _resolve_provider_display(row: Any) -> str | None:
+    """Canonical provider label from linked organization when available."""
+    org = _get_attr(row, "organization")
+    if org is not None:
+        return getattr(org, "canonical_name", None) or _get_attr(row, "provider")
+    display = _get_attr(row, "provider_display") or _get_attr(row, "provider_canonical_name")
+    if display:
+        return display
+    return _get_attr(row, "provider")
+
+
 def _resolve_provider_logo(row: Any) -> str | None:
     """Wire provider_logo from organization.logo_url when linked."""
     explicit = _get_attr(row, "provider_logo")
@@ -164,6 +192,7 @@ def scholarship_row_to_payload(row: Any, *, dates_as_iso: bool = False) -> dict[
         "id": _get_attr(row, "id"),
         "title": _get_attr(row, "title"),
         "provider": _get_attr(row, "provider"),
+        "provider_display": _resolve_provider_display(row),
         "source": _get_attr(row, "source"),
         "countries": parse_json(_get_attr(row, "countries")),
         "regions": _resolved_regions(row),
@@ -231,6 +260,21 @@ def scholarship_row_to_payload(row: Any, *, dates_as_iso: bool = False) -> dict[
         "type_attributes": type_attributes,
         "organization_id": _get_attr(row, "organization_id"),
         "editorial_state": _get_attr(row, "editorial_state"),
+        "max_prior_tertiary_units": _get_attr(row, "max_prior_tertiary_units"),
+        "min_work_experience_years": _get_attr(row, "min_work_experience_years"),
+        "max_class_rank": _get_attr(row, "max_class_rank"),
+        "max_class_percentile": _get_attr(row, "max_class_percentile"),
+        "academic_gate_mode": _get_attr(row, "academic_gate_mode"),
+        "allow_transferee": _get_attr(row, "allow_transferee"),
+        "allow_shiftee": _get_attr(row, "allow_shiftee"),
+        "first_undergraduate_only": bool(_get_attr(row, "first_undergraduate_only", False)),
+        "min_residency_years": _get_attr(row, "min_residency_years"),
+        "age_as_of_date": format_field_value(_get_attr(row, "age_as_of_date"), dates_as_iso=dates_as_iso),
+        "age_as_of_rule": _get_attr(row, "age_as_of_rule"),
+        "max_parent_salary_grade": _get_attr(row, "max_parent_salary_grade"),
+        "parent_program_id": _get_attr(row, "parent_program_id"),
+        "required_affiliation_codes": _get_attr(row, "required_affiliation_codes"),
+        "conflict_scope_codes": _get_attr(row, "conflict_scope_codes"),
     }
 
 

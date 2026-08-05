@@ -1,16 +1,55 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { apiFetch } from "../api/client";
+import { parseSearchSort, type SearchSortOption } from "../constants/searchSort";
 import { useDebounce } from "./useDebounce";
 import type {
   ScholarshipInfo,
   ScholarshipSearchResponse,
   ScholarshipSearchFilters,
 } from "../types";
+import { getNetworkErrorMessage } from "../constants/errorCopy";
 import { cacheSearchResults, readCachedSearchResults } from "../utils/offlineCache";
 
 const DEBOUNCE_MS = 300;
 const DEFAULT_LIMIT = 20;
+
+const TIMING_VALUES = new Set([
+  "open_now",
+  "opening_soon",
+  "expected_reopen",
+  "closed",
+  "previous_cycle",
+  "needs_verification",
+  "archived",
+]);
+
+const LIFE_STAGE_VALUES = new Set(["high_school", "college", "graduate", "tvet"]);
+
+function parseFiltersFromSearchParams(params: URLSearchParams): ScholarshipSearchFilters {
+  const filters: ScholarshipSearchFilters = {};
+  const region = params.get("region");
+  if (region) filters.region = region;
+  const field = params.get("field");
+  if (field) filters.field = field;
+  const educationLevel = params.get("education_level");
+  if (educationLevel) filters.education_level = educationLevel;
+  const provider = params.get("provider");
+  if (provider) filters.provider = provider;
+  const school = params.get("school");
+  if (school) filters.school = school;
+  const maxIncome = params.get("max_income");
+  if (maxIncome != null && maxIncome !== "") {
+    const n = Number(maxIncome);
+    if (!Number.isNaN(n)) filters.max_income = n;
+  }
+  const timing = params.get("timing");
+  if (timing && TIMING_VALUES.has(timing)) filters.timing = timing;
+  const lifeStage = params.get("life_stage");
+  if (lifeStage && LIFE_STAGE_VALUES.has(lifeStage)) filters.life_stage = lifeStage;
+  if (params.get("include_archived") === "true") filters.include_archived = true;
+  return filters;
+}
 
 export interface UseScholarshipSearchOptions {
   /** Page size for GET /api/v1/scholarships/search */
@@ -19,11 +58,21 @@ export interface UseScholarshipSearchOptions {
   enableSuggestions?: boolean;
   /** Keep search input in sync with `?query=` URL param */
   syncUrlQuery?: boolean;
+  /** Persist filters in URL query params */
+  syncUrlFilters?: boolean;
+  /** Keep sort in sync with `?sort=` URL param */
+  syncUrlSort?: boolean;
 }
 
 export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) {
-  const { limit = DEFAULT_LIMIT, enableSuggestions = true, syncUrlQuery = false } = options;
-  const [searchParams] = useSearchParams();
+  const {
+    limit = DEFAULT_LIMIT,
+    enableSuggestions = true,
+    syncUrlQuery = false,
+    syncUrlSort = true,
+    syncUrlFilters = true,
+  } = options;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [query, setQuery] = useState(() => (syncUrlQuery ? (searchParams.get("query") ?? "") : ""));
 
@@ -33,13 +82,19 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     if (q != null) setQuery(q);
   }, [searchParams, syncUrlQuery]);
 
-  const [filters, setFilters] = useState<ScholarshipSearchFilters>({});
+  const [filters, setFilters] = useState<ScholarshipSearchFilters>(() =>
+    syncUrlFilters ? parseFiltersFromSearchParams(searchParams) : {}
+  );
+  const [sortBy, setSortByState] = useState<SearchSortOption>(() =>
+    syncUrlSort ? parseSearchSort(searchParams.get("sort")) : "relevance"
+  );
   const [page, setPage] = useState(1);
   const [results, setResults] = useState<ScholarshipInfo[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [usingCached, setUsingCached] = useState(false);
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
@@ -51,8 +106,42 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
 
   const filtersCacheKey = JSON.stringify(filters);
 
+  const setSortBy = useCallback(
+    (next: SearchSortOption) => {
+      setSortByState(next);
+      setPage(1);
+      if (syncUrlSort) {
+        setSearchParams(
+          (prev) => {
+            const params = new URLSearchParams(prev);
+            if (next === "relevance") params.delete("sort");
+            else params.set("sort", next);
+            return params;
+          },
+          { replace: true }
+        );
+      }
+    },
+    [syncUrlSort, setSearchParams]
+  );
+
+  useEffect(() => {
+    if (!syncUrlSort) return;
+    setSortByState(parseSearchSort(searchParams.get("sort")));
+  }, [searchParams, syncUrlSort]);
+
+  useEffect(() => {
+    if (!syncUrlFilters) return;
+    setFilters(parseFiltersFromSearchParams(searchParams));
+  }, [searchParams, syncUrlFilters]);
+
   const fetchSearch = useCallback(
-    async (searchQuery: string, searchFilters: ScholarshipSearchFilters, pageNum: number) => {
+    async (
+      searchQuery: string,
+      searchFilters: ScholarshipSearchFilters,
+      pageNum: number,
+      sort: SearchSortOption
+    ) => {
       const params = new URLSearchParams();
       if (searchQuery.trim()) params.set("query", searchQuery.trim());
       if (searchFilters.region) params.set("region", searchFilters.region);
@@ -68,6 +157,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
       if (searchFilters.timing) params.set("timing", searchFilters.timing);
       if (searchFilters.life_stage) params.set("life_stage", searchFilters.life_stage);
       if (searchFilters.include_archived) params.set("include_archived", "true");
+      if (sort !== "relevance") params.set("sort", sort);
       params.set("page", String(pageNum));
       params.set("limit", String(limit));
 
@@ -86,27 +176,34 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     let cancelled = false;
     setLoading(true);
     setError(null);
-    fetchSearch(debouncedQuery, filters, page)
+    setUsingCached(false);
+    fetchSearch(debouncedQuery, filters, page, sortBy)
       .then((data) => {
         if (!cancelled) {
           setResults(data.results ?? []);
           setTotal(data.total ?? 0);
           setTotalPages(data.total_pages ?? 0);
-          void cacheSearchResults(`search:${debouncedQuery}:${filtersCacheKey}:${page}`, data);
+          setUsingCached(false);
+          void cacheSearchResults(
+            `search:${debouncedQuery}:${filtersCacheKey}:${sortBy}:${page}`,
+            data
+          );
         }
       })
-      .catch(async (err) => {
+      .catch(async () => {
         if (!cancelled) {
           const cached = await readCachedSearchResults<ScholarshipSearchResponse>(
-            `search:${debouncedQuery}:${filtersCacheKey}:${page}`,
+            `search:${debouncedQuery}:${filtersCacheKey}:${sortBy}:${page}`
           );
           if (cached?.results) {
             setResults(cached.results);
             setTotal(cached.total ?? cached.results.length);
             setTotalPages(cached.total_pages ?? 1);
             setError(null);
+            setUsingCached(true);
           } else {
-            setError(err instanceof Error ? err.message : "Search failed");
+            setUsingCached(false);
+            setError(getNetworkErrorMessage());
           }
         }
       })
@@ -116,7 +213,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, filters, filtersCacheKey, page, fetchSearch]);
+  }, [debouncedQuery, filters, filtersCacheKey, page, sortBy, fetchSearch]);
 
   useEffect(() => {
     if (!enableSuggestions) return;
@@ -199,10 +296,27 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     setPage(1);
   }, []);
 
+  const clearQuery = useCallback(() => {
+    setQuery("");
+    setPage(1);
+    if (syncUrlQuery) {
+      setSearchParams(
+        (prev) => {
+          const params = new URLSearchParams(prev);
+          params.delete("query");
+          return params;
+        },
+        { replace: true }
+      );
+    }
+  }, [syncUrlQuery, setSearchParams]);
+
   return {
     query,
     setQuery,
     filters,
+    sortBy,
+    setSortBy,
     page,
     setPage,
     results,
@@ -210,6 +324,7 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     totalPages,
     loading,
     error,
+    usingCached,
     suggestions,
     suggestionsOpen,
     setSuggestionsOpen,
@@ -219,5 +334,8 @@ export function useScholarshipSearch(options: UseScholarshipSearchOptions = {}) 
     handleSearchSubmit,
     handleKeyDown,
     handleFiltersChange,
+    clearQuery,
   };
 }
+
+export type { SearchSortOption };

@@ -23,10 +23,17 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-    # development | staging | production — set ENVIRONMENT=production when deployed
+    # Explicit development only when ENVIRONMENT=development. Unset/unrecognized values
+    # are treated as production for validation (SEC-01).
     environment: str = Field(
-        default="development",
+        default="",
         validation_alias="ENVIRONMENT",
+    )
+
+    # Bind address used for loopback dev detection (SEC-01). Set to 0.0.0.0 in production.
+    bind_host: str = Field(
+        default="127.0.0.1",
+        validation_alias="BIND_HOST",
     )
 
     # Database - set DATABASE_URL in env
@@ -37,7 +44,7 @@ class Settings(BaseSettings):
 
     # CORS - comma-separated list, set CORS_ORIGINS in env
     cors_origins: str = Field(
-        default="http://localhost:5173,http://localhost:5174,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:5174,http://127.0.0.1:3000",
+        default="http://localhost:5173,http://localhost:5174,http://localhost:3000,http://localhost:4173,http://127.0.0.1:5173,http://127.0.0.1:5174,http://127.0.0.1:3000,http://127.0.0.1:4173",
         validation_alias="CORS_ORIGINS",
     )
 
@@ -52,7 +59,7 @@ class Settings(BaseSettings):
         validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES",
     )
     refresh_token_expire_days: int = Field(
-        default=14,
+        default=7,
         validation_alias="REFRESH_TOKEN_EXPIRE_DAYS",
     )
 
@@ -101,9 +108,29 @@ class Settings(BaseSettings):
         default=False,
         validation_alias="DB_DRIVEN_WEIGHTS",
     )
+    plan_prefilter_enabled: bool = Field(
+        default=False,
+        validation_alias="PLAN_PREFILTER_ENABLED",
+    )
     retention_inactive_days: int = Field(
         default=365,
         validation_alias="RETENTION_INACTIVE_DAYS",
+    )
+
+    # Eligibility migration v1 — per-gate rollout (default off in production)
+    gate_prior_units: bool = Field(default=False, validation_alias="GATE_PRIOR_UNITS")
+    gate_academic_or: bool = Field(default=False, validation_alias="GATE_ACADEMIC_OR")
+    gate_conflicts: bool = Field(default=False, validation_alias="GATE_CONFLICTS")
+    gate_affiliations: bool = Field(default=False, validation_alias="GATE_AFFILIATIONS")
+    gate_age_as_of: bool = Field(default=False, validation_alias="GATE_AGE_AS_OF")
+    gate_work_experience: bool = Field(default=False, validation_alias="GATE_WORK_EXPERIENCE")
+    gate_marital_status: bool = Field(default=False, validation_alias="GATE_MARITAL_STATUS")
+    gate_residency_years: bool = Field(default=False, validation_alias="GATE_RESIDENCY_YEARS")
+    gate_entry_path: bool = Field(default=False, validation_alias="GATE_ENTRY_PATH")
+    gate_parent_salary_grade: bool = Field(default=False, validation_alias="GATE_PARENT_SALARY_GRADE")
+    publishability_rule_validation: bool = Field(
+        default=True,
+        validation_alias="PUBLISHABILITY_RULE_VALIDATION",
     )
 
     # When false, users can sign in without verifying email (beta testing). SMTP not required in production.
@@ -142,6 +169,10 @@ class Settings(BaseSettings):
         validation_alias="SCHOLARSHIP_IMAGE_MAX_BYTES",
     )
 
+    # Cloudflare Turnstile (optional — verification skipped when secret unset)
+    turnstile_secret_key: str | None = Field(default=None, validation_alias="TURNSTILE_SECRET_KEY")
+    turnstile_site_key: str | None = Field(default=None, validation_alias="TURNSTILE_SITE_KEY")
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""
@@ -163,24 +194,79 @@ class Settings(BaseSettings):
     def email_is_configured(self) -> bool:
         return bool(self.smtp_host and self.email_from)
 
+    def is_development_environment(self) -> bool:
+        """True only when ENVIRONMENT is explicitly set to development."""
+        return (self.environment or "").strip().lower() == "development"
+
+    def is_loopback_bind(self) -> bool:
+        """True when the API bind host is a local loopback address."""
+        host = (self.bind_host or "").strip().lower()
+        if host.startswith("[") and host.endswith("]"):
+            host = host[1:-1]
+        return host in ("127.0.0.1", "localhost", "::1")
+
+    def resolved_validation_environment(self) -> str:
+        """Environment label used for startup guards and logging."""
+        if self.is_development_environment():
+            return "development"
+        raw = (self.environment or "").strip().lower()
+        if raw in ("production", "staging", "prod"):
+            return raw
+        return "production"
+
+    def active_guards(self) -> list[str]:
+        """Human-readable list of security guards active for this configuration."""
+        guards: list[str] = []
+        if self.is_development_environment():
+            guards.append("development-relaxed")
+        else:
+            guards.append("production-config-validation")
+        if self.secret_key != DEFAULT_SECRET_KEY_VALUE:
+            guards.append("custom-secret-key")
+        elif not self.is_loopback_bind():
+            guards.append("placeholder-secret-blocked-non-loopback")
+        if self.redis_url:
+            guards.append("redis")
+        if not self.auth_disabled:
+            guards.append("jwt-required")
+        if self.is_development_environment() and not self.redis_url:
+            guards.append("token-revocation-dev-no-redis")
+        elif self.redis_url and not self.auth_disabled:
+            guards.append("token-revocation-redis")
+        return guards
+
     def validate_for_production(self) -> None:
         """
-        Refuse unsafe configuration when ENVIRONMENT is production-like.
+        Refuse unsafe configuration outside explicit development, and always block
+        placeholder SECRET_KEY on non-loopback binds (SEC-01).
         Call from app startup (main.py), not at import of this module (keeps tests flexible).
         """
-        env = (self.environment or "").strip().lower()
-        if env not in ("production", "staging", "prod"):
-            return
         errors: list[str] = []
+
+        if self.secret_key == DEFAULT_SECRET_KEY_VALUE and not self.is_loopback_bind():
+            errors.append(
+                "SECRET_KEY must not use the default placeholder when BIND_HOST is not loopback "
+                f"(current BIND_HOST={self.bind_host!r}). Generate with: openssl rand -hex 32"
+            )
+
+        if self.is_development_environment():
+            if errors:
+                raise RuntimeError("Invalid configuration: " + "; ".join(errors))
+            return
+
+        env = self.resolved_validation_environment()
         if self.secret_key == DEFAULT_SECRET_KEY_VALUE:
-            errors.append("SECRET_KEY must not use the default placeholder in production")
+            errors.append(
+                "SECRET_KEY must not use the default placeholder outside development "
+                "(set ENVIRONMENT=development for local dev or generate: openssl rand -hex 32)"
+            )
         if self.auth_disabled:
-            errors.append("AUTH_DISABLED must be false in production")
+            errors.append("AUTH_DISABLED must be false outside development")
         if self.database_url.strip().lower().startswith("sqlite"):
-            errors.append("DATABASE_URL must not be SQLite in production")
+            errors.append("DATABASE_URL must not be SQLite outside development")
         if not self.cors_has_non_localhost_origin():
             errors.append(
-                "CORS_ORIGINS must include at least one non-localhost origin in production"
+                "CORS_ORIGINS must include at least one non-localhost origin outside development"
             )
         if self.require_email_verification:
             if not self.email_is_configured():
@@ -201,8 +287,10 @@ class Settings(BaseSettings):
             )
         if not self.redis_url:
             errors.append(
-                "REDIS_URL must be set in production for shared rate limits and scholarship cache"
+                "REDIS_URL must be set outside development for shared rate limits, token revocation, and cache"
             )
+        elif not self.auth_disabled:
+            pass  # redis required above; revocation depends on it in non-dev
         if not self.trust_proxy_headers:
             errors.append(
                 "TRUST_PROXY_HEADERS must be true in production when deployed behind Render/Railway"

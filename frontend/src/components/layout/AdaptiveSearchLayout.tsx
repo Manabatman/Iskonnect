@@ -1,32 +1,14 @@
 import { type ReactNode, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useSavedScholarships } from "../../contexts/SavedScholarshipsContext";
+import { SkipLink } from "../a11y/SkipLink";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { SavedScholarshipsErrorBanner } from "./SavedScholarshipsErrorBanner";
 import { PublicShell } from "./PublicLayout";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardTopbar } from "./DashboardTopbar";
-
-function SavedScholarshipsErrorBanner() {
-  const { error, clearError } = useSavedScholarships();
-  if (!error) return null;
-  return (
-    <div
-      role="status"
-      className="border-b border-slate-200 bg-slate-100 px-4 py-2 text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
-    >
-      <div className="mx-auto flex max-w-7xl items-start justify-between gap-3">
-        <p className="min-w-0 flex-1">{error}</p>
-        <button
-          type="button"
-          onClick={clearError}
-          className="shrink-0 rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-medium hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:hover:bg-slate-700"
-        >
-          Dismiss
-        </button>
-      </div>
-    </div>
-  );
-}
+import { BottomNav } from "./BottomNav";
+import { FeedbackButton } from "../FeedbackButton";
+import { AuthShellSkeleton } from "../LoadingSkeletons";
 
 interface AdaptiveSearchLayoutProps {
   children: ReactNode;
@@ -42,19 +24,13 @@ export function AdaptiveSearchLayout({ children }: AdaptiveSearchLayoutProps) {
   const { authError, clearAuthError, user, loading: authLoading } = useAuth();
 
   if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
-          <p className="text-sm">Loading…</p>
-        </div>
-      </div>
-    );
+    return <AuthShellSkeleton />;
   }
 
   if (user) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+      <div className="min-h-screen bg-background text-foreground pb-[env(safe-area-inset-bottom)]">
+        <SkipLink />
         {authError ? (
           <div
             role="alert"
@@ -82,15 +58,17 @@ export function AdaptiveSearchLayout({ children }: AdaptiveSearchLayoutProps) {
           />
           <div
             className={[
-              "flex min-h-screen flex-col transition-[padding] duration-200",
-              sidebarCollapsed ? "lg:pl-16" : "lg:pl-64",
+              "flex min-h-screen flex-col transition-[padding] duration-base",
+              sidebarCollapsed ? "lg:pl-16" : "lg:pl-sidebar",
             ].join(" ")}
           >
             <DashboardTopbar onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-            <div className="flex-1 overflow-auto">
+            <main id="main-content" className="flex-1 overflow-auto pb-bottom-nav lg:pb-0">
               <ErrorBoundary>{children}</ErrorBoundary>
-            </div>
+            </main>
           </div>
+          <BottomNav />
+          <FeedbackButton />
         </ErrorBoundary>
       </div>
     );

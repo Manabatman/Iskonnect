@@ -1,9 +1,10 @@
-"""Admin analytics overview."""
+"""Admin analytics overview and aggregate referral clicks (C9)."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Body, Depends, HTTPException, Request
+from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -11,8 +12,30 @@ from app import models
 from app.auth import get_current_user_id, require_admin
 from app.db import get_db
 from app.limiter import limiter
+from app.utils.timezone import today_manila
 
 router = APIRouter(tags=["analytics"])
+
+ALLOWED_SURFACES = frozenset({"card", "detail_page", "detail_panel", "trust_source"})
+ALLOWED_LINK_KINDS = frozenset({"apply_official", "check_official", "view_source"})
+
+
+class ReferralClickCreate(BaseModel):
+    scholarship_id: int = Field(..., gt=0)
+    surface: str = Field(..., min_length=1, max_length=32)
+    link_kind: str = Field(..., min_length=1, max_length=32)
+
+    @model_validator(mode="after")
+    def validate_enums(self):
+        if self.surface not in ALLOWED_SURFACES:
+            raise ValueError("invalid surface")
+        if self.link_kind not in ALLOWED_LINK_KINDS:
+            raise ValueError("invalid link_kind")
+        return self
+
+
+class ReferralClickResponse(BaseModel):
+    recorded: bool = True
 
 
 @router.get("/admin/analytics/overview")
@@ -105,6 +128,14 @@ def analytics_overview(
         "missing_deadline_precision": missing_precision,
     }
 
+    referral_since = today_manila() - timedelta(days=30)
+    referral_clicks_last_30 = (
+        db.query(func.coalesce(func.sum(models.ReferralClickDaily.click_count), 0))
+        .filter(models.ReferralClickDaily.day >= referral_since)
+        .scalar()
+        or 0
+    )
+
     return {
         "total_scholarships": total_scholarships,
         "total_profiles": total_profiles,
@@ -120,7 +151,51 @@ def analytics_overview(
         "profiles_by_region": profiles_by_region,
         "match_runs_last_30_days": match_runs_last_30,
         "catalog_quality": catalog_quality,
+        "referral_clicks_last_30_days": int(referral_clicks_last_30),
     }
+
+
+@router.post("/analytics/referral-clicks", response_model=ReferralClickResponse)
+@limiter.limit("120/minute")
+def record_referral_click(
+    request: Request,
+    body: Annotated[ReferralClickCreate, Body()],
+    db: Session = Depends(get_db),
+):
+    """Aggregate-only outbound click counter — no user id, no PII (C9)."""
+    day = today_manila()
+    exists = (
+        db.query(models.Scholarship.id)
+        .filter(models.Scholarship.id == body.scholarship_id, models.Scholarship.is_active != False)  # noqa: E712
+        .first()
+    )
+    if not exists:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+
+    row = (
+        db.query(models.ReferralClickDaily)
+        .filter(
+            models.ReferralClickDaily.day == day,
+            models.ReferralClickDaily.scholarship_id == body.scholarship_id,
+            models.ReferralClickDaily.surface == body.surface,
+            models.ReferralClickDaily.link_kind == body.link_kind,
+        )
+        .first()
+    )
+    if row:
+        row.click_count = (row.click_count or 0) + 1
+    else:
+        db.add(
+            models.ReferralClickDaily(
+                day=day,
+                scholarship_id=body.scholarship_id,
+                surface=body.surface,
+                link_kind=body.link_kind,
+                click_count=1,
+            )
+        )
+    db.commit()
+    return ReferralClickResponse()
 
 
 @router.get("/analytics/student-summary")

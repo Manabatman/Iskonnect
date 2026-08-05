@@ -12,14 +12,19 @@ import {
   DRAFT_KEY,
   INITIAL_STATE,
   clearProfileDraft,
-  type ProfileBuilderState,
+  mergeProfileDrafts,
   parseDraftFromStorage,
+  validateProfileBuilderStep,
+  type ProfileBuilderState,
   profileBuilderReducer,
 } from "../components/profile-builder/profileBuilderState";
 import { StepperSidebar } from "../components/profile-builder/StepperSidebar";
-import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
+import { SuccessModal } from "@/components/ui/success-modal";
+import { AUTH_USER_CHANGED_EVENT, type AuthUserChangedDetail, useAuth } from "../contexts/AuthContext";
 import { buildStudentProfileFromBuilderState } from "../utils/studentProfilePayload";
+import { parseApiDetail } from "../utils/apiErrors";
 import { profileToInitialValues } from "../utils/profileDraft";
+import { validateEmail } from "../utils/validateEmail";
 
 const SAVE_DEBOUNCE_MS = 400;
 const TOTAL_STEPS = 5;
@@ -54,17 +59,25 @@ export function ProfileBuilderPage() {
   const [serverLoading, setServerLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveOk, setSaveOk] = useState<string | null>(null);
+  const [stepError, setStepError] = useState<string | null>(null);
   const [consentModalOpen, setConsentModalOpen] = useState(false);
-  const [sampleMatches, setSampleMatches] = useState<Array<{ id: number; title: string; score?: number; final_score?: number }>>([]);
-  const [sampleLoading, setSampleLoading] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hadProfileOnLoadRef = useRef(false);
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const onAuthChange = () => {
-      clearProfileDraft();
-      dispatch({ type: "RESET" });
-      setCurrentStep(1);
+    const onAuthChange = (event: Event) => {
+      const detail = (event as CustomEvent<AuthUserChangedDetail>).detail;
+      const prev = detail?.previousUserId ?? null;
+      const next = detail?.userId ?? null;
+      // Anonymous → authenticated: keep local draft; server merge runs in profiles/me effect.
+      if (prev === null && next !== null) return;
+      if (next === null || (prev !== null && prev !== next)) {
+        clearProfileDraft();
+        dispatch({ type: "RESET" });
+        setCurrentStep(1);
+      }
     };
     window.addEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
     return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, onAuthChange);
@@ -81,8 +94,13 @@ export function ProfileBuilderPage() {
       })
       .then((row: unknown) => {
         if (cancelled || !row || typeof row !== "object") return;
-        const flat = profileToInitialValues(row as { id?: number; [key: string]: unknown });
-        dispatch({ type: "LOAD_DRAFT", draft: flat });
+        if ("id" in row && row.id != null) {
+          hadProfileOnLoadRef.current = true;
+        }
+        const serverFlat = profileToInitialValues(row as { id?: number; [key: string]: unknown });
+        const localDraft = parseDraftFromStorage(localStorage.getItem(DRAFT_KEY)) ?? {};
+        const merged = mergeProfileDrafts(localDraft, serverFlat);
+        dispatch({ type: "LOAD_DRAFT", draft: merged });
       })
       .catch(() => {
         /* keep local draft */
@@ -123,38 +141,6 @@ export function ProfileBuilderPage() {
   }, [user?.email, authLoading, serverLoading, state.email]);
 
   useEffect(() => {
-    if (currentStep < 2) return;
-    if (!state.region?.trim() || !state.education_level?.trim()) {
-      setSampleMatches([]);
-      return;
-    }
-    let cancelled = false;
-    setSampleLoading(true);
-    const params = new URLSearchParams({
-      region: state.region.trim(),
-      education_level: state.education_level.trim(),
-      limit: "4",
-    });
-    if (state.age) params.set("age", state.age);
-    apiFetch(`/api/v1/profiles/sample-matches?${params.toString()}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (!cancelled && data?.sample_matches) {
-          setSampleMatches(data.sample_matches);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setSampleMatches([]);
-      })
-      .finally(() => {
-        if (!cancelled) setSampleLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [currentStep, state.region, state.education_level, state.age]);
-
-  useEffect(() => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     saveTimeoutRef.current = setTimeout(() => {
       try {
@@ -176,8 +162,19 @@ export function ProfileBuilderPage() {
     dispatch({ type: "SET_FIELD", field, value });
   }, []);
 
-  const goNext = () => setCurrentStep((s) => Math.min(TOTAL_STEPS, s + 1));
-  const goBack = () => setCurrentStep((s) => Math.max(1, s - 1));
+  const goNext = () => {
+    const validationError = validateProfileBuilderStep(currentStep, state, validateEmail);
+    if (validationError) {
+      setStepError(validationError);
+      return;
+    }
+    setStepError(null);
+    setCurrentStep((s) => Math.min(TOTAL_STEPS, s + 1));
+  };
+  const goBack = () => {
+    setStepError(null);
+    setCurrentStep((s) => Math.max(1, s - 1));
+  };
 
   const stepContent = useMemo(() => {
     switch (currentStep) {
@@ -196,9 +193,14 @@ export function ProfileBuilderPage() {
     }
   }, [currentStep, state, onChange]);
 
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+    };
+  }, []);
+
   const saveToServer = useCallback(async () => {
     setSaveError(null);
-    setSaveOk(null);
     if (!user) {
       navigate("/login", { state: { from: "/profile-builder" } });
       return;
@@ -211,8 +213,13 @@ export function ProfileBuilderPage() {
       setSaveError("Please enter your full name (at least 2 characters).");
       return;
     }
-    if (!state.email?.trim() || !state.email.includes("@")) {
+    if (!state.email?.trim()) {
       setSaveError("Please enter a valid email address.");
+      return;
+    }
+    const emailCheck = validateEmail(state.email);
+    if (!emailCheck.valid) {
+      setSaveError(emailCheck.message ?? "Please enter a valid email address.");
       return;
     }
     if (!state.region?.trim()) {
@@ -230,15 +237,20 @@ export function ProfileBuilderPage() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.detail ?? "Unable to save profile");
+        throw new Error(parseApiDetail(data?.detail, "Unable to save profile"));
       }
-      setSaveOk("Profile saved to your account.");
+      clearProfileDraft();
+      hadProfileOnLoadRef.current = true;
+      setSuccessModalOpen(true);
+      redirectTimeoutRef.current = setTimeout(() => {
+        navigate("/scholarships/search", { replace: true });
+      }, 1200);
     } catch (e) {
       setSaveError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setSaveLoading(false);
     }
-  }, [user, navigate, state, authHeaders]);
+  }, [user, navigate, state, authHeaders, currentStep]);
 
   return (
     <section className="px-4 py-6 sm:px-6 lg:py-8" aria-labelledby="profile-builder-title">
@@ -249,7 +261,7 @@ export function ProfileBuilderPage() {
               Complete Your Profile
             </h1>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Guided steps — your progress saves automatically to this device
+              Guided steps. Your progress saves automatically to this device
               {user ? " and can be synced to your account." : "."}
             </p>
             {!user ? (
@@ -272,14 +284,14 @@ export function ProfileBuilderPage() {
           </Link>
         </div>
 
-        {saveOk ? (
-          <p className="mb-4 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-900 dark:border-green-800 dark:bg-green-950/50 dark:text-green-100">
-            {saveOk}
+        {saveError ? (
+          <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100" role="alert">
+            {saveError}
           </p>
         ) : null}
-        {saveError ? (
-          <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100">
-            {saveError}
+        {stepError ? (
+          <p className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-100" role="alert">
+            {stepError}
           </p>
         ) : null}
 
@@ -288,40 +300,13 @@ export function ProfileBuilderPage() {
           listPane={<StepperSidebar currentStep={currentStep} onStepClick={setCurrentStep} state={state} />}
           detailPane={
             <div className="flex min-h-0 flex-col">
-              {currentStep >= 2 && (sampleLoading || sampleMatches.length > 0) ? (
-                <div className="mb-6 rounded-xl border border-primary-200 bg-primary-50/70 p-4 dark:border-primary-800 dark:bg-primary-950/30">
-                  <p className="text-sm font-semibold text-primary-900 dark:text-primary-100">Preview matches</p>
-                  <p className="mt-1 text-xs text-primary-800/80 dark:text-primary-200/80">
-                    Based on your region and education level so far — complete your profile for full results.
-                  </p>
-                  {sampleLoading ? (
-                    <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">Loading preview…</p>
-                  ) : (
-                    <ul className="mt-3 space-y-2">
-                      {sampleMatches.map((m) => (
-                        <li
-                          key={m.id}
-                          className="rounded-lg border border-white/60 bg-white/80 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900/50"
-                        >
-                          <span className="font-medium text-slate-900 dark:text-slate-100">{m.title}</span>
-                          {m.final_score != null || m.score != null ? (
-                            <span className="ml-2 text-xs text-primary-700 dark:text-primary-300">
-                              {Math.round(m.final_score ?? m.score ?? 0)}% match
-                            </span>
-                          ) : null}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ) : null}
               <div className="min-h-0 flex-1">{stepContent}</div>
               <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 dark:border-slate-700 sm:flex-row sm:justify-between">
                 <button
                   type="button"
                   onClick={goBack}
                   disabled={currentStep <= 1}
-                  className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                  className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                 >
                   Back
                 </button>
@@ -330,7 +315,7 @@ export function ProfileBuilderPage() {
                     <button
                       type="button"
                       onClick={goNext}
-                      className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
+                      className="rounded-lg bg-primary-600 px-5 py-3 text-sm font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
                     >
                       Next
                     </button>
@@ -340,17 +325,10 @@ export function ProfileBuilderPage() {
                         type="button"
                         onClick={saveToServer}
                         disabled={saveLoading}
-                        className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 dark:focus:ring-offset-slate-800"
+                        className="rounded-lg bg-primary-600 px-5 py-3 text-sm font-semibold text-white shadow transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 dark:focus:ring-offset-slate-800"
                       >
                         {saveLoading ? "Saving…" : "Save Profile"}
                       </button>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
-                        Or run matches from your{" "}
-                        <Link to="/dashboard" className="font-medium text-primary-600 dark:text-primary-400">
-                          dashboard
-                        </Link>
-                        .
-                      </p>
                     </>
                   )}
                 </div>
@@ -368,6 +346,14 @@ export function ProfileBuilderPage() {
             document.getElementById("privacy-consent-checkbox")?.focus();
           }, 150);
         }}
+      />
+      <SuccessModal
+        open={successModalOpen}
+        onOpenChange={setSuccessModalOpen}
+        title="Profile saved"
+        description="Your profile is ready. Taking you to Scholarships to explore matches."
+        actionLabel="Go to Scholarships"
+        onAction={() => navigate("/scholarships/search", { replace: true })}
       />
     </section>
   );

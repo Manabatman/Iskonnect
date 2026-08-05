@@ -1,37 +1,65 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { HeroCarousel } from "../HeroCarousel";
+import { HERO_BREAKPOINTS, HERO_IMAGE_ALT } from "../../constants/heroImages";
 import { HeroDirectionalOverlay } from "../visual/DirectionalImageOverlays";
-import { HERO_CAROUSEL_IMAGES } from "../../constants/heroImages";
 import { heroTrustChips } from "./landingData";
 import { primaryButtonClass, secondaryButtonClass } from "./Section";
 import { Reveal } from "./Reveal";
 
-const heroAlts = [
-  "Filipino students in graduation caps celebrating achievement",
-  "Scholarship recipients at a Philippine university ceremony",
-  "Students walking on a Philippine university campus at golden hour",
-] as const;
+function HeroPhotography() {
+  const { mobile, tablet, desktop } = HERO_BREAKPOINTS;
+
+  return (
+    <picture className="absolute inset-0 block h-full w-full">
+      <source media={desktop.media} srcSet={desktop.avif} type="image/avif" />
+      <source media={desktop.media} srcSet={desktop.webp} type="image/webp" />
+      <source media={tablet.media} srcSet={tablet.avif} type="image/avif" />
+      <source media={tablet.media} srcSet={tablet.webp} type="image/webp" />
+      <source media={mobile.media} srcSet={mobile.avif} type="image/avif" />
+      <source media={mobile.media} srcSet={mobile.webp} type="image/webp" />
+      <source media={desktop.media} srcSet={desktop.png} type="image/png" />
+      <source media={tablet.media} srcSet={tablet.png} type="image/png" />
+      <img
+        src={mobile.png}
+        alt={HERO_IMAGE_ALT}
+        width={mobile.width}
+        height={mobile.height}
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        className="h-full w-full object-cover object-[50%_35%] md:object-center"
+        sizes="100vw"
+      />
+    </picture>
+  );
+}
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[clamp(30rem,calc(100svh-9rem),64rem)] overflow-hidden border-b border-slate-800 sm:min-h-[clamp(34rem,calc(100svh-4rem),64rem)]">
-      <HeroCarousel images={HERO_CAROUSEL_IMAGES} alts={heroAlts} />
+    <section
+      data-testid="landing-hero"
+      className="relative min-h-[clamp(30rem,calc(100svh-9rem),64rem)] overflow-hidden border-b border-slate-800 sm:min-h-[clamp(34rem,calc(100svh-4rem),64rem)]"
+    >
+      <HeroPhotography />
       <HeroDirectionalOverlay />
       <div className="relative z-10 mx-auto flex min-h-[inherit] w-full max-w-6xl flex-col justify-center px-4 py-[clamp(3rem,8vh,7rem)] sm:px-6">
         <Reveal>
           <div className="max-w-[42rem] xl:max-w-[48rem]">
-            <h1 className="text-balance text-[clamp(2.25rem,5.5vw,4rem)] font-extrabold leading-[1.08] tracking-tight text-white">
+            <h1 className="text-balance font-sans text-[clamp(2.25rem,5.5vw,4rem)] font-extrabold leading-[1.08] tracking-tight text-white">
               Find scholarships you&apos;re actually eligible for.
             </h1>
-            <p className="mt-[clamp(1rem,2vh,1.5rem)] max-w-xl text-pretty text-[clamp(1rem,1.4vw,1.25rem)] leading-relaxed text-slate-200">
+            <p className="mt-[clamp(1rem,2vh,1.5rem)] max-w-xl text-pretty font-sans text-[clamp(1rem,1.4vw,1.25rem)] leading-relaxed text-slate-200">
               ISKONNECT matches you to scholarships from government agencies, universities, LGUs, and private
-              foundations—then helps you plan ahead: apply now, prepare documents early, or watch for programs you&apos;ll
+              foundations, then helps you plan ahead: apply now, prepare documents early, or watch for programs you&apos;ll
               qualify for later.
             </p>
 
             <div className="mt-[clamp(1.5rem,3vh,2rem)] flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link to="/register" className={`${primaryButtonClass} w-full sm:w-auto`}>
+              <Link
+                to="/register"
+                className={`${primaryButtonClass} w-full sm:w-auto`}
+                data-testid="hero-primary-cta"
+              >
                 Get started free
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>

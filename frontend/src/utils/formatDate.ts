@@ -1,13 +1,6 @@
 /** Asia/Manila for all user-visible dates/times (Philippines). */
 const PH_TIMEZONE = "Asia/Manila";
 
-const dateOnlyOpts: Intl.DateTimeFormatOptions = {
-  timeZone: PH_TIMEZONE,
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-};
-
 const dateMediumOpts: Intl.DateTimeFormatOptions = {
   timeZone: PH_TIMEZONE,
   dateStyle: "medium",
@@ -25,15 +18,6 @@ const dateTimeLongOpts: Intl.DateTimeFormatOptions = {
   timeStyle: "short",
 };
 
-/** Scholarship/opportunity deadline-style (long month name). */
-export function formatDate(iso: string | null | undefined): string {
-  if (!iso) return "—";
-  try {
-    return new Date(iso).toLocaleDateString("en-PH", dateOnlyOpts);
-  } catch {
-    return String(iso);
-  }
-}
 
 /** Medium date in Manila (e.g. Apr 4, 2026). */
 export function formatDateMedium(iso: string | null | undefined): string {
@@ -81,11 +65,6 @@ export function startOfTodayManila(): Date {
   return new Date(Number(y), Number(m) - 1, Number(d));
 }
 
-/** Parse YYYY-MM-DD as local calendar date at noon UTC (stable for deadline compares). */
-export function parseDateOnly(isoDate: string): Date {
-  const [y, mo, da] = isoDate.split("-").map(Number);
-  return new Date(Date.UTC(y, mo - 1, da, 12, 0, 0));
-}
 
 /** Short month + day + year in Manila (e.g. Apr 4, 2026). */
 export function formatDateShort(iso: string | null | undefined): string {

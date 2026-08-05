@@ -34,7 +34,7 @@ export function AboutPage() {
               into one place—and matches them to your real profile so you can plan ahead, not just search.
             </p>
             <p className="mt-3">
-              <Link to="/why-iskonnect" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              <Link to="/how-matching-works#why" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 Why ISKONNECT exists →
               </Link>
             </p>
@@ -48,7 +48,7 @@ export function AboutPage() {
               ranked so your strongest fits rise to the top—and you can see why each one matched.
             </p>
             <p className="mt-3">
-              <Link to="/transparency" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
+              <Link to="/how-matching-works" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 How match scores work →
               </Link>
             </p>
@@ -58,7 +58,7 @@ export function AboutPage() {
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Trust and verification</h2>
             <p className="mt-2 leading-relaxed">
               Our recommendations are based on publicly available eligibility criteria from official sources. ISKONNECT
-              is not affiliated with any scholarship provider. We verify listings before publishing and show when
+              is not affiliated with any scholarship provider. We verify scholarships before publishing and show when
               information was last checked—but providers can change rules without notice.
             </p>
             <p className="mt-3 leading-relaxed font-medium text-slate-800 dark:text-slate-200">

@@ -14,31 +14,33 @@ export interface StepperSidebarProps {
 
 function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebarProps) {
   const overall = useMemo(() => computeOverallCompletion(state), [state]);
+  const activeStep = PROFILE_BUILDER_STEPS.find((s) => s.id === currentStep);
 
   return (
     <div className="space-y-4">
       <div>
         <div className="mb-1 flex items-center justify-between text-xs font-medium text-slate-600 dark:text-slate-400">
-          <span>Overall progress</span>
+          <span>Match quality</span>
           <span>{overall}%</span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
           <div
-            className="h-full rounded-full bg-primary-600 transition-all duration-300"
+            className="h-full rounded-full bg-primary-600 transition-[width] duration-base ease-out-custom"
             style={{ width: `${overall}%` }}
           />
         </div>
       </div>
 
-      <p className="rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-xs text-primary-800 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-200">
-        Tip: completing all steps improves match accuracy.
-      </p>
+      {activeStep ? (
+        <p className="rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-xs text-primary-800 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-200">
+          {activeStep.unlockHint}
+        </p>
+      ) : null}
 
-      {/* Mobile: horizontal pills */}
       <div className="flex gap-2 overflow-x-auto pb-1 lg:hidden" role="tablist" aria-label="Profile steps">
         {PROFILE_BUILDER_STEPS.map((s) => {
           const { filled, total } = computeStepCompletion(state, s.id);
-          const done = filled === total && total > 0;
+          const done = total > 0 ? filled === total : false;
           const active = currentStep === s.id;
           return (
             <button
@@ -63,11 +65,10 @@ function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebar
         })}
       </div>
 
-      {/* Desktop: vertical list */}
       <nav className="hidden space-y-2 lg:block" aria-label="Profile steps">
         {PROFILE_BUILDER_STEPS.map((s) => {
           const { filled, total } = computeStepCompletion(state, s.id);
-          const done = filled === total && total > 0;
+          const done = total > 0 ? filled === total : false;
           const active = currentStep === s.id;
           return (
             <button
@@ -76,7 +77,7 @@ function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebar
               aria-current={active ? "step" : undefined}
               onClick={() => onStepClick(s.id)}
               className={[
-                "flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition",
+                "flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left transition",
                 active
                   ? "border-primary-500 bg-primary-50 shadow-sm dark:border-primary-600 dark:bg-primary-900/25"
                   : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:border-slate-600",
@@ -102,8 +103,8 @@ function StepperSidebarInner({ currentStep, onStepClick, state }: StepperSidebar
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">{s.label}</span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  {filled}/{total} fields
+                <span className="text-xs text-slate-600 dark:text-slate-400">
+                  {total > 0 ? `${filled}/${total} required` : "Optional — improves matches"}
                 </span>
               </span>
             </button>

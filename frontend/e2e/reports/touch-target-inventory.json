@@ -1,0 +1,82 @@
+{
+  "capturedAt": "2026-08-02T14:56:35.491Z",
+  "viewport": {
+    "width": 360,
+    "height": 640
+  },
+  "minTouchPx": 44,
+  "routesAudited": [
+    "/",
+    "/login",
+    "/register",
+    "/scholarships/search",
+    "/scholarship-status",
+    "/faq"
+  ],
+  "summaryByRoute": {
+    "/faq": 7
+  },
+  "blockingByRoute": {},
+  "allowlistedCount": 7,
+  "totalViolations": 7,
+  "blockingViolations": 0,
+  "violations": [
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "Skip to main content",
+      "width": 32,
+      "height": 16,
+      "selector": "a[data-touch-audit=\"0\"]"
+    },
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "IskonnectConnecting Filipino Students to Opportunity",
+      "width": 156,
+      "height": 40,
+      "selector": "a[data-touch-audit=\"1\"]"
+    },
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "why ISKONNECT exists",
+      "width": 208,
+      "height": 37,
+      "selector": "a[data-touch-audit=\"11\"]"
+    },
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "how matching works",
+      "width": 227,
+      "height": 37,
+      "selector": "a[data-touch-audit=\"12\"]"
+    },
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "Terms",
+      "width": 41,
+      "height": 44,
+      "selector": "a[data-touch-audit=\"21\"]"
+    },
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "About",
+      "width": 39,
+      "height": 44,
+      "selector": "a[data-touch-audit=\"23\"]"
+    },
+    {
+      "route": "/faq",
+      "tag": "a",
+      "text": "FAQ",
+      "width": 27,
+      "height": 44,
+      "selector": "a[data-touch-audit=\"25\"]"
+    }
+  ],
+  "blocking": []
+}

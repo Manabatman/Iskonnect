@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { AutocompleteInput } from "../AutocompleteInput";
+import { GlossaryTerm } from "../GlossaryTerm";
 import type { ProfileBuilderState } from "./profileBuilderState";
 import {
   ACADEMIC_STAGES,
   EDUCATION_LEVELS,
   ENROLLMENT_STATUSES,
   GWA_SCALES,
+  MARITAL_STATUSES,
+  ACTIVE_GRANT_SCOPES,
   SCHOOL_TYPES,
   YEAR_LEVELS,
   inputClass,
@@ -73,12 +76,16 @@ export function EducationStep({ state, onChange }: StepProps) {
       <div>
         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Education</h2>
         <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Where you study and how you are performing academically.
+          Where you study and how you are performing academically. Programs may come from{" "}
+          <GlossaryTerm term="CHED">CHED</GlossaryTerm>, <GlossaryTerm term="DOST-SEI">DOST-SEI</GlossaryTerm>,{" "}
+          <GlossaryTerm term="TESDA">TESDA</GlossaryTerm>, <GlossaryTerm term="LGU">LGUs</GlossaryTerm>, or{" "}
+          <GlossaryTerm term="SUC">SUCs</GlossaryTerm>/<GlossaryTerm term="LUC">LUCs</GlossaryTerm> and other{" "}
+          <GlossaryTerm term="HEI">HEIs</GlossaryTerm>.
         </p>
       </div>
 
       <div className="rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-800 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-200">
-        Adding your GWA lets us check merit-based scholarships.
+        Adding your <GlossaryTerm term="GWA">GWA</GlossaryTerm> lets us check merit-based scholarships.
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -103,6 +110,9 @@ export function EducationStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-enrollment_status" className={labelClass}>
             Enrollment status
           </label>
+          <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">
+            Choose <GlossaryTerm term="LOA">LOA</GlossaryTerm> if you are on an approved leave of absence.
+          </p>
           <select
             id="pb-enrollment_status"
             value={state.enrollment_status}
@@ -138,7 +148,8 @@ export function EducationStep({ state, onChange }: StepProps) {
             Target education level for scholarship
           </label>
           <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">
-            The level you want scholarships for — can differ from your current academic stage above.
+            The level you want scholarships for — includes <GlossaryTerm term="TVET">TVET</GlossaryTerm>,{" "}
+            <GlossaryTerm term="ALS">ALS</GlossaryTerm>, and college paths.
           </p>
           <select
             id="pb-education_level"
@@ -165,6 +176,24 @@ export function EducationStep({ state, onChange }: StepProps) {
             className={inputClass}
             placeholder="e.g. 2026-2027"
           />
+        </div>
+        <div>
+          <label htmlFor="pb-study_destination_preference" className={labelClass}>
+            Study destination preference
+          </label>
+          <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">
+            Filters international programs (e.g. MEXT, GKS) from Philippines-only scholarships.
+          </p>
+          <select
+            id="pb-study_destination_preference"
+            value={state.study_destination_preference || "PHILIPPINES_ONLY"}
+            onChange={(e) => onChange("study_destination_preference", e.target.value)}
+            className={inputClass}
+          >
+            <option value="PHILIPPINES_ONLY">Philippines only</option>
+            <option value="ABROAD_ONLY">Abroad only</option>
+            <option value="BOTH">Philippines and abroad</option>
+          </select>
         </div>
         <div>
           <AutocompleteInput
@@ -209,7 +238,7 @@ export function EducationStep({ state, onChange }: StepProps) {
         </div>
         <div>
           <label htmlFor="pb-gwa_raw" className={labelClass}>
-            GWA / Grade
+            <GlossaryTerm term="GWA">GWA</GlossaryTerm> / Grade
           </label>
           <input
             id="pb-gwa_raw"
@@ -238,6 +267,141 @@ export function EducationStep({ state, onChange }: StepProps) {
           </select>
         </div>
       </div>
+
+      <details className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
+        <summary className="cursor-pointer text-sm font-medium text-slate-800 dark:text-slate-200">
+          Additional eligibility details (optional)
+        </summary>
+        <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
+          These unlock stricter scholarship checks when you provide them. Leave blank if unsure — we will not guess.
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="pb-prior_tertiary_units" className={labelClass}>
+              Prior tertiary units completed
+            </label>
+            <input
+              id="pb-prior_tertiary_units"
+              type="number"
+              min={0}
+              value={state.prior_tertiary_units}
+              onChange={(e) => onChange("prior_tertiary_units", e.target.value)}
+              className={inputClass}
+              placeholder="0 for incoming freshman"
+            />
+          </div>
+          <div>
+            <label htmlFor="pb-class_rank" className={labelClass}>
+              Class rank (batch standing)
+            </label>
+            <input
+              id="pb-class_rank"
+              type="number"
+              min={1}
+              value={state.class_rank}
+              onChange={(e) => onChange("class_rank", e.target.value)}
+              className={inputClass}
+              placeholder="e.g. 3"
+            />
+          </div>
+          <div>
+            <label htmlFor="pb-class_size" className={labelClass}>
+              Class size
+            </label>
+            <input
+              id="pb-class_size"
+              type="number"
+              min={1}
+              value={state.class_size}
+              onChange={(e) => onChange("class_size", e.target.value)}
+              className={inputClass}
+              placeholder="e.g. 120"
+            />
+          </div>
+          <div>
+            <label htmlFor="pb-work_experience_years" className={labelClass}>
+              Work experience (years)
+            </label>
+            <input
+              id="pb-work_experience_years"
+              type="number"
+              min={0}
+              value={state.work_experience_years}
+              onChange={(e) => onChange("work_experience_years", e.target.value)}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="pb-residency_years_in_locality" className={labelClass}>
+              Years of residency in your city/municipality
+            </label>
+            <input
+              id="pb-residency_years_in_locality"
+              type="number"
+              min={0}
+              value={state.residency_years_in_locality}
+              onChange={(e) => onChange("residency_years_in_locality", e.target.value)}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="pb-marital_status" className={labelClass}>
+              Marital status
+            </label>
+            <select
+              id="pb-marital_status"
+              value={state.marital_status}
+              onChange={(e) => onChange("marital_status", e.target.value)}
+              className={inputClass}
+            >
+              {MARITAL_STATUSES.map((opt) => (
+                <option key={opt.value || "empty-marital"} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <span className={labelClass}>Active scholarships you currently hold (self-reported)</span>
+            <div className="mt-2 flex flex-col gap-2">
+              {ACTIVE_GRANT_SCOPES.map((opt) => {
+                const selected = state.active_grant_scopes
+                  .split(",")
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+                const checked = selected.includes(opt.value);
+                return (
+                  <label key={opt.value} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(e) => {
+                        const next = new Set(selected);
+                        if (e.target.checked) next.add(opt.value);
+                        else next.delete(opt.value);
+                        onChange("active_grant_scopes", Array.from(next).join(","));
+                      }}
+                      className="mt-0.5"
+                    />
+                    {opt.label}
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <label className={labelClass}>
+              <input
+                type="checkbox"
+                checked={state.is_hei_faculty_or_staff === "on"}
+                onChange={(e) => onChange("is_hei_faculty_or_staff", e.target.checked ? "on" : "")}
+                className="mr-2"
+              />
+              I am HEI faculty or staff
+            </label>
+          </div>
+        </div>
+      </details>
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 import { apiFetch } from "../api/client";
 import { useDebounce } from "../hooks/useDebounce";
 import { PHILIPPINE_REGIONS } from "../constants/regions";
 import type { ScholarshipSearchFilters } from "../types";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 /** Fallback when /search/filters fails or returns no levels */
 const FALLBACK_EDUCATION_LEVELS = [
@@ -30,6 +33,8 @@ interface ScholarshipFilterOptions {
 interface ScholarshipSearchFiltersProps {
   filters: ScholarshipSearchFilters;
   onChange: (filters: ScholarshipSearchFilters) => void;
+  /** drawer = mobile sheet trigger; sidebar = desktop aside panel (D-11). */
+  variant?: "drawer" | "sidebar";
 }
 
 const TIMING_LABELS: Record<string, string> = {
@@ -49,6 +54,31 @@ const LIFE_STAGE_LABELS: Record<string, string> = {
   tvet: "TVET",
 };
 
+/** Name the filter most likely to zero out results (CONT-03). */
+export function mostRestrictiveFilterHint(filters: ScholarshipSearchFilters): string | null {
+  if (filters.region) {
+    return `Region (${filters.region}) is often the strictest filter — try removing it first.`;
+  }
+  if (filters.max_income != null && filters.max_income >= 0) {
+    const incomeLabel = INCOME_OPTIONS.find((o) => o.value === filters.max_income)?.label;
+    return `Income ceiling (${incomeLabel ?? `≤ ₱${filters.max_income.toLocaleString()}`}) may be excluding programs — try relaxing it.`;
+  }
+  if (filters.education_level) {
+    return `Education level (${filters.education_level}) may be limiting results — try clearing it.`;
+  }
+  if (filters.school?.trim()) {
+    return `School filter (${filters.school.trim()}) is very specific — try clearing it.`;
+  }
+  if (filters.field) {
+    return `Study area (${filters.field}) may be too narrow — try a broader field or clear it.`;
+  }
+  return null;
+}
+
+export function countActiveFilters(filters: ScholarshipSearchFilters): number {
+  return describeActiveFilters(filters).length;
+}
+
 export function describeActiveFilters(filters: ScholarshipSearchFilters): string[] {
   const labels: string[] = [];
   if (filters.region) labels.push(`Region: ${filters.region}`);
@@ -66,7 +96,11 @@ export function describeActiveFilters(filters: ScholarshipSearchFilters): string
   return labels;
 }
 
-export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearchFiltersProps) {
+export function ScholarshipSearchFilters({
+  filters,
+  onChange,
+  variant = "sidebar",
+}: ScholarshipSearchFiltersProps) {
   const [filterOptions, setFilterOptions] = useState<ScholarshipFilterOptions>({
     providers: [],
     education_levels: [],
@@ -155,25 +189,17 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
   const inputClassName =
     "mt-1 w-full min-h-[44px] rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-3 text-base sm:text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
 
-  return (
-    <aside className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-md">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
-          Filters
-        </h3>
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={handleClearAll}
-            className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
-          >
-            Clear all
-          </button>
-        )}
-      </div>
+  const activeFilterCount = countActiveFilters(filters);
 
-      <div className="space-y-4">
-        <div>
+  const fieldsetClass = "space-y-4 border-0 p-0 min-w-0";
+  const legendClass =
+    "mb-1 block w-full text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
+
+  const filterFields = (
+    <div className="space-y-6">
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Location</legend>
+          <div>
           <label htmlFor="filter-region" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Region
           </label>
@@ -191,7 +217,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             ))}
           </select>
         </div>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Eligibility</legend>
         <div>
           <label htmlFor="filter-education" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Education Level
@@ -259,7 +288,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
           />
           Include discontinued programs
         </label>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Study & school</legend>
         <div>
           <label htmlFor="filter-field" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Study area
@@ -287,7 +319,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             className={inputClassName}
           />
         </div>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Financial</legend>
         <div>
           <label htmlFor="filter-income" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Max Household Income
@@ -312,7 +347,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             ))}
           </select>
         </div>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Provider</legend>
         <div className="relative">
           <label htmlFor="filter-provider" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Scholarship Provider
@@ -329,9 +367,14 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             }}
             placeholder="e.g. DOST, CHED"
             className={inputClassName}
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={providerOpen}
+            aria-controls="filter-provider-listbox"
           />
           {providerOpen && providerSuggestions.length > 0 && (
             <ul
+              id="filter-provider-listbox"
               className="absolute z-50 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 py-1 shadow-lg"
               role="listbox"
             >
@@ -353,7 +396,52 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             </ul>
           )}
         </div>
+        </fieldset>
       </div>
+  );
+
+  const filterHeader = (
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Filters</h3>
+      {hasActiveFilters && (
+        <Button type="button" variant="link" size="sm" className="h-auto p-0 text-xs" onClick={handleClearAll}>
+          Clear all
+        </Button>
+      )}
+    </div>
+  );
+
+  if (variant === "drawer") {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button type="button" variant="outline" className="min-h-[44px] w-full gap-2 sm:w-auto">
+            <SlidersHorizontal className="h-4 w-4" aria-hidden />
+            Filters
+            {activeFilterCount > 0 ? (
+              <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                {activeFilterCount}
+              </span>
+            ) : null}
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-xl">
+          <SheetHeader>
+            <SheetTitle>Search filters</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4">
+            {filterHeader}
+            {filterFields}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  return (
+    <aside className="rounded-xl border border-border bg-card p-4 shadow-2">
+      {filterHeader}
+      {filterFields}
     </aside>
   );
 }

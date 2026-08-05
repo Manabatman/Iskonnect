@@ -130,9 +130,7 @@ def is_publishable(row: Any, *, threshold: int = PUBLISHABILITY_THRESHOLD) -> bo
     ds = _get(row, "data_status")
     if ds in ("expired", "broken_link", "past_deadline"):
         return False
-    score = _get(row, "data_completeness_score")
-    if score is None:
-        score = compute_data_completeness_score(row)
+    score = compute_data_completeness_score(row)
     return int(score) >= threshold
 
 

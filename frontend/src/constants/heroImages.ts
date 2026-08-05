@@ -1,27 +1,47 @@
 /**
- * Landing hero carousel — primary assets under public/images/hero/ (.jpg).
- * If a file is missing, HeroCarousel falls back to the matching SVG placeholder.
- *
- * ## Replacing images (no code change required)
- * Swap files in place keeping the same filenames:
- * - hero-1.jpeg — graduates / celebration (recommended 1920×1080 or 16:9, &lt; 400 KB WebP/JPEG)
- * - hero-2.jpg — ceremony / campus wide shot
- * - hero-3.jpg — inspirational campus or student life
- *
- * Alt text for each slide is set in LandingPage `heroAlts` (same order as this array).
+ * Static landing hero photography (AVIF/WebP + PNG fallback in public/images/hero/).
  */
-export const HERO_CAROUSEL_IMAGES = [
-  "/images/hero/hero-1.jpg",
-  "/images/hero/hero-2.jpg",
-  "/images/hero/hero-3.jpg",
-] as const;
+export const HERO_IMAGE_ALT = "Filipino students in graduation caps celebrating achievement";
 
-/** Same order as HERO_CAROUSEL_IMAGES — used when primary image fails to load. */
-export const HERO_CAROUSEL_FALLBACK_SVGS = [
-  "/images/hero/hero-1.svg",
-  "/images/hero/hero-2.svg",
-  "/images/hero/hero-3.svg",
-] as const;
+export type HeroBreakpointAssets = {
+  width: number;
+  height: number;
+  media: string;
+  avif: string;
+  webp: string;
+  png: string;
+};
 
-/** Milliseconds between slide transitions (white fade happens inside the carousel). */
-export const HERO_CAROUSEL_INTERVAL_MS = 5000;
+export const HERO_BREAKPOINTS: {
+  mobile: HeroBreakpointAssets;
+  tablet: HeroBreakpointAssets;
+  desktop: HeroBreakpointAssets;
+} = {
+  mobile: {
+    width: 768,
+    height: 1024,
+    media: "(max-width: 767px)",
+    avif: "/images/hero/hero-mobile.avif",
+    webp: "/images/hero/hero-mobile.webp",
+    png: "/images/hero/hero-mobile.png",
+  },
+  tablet: {
+    width: 1024,
+    height: 768,
+    media: "(min-width: 768px) and (max-width: 1023px)",
+    avif: "/images/hero/hero-tablet.avif",
+    webp: "/images/hero/hero-tablet.webp",
+    png: "/images/hero/hero-tablet.png",
+  },
+  desktop: {
+    width: 1920,
+    height: 1080,
+    media: "(min-width: 1024px)",
+    avif: "/images/hero/hero-desktop.avif",
+    webp: "/images/hero/hero-desktop.webp",
+    png: "/images/hero/hero-desktop.png",
+  },
+};
+
+/** Auth panel fallback when login illustration fails. */
+export const HERO_FALLBACK_SVG = "/images/hero/hero-1.svg";
