@@ -46,10 +46,22 @@ export interface StudentProfile {
   is_uniformed_service_dependent?: boolean;
   is_gsis_dependent?: boolean;
   is_sss_dependent?: boolean;
+  is_medical_frontliner_dependent?: boolean;
+  study_destination_preference?: "PHILIPPINES_ONLY" | "ABROAD_ONLY" | "BOTH";
   employment_status?: string;
   evening_weekend_program?: boolean;
   athlete_level?: string;
   parent_occupation?: string;
+  prior_tertiary_units?: number;
+  class_rank?: number;
+  class_size?: number;
+  work_experience_years?: number;
+  marital_status?: string;
+  parent_salary_grade?: number;
+  parent_status?: string;
+  is_hei_faculty_or_staff?: boolean;
+  residency_years_in_locality?: number;
+  active_grant_scope_codes?: string[];
   documents?: Array<{ type: string; status: string }>;
   privacy_consent?: boolean;
   privacy_consent_version?: string;
@@ -129,15 +141,46 @@ export interface ApplicationPreparation {
   profile_fields_total?: number;
 }
 
-export interface ScholarshipEligibilityDetail {
-  scholarship_id: number;
-  profile_id: number;
-  qualification_status: string;
-  requirements?: Array<{ key?: string; label?: string; result?: string; detail?: string }>;
+export interface EligibilityRequirementCheck {
+  key?: string;
+  label?: string;
+  kind?: string;
+  result?: string;
+  verified?: string;
+  evidence?: string | null;
+  changeable?: string;
+  blocker_explanation?: string | null;
+  change_hint?: string | null;
+}
+
+export interface EligibilityPrimaryBlocker {
+  key: string;
+  title: string;
+  changeable: string;
+}
+
+/** Backend-authored eligibility explanation — render verbatim, do not derive. */
+export interface EligibilityExplanation {
+  status: string;
+  status_label: string;
+  summary: string;
+  reason?: string | null;
+  application_window: string;
+  next_action: string;
+  primary_blocker?: EligibilityPrimaryBlocker | null;
+  requirements: EligibilityRequirementCheck[];
+  qualification_status?: string;
+  passes_for_matching?: boolean;
   missing_requirements?: string[];
   qualifying_requirements?: string[];
   eligibility_confidence?: string | null;
-  passes_for_matching?: boolean;
+  catalog_status?: string | null;
+  catalog_message?: string | null;
+}
+
+export interface ScholarshipEligibilityDetail extends EligibilityExplanation {
+  scholarship_id: number;
+  profile_id: number;
 }
 
 export interface ScholarshipVersionHistoryItem {
@@ -360,6 +403,11 @@ export interface ScholarshipInfo {
   deadline_note?: string | null;
   application_open_date?: string | null;
   next_review_date?: string | null;
+  student_verification_status?: string | null;
+  student_verification_label?: string | null;
+  student_verification_message?: string | null;
+  official_website?: string | null;
+  official_website_host?: string | null;
   field_evidence?: FieldEvidence[];
   completeness_label?: string | null;
   completeness_tier?: string | null;

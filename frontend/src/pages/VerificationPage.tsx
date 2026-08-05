@@ -21,7 +21,7 @@ function formatCatalogVerifiedDate(iso: string | null | undefined): string | nul
 
 const sources = [
   "CHED (Commission on Higher Education)",
-  "DOST-SEI (Department of Science and Technology — Science Education Institute)",
+  "DOST-SEI (Department of Science and Technology, Science Education Institute)",
   "TESDA (Technical Education and Skills Development Authority)",
   "Local government units (LGUs)",
   "Universities and state colleges",
@@ -31,8 +31,8 @@ const sources = [
 const verificationChecks = [
   "We confirm the scholarship exists through an official source.",
   "We verify application dates, eligibility requirements, and benefits.",
-  "We check for duplicate listings.",
-  "We ensure every listing links back to the official provider.",
+  "We check for duplicate scholarships.",
+  "We ensure every scholarship links back to the official provider.",
   "We flag uncertain information for additional review before publication.",
 ];
 
@@ -62,11 +62,11 @@ export function VerificationPage() {
       <div className="mx-auto max-w-3xl px-4">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">How we verify scholarships</h1>
         <p className="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-400">
-          Can you trust the information on ISKONNECT? This page explains how we review listings, what
+          Can you trust the information on ISKONNECT? This page explains how we review scholarships, what
           &quot;verified&quot; means, and what we still ask you to confirm on your own.
         </p>
 
-        <div className="mt-10 space-y-10 text-slate-700 dark:text-slate-300">
+        <div className="mt-12 space-y-12 text-slate-700 dark:text-slate-300">
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">What ISKONNECT verifies</h2>
             <p className="mt-2 leading-relaxed">
@@ -74,8 +74,8 @@ export function VerificationPage() {
             </p>
             <p className="mt-3 leading-relaxed">
               Before a scholarship appears in our catalog, we review its source, eligibility requirements,
-              application period, and official links. We re-check listings on a rolling basis and show the
-              date each listing was last verified—we do not promise a fixed re-verification window for every
+              application period, and official links. We re-check scholarships on a rolling basis and show the
+              date each scholarship was last verified. We do not promise a fixed re-verification window for every
               program at once.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -95,7 +95,7 @@ export function VerificationPage() {
               ))}
             </ul>
             <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-              Each listing links back to the provider&apos;s site so you can verify eligibility, deadlines, and
+              Each scholarship links back to the provider&apos;s site so you can verify eligibility, deadlines, and
               requirements yourself.
             </p>
           </section>
@@ -109,7 +109,7 @@ export function VerificationPage() {
             <p className="mt-3 leading-relaxed">
               Because scholarship providers can update their requirements at any time, we still recommend checking
               the official announcement before applying. &quot;Verified&quot; is not a guarantee of funding or
-              acceptance—it means we believe the listing was accurate when we last checked it.
+              acceptance. It means we believe the scholarship was accurate when we last checked it.
             </p>
           </section>
 
@@ -128,12 +128,12 @@ export function VerificationPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Verification status labels</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              Status labels help you decide whether to apply now, prepare for later, or use a listing for reference.
+              Status labels help you decide whether to apply now, prepare for later, or use a scholarship for reference.
               See our{" "}
               <Link to="/scholarship-status" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 Scholarship Status Guide
               </Link>{" "}
-              for a scannable summary and full details on each label — including Open now, Needs verification, and Past
+              for a scannable summary and full details on each label, including Open now, Needs verification, and Past
               cycle.
             </p>
           </section>
@@ -141,37 +141,37 @@ export function VerificationPage() {
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Why past cycles stay visible</h2>
             <p className="mt-2 leading-relaxed">
               Closed or previous-cycle scholarships remain in ISKONNECT so you can learn typical requirements, plan for
-              the next opening, and compare benefits—even when you can&apos;t apply right now.
+              the next opening, and compare benefits, even when you can&apos;t apply right now.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Last verified</h2>
             <p className="mt-2 leading-relaxed">
-              When our team or automated checks confirm a listing against an official source, we record the date.
+              When our team or automated checks confirm a scholarship against an official source, we record the date.
               You&apos;ll see labels like &quot;Verified Mar 15, 2026&quot; on scholarship cards and detail pages.
             </p>
             <p className="mt-3 leading-relaxed">
-              If a listing hasn&apos;t been checked recently, we show &quot;Not yet verified&quot; so you know to
+              If a scholarship hasn&apos;t been checked recently, we show &quot;Not yet verified&quot; so you know to
               double-check on the provider&apos;s site before relying on the details.
             </p>
             {catalogTrust && catalogTrust.published_count > 0 ? (
               <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 {catalogLastVerified ? (
                   <>
-                    Across our {catalogTrust.published_count} active listings, the most recent verification was on{" "}
+                    Across our {catalogTrust.published_count} active scholarships, the most recent verification was on{" "}
                     <span className="font-medium text-slate-800 dark:text-slate-200">{catalogLastVerified}</span>.
                     {catalogTrust.verified_within_90d_count > 0 ? (
                       <>
                         {" "}
-                        {catalogTrust.verified_within_90d_count} listing
+                        {catalogTrust.verified_within_90d_count} scholarship
                         {catalogTrust.verified_within_90d_count === 1 ? "" : "s"} were checked within the last{" "}
                         {catalogTrust.verification_fresh_days} days.
                       </>
                     ) : null}
                   </>
                 ) : (
-                  <>None of our {catalogTrust.published_count} active listings have a verification date recorded yet.</>
+                  <>None of our {catalogTrust.published_count} active scholarships have a verification date recorded yet.</>
                 )}
               </p>
             ) : null}
@@ -180,7 +180,7 @@ export function VerificationPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How freshness works</h2>
             <p className="mt-2 leading-relaxed">
-              Freshness chips summarize what we know—verification date, source, and whether a cycle has closed. They
+              Freshness chips summarize what we know: verification date, source, and whether a cycle has closed. They
               guide your judgment; they do not replace reading the official announcement.
             </p>
           </section>
@@ -188,8 +188,8 @@ export function VerificationPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How matching works</h2>
             <p className="mt-2 leading-relaxed">
-              ISKONNECT compares the information you provide — such as your school level, location, income, and academic
-              profile — with the eligibility requirements published by scholarship providers.
+              ISKONNECT compares the information you provide, such as your school level, location, income, and academic
+              profile, with the eligibility requirements published by scholarship providers.
             </p>
             <p className="mt-3 leading-relaxed">
               Matches indicate scholarships you may qualify for based on available information. They are not guarantees
@@ -217,7 +217,7 @@ export function VerificationPage() {
             <p className="mt-2 text-sm leading-relaxed text-amber-900/90 dark:text-amber-100/90">
               ISKONNECT does not guarantee admission, funding, or that every detail is current. Scholarship providers
               may change income ceilings, document requirements, or deadlines without telling us. Matching shows
-              programs you may qualify for based on the information we have—it is not a promise of acceptance. Always
+              programs you may qualify for based on the information we have. It is not a promise of acceptance. Always
               confirm on the official provider&apos;s website before applying.
             </p>
           </section>

@@ -1,25 +1,47 @@
 /**
- * Landing hero carousel — SVG placeholders under public/images/hero/.
- * HeroCarousel falls back to the matching SVG if a primary asset fails to load.
- *
- * Alt text for each slide is set in LandingPage `heroAlts` (same order as this array).
+ * Static landing hero photography (AVIF/WebP + PNG fallback in public/images/hero/).
  */
-export const HERO_CAROUSEL_IMAGES = [
-  "/images/hero/hero-1.svg",
-  "/images/hero/hero-2.svg",
-  "/images/hero/hero-3.svg",
-] as const;
+export const HERO_IMAGE_ALT = "Filipino students in graduation caps celebrating achievement";
 
-/** Same order as HERO_CAROUSEL_IMAGES — used when primary image fails to load. */
-export const HERO_CAROUSEL_FALLBACK_SVGS = [
-  "/images/hero/hero-1.svg",
-  "/images/hero/hero-2.svg",
-  "/images/hero/hero-3.svg",
-] as const;
+export type HeroBreakpointAssets = {
+  width: number;
+  height: number;
+  media: string;
+  avif: string;
+  webp: string;
+  png: string;
+};
 
-/** Milliseconds between slide transitions (white fade happens inside the carousel). */
-export const HERO_CAROUSEL_INTERVAL_MS = 5000;
+export const HERO_BREAKPOINTS: {
+  mobile: HeroBreakpointAssets;
+  tablet: HeroBreakpointAssets;
+  desktop: HeroBreakpointAssets;
+} = {
+  mobile: {
+    width: 768,
+    height: 1024,
+    media: "(max-width: 767px)",
+    avif: "/images/hero/hero-mobile.avif",
+    webp: "/images/hero/hero-mobile.webp",
+    png: "/images/hero/hero-mobile.png",
+  },
+  tablet: {
+    width: 1024,
+    height: 768,
+    media: "(min-width: 768px) and (max-width: 1023px)",
+    avif: "/images/hero/hero-tablet.avif",
+    webp: "/images/hero/hero-tablet.webp",
+    png: "/images/hero/hero-tablet.png",
+  },
+  desktop: {
+    width: 1920,
+    height: 1080,
+    media: "(min-width: 1024px)",
+    avif: "/images/hero/hero-desktop.avif",
+    webp: "/images/hero/hero-desktop.webp",
+    png: "/images/hero/hero-desktop.png",
+  },
+};
 
-/** Intrinsic dimensions for hero slides (16:9) — prevents CLS while SVG/JPEG loads. */
-export const HERO_CAROUSEL_WIDTH = 1920;
-export const HERO_CAROUSEL_HEIGHT = 1080;
+/** Auth panel fallback when login illustration fails. */
+export const HERO_FALLBACK_SVG = "/images/hero/hero-1.svg";

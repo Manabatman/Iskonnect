@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { apiFetch } from "../../api/client";
+import { BrandWordmark } from "../BrandWordmark";
+import { OpportunityRoadmapDialog } from "../OpportunityRoadmapDialog";
 export interface DashboardSidebarProps {
   collapsed: boolean;
   onToggleCollapse: () => void;
@@ -28,7 +30,7 @@ const navItems: NavItem[] = [
   },
   {
     to: "/scholarships/search",
-    label: "Search opportunities",
+    label: "Scholarships",
     match: (path: string) => path.startsWith("/scholarships/search"),
     icon: IconSearch,
   },
@@ -52,7 +54,7 @@ const navItems: NavItem[] = [
   },
   {
     to: "/settings",
-    label: "Account Settings",
+    label: "Settings",
     match: (path: string) => path.startsWith("/settings"),
     icon: IconSettings,
   },
@@ -141,6 +143,17 @@ function IconCalendar({ className }: { className?: string }) {
   );
 }
 
+function IconJourney({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 01-1.447.894L12 16.618l-2.553 1.276A1 1 0 018 17v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7zm0 2a5 5 0 00-5 5c0 1.74.89 3.27 2.24 4.17l.76.49V17l1.553-.776L12 17.382l1.447-.724V13.66l.76-.49A4.99 4.99 0 0017 9a5 5 0 00-5-5z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 function IconChevronLeft({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -159,6 +172,7 @@ export function DashboardSidebar({
   const path = location.pathname;
   const { user, authHeaders } = useAuth();
   const [profileId, setProfileId] = useState<number | null>(null);
+  const [roadmapOpen, setRoadmapOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -207,7 +221,7 @@ export function DashboardSidebar({
 
       <aside
         className={[
-          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-slate-200 bg-white shadow-lg transition-all duration-200 dark:border-slate-700 dark:bg-slate-800",
+          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-slate-200 bg-white shadow-lg transition-all duration-base dark:border-slate-700 dark:bg-slate-800",
           collapsed ? "w-16" : "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
@@ -227,14 +241,7 @@ export function DashboardSidebar({
               I
             </Link>
           ) : (
-            <Link to="/dashboard" className="focus-visible-ring min-w-0 flex-1 dark:ring-offset-slate-800">
-              <span className="block truncate text-lg font-bold text-primary-700 dark:text-primary-400">
-                Iskonnect
-              </span>
-              <span className="block truncate text-xs text-slate-500 dark:text-slate-400">
-                Student dashboard
-              </span>
-            </Link>
+            <BrandWordmark to="/dashboard" size="sm" showLogo={false} className="min-w-0 flex-1" textClassName="text-primary-700 dark:text-primary-400" />
           )}
           <button
             type="button"
@@ -244,7 +251,7 @@ export function DashboardSidebar({
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <IconChevronLeft
-              className={["transition-transform", collapsed ? "rotate-180" : ""].join(" ")}
+              className={["transition-transform duration-base", collapsed ? "rotate-180" : ""].join(" ")}
             />
           </button>
         </div>
@@ -254,7 +261,7 @@ export function DashboardSidebar({
             const active = item.match(path);
             const Icon = item.icon;
             const sharedClass = [
-              "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+              "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition",
               active
                 ? "bg-primary-50 text-primary-700 shadow-sm dark:bg-primary-900/30 dark:text-primary-300"
                 : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700/80",
@@ -292,6 +299,25 @@ export function DashboardSidebar({
             );
           })}
         </nav>
+
+        <div className="mt-auto border-t border-slate-200 p-2 dark:border-slate-700">
+          <button
+            type="button"
+            onClick={() => {
+              setRoadmapOpen(true);
+              onMobileClose();
+            }}
+            className={[
+              "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700/80",
+              collapsed ? "justify-center px-2" : "",
+            ].join(" ")}
+            title={collapsed ? "Your opportunity journey" : undefined}
+            aria-label={collapsed ? "Your opportunity journey" : undefined}
+          >
+            <IconJourney className="shrink-0 opacity-90" />
+            {!collapsed ? <span className="truncate">Your opportunity journey</span> : null}
+          </button>
+        </div>
 
         {user?.role === "admin" || user?.role === "sponsor" || user?.role === "school_verifier" ? (
           <div className="mt-auto space-y-1 border-t border-slate-200 p-2 dark:border-slate-700">
@@ -358,6 +384,7 @@ export function DashboardSidebar({
           </div>
         ) : null}
       </aside>
+      <OpportunityRoadmapDialog open={roadmapOpen} onOpenChange={setRoadmapOpen} />
     </>
   );
 }

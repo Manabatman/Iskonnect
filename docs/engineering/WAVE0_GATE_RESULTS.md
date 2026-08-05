@@ -54,7 +54,7 @@
 
 | Gate | Command | Result | Notes |
 | --- | --- | --- | --- |
-| Pytest (full) | `python -m pytest app/tests/ -q` | **INCOMPLETE** | Full suite exceeded 13 min in this environment; re-run locally before Wave 1 |
+| Pytest (full) | `python -m pytest app/tests/ -q` | **PASS** | 690 passed, 2 skipped; 72.58% cov (≥70% gate); ~13m40s (2026-08-01) |
 
 Re-run before Wave 1:
 

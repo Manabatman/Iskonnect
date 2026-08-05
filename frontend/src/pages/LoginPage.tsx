@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthDirectionalOverlay } from "../components/visual/DirectionalImageOverlays";
-import { getPostAuthPath, useAuth } from "../contexts/AuthContext";
+import { EmailVerificationRequiredError, getPostAuthPath, useAuth } from "../contexts/AuthContext";
 import { clearLoginFlowMeasures, markLoginFlow } from "../utils/perfTiming";
 import { validateEmail } from "../utils/validateEmail";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -29,6 +29,7 @@ export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [verificationBlocked, setVerificationBlocked] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [authPanelSrc, setAuthPanelSrc] = useState(AUTH_PANEL_PRIMARY);
@@ -36,6 +37,7 @@ export function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    setVerificationBlocked(false);
     setEmailError(null);
     const emailCheck = validateEmail(email);
     if (!emailCheck.valid) {
@@ -52,7 +54,12 @@ export function LoginPage() {
       markLoginFlow("navigate-dashboard");
       navigate(getPostAuthPath(authUser, returnTo), { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      if (err instanceof EmailVerificationRequiredError) {
+        setVerificationBlocked(true);
+        setError(err.message);
+      } else {
+        setError(err instanceof Error ? err.message : "Login failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -90,8 +97,24 @@ export function LoginPage() {
           <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <Alert variant="destructive" role="alert">
-                <AlertDescription>{error}</AlertDescription>
+              <Alert variant={verificationBlocked ? "default" : "destructive"} role="alert">
+                <AlertDescription>
+                  {error}
+                  {verificationBlocked && (
+                    <span className="mt-2 block text-sm text-muted-foreground">
+                      Check your inbox and spam folder for the verification email we sent when you registered.
+                      Resending requires a signed-in session, so if you still don&apos;t see it, try registering again
+                      with the same email or contact{" "}
+                      <a
+                        href="mailto:manabat.markjustin@gmail.com"
+                        className="font-medium text-primary hover:underline"
+                      >
+                        support
+                      </a>
+                      .
+                    </span>
+                  )}
+                </AlertDescription>
               </Alert>
             )}
             <div className="space-y-2">

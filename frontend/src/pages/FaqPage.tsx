@@ -11,7 +11,7 @@ export function FaqPage() {
           Straight answers about matching, trust, and how ISKONNECT helps you plan—not just search—for scholarships.
         </p>
 
-        <div className="mt-10 space-y-3">
+        <div className="mt-12 space-y-3">
           {faqItems.map((item) => (
             <details
               key={item.q}
@@ -56,7 +56,7 @@ export function FaqPage() {
           ))}
         </div>
 
-        <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/50">
+        <div className="mt-12 rounded-xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/50">
           <p className="text-sm text-slate-600 dark:text-slate-400">
             Still have questions? Learn{" "}
             <Link to="/how-matching-works#why" className="font-medium text-primary-600 hover:underline dark:text-primary-400">

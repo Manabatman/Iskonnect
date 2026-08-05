@@ -70,6 +70,19 @@ export const ATHLETE_LEVELS = [
   { value: "national", label: "National team" },
 ] as const;
 
+export const MARITAL_STATUSES = [
+  { value: "", label: "Select marital status" },
+  { value: "single", label: "Single" },
+  { value: "married", label: "Married" },
+  { value: "separated", label: "Separated" },
+  { value: "widowed", label: "Widowed" },
+] as const;
+
+export const ACTIVE_GRANT_SCOPES = [
+  { value: "national_stufap", label: "National government scholarship (StuFAP/TES/DOST/etc.)" },
+  { value: "lgu_grant", label: "LGU/local scholarship" },
+] as const;
+
 export const EQUITY_FLAG_MAP: Record<string, string> = {
   Underprivileged: "is_underprivileged",
   PWD: "is_pwd",
@@ -82,6 +95,7 @@ export const EQUITY_FLAG_MAP: Record<string, string> = {
   "Uniformed Service Dependents": "is_uniformed_service_dependent",
   "GSIS Dependent": "is_gsis_dependent",
   "SSS Dependent": "is_sss_dependent",
+  "Medical Frontliner Dependent": "is_medical_frontliner_dependent",
 };
 
 /** Static fallback when profile-options API is unavailable (DATA-04 / B8). */

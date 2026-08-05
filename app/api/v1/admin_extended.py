@@ -132,6 +132,22 @@ def admin_update_feedback_triage(
     }
 
 
+@router.delete("/admin/feedback/{feedback_id}")
+@limiter.limit("60/minute")
+def admin_delete_feedback(
+    feedback_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    _admin: Annotated[models.User | None, Depends(require_admin)] = None,
+):
+    row = db.query(models.ProductFeedback).filter(models.ProductFeedback.id == feedback_id).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    db.delete(row)
+    db.commit()
+    return {"deleted": True, "id": feedback_id}
+
+
 @router.get("/admin/staging/stats")
 @limiter.limit("60/minute")
 def admin_staging_stats(

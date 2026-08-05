@@ -8,8 +8,14 @@
   "start_url": "/",
   "icons": [
     {
+      "src": "/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/images/logo-light.png",
-      "sizes": "512x512",
+      "sizes": "160x148",
       "type": "image/png",
       "purpose": "any"
     }

@@ -52,27 +52,36 @@ export function freshnessFromScholarship(sch: {
   verification_source?: string | null;
   freshness_chips?: FreshnessChip[];
 }): FreshnessChip[] {
-  if (sch.freshness_chips?.length) return sch.freshness_chips;
-  const chips: FreshnessChip[] = [];
   const appStatus = resolveApplicationStatus(sch);
+  if (sch.freshness_chips?.length) {
+    if (appStatus === "needs_verification") {
+      return sch.freshness_chips.filter(
+        (chip) =>
+          !/verified|verification source|official source/i.test(chip.label) &&
+          chip.label !== "Not yet verified",
+      );
+    }
+    return sch.freshness_chips;
+  }
+  const chips: FreshnessChip[] = [];
 
   if (appStatus === "needs_verification") {
     chips.push({ label: "Needs verification", tone: "warning" });
+  } else {
+    const verified = formatVerifiedDate(sch.last_verified_at);
+    if (verified) {
+      chips.push({ label: `Last verified ${verified}`, tone: "success" });
+    } else {
+      chips.push({ label: "Not yet verified", tone: "warning" });
+    }
+
+    const source = humanizeVerificationSource(sch.verification_source);
+    if (source) {
+      chips.push({ label: source, tone: "neutral" });
+    }
   }
   if ((sch.link_status || "").toLowerCase() === "broken") {
     chips.push({ label: "Link issue", tone: "danger" });
-  }
-
-  const verified = formatVerifiedDate(sch.last_verified_at);
-  if (verified && appStatus !== "needs_verification") {
-    chips.push({ label: `Last verified ${verified}`, tone: "success" });
-  } else if (appStatus !== "needs_verification") {
-    chips.push({ label: "Not yet verified", tone: "warning" });
-  }
-
-  const source = humanizeVerificationSource(sch.verification_source);
-  if (source) {
-    chips.push({ label: source, tone: "neutral" });
   }
   return chips;
 }

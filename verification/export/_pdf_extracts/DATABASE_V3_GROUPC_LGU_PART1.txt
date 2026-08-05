@@ -1,0 +1,3547 @@
+Canonical Verification Report for 
+ISKONNECT Production Database: Local 
+Government Unit & Institutional 
+Scholarship Tracks 
+Taguig LANI Premier Scholarship (ID: 27) 
+1. Scholarship Identity 
+●​ Official Name: Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier 
+Scholarship1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Merit-based1 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: https://tcu.edu.ph/lani-scholarship1 
+●​ Official Guidelines: Taguig City Ordinance No. 9, Series of 2011; Executive Order No. 
+2011-111 
+●​ Current Status: Active3 
+2. Purpose 
+To provide financial assistance and merit incentives to qualified Taguig City residents pursuing 
+higher education in top-tier higher education institutions, specifically the University of the 
+Philippines System (Luzon campuses) and private/public higher education institutions in the 
+National Capital Region (NCR) recognized as Centers of Excellence by the Commission on 
+Higher Education (CHED)1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years immediately 
+preceding the application1. 
+●​ Education Level: College / Undergraduate1. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 51. 
+●​ Incoming Freshman Only?: No1. 
+●​ Existing College Students?: Yes1. 
+●​ Graduate Students?: No (Covered under LEAD track ID 97)1. 
+●​ Current Enrollment Requirement: Enrolled or enrolling in the UP System (Luzon 
+
+campuses) or CHED-certified Centers of Excellence in NCR1. 
+●​ Academic Requirements: Senior High School or college academic performance meeting 
+admission and retention cutoffs1. 
+●​ Minimum GWA: 90% (or equivalent 1.75 semestral weighted average)1. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Restricted to University of the Philippines System (Luzon campuses) 
+and CHED-certified Centers of Excellence in NCR1. 
+●​ Priority Courses: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required (Certificate of Good Moral Character issued for the current 
+school year)1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must be a registered voter of Taguig City if 18 years or older, with at 
+least one parent registered as a voter of Taguig City1. 
+4. Application Timing 
+●​ Who May Apply: Graduating SHS students and ongoing college students enrolled in 
+qualifying COE institutions or UP Luzon campuses1. 
+●​ Can current freshmen apply?: Yes1. 
+●​ Can current sophomores apply?: Yes1. 
+●​ Can current juniors apply?: Yes1. 
+●​ Can current seniors apply?: Yes1. 
+●​ Can graduates apply?: No1. 
+●​ Can previous applicants reapply?: Yes (Requires semestral renewal)1. 
+5. Application Window 
+●​ Opening Date: Semestral schedule announced by the Taguig Scholarship Secretariat1. 
+●​ Closing Date: Announced per semestral intake window1. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Integrated into financial grant1. 
+●​ Monthly Stipend: Integrated into semestral allowance1. 
+●​ Allowance: PHP 40,000.00 to PHP 50,000.00 per school year (PHP 20,000.00 to PHP 
+25,000.00 per semester)1. 
+●​ Book Allowance: Integrated into semestral allowance1. 
+●​ Transportation: Integrated into semestral allowance1. 
+
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None mandated; scholars are encouraged to serve Taguig City1. 
+●​ Other Benefits: Merit incentives awarded to scholars obtaining a semestral weighted 
+average of 1.75 or higher1. 
+7. Required Documents 
+1.​ Completely filled-out LANI Scholarship Application Form with recent 2x2 pictures1. 
+2.​ Registration Form or Official Receipt of Enrollment for the current semester1. 
+3.​ Authenticated Copy of Grades/Transcript of Records for the preceding semester1. 
+4.​ Certificate of Good Moral Character issued for the current academic year1. 
+5.​ Voter's Certification issued by COMELEC (for applicant if >=18 years old, and parent)1. 
+6.​ Certificate of Residency (minimum 3 years)1. 
+7.​ Proof of Billing under the applicant's or parent's name1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain a General Weighted Average (GWA) not lower than 2.50 
+per semester5. 
+●​ Regular Load: Enrolled in at least 15 academic units per semester or equivalent per 
+trimester5. 
+●​ No Failures: Zero failing grades (5.0), unremoved 4.0, Incomplete (INC), or Dropped 
+marks5. 
+●​ Return Service: None1. 
+9. Disqualifying Conditions 
+●​ Residing in Taguig City for less than three (3) consecutive years1. 
+●​ Non-voter status of applicant (if 18+) or parent in Taguig City1. 
+●​ Semester GWA dropping below 2.50 or receiving grades of 5.0, 4.0, INC, or Dropped5. 
+●​ Enrollment in non-COE institutions or non-UP Luzon campuses1. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled UP Manila Student 
+(Taguig Resident >= 3 yrs) 
+Eligible Now 
+Apply during semestral 
+submission window with 
+COMELEC certification1. 
+
+2nd Year College Student at 
+Private Non-COE HEI 
+Ineligible 
+Restricted to UP Luzon 
+campuses and 
+CHED-certified Centers of 
+Excellence1. 
+Non-Taguig Resident 
+Student 
+Never Eligible 
+Requires 3-year minimum 
+residency and voter 
+registration in Taguig City1. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Residency 
+Taguig 
+Resident >= 3 
+yrs 
+"Bona fide 
+resident of 
+Taguig City for 
+at least 3 years 
+immediately 
+preceding the 
+application" 
+LANI 
+Guidelines1 
+Tier 1 
+School 
+Restriction 
+UP Luzon / 
+CHED COE 
+NCR 
+"Enrolled in the 
+University of 
+the Philippines 
+System (Luzon 
+Campuses) & 
+other public & 
+private 
+colleges & 
+universities 
+certified by 
+CHED as 
+Centers of 
+Excellence in 
+the NCR" 
+LANI 
+Guidelines1 
+Tier 1 
+Financial 
+Award 
+PHP 
+40,000–50,00
+"P40,000 to 
+P50,000 per 
+LANI 
+Guidelines1 
+Tier 1 
+
+0 / yr 
+school year" 
+Retention 
+Cutoff 
+GWA <= 2.50 
+"General 
+weighted 
+average 
+(GWA)... 
+should not be 
+lower than 2.5, 
+with no grade 
+of 5, dropped, 
+unremoved 4, 
+or incomplete" 
+LANI 
+Guidelines5 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 90.00,​
+  "renewal_gwa": 81.00,​
+  "income_limit": null,​
+  "school_type": ["UP_SYSTEM_LUZON", "CHED_CENTER_OF_EXCELLENCE_NCR"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "voter_requirement": "TAGUIG_REGISTERED_VOTER",​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+
+●​ COE Validation Risk: Automated matching engines may grant recommendations to 
+private HEI students whose specific course/program is not explicitly designated as a 
+CHED Center of Excellence1. 
+●​ Voter Status Edge-Case: Applicants turning 18 during the academic cycle must present 
+active voter registration or face administrative disqualification1. 
+14. Verification Summary 
+●​ Verification Status: Verified1. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.taguig.gov.ph, https://tcu.edu.ph/lani-scholarship1. 
+●​ Broken Links: None1. 
+●​ Overall Confidence Score: 95/1003. 
+Taguig LANI Priority Scholarship (ID: 28) 
+1. Scholarship Identity 
+●​ Official Name: Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Merit-and-Need1 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: https://tcu.edu.ph/lani-scholarship1 
+●​ Official Guidelines: Taguig City Ordinance No. 9, Series of 2011; Executive Order No. 
+2011-111 
+●​ Current Status: Active3 
+2. Purpose 
+To incentivize Taguig City residents to pursue priority science, technology, law, and medical 
+degree programs in government-accredited institutions, as well as to support persons with 
+disabilities (PWDs) undergoing specialized training1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years immediately 
+preceding the application1. 
+●​ Education Level: College / Undergraduate / Professional (Law & Medicine)1. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 51. 
+●​ Incoming Freshman Only?: No1. 
+●​ Existing College Students?: Yes1. 
+●​ Graduate Students?: No (Except Law and Medicine)1. 
+●​ Current Enrollment Requirement: Must be enrolled in DOST-listed priority courses in 
+
+DOST-listed schools, top-performing Law/Medicine schools as listed by PRC/CHED, or 
+PWD applicants endorsed by PDAO1. 
+●​ Academic Requirements: GWA of at least 82% or equivalent1. 
+●​ Minimum GWA: 82.00%1. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Restricted to DOST-listed institutions, top PRC/CHED performing 
+law/medical schools, or PDAO-accredited institutions1. 
+●​ Priority Courses: DOST S&T Priority Courses, Law (Juris Doctor), Medicine (Doctor of 
+Medicine)1. 
+●​ Sectoral Requirements: PWD applicants must submit an official ID/endorsement from the 
+Taguig Persons with Disabilities Affairs Office (PDAO)1. 
+●​ Good Moral: Required1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Applicant and/or parent must be registered voters of Taguig City1. 
+4. Application Timing 
+●​ Who May Apply: High school graduates and current tertiary/professional students 
+meeting course and institutional criteria1. 
+●​ Can current freshmen apply?: Yes1. 
+●​ Can current sophomores apply?: Yes1. 
+●​ Can current juniors apply?: Yes1. 
+●​ Can current seniors apply?: Yes1. 
+●​ Can graduates apply?: No (Unless entering Law/Medicine)1. 
+●​ Can previous applicants reapply?: Yes1. 
+5. Application Window 
+●​ Opening Date: Semestral schedule published by Taguig Secretariat1. 
+●​ Closing Date: Semestral deadline1. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Direct grant allocation1. 
+●​ Monthly Stipend: Integrated into allowance1. 
+●​ Allowance: PHP 40,000.00 to PHP 50,000.00 per school year (PHP 20,000.00 to PHP 
+25,000.00 per semester)1. 
+●​ Book Allowance: Integrated into allowance1. 
+●​ Transportation: Integrated into allowance1. 
+
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None1. 
+●​ Other Benefits: Merit incentives available for semestral averages >= 1.751. 
+7. Required Documents 
+1.​ Filled LANI Application Form1. 
+2.​ Enrollment Certificate / Registration Form1. 
+3.​ Preceding Term Grade Report / Transcript of Records1. 
+4.​ Taguig PDAO ID and Endorsement (for PWD applicants)1. 
+5.​ COMELEC Voter's Certification of applicant/parent1. 
+6.​ Certificate of Good Moral Character1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Semestral GWA >= 2.50 (81%)5. 
+●​ Regular Load: Minimum 15 credit units per semester5. 
+●​ No Failures: Zero failing or incomplete grades5. 
+●​ Return Service: None1. 
+9. Disqualifying Conditions 
+●​ Enrolling in non-priority courses outside DOST/Law/Medicine frameworks1. 
+●​ Failure to present valid Taguig PDAO endorsement for PWD track1. 
+●​ Accumulation of failing, incomplete, or dropped subjects5. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled BS Civil 
+Engineering Student (DOST 
+School, GWA 85%) 
+Eligible Now 
+Submit application with 
+DOST course/school 
+accreditation proof1. 
+1st Year Law Student at 
+Accredited Law School 
+Eligible Now 
+Apply under Priority 
+Professional Track with 
+enrollment card1. 
+Enrolled BA History Student 
+Ineligible 
+Program restricted to DOST 
+
+at Private HEI 
+priority S&T, Law, Medicine, 
+or PWD tracks1. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Priority 
+Courses 
+DOST S&T / 
+Law / Med 
+"enrolling in or 
+enrolled in 
+DOST-listed 
+priority 
+courses in 
+DOST-listed 
+schools... or 
+taking up law 
+or medicine" 
+LANI 
+Guidelines1 
+Tier 1 
+Entry GWA 
+>= 82.00% 
+Minimum GWA 
+entry cutoff 
+parameter 82% 
+Live DB / 
+Guidelines1 
+Tier 1 
+Financial 
+Award 
+PHP 
+40,000–50,00
+0 / yr 
+"P40,000 to 
+P50,000" 
+LANI 
+Guidelines1 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College", "Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 82.00,​
+  "income_limit": null,​
+
+  "priority_courses": ["DOST_ST_PRIORITY", "LAW_JURIS_DOCTOR", "DOCTOR_OF_MEDICINE"],​
+  "sectoral_restriction": "PWD_TAGUIG_PDAO_ENDORSED",​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Course Misclassification: System must strictly validate course codes against DOST 
+priority lists before displaying recommendations1. 
+14. Verification Summary 
+●​ Verification Status: Verified1. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://tcu.edu.ph/lani-scholarship1. 
+●​ Overall Confidence Score: 95/1003. 
+Taguig LANI LCU and SUC Assistance Scholarship (ID: 
+29) 
+1. Scholarship Identity 
+●​ Official Name: Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges 
+and Universities (LCU) Assistance Scholarship1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Need-and-Merit1 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: https://tcu.edu.ph/lani-scholarship1 
+●​ Official Guidelines: City Ordinance No. 9, Series of 2011; Executive Order No. 2011-111 
+●​ Current Status: Active3 
+2. Purpose 
+To extend educational financial assistance to public and private high school graduates residing 
+in Taguig City who are enrolled in public tertiary institutions (SUCs and LCUs) within the 
+
+National Capital Region1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years1. 
+●​ Education Level: College / Undergraduate1. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 51. 
+●​ Incoming Freshman Only?: No1. 
+●​ Existing College Students?: Yes1. 
+●​ Graduate Students?: No1. 
+●​ Current Enrollment Requirement: Must be enrolled in a State University or College (SUC) 
+or Local College/University (LCU) in NCR1. 
+●​ Academic Requirements: Passing academic standing with GWA >= 80%1. 
+●​ Minimum GWA: 80.00%1. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Restricted to SUCs and LCUs within NCR (e.g., PUP, PLM, UDM, TCU)1. 
+●​ Priority Courses: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Sectoral Requirements: Sub-categorized by high school background: Public HS 
+graduates receive Basic+SUC/LCU grant; Private HS graduates receive SUC/LCU grant1. 
+●​ Good Moral: Required1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Voter registration requirement for applicant/parent1. 
+4. Application Timing 
+●​ Who May Apply: Taguig resident public or private high school graduates enrolled in NCR 
+SUCs or LCUs1. 
+●​ Can current freshmen apply?: Yes1. 
+●​ Can current sophomores apply?: Yes1. 
+●​ Can current juniors apply?: Yes1. 
+●​ Can current seniors apply?: Yes1. 
+●​ Can graduates apply?: No1. 
+●​ Can previous applicants reapply?: Yes1. 
+5. Application Window 
+●​ Opening Date: Announced semestrally1. 
+●​ Closing Date: Semestral cutoff1. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+
+6. Benefits 
+●​ Tuition: Direct financial grant1. 
+●​ Monthly Stipend: Integrated into allowance1. 
+●​ Allowance: Public HS Grads (Basic + SUC/LCU): PHP 15,000.00/year; Private HS Grads 
+(SUC/LCU): PHP 10,000.00/year1. 
+●​ Book Allowance: Integrated into grant1. 
+●​ Transportation: Integrated into grant1. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None1. 
+●​ Other Benefits: None1. 
+7. Required Documents 
+1.​ Filled LANI Application Form1. 
+2.​ Official Certificate of Registration from SUC/LCU1. 
+3.​ High School Diploma / Form 138 (for new entry) or Term Grade Report1. 
+4.​ Barangay Certificate of Residency1. 
+5.​ COMELEC Voter's Certificate1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Semestral GWA >= 2.505. 
+●​ Regular Load: Minimum 15 units per term5. 
+●​ No Failures: Zero failing grades5. 
+●​ Return Service: None1. 
+9. Disqualifying Conditions 
+●​ Transferring to a private college or university1. 
+●​ Dropping below minimum 15-unit term load5. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled PUP Manila 
+Student (Taguig Resident, 
+Public HS Grad) 
+Eligible Now 
+Apply under Basic + 
+SUC/LCU track for PHP 
+15,000/yr grant1. 
+
+Enrolled UDM Student 
+(Taguig Resident, Private HS 
+Grad) 
+Eligible Now 
+Apply under SUC/LCU track 
+for PHP 10,000/yr grant1. 
+Enrolled Private College 
+Student 
+Ineligible 
+Program restricted 
+exclusively to public 
+SUCs/LCUs in NCR1. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Institution Type 
+NCR SUC / LCU 
+"enrolled or 
+enrolling in an 
+SUC or LCUs in 
+the NCR" 
+LANI 
+Guidelines1 
+Tier 1 
+Public HS Track 
+Grant 
+PHP 15,000 / yr 
+"Graduates of 
+public high 
+schools... Basic 
++ SUC/LCU 
+P15,000" 
+LANI 
+Guidelines1 
+Tier 1 
+Private HS 
+Track Grant 
+PHP 10,000 / 
+yr 
+"Graduate of 
+private 
+school... 
+SUC/LCU 
+P10,000" 
+LANI 
+Guidelines1 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 80.00,​
+  "income_limit": null,​
+  "school_type": ["SUC", "LUC"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ High School Origin Routing: The engine must differentiate between public and private 
+high school graduates to assign correct benefit amounts (15k vs 10k)1. 
+14. Verification Summary 
+●​ Verification Status: Verified1. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://tcu.edu.ph/lani-scholarship1. 
+●​ Overall Confidence Score: 95/1003. 
+Taguig Lifeline Bar and Board Review Assistance (ID: 
+30) 
+1. Scholarship Identity 
+●​ Official Name: Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Licensure Review Assistance2 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: Taguig Scholarship Secretariat / Physical Submission2 
+●​ Official Guidelines: City Ordinance No. 9 s. 2011; LANI Review Guidelines1 
+●​ Current Status: Active3 
+2. Purpose 
+
+To provide one-time financial assistance and top-notch incentives to Taguig City resident 
+graduates preparing for professional licensure board examinations or the Philippine Bar 
+Examination2. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years immediately 
+preceding application1. 
+●​ Education Level: College Graduate / Post-Graduate Graduate1. 
+●​ Eligible Year Levels: Graduated / Board Reviewee2. 
+●​ Incoming Freshman Only?: No2. 
+●​ Existing College Students?: No2. 
+●​ Graduate Students?: Yes (Law/Medical/Graduate reviewees)2. 
+●​ Current Enrollment Requirement: Must be officially registered in a recognized review 
+center or scheduled for upcoming board/bar exam2. 
+●​ Academic Requirements: Completion of tertiary degree program eligible for board/bar 
+examination2. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Graduation from a CHED/PRC-recognized college or university1. 
+●​ Priority Courses: Any course requiring PRC Board Licensure or Supreme Court Bar 
+Examination2. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must submit PRC Notice of Admission (NOA) or Supreme Court 
+permit2. 
+4. Application Timing 
+●​ Who May Apply: College/professional graduates preparing for upcoming licensure 
+examinations2. 
+●​ Can current freshmen apply?: No2. 
+●​ Can current sophomores apply?: No2. 
+●​ Can current juniors apply?: No2. 
+●​ Can current seniors apply?: No2. 
+●​ Can graduates apply?: Yes (Primary target cohort)2. 
+●​ Can previous applicants reapply?: No (One-time assistance grant per exam)2. 
+
+5. Application Window 
+●​ Opening Date: Announced prior to major national board/bar exam cycles2. 
+●​ Closing Date: Specified per review disbursement cycle2. 
+●​ Application Cycle: Rolling / Exam-based2. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Review center fee support2. 
+●​ Monthly Stipend: None2. 
+●​ Allowance: One-time grant: PHP 20,000.00 for Bar and Physician Licensure Exams; PHP 
+15,000.00 for other PRC Board Exams2. 
+●​ Book Allowance: Integrated into review assistance2. 
+●​ Transportation: Integrated into grant2. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: PHP 15,000.00 to PHP 20,000.00 outright review subsidy2. 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None; commitment to serve Taguig City1. 
+●​ Other Benefits: Additional PHP 50,000.00 cash incentive if the scholar lands in the Top 
+10 of the national board/bar examination2. 
+7. Required Documents 
+1.​ Filled Review Assistance Application Form2. 
+2.​ PRC Notice of Admission (NOA) or Bar Exam Registration2. 
+3.​ Two (2) valid government-issued IDs2. 
+4.​ Transcript of Records showing degree completion1. 
+5.​ Taguig COMELEC Voter's Certification1. 
+6.​ Certificate of Residency1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Non-renewable (One-time grant)2. 
+●​ Regular Load: N/A2. 
+●​ No Failures: N/A2. 
+●​ Return Service: None1. 
+9. Disqualifying Conditions 
+●​ Enrolled ongoing undergraduate students2. 
+●​ Failure to present official PRC Notice of Admission or Supreme Court permit2. 
+●​ Prior enjoyment of Taguig Bar/Board assistance for the same exam type2. 
+
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Graduate preparing for 
+Philippine Bar Exam (Taguig 
+Resident) 
+Eligible Now 
+Submit application with 
+Supreme Court NOA for 
+PHP 20,000 grant2. 
+Graduate preparing for LET 
+/ Nursing Board Exam 
+Eligible Now 
+Apply with PRC NOA for 
+PHP 15,000 review grant2. 
+Enrolled 4th Year 
+Engineering Student 
+Ineligible 
+Must complete degree and 
+obtain PRC examination 
+permit prior to applying2. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Beneficiary 
+Type 
+Board/Bar 
+Reviewee 
+"one-time 
+financial aid for 
+those who 
+have 
+completed 
+their studies 
+and are 
+preparing for 
+their 
+licensure/boar
+d or bar 
+examinations" 
+Taguig 
+Advisory2 
+Tier 1 
+Bar/Med Grant 
+PHP 
+20,000.00 
+"taking the Bar 
+and Medical 
+Board will 
+receive 
+Taguig 
+Advisory2 
+Tier 1 
+
+P20,000" 
+Other Board 
+Grant 
+PHP 15,000.00 
+"those taking 
+other types of 
+board exams 
+will receive 
+P15,000" 
+Taguig 
+Advisory2 
+Tier 1 
+Top 10 
+Incentive 
+PHP 
+50,000.00 
+"plus an 
+additional 
+P50,000 if land 
+in the Top 10" 
+Taguig 
+Advisory4 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [5, 6],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": false,​
+  "minimum_gwa": null,​
+  "income_limit": null,​
+  "target_cohort": "LICENSURE_EXAM_REVIEWEES",​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "application_window": {"open": "rolling_exam_based", "close": "rolling_exam_based"},​
+  "deadline_type": "rolling",​
+  "cycle_type": "exam_cycle",​
+  "renewable": false,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Status Mismatch: Displaying this scholarship to current undergraduate students will 
+cause invalid filings; applicants must hold a completed bachelor's degree and exam 
+
+permit2. 
+14. Verification Summary 
+●​ Verification Status: Verified2. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: 
+https://www.taguig.com/news/review-allowance-for-qualified-lani-scholars/2. 
+●​ Overall Confidence Score: 95/1003. 
+Makati City SUC and Priority Courses Scholarship (ID: 
+31) 
+1. Scholarship Identity 
+●​ Official Name: Makati City College Scholarship Program – SUC and Priority Courses 
+Tracks6 
+●​ Provider: Makati City Government / City Education Department6 
+●​ Category: Local Government Unit (LGU) / Merit-and-Need3 
+●​ Official Website: https://www.makati.gov.ph6 
+●​ Application Portal: Makati City Education Department Portal / Physical Office6 
+●​ Official Guidelines: Makati City Ordinance No. 2019-A-0366 
+●​ Current Status: Active3 
+2. Purpose 
+To grant equal access to quality higher education by providing tuition subsidies and stipends to 
+qualified Makati public high school graduates enrolled in State Universities and Colleges (SUCs) 
+in Metro Manila or DOST priority programs6. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen6 
+●​ Residency: Bona fide resident of Makati City6. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1 (Incoming Freshmen)6. 
+●​ Incoming Freshman Only?: Yes6. 
+●​ Existing College Students?: Ineligible for initial entry6. 
+●​ Graduate Students?: Ineligible6. 
+●​ Current Enrollment Requirement: Enrolled or accepted as an incoming 1st-year student in 
+any Metro Manila SUC (other than UMak) or DOST-accredited priority course6. 
+●​ Academic Requirements: Fresh senior high school graduate belonging to the Top 10 
+Percent of the graduating class6. 
+
+●​ Minimum GWA: Minimum GWA of 1.50 (or equivalent 88–90% scale)3. 
+●​ Alternative Class Rank: Belong to the Top 10% of the SHS graduating class6. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Metro Manila SUCs (excluding UMak) or DOST-accredited schools6. 
+●​ Priority Courses: DOST-listed priority courses6. 
+●​ Sectoral Requirements: PWDs enrolled in top performing CHED/PRC schools qualify 
+under the PHP 40,000 track6. 
+●​ Good Moral: Required6. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must sign a mandatory Service Agreement committing to serve with 
+the Makati City Government upon graduation6. 
+4. Application Timing 
+●​ Who May Apply: Graduating SHS students from Makati public schools belonging to the 
+top 10% of their class6. 
+●​ Can current freshmen apply?: Yes (at initial college entry)6. 
+●​ Can current sophomores apply?: No6. 
+●​ Can current juniors apply?: No6. 
+●​ Can current seniors apply?: No6. 
+●​ Can graduates apply?: No6. 
+●​ Can previous applicants reapply?: No6. 
+5. Application Window 
+●​ Opening Date: Annual cycle announced following SHS graduation6. 
+●​ Closing Date: Specified per annual intake notice6. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Covered per institutional billing6. 
+●​ Monthly Stipend: Integrated into total grant6. 
+●​ Allowance: SUC Track: PHP 20,000.00 total benefit per school year; DOST Priority 
+Courses / PWD Track: PHP 40,000.00 total benefit per school year6. 
+●​ Book Allowance: Integrated into grant6. 
+●​ Transportation: Integrated into grant6. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+
+●​ Return Service: Mandatory service agreement to serve with the Makati City Government 
+after graduation6. 
+●​ Other Benefits: None6. 
+7. Required Documents 
+1.​ Official Application Form6. 
+2.​ SHS Form 138 showing GWA and Certification of Top 10% Class Rank signed by 
+Principal6. 
+3.​ Proof of Residency in Makati City (Barangay Certificate / Voter's ID)6. 
+4.​ Certificate of Enrollment / Admission Notice from Metro Manila SUC or DOST-accredited 
+HEI6. 
+5.​ Parents' Income Tax Return or Certificate of Indigency6. 
+6.​ Signed Service Contract Agreement6. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain a GWA of at least 1.50 (or equivalent) each term6. 
+●​ Regular Load: Full academic credit load required6. 
+●​ No Failures: No grade of 5.0, 4.0, Incomplete, or Dropped subjects6. 
+●​ Return Service: Compliance with post-graduation service contract6. 
+9. Disqualifying Conditions 
+●​ Failing grades (5.0), unremoved 4.0, or incomplete marks6. 
+●​ Refusal to sign or fulfill the mandatory Makati City Government service agreement6. 
+●​ Non-residency in Makati City6. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming PUP Freshman 
+(Makati Resident, Top 10% 
+SHS Rank) 
+Eligible Now 
+Apply under SUC track for 
+PHP 20,000 annual grant6. 
+Incoming BS Computer 
+Science Freshman (DOST 
+Course, Top 5% Rank) 
+Eligible Now 
+Apply under Priority Course 
+track for PHP 40,000 
+annual grant6. 
+Enrolled 2nd Year SUC 
+Student 
+Ineligible 
+Scholarship entry restricted 
+to fresh SHS graduates 
+
+entering 1st year6. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Target Cohort 
+Top 10% SHS 
+Graduates 
+"fresh senior 
+high school 
+graduates and 
+belong to the 
+top 10 percent 
+of the 
+graduating 
+class" 
+City Ord. 
+2019-A-0366 
+Tier 1 
+SUC Track 
+Grant 
+PHP 20,000 / 
+yr 
+"enrolled in any 
+state university 
+or college 
+(SUC)... 
+granted Full 
+Scholarship 
+with P20,000 
+in total benefit" 
+City Ord. 
+2019-A-0366 
+Tier 1 
+Priority Track 
+Grant 
+PHP 40,000 / 
+yr 
+"enrolled in 
+DOST-listed 
+priority 
+courses... 
+given 
+P40,000" 
+City Ord. 
+2019-A-0366 
+Tier 1 
+Mandatory 
+Return Svc 
+Required 
+"undertake a 
+service 
+agreement 
+with the city to 
+signify their 
+commitment 
+to serve with 
+City Ord. 
+2019-A-0366 
+Tier 1 
+
+the city 
+government" 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 88.00,​
+  "rank_cutoff_alternative": 10,​
+  "income_limit": null,​
+  "school_type": ["SUC"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "MAKATI_CITY_RESIDENT",​
+  "return_service_required": true,​
+  "application_window": {"open": "annual_notice", "close": "annual_notice"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Service Obligation Friction: Candidates seeking unencumbered grants may reject the 
+mandatory municipal service contract; UI must display return service terms prominently6. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.makati.gov.ph/content/news/70216. 
+●​ Overall Confidence Score: 96/1003. 
+University of Makati Token Fee Exemption Program 
+
+(ID: 32) 
+1. Scholarship Identity 
+●​ Official Name: University of Makati (UMak) Token Fee Exemption Program7 
+●​ Provider: University of Makati / City Government of Makati7 
+●​ Category: Institutional / Local University / Merit-and-Need3 
+●​ Official Website: https://www.umak.edu.ph7 
+●​ Application Portal: UMak OLEA Portal 
+(https://www.umak.edu.ph/admissions/scholarships/)7 
+●​ Official Guidelines: UMak City Ordinance No. 2024-108; UMak Revised Scholarship 
+Guidelines AY 2025–20267 
+●​ Current Status: Active3 
+2. Purpose 
+To grant full or partial exemption from institutional token and tuition fees to qualified students 
+enrolled at the University of Makati based on academic honors, residency, and retention 
+performance7. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen7 
+●​ Residency: Priority given to bona fide Makati City residents (determined via UMak 
+residency verification)10. Non-Makati residents eligible for specific honor tracks7. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 57. 
+●​ Incoming Freshman Only?: No (Entrance exemption is freshman-only; academic retention 
+applies to all years)7. 
+●​ Existing College Students?: Yes7. 
+●​ Graduate Students?: Restricted (Separate graduate fee schedules apply)10. 
+●​ Current Enrollment Requirement: Must be officially admitted and enrolled at the 
+University of Makati7. 
+●​ Academic Requirements: Entrance exemption requires SHS graduation with "Highest 
+Honor" (GWA 98–100) or "High Honor" (GWA 95–97)7. Continuing exemption governed 
+by semestral GWA cutoffs8. 
+●​ Minimum GWA: Entrance cutoff: 95.00% (High Honor) or 98.00% (Highest Honor)7. 
+Renewal cutoff: GWA <= 2.50 (If GWA is 2.75–3.00, student pays PHP 2,000/unit)11. 
+●​ Alternative Class Rank: Senior High School Honor Roll certification7. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Restricted strictly to students enrolled at the University of Makati7. 
+
+●​ Priority Courses: Any undergraduate degree program offered by UMak7. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required (Good disciplinary standing)7. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Governed by UMak retention policies; unofficially dropped subjects 
+cause forfeiture7. 
+4. Application Timing 
+●​ Who May Apply: Officially enrolled UMak undergraduate students7. 
+●​ Can current freshmen apply?: Yes7. 
+●​ Can current sophomores apply?: Yes7. 
+●​ Can current juniors apply?: Yes7. 
+●​ Can current seniors apply?: Yes7. 
+●​ Can graduates apply?: No7. 
+●​ Can previous applicants reapply?: Yes (Automated evaluation or semestral application on 
+OLEA portal)7. 
+5. Application Window 
+●​ Opening Date: Scheduled per semester on the OLEA system (e.g., January intake for 2nd 
+Sem)7. 
+●​ Closing Date: Specified per term registration schedule12. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: 100% exemption from tuition/token fees for qualified honor entrants and 
+high-performing scholars7. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Allowance: Token exemption value equivalent to PHP 1,000.00 – PHP 5,000.00 per 
+semester depending on residency tier3. 
+●​ Book Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Transportation: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None7. 
+●​ Other Benefits: Exemption from paying per-unit fee penalties11. 
+7. Required Documents 
+
+1.​ SHS Grade 12 Report Card (1st and 2nd Semesters)7. 
+2.​ Certificate of Highest Honor (GWA 98–100) or High Honor (GWA 95–97) signed by 
+Principal7. 
+3.​ Voter's Certification of applicant or parent (for Makati resident tagging)10. 
+4.​ Official UMak Grade Report for preceding semester (for continuing applicants)7. 
+5.​ Online application submission via UMak OLEA account7. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain prescribed GWA per semester (GWA <= 2.50)8. 
+●​ Regular Load: Full academic load carried each term7. 
+●​ No Failures: Zero failing grades or unofficially dropped subjects7. 
+●​ Return Service: None7. 
+9. Disqualifying Conditions 
+●​ GWA dropping between 2.75 and 3.00 results in loss of exemption and triggers a PHP 
+2,000 per unit tuition fee11. 
+●​ Accumulation of unofficially dropped (UD) courses exceeding institutional limits7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming UMak Freshman 
+(Highest Honor, GWA 99) 
+Eligible Now 
+Apply on OLEA portal for 
+Full Entrance Token Fee 
+Exemption7. 
+Continuing UMak 
+Sophomore (Makati 
+Resident, GWA 1.75) 
+Eligible Now 
+Exemption automatically 
+renewed upon term grade 
+verification7. 
+UMak Student with Term 
+GWA of 2.85 
+Ineligible 
+Exemption forfeited; 
+required to pay PHP 
+2,000/unit tuition rate11. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Source 
+Confidence 
+
+Quote 
+Entrance 
+Cutoff 
+Highest/High 
+Honor 
+"awarded to 
+both Makati 
+and 
+non-Makati 
+residents who 
+have 
+graduated with 
+a Highest 
+Honor award 
+(GWA within 
+98 to 100)" 
+UMak 
+Guidelines7 
+Tier 1 
+Governed 
+Ordinance 
+Ord. No. 
+2024-108 
+"Governed by 
+the provisions 
+of City 
+Ordinance No. 
+2024-108... 
+New Rate of 
+Tuition Fees in 
+the University 
+of Makati" 
+UMak 
+Guidelines7 
+Tier 1 
+Fee Penalty 
+GWA 
+2.75–3.00 = 
+2k/unit 
+"with a GWA 
+between 2.75 
+and 3.00, you 
+will be required 
+to pay a tuition 
+fee of Php 
+2,000 per unit" 
+UMak Tuition 
+FAQ11 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 95.00,​
+  "renewal_gwa": 81.00,​
+  "income_limit": null,​
+  "school_type": ["UMAK_ONLY"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "OLEA_semestral_dates", "close": "OLEA_semestral_dates"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Grade Penalty Threshold: The system must enforce logic checking for GWAs between 
+2.75 and 3.00 to flag students transition from exempted to fee-paying status11. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.umak.edu.ph/admissions/scholarships/7. 
+●​ Overall Confidence Score: 95/1003. 
+Valenzuela City Dr. Pio Valenzuela Scholarship 
+Program (ID: 33) 
+1. Scholarship Identity 
+●​ Official Name: Valenzuela City Dr. Pio Valenzuela Scholarship Program13 
+●​ Provider: Valenzuela City Government / City Social Welfare and Development Office13 
+●​ Category: Local Government Unit (LGU) / Merit-and-Need3 
+●​ Official Website: https://www.valenzuela.gov.ph13 
+●​ Application Portal: https://www.valenzuela.gov.ph/drpioscholarship13 
+●​ Official Guidelines: Valenzuela Municipal Council Ordinance No. 12 of 1995 (amended by 
+City Ordinance No. 37, Series of 2009)13 
+●​ Current Status: Active3 
+2. Purpose 
+
+To grant annual financial assistance to underprivileged but academically competent high 
+school graduates in Valenzuela City pursuing baccalaureate degree programs in 
+CHED-accredited public or private higher education institutions13. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born Filipino Citizen13. 
+●​ Residency: Long-term resident of Valenzuela City (at least four consecutive years of 
+residency immediately prior to application)13. 
+●​ Education Level: College / Undergraduate (Incoming Freshmen)13. 
+●​ Eligible Year Levels: 1 (Incoming First-Year College Students)13. 
+●​ Incoming Freshman Only?: Yes13. 
+●​ Existing College Students?: Ineligible for new entry13. 
+●​ Graduate Students?: Ineligible13. 
+●​ Current Enrollment Requirement: Enrolled or applying for admission in any 
+CHED-accredited college or university13. 
+●​ Academic Requirements: SHS GWA of at least 85.00% with no subject grade below 85% 
+in Grade 11 (1st and 2nd sem) and Grade 12 (1st sem)13. Must pass the scholarship 
+qualifying examination13. 
+●​ Minimum GWA: 85.00% (with zero subject grades below 85%)13. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: Combined gross annual income of employed parents must NOT exceed 
+PHP 120,000.0013. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Any public or private HEI accredited by the Commission on Higher 
+Education (CHED)13. 
+●​ Priority Courses: Open to all baccalaureate degree programs under GAS, STEM, HUMSS, 
+and ABM strands17. 
+●​ Sectoral Requirements: Underprivileged/low-income family status verified via BIR ITR or 
+Barangay Certificate of Indigency13. 
+●​ Good Moral: Required (Certificate of Good Moral Character)13. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must be a graduate of a public or private senior high school in 
+Valenzuela City13. Voter's certificate of parent/applicant required16. 
+4. Application Timing 
+●​ Who May Apply: Graduating Grade 12 students and SHS graduates residing in Valenzuela 
+City for >= 4 years13. 
+●​ Can current freshmen apply?: Yes (prior to/at starting college intake)13. 
+●​ Can current sophomores apply?: No13. 
+●​ Can current juniors apply?: No13. 
+
+●​ Can current seniors apply?: No13. 
+●​ Can graduates apply?: No13. 
+●​ Can previous applicants reapply?: No13. 
+5. Application Window 
+●​ Opening Date: January 3 annually13. 
+●​ Closing Date: Late February / Mid-March (e.g., March 20)13. 
+●​ Qualifying Exam Date: Mid-March / April annually13. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Educational grant allocation13. 
+●​ Monthly Stipend: Integrated into annual grant13. 
+●​ Allowance: PHP 30,000.00 per academic year (PHP 15,000.00 per semester)13. 
+●​ Book Allowance: Integrated into semestral allowance13. 
+●​ Transportation: Integrated into semestral allowance13. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None13. 
+●​ Other Benefits: None13. 
+7. Required Documents 
+1.​ Accomplished Dr. Pio Valenzuela Scholarship Application Form14. 
+2.​ Certified True Copy of Grade 11 Report Card (1st & 2nd Semesters) and Grade 12 Report 
+Card (1st Semester) showing GWA >= 85% and no grade below 8516. 
+3.​ Proof of Income: Certified True Copy of 2024 ITR (Form 2316) showing annual gross 
+income <= PHP 120,000.00, or Joint Affidavit and Certificate of Non-Filing of ITR if 
+unemployed16. 
+4.​ Barangay Certificate of Residency and Indigency of parents16. 
+5.​ PSA Certified Birth Certificate of applicant16. 
+6.​ Certificate of Good Moral Character16. 
+7.​ Voter's Certificate of registered parent or guardian16. 
+8.​ Photo of actual street residence of applicant16. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain a semestral GWA of at least 2.00 (85%)13. 
+●​ Regular Load: Full-time credit enrollment13. 
+
+●​ No Failures: Individual subject grades must not fall below 2.2513. 
+●​ Return Service: None13. 
+9. Disqualifying Conditions 
+●​ Parents' annual gross income exceeding PHP 120,000.0013. 
+●​ Subject grade below 85% in SHS or below 2.25 in college13. 
+●​ Residency in Valenzuela City less than four (4) consecutive years13. 
+●​ Non-natural-born citizenship13. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Grade 12 Student 
+(Valenzuela Resident >= 4 
+yrs, GWA 88%, Income 
+100k) 
+Eligible Now 
+Download form and apply 
+during January–March 
+window13. 
+Grade 12 Student (Parent 
+Income PHP 150,000) 
+Ineligible 
+Income exceeds mandatory 
+PHP 120,000.00 annual 
+gross cap13. 
+Enrolled 2nd Year College 
+Student 
+Ineligible 
+Program restricted 
+exclusively to incoming 
+first-year college entrants13. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Income Cap 
+PHP 120,000 / 
+yr 
+"Annual Gross 
+Income is not 
+more than PhP 
+120,000 as 
+attested by the 
+2021 Income 
+Tax Return" 
+Valenzuela 
+Notice13 
+Tier 1 
+
+Residency 
+>= 4 Years 
+"students who 
+have lived in 
+the city for at 
+least four years 
+may also 
+qualify" 
+Valenzuela 
+Notice13 
+Tier 1 
+Entry GWA 
+Cutoff 
+>= 85% (Min 
+85/sub) 
+"no subject 
+grades lower 
+than 85 and a 
+Gross 
+Weighted 
+Average 
+(GWA) not 
+lower than 
+85%" 
+Valenzuela 
+Notice13 
+Tier 1 
+Financial 
+Award 
+PHP 30,000 / 
+yr 
+"entitled to PhP 
+30,000 
+annually or PhP 
+15,000 per 
+semester" 
+Valenzuela 
+Notice13 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "renewal_gwa": 85.00,​
+  "income_limit": 120000,​
+  "school_type": ["CHED_ACCREDITED_HEI"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino (Natural-born)",​
+  "residency_restriction": "VALENZUELA_CITY_4_YEARS",​
+  "application_window": {"open": "01-03", "close": "03-20"},​
+
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Strict Income Disqualification: The PHP 120,000 annual income threshold is exceptionally 
+strict; matching algorithms must ensure parent income field validation is precise to avoid 
+immediate administrative rejection13. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.valenzuela.gov.ph/drpioscholarship13. 
+●​ Overall Confidence Score: 98/1003. 
+NavotaAs Academic College Scholarship (ID: 34) 
+1. Scholarship Identity 
+●​ Official Name: NavotaAs Academic College Scholarship Program19 
+●​ Provider: Navotas City Government19 
+●​ Category: Local Government Unit (LGU) / Merit-based3 
+●​ Official Website: https://www.navotas.gov.ph19 
+●​ Application Portal: Navotas City Hall / City Education Office19 
+●​ Official Guidelines: Navotas City Ordinance on Academic Scholarships19 
+●​ Current Status: Active3 
+2. Purpose 
+To incentivize high-achieving resident youth of Navotas City by subsidizing full tuition fees and 
+providing monthly stipends throughout their higher education in recognized tertiary 
+institutions19. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen19 
+●​ Residency: Bona fide resident of Navotas City19. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 53. 
+
+●​ Incoming Freshman Only?: No3. 
+●​ Existing College Students?: Yes3. 
+●​ Graduate Students?: No3. 
+●​ Current Enrollment Requirement: Enrolled or accepted in a recognized higher education 
+institution19. 
+●​ Academic Requirements: Outstanding academic standing with SHS or college GWA of at 
+least 88.00%3. 
+●​ Minimum GWA: 88.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Recognized public or private colleges and universities19. 
+●​ Priority Courses: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required19. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Resident voter requirements apply19. 
+4. Application Timing 
+●​ Who May Apply: Qualified resident college students and incoming freshmen3. 
+●​ Can current freshmen apply?: Yes3. 
+●​ Can current sophomores apply?: Yes3. 
+●​ Can current juniors apply?: Yes3. 
+●​ Can current seniors apply?: Yes3. 
+●​ Can graduates apply?: No3. 
+●​ Can previous applicants reapply?: Yes3. 
+5. Application Window 
+●​ Opening Date: Annual application schedule published by Navotas City Hall19. 
+●​ Closing Date: Announced per annual cycle19. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Full tuition fee coverage3. 
+●​ Monthly Stipend: PHP 2,200.00 per month3. 
+●​ Allowance: Integrated into monthly stipend package3. 
+●​ Book Allowance: Integrated into grant3. 
+●​ Transportation: Integrated into grant3. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None3. 
+●​ Other Benefits: Max aggregate program grant value up to PHP 262,000.00 across 
+degree duration3. 
+7. Required Documents 
+1.​ NavotaAs Application Form19. 
+2.​ Proof of Residency in Navotas City19. 
+3.​ Report Card / TOR showing GWA >= 88.00%3. 
+4.​ Certificate of Enrollment19. 
+5.​ Certificate of Good Moral Character19. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required academic average (>= 88.00%) per term3. 
+●​ Regular Load: Full credit load per term19. 
+●​ No Failures: Zero failing grades19. 
+●​ Return Service: None19. 
+9. Disqualifying Conditions 
+●​ Loss of Navotas residency status19. 
+●​ Failure to maintain required 88.00% GWA3. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled College Student 
+(Navotas Resident, GWA 
+90%) 
+Eligible Now 
+Submit application at 
+Navotas City Hall during 
+open intake3. 
+Student with GWA of 84% 
+Ineligible 
+Fails to meet the 88.00% 
+minimum GWA threshold3. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Source 
+Confidence 
+
+Quote 
+Residency 
+Navotas 
+Resident 
+Bona fide 
+resident 
+requirement 
+City Guide19 
+Tier 1 
+Entry GWA 
+>= 88.00% 
+Minimum GWA 
+parameter 88% 
+Live DB3 
+Tier 1 
+Monthly 
+Stipend 
+PHP 2,200 / 
+month 
+Monthly 
+allowance 
+parameter 
+2,200 
+Live DB3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 88.00,​
+  "income_limit": null,​
+  "school_type": ["RECOGNIZED_HEI"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "NAVOTAS_CITY_RESIDENT",​
+  "application_window": {"open": "annual_notice", "close": "annual_notice"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+
+●​ High Total Value Perception: Live DB lists total_value: 262000 reflecting 4-year cumulative 
+benefits; matching UI must clarify this is a multi-year cap, not an annual disbursement3. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.navotas.gov.ph19. 
+●​ Overall Confidence Score: 92/1003. 
+Marikina City Medical Scholarship Program (ID: 35) 
+1. Scholarship Identity 
+●​ Official Name: Marikina City Medical Scholarship Program3 
+●​ Provider: Marikina City Government3 
+●​ Category: Local Government Unit (LGU) / Graduate / Return Service Obligation3 
+●​ Official Website: https://www.marikina.gov.ph3 
+●​ Application Portal: Marikina City Hall / Health & Education Office3 
+●​ Official Guidelines: Marikina City Ordinance on Medical Scholarships3 
+●​ Current Status: Active3 
+2. Purpose 
+To address health human resource needs in Marikina City by providing full financial support to 
+deserving resident students pursuing a Doctor of Medicine degree in exchange for mandatory 
+return service in public health facilities3. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen3 
+●​ Residency: Bona fide resident of Marikina City3. 
+●​ Education Level: Graduate (Doctor of Medicine)3. 
+●​ Eligible Year Levels: 1, 2, 3, 4 (Medical School Years)3. 
+●​ Incoming Freshman Only?: No3. 
+●​ Existing College Students?: Eligible as medical students3. 
+●​ Graduate Students?: Yes (Restricted strictly to Doctor of Medicine degree)3. 
+●​ Current Enrollment Requirement: Accepted or enrolled in a recognized Doctor of 
+Medicine program3. 
+●​ Academic Requirements: Bachelor's degree completion and NMAT score meeting 
+medical school entry standards; GWA >= 85.00%3. 
+●​ Minimum GWA: 85.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: Combined annual gross family income must not exceed PHP 
+
+600,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Accredited medical schools3. 
+●​ Priority Courses: Doctor of Medicine3. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required3. 
+●​ Health Requirements: Physically and mentally fit3. 
+●​ Other Official Rules: Mandatory return service obligation in Marikina City public 
+hospitals/health centers upon passing the Physician Licensure Examination3. 
+4. Application Timing 
+●​ Who May Apply: Incoming and ongoing medical students residing in Marikina City3. 
+●​ Can current freshmen apply?: Yes (1st year medical students)3. 
+●​ Can current sophomores apply?: Yes (2nd year medical students)3. 
+●​ Can current juniors apply?: Yes (3rd year medical students)3. 
+●​ Can current seniors apply?: Yes (4th year medical students)3. 
+●​ Can graduates apply?: Yes (Bachelor's graduates entering medical school)3. 
+●​ Can previous applicants reapply?: Yes3. 
+5. Application Window 
+●​ Opening Date: Summer intake period prior to medical academic year3. 
+●​ Closing Date: Announced per annual notice3. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Full tuition and matriculation fee coverage3. 
+●​ Monthly Stipend: PHP 4,000.00 per month3. 
+●​ Allowance: Integrated into stipend package3. 
+●​ Book Allowance: Integrated into annual grant3. 
+●​ Transportation: Integrated into annual grant3. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: Mandatory return service in Marikina City public health facilities3. 
+●​ Other Benefits: Total annual grant value PHP 150,000.003. 
+7. Required Documents 
+1.​ Application Form3. 
+
+2.​ Proof of Marikina Residency3. 
+3.​ Transcript of Records (TOR) of completed Bachelor's degree (GWA >= 85%)3. 
+4.​ NMAT Score Report3. 
+5.​ Admission / Enrollment Certificate from accredited Medical School3. 
+6.​ Income Tax Return of parents (income <= PHP 600,000)3. 
+7.​ Signed Return Service Contract3. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain passing GWA prescribed by medical school and scholarship 
+rules3. 
+●​ Regular Load: Full-time enrollment in medical curriculum3. 
+●​ No Failures: Zero failing grades in medical subjects3. 
+●​ Return Service: Mandatory service execution post-graduation3. 
+9. Disqualifying Conditions 
+●​ Family income exceeding PHP 600,000.003. 
+●​ Failure to fulfill return service contract3. 
+●​ Academic failure or dismissal from medical school3. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming 1st Year Doctor of 
+Medicine Student (Marikina 
+Resident) 
+Eligible Now 
+Submit TOR, NMAT, and 
+enrollment proof during 
+intake window3. 
+Undergraduate Pre-Med 
+Senior 
+Eligible Later 
+Must complete Bachelor's 
+degree and secure medical 
+school admission first3. 
+Non-Medical Master's 
+Degree Student 
+Never Eligible 
+Program strictly restricted 
+to Doctor of Medicine 
+degree candidates3. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Source 
+Confidence 
+
+Quote 
+Degree Focus 
+Doctor of 
+Medicine 
+Graduate track 
+for medical 
+studies 
+Live DB3 
+Tier 1 
+Income Limit 
+PHP 600,000 / 
+yr 
+Income ceiling 
+parameter 
+600,000 
+Live DB3 
+Tier 1 
+Monthly 
+Allowance 
+PHP 4,000 / 
+month 
+Monthly 
+allowance 
+parameter 
+4,000 
+Live DB3 
+Tier 1 
+Return Service 
+Mandatory 
+Return service 
+required 
+parameter 
+Live DB3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "income_limit": 600000,​
+  "priority_courses": ["DOCTOR_OF_MEDICINE"],​
+  "school_type": ["ACCREDITED_MEDICAL_SCHOOLS"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "MARIKINA_CITY_RESIDENT",​
+  "return_service_required": true,​
+  "application_window": {"open": "annual_notice", "close": "annual_notice"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Pre-Med Candidate Confusion: Automated rules must block undergraduate pre-med 
+students from applying prematurely until medical school admission is secured3. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.marikina.gov.ph3. 
+●​ Overall Confidence Score: 90/1003. 
+Muntinlupa MOST Academic Scholarship (ID: 47) 
+1. Scholarship Identity 
+●​ Official Name: Muntinlupa Most Outstanding Students (10 MOST) Academic 
+Scholarship20 
+●​ Provider: Muntinlupa Scholarship Division (MSD), City Government of Muntinlupa21 
+●​ Category: Local Government Unit (LGU) / Merit-based3 
+●​ Official Website: https://www.muntinlupacity.gov.ph24 
+●​ Application Portal: https://msd.muntinlupacity.gov.ph23 
+●​ Official Guidelines: Muntinlupa City Ordinance No. 2023-143; MSD Service Charter21 
+●​ Current Status: Active3 
+2. Purpose 
+To honor, incentivize, and financially support top-performing public senior high school 
+graduates in Muntinlupa City who enter top-tier universities, specifically UP Luzon campuses, 
+DOST priority programs, or CHED Centers of Excellence21. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen25 
+●​ Residency: Bona fide resident of Muntinlupa City holding a valid Muntinlupa Care Card21. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1 (Incoming Freshmen)3. 
+●​ Incoming Freshman Only?: Yes3. 
+●​ Existing College Students?: Ineligible for initial entry21. 
+
+●​ Graduate Students?: Ineligible21. 
+●​ Current Enrollment Requirement: Must be admitted/enrolled in UP (Luzon campuses), 
+DOST priority programs, or CHED Centers of Excellence21. 
+●​ Academic Requirements: Yearly 10 MOST Awardees or top-ranked public SHS graduates 
+with GWA >= 90.00%3. 
+●​ Minimum GWA: 90.00%3. 
+●​ Alternative Class Rank: Designated 10 MOST Awardee status21. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: UP Luzon Campuses, DOST Priority Program Schools, CHED Centers 
+of Excellence21. 
+●​ Priority Courses: DOST Priority Programs, CHED COE Programs21. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required (Certificate of Good Moral)21. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must possess an active Muntinlupa Care Card number21. 
+4. Application Timing 
+●​ Who May Apply: 10 MOST Awardees and qualified top public SHS graduates in 
+Muntinlupa21. 
+●​ Can current freshmen apply?: Yes (at initial college entry)21. 
+●​ Can current sophomores apply?: No21. 
+●​ Can current juniors apply?: No21. 
+●​ Can current seniors apply?: No21. 
+●​ Can graduates apply?: No21. 
+●​ Can previous applicants reapply?: No21. 
+5. Application Window 
+●​ Opening Date: Mid-year cycle following annual MOST pre-awarding events21. 
+●​ Closing Date: Announced on MSD portal25. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Full or partial tuition grant per university billing3. 
+●​ Monthly Stipend: PHP 5,000.00 per month3. 
+●​ Allowance: PHP 130,000.00 maximum total financial package per school year3. 
+●​ Book Allowance: Integrated into grant21. 
+●​ Transportation: Integrated into grant21. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: Mandatory scheduling of service obligation via MSD portal20. 
+●​ Other Benefits: Recognition incentives for MOST awardees22. 
+7. Required Documents 
+1.​ Duly accomplished MSD Application Form21. 
+2.​ Muntinlupa Care Card or Official Receipt with Care Card Number21. 
+3.​ SHS Form 138 showing GWA >= 90.00%3. 
+4.​ Certificate of Good Moral Character21. 
+5.​ Voter's ID or Voter's Certification of applicant or parents21. 
+6.​ Certificate of Enrollment from UP Luzon, DOST school, or CHED COE21. 
+7.​ 2x2 ID Picture21. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required academic standing per semester21. 
+●​ Regular Load: Full-time credit enrollment21. 
+●​ No Failures: Zero failing grades21. 
+●​ Return Service: Complete scheduled service obligation hours20. 
+9. Disqualifying Conditions 
+●​ Enrolling in non-COE private institutions outside UP/DOST frameworks21. 
+●​ Lack of valid Muntinlupa Care Card21. 
+●​ Non-compliance with mandatory MSD service obligation20. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming UP Diliman 
+Freshman (Muntinlupa 
+Resident, Care Card Holder) 
+Eligible Now 
+Register on MSD portal 
+under 10MOST/SUC track21. 
+Incoming Freshman at 
+Private Non-COE College 
+Ineligible 
+Restricted to UP Luzon, 
+DOST, and CHED COE 
+institutions21. 
+Enrolled 2nd Year College 
+Ineligible 
+Entry restricted exclusively 
+
+Student 
+to incoming first-year 
+college entrants21. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Target 
+Beneficiaries 
+10 MOST / UP / 
+DOST / COE 
+"Yearly 10 
+MOST 
+Awardees... 
+Incoming UP 
+Freshman... 
+DOST Priority 
+Program... 
+CHED's list of 
+Centers for 
+Excellence" 
+MSD Charter21 
+Tier 1 
+Care Card 
+Mandatory 
+Required 
+"Muntinlupa 
+Care Card or 
+Official Receipt 
+with Care Card 
+Number" 
+MSD Charter21 
+Tier 1 
+Entry GWA 
+Cutoff 
+>= 90.00% 
+Minimum GWA 
+parameter 
+90% 
+Live DB3 
+Tier 1 
+Monthly 
+Allowance 
+PHP 5,000 / 
+month 
+Monthly 
+allowance 
+parameter 
+5,000 
+Live DB3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 90.00,​
+  "income_limit": null,​
+  "school_type": ["UP_SYSTEM_LUZON", "DOST_PRIORITY_SCHOOLS", 
+"CHED_CENTER_OF_EXCELLENCE"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "MUNTINLUPA_CARE_CARD_HOLDER",​
+  "return_service_required": true,​
+  "application_window": {"open": "annual_notice", "close": "annual_notice"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Care Card Dependency: Automated recommendation logic must check if the applicant 
+holds a valid Muntinlupa Care Card before confirming eligibility21. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://msd.muntinlupacity.gov.ph, 
+https://www.muntinlupacity.gov.ph23. 
+●​ Overall Confidence Score: 96/1003. 
+Muntinlupa CARES Financial Assistance Program (ID: 
+48) 
+1. Scholarship Identity 
+●​ Official Name: Muntinlupa Continuing Assistance for Reintegrating Students (CARES) 
+Financial Assistance Program21 
+●​ Provider: Muntinlupa Scholarship Division (MSD), City Government of Muntinlupa21 
+
+●​ Category: Local Government Unit (LGU) / Financial Assistance / Need-based3 
+●​ Official Website: https://www.muntinlupacity.gov.ph24 
+●​ Application Portal: https://msd.muntinlupacity.gov.ph23 
+●​ Official Guidelines: Muntinlupa City Ordinance No. 2023-143; MSD Service Charter21 
+●​ Current Status: Active3 
+2. Purpose 
+To extend financial educational assistance to incoming freshmen and existing college students 
+enrolled in public or private higher education institutions within Luzon who do not fall under the 
+MOST or SUC tracks, as well as continuing Basic Scholarship recipients21. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen25 
+●​ Residency: Bona fide resident of Muntinlupa City holding an active Muntinlupa Care 
+Card21. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 53. 
+●​ Incoming Freshman Only?: No21. 
+●​ Existing College Students?: Yes21. 
+●​ Graduate Students?: Ineligible21. 
+●​ Current Enrollment Requirement: Must be enrolled in any college or university within 
+Luzon25. 
+●​ Academic Requirements: Must maintain the required number of units and General 
+Weighted Average (GWA) set by the MSD (GWA >= 80.00%)3. 
+●​ Minimum GWA: 80.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Any recognized public or private college or university in Luzon25. 
+●​ Priority Courses: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Sectoral Requirements: Caters to recipients of Basic Scholarship in their continuing 
+college studies26. Categorized into three (3) brackets26. 
+●​ Good Moral: Required21. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Requires Muntinlupa Care Card registration21. 
+4. Application Timing 
+●​ Who May Apply: Incoming freshmen and existing college students in Luzon 
+colleges/universities21. 
+●​ Can current freshmen apply?: Yes21. 
+
+●​ Can current sophomores apply?: Yes21. 
+●​ Can current juniors apply?: Yes21. 
+●​ Can current seniors apply?: Yes21. 
+●​ Can graduates apply?: No21. 
+●​ Can previous applicants reapply?: Yes21. 
+5. Application Window 
+●​ Opening Date: Semestral schedule posted on MSD portal/Facebook page21. 
+●​ Closing Date: Semestral cutoff27. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Direct stipend assistance26. 
+●​ Monthly Stipend: PHP 1,000.00 per month3. 
+●​ Allowance: PHP 10,000.00 per academic year (PHP 5,000.00 per semester)3. 
+●​ Book Allowance: Integrated into semestral stipend26. 
+●​ Transportation: Integrated into semestral stipend26. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: One-time initial assistance grant of PHP 5,000.00 for graduating 
+Grade 12 scholars entering college25. 
+●​ Return Service: Scheduling of service obligation via MSD online portal20. 
+●​ Other Benefits: None26. 
+7. Required Documents 
+1.​ Duly accomplished CARES Application Form21. 
+2.​ Muntinlupa Care Card or Official Receipt with Care Card Number21. 
+3.​ Current School ID21. 
+4.​ Certificate of Enrollment for the current semester21. 
+5.​ Certified Copy of Previous Semester Grades21. 
+6.​ Curriculum / Prospectus (if applicable)23. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain GWA set by MSD (GWA <= 2.50 / 80%)26. 
+●​ Regular Load: Enrolled in prescribed credit units per semester26. 
+●​ No Failures: Zero failing grades23. 
+●​ Return Service: Complete scheduled service obligation20. 
+
+9. Disqualifying Conditions 
+●​ Enrolling in institutions outside Luzon25. 
+●​ Failure to maintain required MSD GWA or term credit units26. 
+●​ Lack of valid Muntinlupa Care Card registration21. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled College Student in 
+Private Manila HEI 
+(Muntinlupa Resident) 
+Eligible Now 
+Register on MSD portal 
+under CARES category21. 
+Graduating Public SHS 
+Grade 12 Student entering 
+College 
+Eligible Now 
+Apply for initial PHP 5,000 
+grant and CARES college 
+transition21. 
+Student Enrolled in 
+Visayas/Mindanao College 
+Ineligible 
+Assistance restricted 
+exclusively to institutions 
+located within Luzon25. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Geographic 
+Bounds 
+Colleges in 
+Luzon 
+"enrolled in 
+Muntinlupa or 
+any institutions 
+within Luzon 
+who do not fall 
+under any of 
+the preceding 
+brackets" 
+Ord. No. 
+2023-14325 
+Tier 1 
+Care Card 
+Mandatory 
+Required 
+"Muntinlupa 
+Care Card or 
+MSD Charter21 
+Tier 1 
+
+Official Receipt 
+with Care Card 
+Number" 
+Semestral 
+Allowance 
+PHP 5,000 / 
+sem 
+Allowance 
+payout batch 
+advisory for 
+CARES 
+Scholars 
+MSD Advisory3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 80.00,​
+  "income_limit": null,​
+  "school_type": ["RECOGNIZED_HEI_IN_LUZON"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "MUNTINLUPA_CARE_CARD_HOLDER",​
+  "return_service_required": true,​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Geographic Filter Mismatch: Filtering must enforce HEI location IN ('Luzon') to prevent 
+misallocating grants to students studying in the Visayas or Mindanao25. 
+14. Verification Summary 
+
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://msd.muntinlupacity.gov.ph23. 
+●​ Overall Confidence Score: 95/1003. 
+Parañaque City Tertiary Education Financial 
+Assistance Program (ID: 50) 
+1. Scholarship Identity 
+●​ Official Name: Parañaque City Tertiary Education Financial Assistance Program3 
+●​ Provider: Parañaque City Government / City Special Services Office3 
+●​ Category: Local Government Unit (LGU) / Need-and-Merit3 
+●​ Official Website: https://www.paranaquecity.gov.ph3 
+●​ Application Portal: Parañaque City Secretariat Portal / Physical Submission3 
+●​ Official Guidelines: Parañaque City Ordinance on Tertiary Financial Assistance3 
+●​ Current Status: Active3 
+2. Purpose 
+To offer financial assistance to underprivileged college students residing in Parañaque City to 
+help defray matriculation and general educational expenses in recognized higher education 
+institutions3. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen3 
+●​ Residency: Bona fide resident of Parañaque City3. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 53. 
+●​ Incoming Freshman Only?: No3. 
+●​ Existing College Students?: Yes3. 
+●​ Graduate Students?: No3. 
+●​ Current Enrollment Requirement: Must be enrolled in a CHED-recognized college or 
+university3. 
+●​ Academic Requirements: Minimum GWA of 80.00%3. 
+●​ Minimum GWA: 80.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: Combined annual gross family income must not exceed PHP 
+300,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: CHED-recognized colleges and universities3. 
+
+●​ Priority Courses: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required3. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Voter's certification of applicant or parent in Parañaque City 
+required3. 
+4. Application Timing 
+●​ Who May Apply: Qualified Parañaque resident college students3. 
+●​ Can current freshmen apply?: Yes3. 
+●​ Can current sophomores apply?: Yes3. 
+●​ Can current juniors apply?: Yes3. 
+●​ Can current seniors apply?: Yes3. 
+●​ Can graduates apply?: No3. 
+●​ Can previous applicants reapply?: Yes3. 
+5. Application Window 
+●​ Opening Date: Semestral schedule published by Parañaque City Government3. 
+●​ Closing Date: Specified per term (e.g., August 20 for AY 2026 intake)3. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Direct cash assistance allocation3. 
+●​ Monthly Stipend: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Allowance: PHP 12,000.00 per academic year (PHP 6,000.00 per semester)3. 
+●​ Book Allowance: Integrated into semestral grant3. 
+●​ Transportation: Integrated into semestral grant3. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None3. 
+●​ Other Benefits: None3. 
+7. Required Documents 
+1.​ Application Form3. 
+2.​ Certificate of Enrollment / Registration Form3. 
+3.​ Preceding Term Grade Report (GWA >= 80.00%)3. 
+4.​ Barangay Certificate of Residency in Parañaque City3. 
+
+5.​ Parents' Income Tax Return or Certificate of Indigency3. 
+6.​ Parañaque COMELEC Voter's Certificate3. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain semestral GWA of at least 80.00%3. 
+●​ Regular Load: Full-time credit enrollment3. 
+●​ No Failures: Zero failing grades3. 
+●​ Return Service: None3. 
+9. Disqualifying Conditions 
+●​ Family income exceeding PHP 300,000.003. 
+●​ Non-residency in Parañaque City3. 
+●​ Failure to maintain required 80.00% GWA3. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled College Student 
+(Parañaque Resident, GWA 
+83%) 
+Eligible Now 
+Apply at Parañaque 
+Secretariat prior to 
+semestral deadline3. 
+Student with Family Income 
+of PHP 350,000 
+Ineligible 
+Exceeds maximum family 
+income threshold of PHP 
+300,0003. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Entry GWA 
+>= 80.00% 
+Minimum GWA 
+parameter 
+80% 
+Live DB3 
+Tier 1 
+Income Limit 
+PHP 300,000 / 
+yr 
+Maximum 
+income 
+parameter 
+Live DB3 
+Tier 1 
+
+300,000 
+Semestral 
+Grant 
+PHP 6,000 / 
+sem 
+Total value 
+parameter 
+12,000 / year 
+Live DB3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 80.00,​
+  "income_limit": 300000,​
+  "school_type": ["CHED_RECOGNIZED_HEI"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "PARANAQUE_CITY_RESIDENT",​
+  "application_window": {"open": "08-01", "close": "08-20"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ Short Application Windows: Application windows are precise and time-sensitive; the 
+system must notify candidates promptly upon opening3. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.paranaquecity.gov.ph3. 
+●​ Overall Confidence Score: 92/1003. 
+
+Taguig LANI Full Scholarship (ID: 95) 
+1. Scholarship Identity 
+●​ Official Name: Taguig City L.A.N.I. Full Scholarship Track1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Merit-and-Need1 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: https://tcu.edu.ph/lani-scholarship1 
+●​ Official Guidelines: City Ordinance No. 9, Series of 2011; Executive Order No. 2011-111 
+●​ Current Status: Active3 
+2. Purpose 
+To provide full educational financial coverage to the Top 10 graduating students of public 
+senior high schools in Taguig City, regardless of the college or course they enroll in, as well as 
+students pursuing priority S&T, law, or medical programs1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years1. 
+●​ Education Level: College / Undergraduate / Professional1. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 51. 
+●​ Incoming Freshman Only?: No1. 
+●​ Existing College Students?: Yes1. 
+●​ Graduate Students?: No (Except Law and Medicine)1. 
+●​ Current Enrollment Requirement: Enrolled in any recognized college/university for Top 10 
+public SHS graduates, or DOST priority/law/medicine schools1. 
+●​ Academic Requirements: GWA of at least 85.00% or designated Top 10 class rank1. 
+●​ Minimum GWA: 85.00%1. 
+●​ Alternative Class Rank: Top 10 graduates of public high schools in Taguig1. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Unrestricted for Top 10 public SHS grads; DOST/PRC/CHED 
+accredited for priority tracks1. 
+●​ Priority Courses: Unrestricted for Top 10 public SHS grads; DOST S&T, Law, and Medicine 
+for other applicants1. 
+●​ Sectoral Requirements: PDAO endorsement required for PWD applicants1. 
+●​ Good Moral: Required1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Voter registration requirement for applicant/parent1. 
+
+4. Application Timing 
+●​ Who May Apply: Top 10 graduates of Taguig public high schools and qualified priority 
+course students1. 
+●​ Can current freshmen apply?: Yes1. 
+●​ Can current sophomores apply?: Yes1. 
+●​ Can current juniors apply?: Yes1. 
+●​ Can current seniors apply?: Yes1. 
+●​ Can graduates apply?: No1. 
+●​ Can previous applicants reapply?: Yes1. 
+5. Application Window 
+●​ Opening Date: Semestral publication1. 
+●​ Closing Date: Semestral deadline1. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Direct financial grant1. 
+●​ Monthly Stipend: Integrated into allowance1. 
+●​ Allowance: PHP 40,000.00 to PHP 50,000.00 per school year (PHP 20,000.00 to PHP 
+25,000.00 per semester)1. 
+●​ Book Allowance: Integrated into grant1. 
+●​ Transportation: Integrated into grant1. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None1. 
+●​ Other Benefits: Merit incentives awarded for GWA <= 1.751. 
+7. Required Documents 
+1.​ Filled LANI Application Form1. 
+2.​ Principal's Certification of Top 10 Class Rank (for public SHS grads)1. 
+3.​ Grade Report showing GWA >= 85.00%1. 
+4.​ Taguig COMELEC Voter's Certificate1. 
+5.​ Certificate of Enrollment1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Semestral GWA >= 2.505. 
+
+●​ Regular Load: Minimum 15 credit units5. 
+●​ No Failures: Zero failing grades5. 
+●​ Return Service: None1. 
+9. Disqualifying Conditions 
+●​ Loss of 15-unit term load5. 
+●​ Accumulation of failing or incomplete marks5. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Top 3 Graduate of Taguig 
+National High School 
+Eligible Now 
+Apply under Full Track for 
+PHP 40,000–50,000 
+annual grant regardless of 
+college/course1. 
+Enrolled Student with GWA 
+of 82% (Non-Top 10) 
+Ineligible 
+Requires minimum 85.00% 
+GWA or Top 10 public SHS 
+rank1. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Alternative 
+Class Rank 
+Top 10 Public 
+SHS 
+"Top 10 
+graduates of 
+public high 
+schools IN 
+Taguig, 
+regardless of 
+the schools or 
+courses in 
+college" 
+LANI 
+Guidelines1 
+Tier 1 
+Financial 
+Award 
+PHP 
+40,000–50,00
+"P40,000 to 
+P50,000" 
+LANI 
+Guidelines1 
+Tier 1 
+
+0 / yr 
+Minimum GWA 
+>= 85.00% 
+Minimum GWA 
+parameter 85% 
+Live DB3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "rank_cutoff_alternative": 10,​
+  "income_limit": null,​
+  "school_type": ["RECOGNIZED_HEI"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Overriding School Restrictions: Matching engine must override school/course restrictions 
+if user.class_rank <= 10 and user.high_school_type == 'Public_Taguig'1. 
+14. Verification Summary 
+●​ Verification Status: Verified1. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://tcu.edu.ph/lani-scholarship1. 
+●​ Overall Confidence Score: 95/1003. 
+
+Taguig LANI Basic Scholarship (ID: 96) 
+1. Scholarship Identity 
+●​ Official Name: Taguig City L.A.N.I. Basic Scholarship Track1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Need-based1 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: https://tcu.edu.ph/lani-scholarship1 
+●​ Official Guidelines: City Ordinance No. 9, Series of 2011; Executive Order No. 2011-111 
+●​ Current Status: Active3 
+2. Purpose 
+To extend essential financial educational support to Taguig resident public high school 
+graduates enrolled in private or non-SUC/LUC tertiary institutions within the National Capital 
+Region1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years1. 
+●​ Education Level: College / Undergraduate1. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 51. 
+●​ Incoming Freshman Only?: No1. 
+●​ Existing College Students?: Yes1. 
+●​ Graduate Students?: No1. 
+●​ Current Enrollment Requirement: Enrolled in any private college or university in NCR (not 
+enrolled in an SUC or LUC)1. 
+●​ Academic Requirements: Passing academic standing with GWA >= 78.00%1. 
+●​ Minimum GWA: 78.00%1. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Private higher education institutions in NCR (Excludes SUCs and 
+LUCs)1. 
+●​ Priority Courses: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Sectoral Requirements: Must be a graduate of a public high school in Taguig City or 
+nearby NCR municipalities/cities1. 
+●​ Good Moral: Required1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Voter registration requirement for applicant/parent1. 
+
+4. Application Timing 
+●​ Who May Apply: Taguig resident public high school graduates enrolled in private colleges 
+in NCR1. 
+●​ Can current freshmen apply?: Yes1. 
+●​ Can current sophomores apply?: Yes1. 
+●​ Can current juniors apply?: Yes1. 
+●​ Can current seniors apply?: Yes1. 
+●​ Can graduates apply?: No1. 
+●​ Can previous applicants reapply?: Yes1. 
+5. Application Window 
+●​ Opening Date: Semestral schedule1. 
+●​ Closing Date: Semestral cutoff1. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Direct grant allocation1. 
+●​ Monthly Stipend: Integrated into allowance1. 
+●​ Allowance: PHP 10,000.00 per school year (PHP 5,000.00 per semester)1. 
+●​ Book Allowance: Integrated into grant1. 
+●​ Transportation: Integrated into grant1. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None1. 
+●​ Other Benefits: None1. 
+7. Required Documents 
+1.​ Filled LANI Application Form1. 
+2.​ Public SHS Diploma / Form 1381. 
+3.​ Certificate of Enrollment from private HEI in NCR1. 
+4.​ Preceding Semester Grade Report (GWA >= 78.00%)1. 
+5.​ Taguig COMELEC Voter's Certificate1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Semestral GWA >= 2.505. 
+●​ Regular Load: Minimum 15 credit units5. 
+
+●​ No Failures: Zero failing grades5. 
+●​ Return Service: None1. 
+9. Disqualifying Conditions 
+●​ Enrolling in an SUC or LUC (must transfer to SUC/LCU assistance track ID 29)1. 
+●​ Graduation from a private high school1. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Enrolled Private College 
+Student in NCR (Taguig 
+Resident, Public SHS Grad) 
+Eligible Now 
+Apply under Basic track for 
+PHP 10,000 annual grant1. 
+Enrolled Private College 
+Student (Private SHS Grad) 
+Ineligible 
+Basic track requires public 
+high school origin1. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+High School 
+Origin 
+Public HS 
+Graduate 
+"Graduate of 
+any public high 
+school in 
+Taguig or 
+nearby 
+municipalities... 
+who are not 
+enrolled in any 
+SUC or LUC" 
+LANI 
+Guidelines1 
+Tier 1 
+Financial 
+Award 
+PHP 10,000 / 
+yr 
+"Basic 
+P10,000" 
+LANI 
+Guidelines1 
+Tier 1 
+Minimum GWA 
+>= 78.00% 
+Minimum GWA 
+Live DB3 
+Tier 1 
+
+parameter 78% 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 78.00,​
+  "income_limit": null,​
+  "school_type": ["PRIVATE_HEI_NCR"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": false​
+}​
+ 
+13. Matching Risks 
+●​ High School Origin Routing: System must verify user.high_school_type == 'Public' and 
+user.college_type == 'Private' before matching1. 
+14. Verification Summary 
+●​ Verification Status: Verified1. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://tcu.edu.ph/lani-scholarship1. 
+●​ Overall Confidence Score: 95/1003. 
+Taguig LANI LEAD Graduate Scholarship (ID: 97) 
+1. Scholarship Identity 
+
+●​ Official Name: Taguig City L.A.N.I. Leadership and Educators Advancement and 
+Development (LEAD) Graduate Scholarship1 
+●​ Provider: Taguig City Government / Taguig Scholarship Secretariat1 
+●​ Category: Local Government Unit (LGU) / Graduate / Public & Educator Sectoral1 
+●​ Official Website: https://www.taguig.gov.ph1 
+●​ Application Portal: https://tcu.edu.ph/lani-scholarship1 
+●​ Official Guidelines: City Ordinance No. 9, Series of 2011; LANI LEAD Guidelines1 
+●​ Current Status: Active3 
+2. Purpose 
+To advance human capital and professional leadership by subsidizing Master's and Doctoral 
+degree studies for Taguig resident teachers, local/national government employees, and 
+uniformed personnel serving in Taguig City1. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen1 
+●​ Residency: Bona fide resident of Taguig City for at least three (3) years immediately 
+preceding application1. 
+●​ Education Level: Graduate (Master's or Doctoral Degree)1. 
+●​ Eligible Year Levels: 1, 2, 3 (Postgraduate Years)1. 
+●​ Incoming Freshman Only?: No1. 
+●​ Existing College Students?: No (Restricted to post-baccalaureate graduate students)1. 
+●​ Graduate Students?: Yes (Primary target cohort)1. 
+●​ Current Enrollment Requirement: Enrolled in a Master's or Doctoral program with courses 
+aligned with applicant's profession1. 
+●​ Academic Requirements: Latest work performance rating of "Excellent" or at least "Very 
+Satisfactory"1; GWA >= 85.00%3. 
+●​ Minimum GWA: 85.00%1. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: Must NOT exceed 50 years of age at time of application1. 
+●​ School Restrictions: Recognized public or private graduate schools1. 
+●​ Priority Courses: Graduate degree courses strictly aligned with applicant's current 
+profession1. 
+●​ Sectoral Requirements: Must have been in service for at least three (3) years in a national 
+or local government office in Taguig, or a teacher in a public/private school in Taguig, or 
+uniformed PNP personnel based in Taguig1. 
+●​ Good Moral: Required (Good moral character in paper and deeds)1. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: DepEd teachers require endorsement from DepEd Superintendent; 
+
+PNP personnel require endorsement from Taguig Chief of Police; Taguig LGU employees 
+require endorsement from Department Head and City Administrator1. 
+4. Application Timing 
+●​ Who May Apply: Resident public/private teachers, government employees, and 
+uniformed personnel in Taguig taking Master's or Doctoral degrees1. 
+●​ Can current freshmen apply?: N/A1. 
+●​ Can current sophomores apply?: N/A1. 
+●​ Can current juniors apply?: N/A1. 
+●​ Can current seniors apply?: N/A1. 
+●​ Can graduates apply?: Yes (Master's/Doctoral enrollees)1. 
+●​ Can previous applicants reapply?: Yes1. 
+5. Application Window 
+●​ Opening Date: Semestral schedule (DepEd applicants submitted per DepEd-TAPAT 
+Division Office schedule)1. 
+●​ Closing Date: Semestral cutoff1. 
+●​ Application Cycle: Annual / Semestral1. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Direct grant subsidy1. 
+●​ Monthly Stipend: Integrated into grant1. 
+●​ Allowance: PHP 18,000.00 to PHP 60,000.00 per school year depending on school 
+category4. 
+●​ Book Allowance: Integrated into allowance1. 
+●​ Transportation: Integrated into allowance1. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research / Thesis Allowance: Dedicated thesis or dissertation completion grant provided 
+upon submission of signed hard copy of approved thesis proposal1. 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: Mandatory commitment to continue serving Taguig City1. 
+●​ Other Benefits: Max aggregate program grant value up to PHP 80,000.003. 
+7. Required Documents 
+1.​ Filled LEAD Application Form with 3 sets of 2x2 photos1. 
+2.​ Registration Form / Proof of Enrolment in Master's or Doctoral program1. 
+3.​ Authenticated Copy of Grades / Transcript of Records1. 
+4.​ Updated Curriculum Checklist of enrolled graduate course1. 
+
+5.​ Service Record proving at least 3 years of service in Taguig1. 
+6.​ Latest Work Performance Evaluation (Very Satisfactory or Excellent)1. 
+7.​ Official Sectoral Endorsement (DepEd Superintendent / Police Chief / City 
+Administrator)1. 
+8.​ Signed copy of approved thesis/dissertation proposal (for research grant)1. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain passing graduate school GWA1. 
+●​ Regular Load: Enrolled in active graduate credit units1. 
+●​ No Failures: Zero failing grades5. 
+●​ Return Service: Active continued employment in Taguig City1. 
+9. Disqualifying Conditions 
+●​ Applicant age exceeding 50 years old1. 
+●​ Work performance rating dropping below "Very Satisfactory"1. 
+●​ Service in Taguig location less than three (3) years1. 
+●​ Enrollment in graduate courses unaligned with current profession1. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Taguig Public School 
+Teacher (Age 38, 5 yrs 
+service, MA Education 
+student) 
+Eligible Now 
+Apply with DepEd 
+Superintendent 
+endorsement for LEAD 
+grant1. 
+Taguig LGU Employee (Age 
+45, 4 yrs service, Master in 
+Public Admin) 
+Eligible Now 
+Apply with City 
+Administrator 
+endorsement1. 
+Government Worker aged 
+52 
+Ineligible 
+Exceeds maximum age limit 
+of 50 years old1. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Source 
+Confidence 
+
+Quote 
+Target Cohort 
+Gov Workers / 
+Teachers 
+"taking up 
+masteral or 
+doctoral 
+degrees 
+provided they 
+have been in 
+service for at 
+least 3 years in 
+a national or 
+local 
+government 
+office in 
+Taguig" 
+LANI 
+Guidelines1 
+Tier 1 
+Age Cap 
+<= 50 Years 
+Old 
+"Applicants 
+must NOT 
+exceed 50 
+years old" 
+LANI 
+Guidelines1 
+Tier 1 
+Work 
+Performance 
+Very 
+Satisfactory / 
+Excellent 
+"with an 
+Excellent 
+performance 
+rating or at 
+least Very 
+Satisfactory" 
+LANI 
+Guidelines1 
+Tier 1 
+Sectoral 
+Endorsement 
+Mandatory 
+"For DepEd 
+teachers... 
+endorsed by 
+Superintenden
+t. For 
+uniformed... 
+Chief of Police. 
+For Taguig City 
+employees... 
+City 
+Administrator" 
+LANI 
+Guidelines1 
+Tier 1 
+
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 85.00,​
+  "income_limit": null,​
+  "age_limit": 50,​
+  "sectoral_restriction": "TAGUIG_GOVT_TEACHER_PNP_3_YEARS",​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "TAGUIG_CITY_3_YEARS",​
+  "return_service_required": true,​
+  "application_window": {"open": "semestral_notice", "close": "semestral_notice"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Sectoral Endorsement Failure: Automated matching engines must require users to 
+confirm possession of an official Superintendent/Police Chief/Administrator endorsement 
+before filing1. 
+14. Verification Summary 
+●​ Verification Status: Verified1. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://tcu.edu.ph/lani-scholarship1. 
+●​ Overall Confidence Score: 96/1003. 
+Makati City Premier and Specialized School 
+Scholarship (ID: 98) 
+
+1. Scholarship Identity 
+●​ Official Name: Makati City Premier and Specialized School Scholarship6 
+●​ Provider: Makati City Government / City Education Department6 
+●​ Category: Local Government Unit (LGU) / Merit-based3 
+●​ Official Website: https://www.makati.gov.ph6 
+●​ Application Portal: Makati City Education Department Portal / Physical Office6 
+●​ Official Guidelines: Makati City Ordinance No. 2019-A-0366 
+●​ Current Status: Active3 
+2. Purpose 
+To incentivize high-performing Makati public senior high school graduates to pursue higher 
+education in top private universities and colleges in Metro Manila that have been officially 
+designated as Centers of Excellence (COE) by CHED6. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen6 
+●​ Residency: Bona fide resident of Makati City6. 
+●​ Education Level: College / Undergraduate3. 
+●​ Eligible Year Levels: 1 (Incoming Freshmen)6. 
+●​ Incoming Freshman Only?: Yes6. 
+●​ Existing College Students?: Ineligible for initial entry6. 
+●​ Graduate Students?: Ineligible6. 
+●​ Current Enrollment Requirement: Enrolled or accepted as an incoming 1st-year student in 
+a private college or university in Metro Manila declared a CHED Center of Excellence6. 
+●​ Academic Requirements: Fresh senior high school graduate belonging to the Top 10 
+Percent of the graduating class6. 
+●​ Minimum GWA: Minimum GWA of 1.50 (or equivalent 88.00% scale)3. 
+●​ Alternative Class Rank: Belong to the Top 10% of the SHS graduating class6. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Private colleges and universities in Metro Manila declared as CHED 
+Centers of Excellence6. 
+●​ Priority Courses: CHED Center of Excellence degree programs6. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Good Moral: Required6. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must sign a mandatory Service Contract Agreement committing to 
+serve with the Makati City Government after graduation6. 
+
+4. Application Timing 
+●​ Who May Apply: Graduating SHS students from Makati public schools belonging to the 
+top 10% of their class6. 
+●​ Can current freshmen apply?: Yes (at initial college entry)6. 
+●​ Can current sophomores apply?: No6. 
+●​ Can current juniors apply?: No6. 
+●​ Can current seniors apply?: No6. 
+●​ Can graduates apply?: No6. 
+●​ Can previous applicants reapply?: No6. 
+5. Application Window 
+●​ Opening Date: Annual cycle following SHS graduation6. 
+●​ Closing Date: Specified per annual intake notice6. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Covered up to grant cap6. 
+●​ Monthly Stipend: PHP 4,000.00 per month (integrated into total award)3. 
+●​ Allowance: PHP 80,000.00 total scholarship benefit per school year6. 
+●​ Book Allowance: Integrated into grant6. 
+●​ Transportation: Integrated into grant6. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: Mandatory service agreement committing scholar to serve with the 
+Makati City Government6. 
+●​ Other Benefits: None6. 
+7. Required Documents 
+1.​ Official Application Form6. 
+2.​ SHS Form 138 showing GWA and Principal's Certification of Top 10% Class Rank6. 
+3.​ Proof of Residency in Makati City6. 
+4.​ Admission Letter / Certificate of Enrollment from private CHED Center of Excellence in 
+Metro Manila6. 
+5.​ Parents' ITR or Certificate of Indigency6. 
+6.​ Signed Service Contract Agreement6. 
+
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain a GWA of at least 1.50 (or equivalent) each term6. 
+●​ Regular Load: Full credit load required6. 
+●​ No Failures: Zero failing (5.0), unremoved 4.0, or incomplete marks6. 
+●​ Return Service: Execution of post-graduation municipal service obligation6. 
+9. Disqualifying Conditions 
+●​ Enrolling in non-COE private institutions or public SUCs (must shift to SUC track ID 31)6. 
+●​ Failing grades (5.0) or dropping below minimum GWA6. 
+●​ Non-compliance with mandatory service agreement6. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Incoming Ateneo/DLSU 
+Freshman (Makati Resident, 
+Top 10% SHS Rank, COE 
+Course) 
+Eligible Now 
+Apply under Premier Track 
+for PHP 80,000 annual 
+grant6. 
+Enrolled 2nd Year Private 
+COE Student 
+Ineligible 
+Restricted strictly to fresh 
+SHS graduates entering 1st 
+year6. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Target School 
+Private COE in 
+Metro Manila 
+"enroll in 
+private 
+colleges and 
+universities in 
+Metro Manila, 
+which have 
+been declared 
+as Centers of 
+City Ord. 
+2019-A-0366 
+Tier 1 
+
+Excellence by 
+CHED" 
+Annual Benefit 
+PHP 80,000 / 
+yr 
+"P80,000-scho
+larship benefit 
+will be given to 
+qualified 
+incoming first 
+year students" 
+City Ord. 
+2019-A-0366 
+Tier 1 
+Class Rank 
+Cutoff 
+Top 10% 
+"belong to the 
+top 10 percent 
+of the 
+graduating 
+class" 
+City Ord. 
+2019-A-0366 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College"],​
+  "eligible_year_levels": [1],​
+  "incoming_year_only": true,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 88.00,​
+  "rank_cutoff_alternative": 10,​
+  "income_limit": null,​
+  "school_type": ["PRIVATE_CHED_CENTER_OF_EXCELLENCE_NCR"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "MAKATI_CITY_RESIDENT",​
+  "return_service_required": true,​
+  "application_window": {"open": "annual_notice", "close": "annual_notice"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": true,​
+  "needs_manual_review": true​
+}​
+
+ 
+13. Matching Risks 
+●​ COE Course Validation: System must verify that the specific program enrolled in is 
+certified as a CHED Center of Excellence, not merely the institution as a whole6. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.makati.gov.ph/content/news/70216. 
+●​ Overall Confidence Score: 96/1003. 
+University of Makati Special Institutional Scholarship 
+(ID: 99) 
+1. Scholarship Identity 
+●​ Official Name: University of Makati Special Institutional Scholarship7 
+●​ Provider: University of Makati (UMak) / Partner Sponsoring Agencies7 
+●​ Category: Institutional / Sectoral & Affiliation3 
+●​ Official Website: https://www.umak.edu.ph7 
+●​ Application Portal: UMak OLEA Portal 
+(https://www.umak.edu.ph/admissions/scholarships/)7 
+●​ Official Guidelines: UMak City Ordinance No. 2024-108; UMak Special Scholarship 
+Guidelines8 
+●​ Current Status: Active3 
+2. Purpose 
+To extend institutional token fee exemptions and sponsor stipends to designated special 
+demographic groups, including dependents of Makati City Government employees, senior 
+citizens, PWDs, AFP dependents, DILG-endorsed enrollees, and student-athletes/artists7. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen7 
+●​ Residency: Dependent on sub-track (Makati employees/DILG/OSCA tracks require local 
+affiliation; sports/arts tracks open)7. 
+●​ Education Level: College / TVET3. 
+●​ Eligible Year Levels: 1, 2, 3, 4, 53. 
+●​ Incoming Freshman Only?: No7. 
+●​ Existing College Students?: Yes7. 
+
+●​ Graduate Students?: Restricted7. 
+●​ Current Enrollment Requirement: Officially enrolled at the University of Makati7. 
+●​ Academic Requirements: Passing GWA >= 75.00% (or standard college retention GWA <= 
+2.50)3. 
+●​ Minimum GWA: 75.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Age Restrictions: Senior Citizen track requires applicant to be at least 70 years of age at 
+time of application7. 
+●​ School Restrictions: Restricted strictly to students enrolled at the University of Makati7. 
+●​ Priority Courses: Any undergraduate or technical-vocational course offered at UMak7. 
+●​ Sectoral Requirements: Must belong to one of the designated categories and present 
+official endorsement: 
+1.​ Makati City Government Employee Dependent (Human Resource endorsement)11. 
+2.​ Senior Citizen (OSCA endorsement + Senior Citizen ID, age >= 70)7. 
+3.​ PWD (Center for Inclusive Education endorsement + PWD ID)7. 
+4.​ AFP Beneficiary (AFP ID or Certificate)7. 
+5.​ Barangay/DILG (DILG Makati endorsement)7. 
+6.​ Student-Athlete / Artist (Center for Athletic Development / Center for Culture and 
+Arts endorsement under Achievement Scholarship)11. 
+●​ Good Moral: Required7. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Endorsement letters must be submitted once per academic year or 
+per term as mandated7. 
+4. Application Timing 
+●​ Who May Apply: Officially enrolled UMak students meeting special sectoral criteria7. 
+●​ Can current freshmen apply?: Yes7. 
+●​ Can current sophomores apply?: Yes7. 
+●​ Can current juniors apply?: Yes7. 
+●​ Can current seniors apply?: Yes7. 
+●​ Can graduates apply?: No7. 
+●​ Can previous applicants reapply?: Yes (Requires annual/semestral re-endorsement)7. 
+5. Application Window 
+●​ Opening Date: Announced semestrally on UMak OLEA system7. 
+●​ Closing Date: Term registration deadline12. 
+●​ Application Cycle: Semestral3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+
+6. Benefits 
+●​ Tuition: Full (100%) or Partial (50%) exemption from tuition/token fees7. 
+●​ Monthly Stipend: PHP 1,000.00 per month (depending on sponsor track)3. 
+●​ Allowance: Total value up to PHP 15,000.00 per school year3. 
+●​ Book Allowance: Integrated into sponsor grant7. 
+●​ Transportation: Integrated into sponsor grant7. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: Active participation in university sports, culture, or community programs 
+(for athletes/artists)7. 
+●​ Other Benefits: Complete waiving of token fee assessment on Scan-to-Pay9. 
+7. Required Documents 
+1.​ Proof of Enrollment at UMak7. 
+2.​ Preceding Term Grade Report7. 
+3.​ Specific Sectoral Endorsement / ID: 
+○​ DILG Makati Endorsement Letter7. 
+○​ OSCA Endorsement + Senior Citizen ID (for age >= 70)7. 
+○​ Center for Inclusive Education Endorsement + PWD ID7. 
+○​ AFP Beneficiary Certificate / ID7. 
+○​ Proof of Parent Employment in Makati City Government11. 
+4.​ Online application submission via UMak OLEA Portal7. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain passing GWA and comply with university retention policies7. 
+●​ Regular Load: Full academic credit load carried7. 
+●​ No Failures: Zero failing grades7. 
+●​ Return Service: Submission of renewed annual endorsement letter7. 
+9. Disqualifying Conditions 
+●​ Failure to submit updated sectoral endorsement letter7. 
+●​ Unapproved reduction of academic unit load7. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+
+UMak Student (Child of 
+Makati LGU Employee) 
+Eligible Now 
+Apply on OLEA portal under 
+Special Scholarship track 
+with employment proof7. 
+UMak Student-Athlete / 
+Student-Artist 
+Eligible Now 
+Apply under Achievement 
+Scholarship with CAD/CCA 
+endorsement11. 
+Senior Citizen UMak 
+Student (Age 72) 
+Eligible Now 
+Submit OSCA endorsement 
+and Senior Citizen ID for 
+token exemption7. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Sectoral 
+Eligibility 
+Employee 
+Dependent / 
+PWD / OSCA / 
+AFP 
+"dependent of 
+a City 
+Government 
+of Makati 
+employee... 
+OSCA... P.W.D... 
+AFP... DILG" 
+UMak 
+Guidelines7 
+Tier 1 
+Senior Age 
+Cutoff 
+>= 70 Years 
+Old 
+"At least 
+seventy (70) 
+years of age at 
+the time of 
+application" 
+UMak 
+Guidelines7 
+Tier 1 
+Exemption 
+Rate 
+50% or 100% 
+Exemption 
+"Full 
+Scholarship – 
+100% 
+tuition/token 
+fee 
+exemption... 
+Partial 
+Scholarship – 
+UMak 
+Guidelines7 
+Tier 1 
+
+50%" 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College", "TVET"],​
+  "eligible_year_levels": [1, 2, 3, 4, 5],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 75.00,​
+  "income_limit": null,​
+  "sectoral_restriction": "UMAK_SPECIAL_SECTORAL_ENDORSED",​
+  "school_type": ["UMAK_ONLY"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "OLEA_semestral_dates", "close": "OLEA_semestral_dates"},​
+  "deadline_type": "semestral",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Annual Endorsement Expiration: Endorsements for DILG and employee tracks expire 
+annually; matching logic must trigger renewal reminders before the start of each 
+academic year7. 
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.umak.edu.ph/admissions/scholarships/7. 
+●​ Overall Confidence Score: 95/1003. 
+NavotaAs Fisherfolk Children Scholarship Track (ID: 
+100) 
+
+1. Scholarship Identity 
+●​ Official Name: NavotaAs Fisherfolk Children Scholarship Track19 
+●​ Provider: Navotas City Government / City Agriculture's Office (CAO)19 
+●​ Category: Local Government Unit (LGU) / Need-based / Sectoral3 
+●​ Official Website: https://www.navotas.gov.ph19 
+●​ Application Portal: City Agriculture's Office / Navotas City Hall19 
+●​ Official Guidelines: Navotas City Ordinance on Fisherfolk Educational Support19 
+●​ Current Status: Active3 
+2. Purpose 
+To promote socio-economic mobility and guarantee higher education access for the children 
+of registered marginalized fisherfolk in Navotas City through dedicated tuition grants and living 
+allowances19. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Filipino Citizen19 
+●​ Residency: Bona fide resident of Navotas City19. 
+●​ Education Level: College / TVET3. 
+●​ Eligible Year Levels: 1, 2, 3, 43. 
+●​ Incoming Freshman Only?: No3. 
+●​ Existing College Students?: Yes3. 
+●​ Graduate Students?: No3. 
+●​ Current Enrollment Requirement: Enrolled or accepted in a recognized college, university, 
+or technical-vocational institution19. 
+●​ Academic Requirements: GWA of at least 78.00%3. 
+●​ Minimum GWA: 78.00%3. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Income Ceilings: Combined annual gross family income must not exceed PHP 
+180,000.003. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ School Restrictions: Recognized public or private HEIs or TVET training centers19. 
+●​ Priority Courses: Agriculture, Fisheries, Marine Biology, TVET trades, and general degree 
+programs19. 
+●​ Sectoral Requirements: Parent must be an officially registered fisherfolk listed in the 
+Navotas City Juan Magsasaka / Fisherfolk Database maintained by the City Agriculture's 
+Office (CAO)19. 
+●​ Good Moral: Required19. 
+●​ Health Requirements: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Other Official Rules: Must present official Fisherfolk Identification Card (ID) issued by 
+
+CAO19. 
+4. Application Timing 
+●​ Who May Apply: Direct legitimate children or dependents of registered Navotas 
+fisherfolk3. 
+●​ Can current freshmen apply?: Yes3. 
+●​ Can current sophomores apply?: Yes3. 
+●​ Can current juniors apply?: Yes3. 
+●​ Can current seniors apply?: Yes3. 
+●​ Can graduates apply?: No3. 
+●​ Can previous applicants reapply?: Yes3. 
+5. Application Window 
+●​ Opening Date: Annual cycle managed by City Agriculture's Office19. 
+●​ Closing Date: Announced per annual cycle19. 
+●​ Application Cycle: Fixed / Annual3. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–20273. 
+6. Benefits 
+●​ Tuition: Full or partial tuition grant coverage3. 
+●​ Monthly Stipend: PHP 1,500.00 per month3. 
+●​ Allowance: Integrated into monthly stipend3. 
+●​ Book Allowance: Integrated into annual package3. 
+●​ Transportation: Integrated into annual package3. 
+●​ Insurance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Research Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE 
+●​ Return Service: None3. 
+●​ Other Benefits: Total annual award value PHP 20,000.003. 
+7. Required Documents 
+1.​ Application Form19. 
+2.​ Official Fisherfolk Registration Certificate / Fisherfolk ID issued by CAO (Juan Magsasaka 
+Database record)19. 
+3.​ Proof of Relationship (PSA Birth Certificate of applicant showing registered parent)19. 
+4.​ Barangay Certificate of Residency in Navotas City19. 
+5.​ School Report Card / TOR (GWA >= 78.00%)3. 
+6.​ Income Tax Return or Barangay Certificate of Indigency (Income <= PHP 180,000)3. 
+
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain passing academic GWA (>= 78.00%)3. 
+●​ Regular Load: Enrolled in regular credit load19. 
+●​ No Failures: Zero failing grades19. 
+●​ Return Service: Active parent registration status in Juan Magsasaka database19. 
+9. Disqualifying Conditions 
+●​ Delisting of parent from the official Navotas Fisherfolk Database19. 
+●​ Combined family annual gross income exceeding PHP 180,000.003. 
+●​ Failure to maintain required 78.00% GWA3. 
+10. Temporal Eligibility Matrix 
+ 
+User Profile 
+Eligibility Status 
+Actionable Guidance 
+Child of Registered Navotas 
+Fisherfolk (GWA 82%, 
+Income 120k) 
+Eligible Now 
+Apply at City Agriculture's 
+Office with parent 
+Fisherfolk ID3. 
+Child of Non-Registered 
+Small Trader 
+Ineligible 
+Must possess active 
+registration in CAO Juan 
+Magsasaka Database19. 
+11. Structured Eligibility Matrix 
+ 
+Requirement 
+Value 
+Official 
+Evidence 
+Quote 
+Source 
+Confidence 
+Sectoral Status 
+Registered 
+Navotas 
+Fisherfolk 
+"Encode the 
+information 
+into the JUAN 
+MAGSASAKA 
+DATABASE... 
+Issue Fisherfolk 
+Identification 
+Card" 
+Navotas 
+Charter19 
+Tier 1 
+
+Income Limit 
+PHP 180,000 / 
+yr 
+Income ceiling 
+parameter 
+180,000 
+Live DB3 
+Tier 1 
+Entry GWA 
+>= 78.00% 
+Minimum GWA 
+parameter 78% 
+Live DB3 
+Tier 1 
+Monthly 
+Allowance 
+PHP 1,500 / 
+month 
+Monthly 
+allowance 
+parameter 
+1,500 
+Live DB3 
+Tier 1 
+12. Production Database Mapping 
+ 
+ 
+ 
+JSON 
+{​
+  "education_level": ["College", "TVET"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": 78.00,​
+  "income_limit": 180000,​
+  "sectoral_restriction": "NAVOTAS_REGISTERED_FISHERFOLK_DEPENDENT",​
+  "school_type": ["RECOGNIZED_HEI_OR_TVET"],​
+  "partner_school_restricted": false,​
+  "citizenship": "Filipino",​
+  "residency_restriction": "NAVOTAS_CITY_RESIDENT",​
+  "application_window": {"open": "annual_notice", "close": "annual_notice"},​
+  "deadline_type": "exact",​
+  "cycle_type": "annual",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Database Verification Dependency: The matching engine must verify parent inclusion in 
+the Navotas CAO Juan Magsasaka Database vector before declaring eligibility19. 
+
+14. Verification Summary 
+●​ Verification Status: Verified3. 
+●​ Last Verified Date: 2026-08-053. 
+●​ Official URLs Checked: https://www.navotas.gov.ph19. 
+●​ Overall Confidence Score: 94/1003. 
+Works cited 
+1.​ LANI Scholarship Program - Taguig City University - TCU, 
+https://tcu.edu.ph/lani-scholarship 
+2.​ Review Allowance for Qualified LANI Scholars to be Released on May 23, 2025 | 
+Taguig News, 
+https://www.taguig.com/news/review-allowance-for-qualified-lani-scholars/ 
+3.​ live_scholarships_for_gemini.json 
+4.​ Taguig City's scholarship program now includes students in EMBO barangays - 
+PIA, 
+https://mirror.pia.gov.ph/news/2023/08/22/taguig-citys-scholarship-program-now
+-includes-students-in-embo-barangays 
+5.​ Taguig L.A.N.I. Scholarship Overview | PDF | Secondary School | Thesis - Scribd, 
+https://www.scribd.com/document/280648712/Briefer-LANI-Scholarship-Progra
+m-Rev-12-2014 
+6.​ Makati offers college scholarships in public and private universities, Colleges in 
+Metro Manila, https://www.makati.gov.ph/content/news/7021 
+7.​ Scholarship and Grants - University of Makati - PH, 
+https://www.umak.edu.ph/admissions/scholarships/ 
+8.​ Scholarship Program Guidelines - University of Makati - PH, 
+https://www.umak.edu.ph/admissions/scholarships/scholarship-guidelines/ 
+9.​ University Registrar Services - University of Makati - PH, 
+https://www.umak.edu.ph/about/offices/registrar/registrar-services/ 
+10.​University of Makati Admission Requirements and Enrollment Procedure, 
+https://www.umak.edu.ph/admission-requirements-and-enrollment-procedure/ 
+11.​Tuition Scheme Frequently Asked Questions - University of Makati - PH, 
+https://www.umak.edu.ph/tuition-faqs/ 
+12.​Scholarship Application Schedule - Second Sem, '23-24 - University of Makati - 
+PH, https://www.umak.edu.ph/scholarship-online-application-jan2024/ 
+13.​Dr. Pio Valenzuela Scholarship Program Calls For New Applicants | Journal Online, 
+https://journal.com.ph/dr-pio-valenzuela-scholarship-program-calls-for-new-app
+licants/ 
+14.​dr. pio valenzuela scholarship program, 
+https://valenzuela.gov.ph/files/pdfs/scholarship_form.pdf 
+15.​Valenzuela City Website: Home, https://valenzuela.gov.ph/ 
+16.​drpioscholarship - Valenzuela City Website, 
+https://valenzuela.gov.ph/drpioscholarship/ 
+
+17.​VALENZUELA CITY OPENS APPLICATION FOR SCHOLARSHIP PROGRAM - The 
+POST, 
+https://thepost.net.ph/news/nation/valenzuela-city-opens-application-for-schola
+rship-program/ 
+18.​Valenzuela opens applications for college scholarship program, 
+https://pia.gov.ph/news/valenzuela-opens-applications-for-college-scholarship-p
+rogram/ 
+19.​Navotas City Citizen's Charter 2022 | PDF - Scribd, 
+https://www.scribd.com/document/693350726/2020-all-Offices-Arta-Navotas-Ci
+ty 
+20.​MSD - Muntinlupa Scholarship Division, 
+https://msd.muntinlupacity.gov.ph/serveob/ 
+21.​Muntinlupa Scholarship Division, 
+https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/msd_services.pdf 
+22.​alino buha - City Government of Muntinlupa, 
+https://www.muntinlupacity.gov.ph/wp-content/uploads/2023/04/rfq-0127-04042
+3.pdf 
+23.​MSD - Muntinlupa Scholarship Division, 
+https://msd.muntinlupacity.gov.ph/iskolarsamunti/contact 
+24.​City Government of Muntinlupa, https://muntinlupacity.gov.ph/ 
+25.​Muntinlupa Scholarship Division: MSD, https://msd.muntinlupacity.gov.ph/ 
+26.​Ordinance No. 2023-143 - City Government of Muntinlupa, 
+https://www.muntinlupacity.gov.ph/wp-content/uploads/2024/01/Ordinance-No.-
+2023-143.pdf 
+27.​MSD - Muntinlupa Scholarship Division, 
+https://msd.muntinlupacity.gov.ph/iskolarsamunti/event 

@@ -80,17 +80,15 @@ describe("ScholarshipStatusPage (C3)", () => {
     expect(screen.getAllByText("Past cycle").length).toBeGreaterThan(0);
   });
 
-  it("accordion expands with aria-expanded", () => {
+  it("accordion expands on summary click", () => {
     render(
       <MemoryRouter>
         <ScholarshipStatusPage />
       </MemoryRouter>
     );
-    const openButtons = screen.getAllByRole("button", { name: /open now/i });
-    const accordionButton = openButtons.find((btn) => btn.getAttribute("aria-controls"))!;
-    expect(accordionButton).toHaveAttribute("aria-expanded", "false");
-    fireEvent.click(accordionButton);
-    expect(accordionButton).toHaveAttribute("aria-expanded", "true");
+    const openSummary = screen.getAllByText("Open now")[0].closest("summary");
+    expect(openSummary).toBeTruthy();
+    fireEvent.click(openSummary!);
     expect(screen.getByText(/Review requirements, gather documents/i)).toBeInTheDocument();
   });
 });

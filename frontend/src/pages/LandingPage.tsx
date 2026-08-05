@@ -10,13 +10,10 @@ import { MiniProfileWizard } from "../components/landing/MiniProfileWizard";
 import { HowItWorksSection } from "../components/landing/HowItWorksSection";
 import { OfficialSourcesBar } from "../components/landing/OfficialSourcesBar";
 import { ProblemSection } from "../components/landing/ProblemSection";
-import { ProofStripSection } from "../components/landing/ProofStripSection";
 import { TrustSection } from "../components/landing/TrustSection";
 
-/** §11.6 section order — exported for tests (C4). */
 export const LANDING_SECTION_ORDER = [
   "hero",
-  "proof",
   "wizard",
   "sources",
   "problem",
@@ -56,7 +53,6 @@ export function LandingPage() {
     <LandingMotionProvider>
       <div className="overflow-hidden" data-testid="landing-page">
         <HeroSection />
-        <ProofStripSection />
         <MiniProfileWizard />
         <OfficialSourcesBar />
         <ProblemSection />

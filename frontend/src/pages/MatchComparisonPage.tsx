@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "../contexts/AuthContext";
 import type { MatchComparisonResponse } from "../types";
 import { apiFetch } from "../api/client";
@@ -73,13 +75,9 @@ export function MatchComparisonPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center">
             <p className="text-red-700">{error}</p>
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard")}
-              className="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-white hover:bg-primary-700"
-            >
+            <Button type="button" onClick={() => navigate("/dashboard")} className="mt-4">
               Back to Dashboard
-            </button>
+            </Button>
           </div>
         </div>
       </section>
@@ -95,13 +93,10 @@ export function MatchComparisonPage() {
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
             Compare Match Runs
           </h2>
-          <button
-            type="button"
-            onClick={() => navigate("/dashboard")}
-            className="text-sm font-medium text-primary-600 hover:text-primary-700"
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+            <ChevronLeft className="size-4" aria-hidden />
             Back to Dashboard
-          </button>
+          </Button>
         </div>
 
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">

@@ -1,5 +1,7 @@
 /** Student-safe error messages — no env vars, URLs, or developer jargon (CLARITY-01). */
 
+import { parseApiDetail } from "../utils/apiErrors";
+
 export type ErrorKind =
   | "offline"
   | "server_unreachable"
@@ -55,8 +57,8 @@ export const ERROR_COPY: Record<ErrorKind, ErrorCopyEntry> = {
     recoveryAction: "Back to home",
   },
   search_no_results: {
-    title: "No scholarships match your filters",
-    message: "Try removing the most restrictive filter first—often region, education level, or income ceiling.",
+    title: "No scholarships match these filters.",
+    message: "Try removing a filter or searching with a broader keyword.",
     recoveryAction: "Clear filters",
   },
   session_expired: {
@@ -86,9 +88,36 @@ export function resolveUserErrorMessage(err: unknown, fallbackKind: ErrorKind = 
       return getNetworkErrorMessage();
     }
     const msg = err.message.trim();
-    if (msg && !containsDevString(msg)) return msg;
+    if (!msg || containsDevString(msg) || msg.includes("[object Object]")) {
+      return ERROR_COPY[fallbackKind].message;
+    }
+    if (/^\(\d{3}\)$|Could not .+ \(\d{3}\)/.test(msg)) {
+      return ERROR_COPY[fallbackKind].message;
+    }
+    if (
+      /^(Invalid email or password|Please verify your email|Too many failed sign-in|Security check failed)/i.test(
+        msg,
+      )
+    ) {
+      return msg;
+    }
+    if (msg.length <= 160 && !/traceback|exception|sqlalchemy|pydantic/i.test(msg)) {
+      return msg;
+    }
   }
   return ERROR_COPY[fallbackKind].message;
+}
+
+/** Build an Error from a failed API JSON body. */
+export function errorFromApiBody(
+  body: unknown,
+  fallback = "Something went wrong. Please try again.",
+): Error {
+  const detail =
+    body && typeof body === "object" && "detail" in body
+      ? (body as { detail: unknown }).detail
+      : undefined;
+  return new Error(parseApiDetail(detail, fallback));
 }
 
 const DEV_STRING_PATTERN = /VITE_|API_BASE_URL|localhost:\d+|127\.0\.0\.1/i;

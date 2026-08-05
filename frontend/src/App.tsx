@@ -3,11 +3,6 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-route
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SavedScholarshipsProvider } from "./contexts/SavedScholarshipsContext";
-import { LoginPage } from "./pages/LoginPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
-import { ResetPasswordPage } from "./pages/ResetPasswordPage";
-import { VerifyEmailPage } from "./pages/VerifyEmailPage";
 import { LandingPage } from "./pages/LandingPage";
 import { PublicLayout, PublicShell } from "./components/layout/PublicLayout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
@@ -21,13 +16,24 @@ import { SessionExpiryHandler } from "./components/SessionExpiryHandler";
 import { ApiWarmupBanner } from "./components/ApiWarmupBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { RouteFallbackSkeleton } from "./components/LoadingSkeletons";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { BackToTopButton } from "./components/BackToTopButton";
 import { Toaster } from "@/components/ui/sonner";
+
+const LoginPage = lazy(() => import("./pages/LoginPage").then((m) => ({ default: m.LoginPage })));
+const RegisterPage = lazy(() => import("./pages/RegisterPage").then((m) => ({ default: m.RegisterPage })));
+const ForgotPasswordPage = lazy(() =>
+  import("./pages/ForgotPasswordPage").then((m) => ({ default: m.ForgotPasswordPage }))
+);
+const ResetPasswordPage = lazy(() =>
+  import("./pages/ResetPasswordPage").then((m) => ({ default: m.ResetPasswordPage }))
+);
+const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage").then((m) => ({ default: m.VerifyEmailPage })));
 
 const AboutPage = lazy(() => import("./pages/AboutPage").then((m) => ({ default: m.AboutPage })));
 const TermsPage = lazy(() => import("./pages/TermsPage").then((m) => ({ default: m.TermsPage })));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage").then((m) => ({ default: m.PrivacyPage })));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage").then((m) => ({ default: m.ChangelogPage })));
-const RoadmapPage = lazy(() => import("./pages/RoadmapPage").then((m) => ({ default: m.RoadmapPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 const HowItWorksPage = lazy(() => import("./pages/HowItWorksPage").then((m) => ({ default: m.HowItWorksPage })));
 const HowMatchingWorksPage = lazy(() =>
@@ -46,9 +52,6 @@ const ScholarshipStatusPage = lazy(() =>
 const FaqPage = lazy(() => import("./pages/FaqPage").then((m) => ({ default: m.FaqPage })));
 const DesignSystemPage = lazy(() =>
   import("./pages/DesignSystemPage").then((m) => ({ default: m.DesignSystemPage }))
-);
-const SuccessStoriesPage = lazy(() =>
-  import("./pages/SuccessStoriesPage").then((m) => ({ default: m.SuccessStoriesPage }))
 );
 
 const MatchResultsPage = lazy(() =>
@@ -132,12 +135,10 @@ function AppRoutes() {
           <Route path="/opportunities/:typeSlug" element={<OpportunityComingSoonPage />} />
           <Route path="/scholarship-status" element={<ScholarshipStatusPage />} />
           <Route path="/faq" element={<FaqPage />} />
-          <Route path="/success-stories" element={<SuccessStoriesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/changelog" element={<ChangelogPage />} />
-          <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="/design-system" element={<DesignSystemPage />} />
           <Route path="/organizations/:slug" element={<OrganizationPage />} />
         </Route>
@@ -223,16 +224,16 @@ export default function App() {
     <ThemeProvider>
       <ErrorBoundary>
         <BrowserRouter>
-          <ScrollToHashElement />
-          <AuthProvider>
+          <ScrollToTop />
+          <ScrollToHashElement />          <AuthProvider>
             <SavedScholarshipsProvider>
               <FeedbackProvider>
                 <SessionExpiryHandler />
                 <AppRoutes />
                 <OfflineIndicator />
                 <ApiWarmupBanner />
-                <Toaster richColors closeButton position="top-center" />
-              </FeedbackProvider>
+                <BackToTopButton />
+                <Toaster richColors closeButton position="top-center" />              </FeedbackProvider>
             </SavedScholarshipsProvider>
           </AuthProvider>
         </BrowserRouter>

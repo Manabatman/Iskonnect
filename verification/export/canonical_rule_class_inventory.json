@@ -1,0 +1,5832 @@
+{
+  "RC01": {
+    "label": "Citizenship — Filipino required",
+    "description": "Applicant must be Filipino (natural-born and/or naturalized).",
+    "count": 105,
+    "scholarship_ids": [
+      3,
+      5,
+      7,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      62,
+      63,
+      66,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      111,
+      112,
+      113,
+      117,
+      118,
+      119,
+      120,
+      124,
+      130,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 30,
+        "title": "Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 69,
+        "title": "PUP Student Assistantship Program"
+      },
+      {
+        "id": 70,
+        "title": "UP College of Law Scholarship Program"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 74,
+        "title": "Australia Awards Scholarships (Philippines)"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 111,
+        "title": "Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "citizenship_required already"
+  },
+  "RC02": {
+    "label": "Citizenship — natural-born only",
+    "description": "Stricter natural-born-only citizenship (when explicitly exclusive).",
+    "count": 9,
+    "scholarship_ids": [
+      20,
+      33,
+      56,
+      73,
+      85,
+      86,
+      87,
+      124,
+      130
+    ],
+    "scholarships": [
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "citizenship enum needs natural_born value"
+  },
+  "RC03": {
+    "label": "Local residency / LGU locality",
+    "description": "Must reside in a city/municipality/province (LGU or locality gate).",
+    "count": 71,
+    "scholarship_ids": [
+      15,
+      17,
+      20,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      59,
+      60,
+      63,
+      64,
+      65,
+      66,
+      72,
+      73,
+      74,
+      77,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      105,
+      112,
+      113,
+      117,
+      118,
+      124,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 30,
+        "title": "Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 74,
+        "title": "Australia Awards Scholarships (Philippines)"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "eligible_cities/regions + residency_required"
+  },
+  "RC04": {
+    "label": "Education level / academic stage",
+    "description": "Eligible education stage (SHS/College/TVET/Graduate/MD).",
+    "count": 107,
+    "scholarship_ids": [
+      3,
+      5,
+      7,
+      10,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      62,
+      63,
+      64,
+      65,
+      66,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      77,
+      78,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      111,
+      112,
+      113,
+      117,
+      118,
+      119,
+      120,
+      124,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 30,
+        "title": "Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 69,
+        "title": "PUP Student Assistantship Program"
+      },
+      {
+        "id": 70,
+        "title": "UP College of Law Scholarship Program"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 74,
+        "title": "Australia Awards Scholarships (Philippines)"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 111,
+        "title": "Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "eligible_levels"
+  },
+  "RC05": {
+    "label": "Year-level window",
+    "description": "Explicit eligible year levels or year window.",
+    "count": 105,
+    "scholarship_ids": [
+      3,
+      5,
+      7,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      62,
+      63,
+      64,
+      65,
+      66,
+      68,
+      69,
+      70,
+      71,
+      72,
+      74,
+      75,
+      77,
+      78,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      111,
+      112,
+      113,
+      117,
+      118,
+      119,
+      120,
+      124,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 30,
+        "title": "Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 69,
+        "title": "PUP Student Assistantship Program"
+      },
+      {
+        "id": 70,
+        "title": "UP College of Law Scholarship Program"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 74,
+        "title": "Australia Awards Scholarships (Philippines)"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 111,
+        "title": "Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "eligible_year_levels"
+  },
+  "RC06": {
+    "label": "Incoming / entry-stage only",
+    "description": "Restricted to incoming freshman / grade-entry / not yet enrolled.",
+    "count": 26,
+    "scholarship_ids": [
+      10,
+      16,
+      17,
+      18,
+      31,
+      33,
+      41,
+      43,
+      44,
+      46,
+      47,
+      65,
+      68,
+      73,
+      76,
+      77,
+      78,
+      81,
+      82,
+      83,
+      87,
+      98,
+      104,
+      105,
+      107,
+      117
+    ],
+    "scholarships": [
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "eligible_enrollment_status=incoming_freshman; backfill"
+  },
+  "RC07": {
+    "label": "Zero prior tertiary units",
+    "description": "Must have earned zero college/tertiary/vocational units.",
+    "count": 4,
+    "scholarship_ids": [
+      10,
+      73,
+      76,
+      77
+    ],
+    "scholarships": [
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "max_prior_tertiary_units + prior_tertiary_units"
+  },
+  "RC08": {
+    "label": "Continuing / mid-program entry window",
+    "description": "Open to continuing students at specific years (not freshman-only); may bar first-years or upper years.",
+    "count": 3,
+    "scholarship_ids": [
+      61,
+      75,
+      130
+    ],
+    "scholarships": [
+      {
+        "id": 61,
+        "title": "Megaworld Foundation"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "year_levels + enrollment_status combinations"
+  },
+  "RC09": {
+    "label": "Transferee/shiftee barred",
+    "description": "Transferees or shiftees with credited units ineligible.",
+    "count": 2,
+    "scholarship_ids": [
+      76,
+      77
+    ],
+    "scholarships": [
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "policy+logic",
+    "implementation_note": "entry.allow_transferee=false in eligibility_policy"
+  },
+  "RC10": {
+    "label": "Lateral entry allowed",
+    "description": "Ongoing students with earned units may enter (esp. graduate).",
+    "count": 5,
+    "scholarship_ids": [
+      3,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "policy+data",
+    "implementation_note": "lateral allowed via enrollment/year; document in policy"
+  },
+  "RC11": {
+    "label": "Minimum GWA cutoff",
+    "description": "Numeric GWA/GPA minimum at entry.",
+    "count": 82,
+    "scholarship_ids": [
+      5,
+      7,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      55,
+      56,
+      58,
+      59,
+      64,
+      65,
+      66,
+      69,
+      71,
+      72,
+      75,
+      77,
+      78,
+      84,
+      85,
+      86,
+      87,
+      88,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      111,
+      113,
+      117,
+      118,
+      119,
+      124
+    ],
+    "scholarships": [
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 69,
+        "title": "PUP Student Assistantship Program"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 111,
+        "title": "Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "min_gwa_normalized"
+  },
+  "RC12": {
+    "label": "Class rank / Top-N gate",
+    "description": "Class rank or Top N/% used as academic gate or alternative.",
+    "count": 31,
+    "scholarship_ids": [
+      7,
+      17,
+      20,
+      31,
+      32,
+      41,
+      43,
+      44,
+      46,
+      47,
+      52,
+      53,
+      54,
+      64,
+      65,
+      68,
+      72,
+      73,
+      76,
+      78,
+      85,
+      86,
+      87,
+      88,
+      95,
+      98,
+      104,
+      105,
+      107,
+      109,
+      117
+    ],
+    "scholarships": [
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+policy+logic",
+    "implementation_note": "class_rank/size on student; rank ops in policy"
+  },
+  "RC13": {
+    "label": "Compound academic OR (GWA or rank)",
+    "description": "Explicit OR between GWA threshold and class rank/Top-N.",
+    "count": 3,
+    "scholarship_ids": [
+      76,
+      77,
+      104
+    ],
+    "scholarships": [
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "policy+logic",
+    "implementation_note": "academic_any_of"
+  },
+  "RC14": {
+    "label": "Per-subject grade floor",
+    "description": "No failing grades / subject minima at entry or retention-as-entry.",
+    "count": 13,
+    "scholarship_ids": [
+      11,
+      23,
+      36,
+      39,
+      58,
+      78,
+      85,
+      86,
+      87,
+      101,
+      102,
+      103,
+      130
+    ],
+    "scholarships": [
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "policy",
+    "implementation_note": "usually process/retention; optional entry predicate"
+  },
+  "RC15": {
+    "label": "Household income ceiling",
+    "description": "Numeric annual household/parental income cap.",
+    "count": 57,
+    "scholarship_ids": [
+      10,
+      13,
+      15,
+      16,
+      17,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      33,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      57,
+      61,
+      62,
+      66,
+      76,
+      77,
+      86,
+      87,
+      88,
+      92,
+      93,
+      94,
+      100,
+      101,
+      102,
+      103,
+      104,
+      106,
+      107,
+      108,
+      109,
+      112,
+      113,
+      117,
+      118,
+      124
+    ],
+    "scholarships": [
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 61,
+        "title": "Megaworld Foundation"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "max_income_threshold — needs remediation"
+  },
+  "RC16": {
+    "label": "Uncapped merit / need-exempt track",
+    "description": "Merit (or similar) track with no income ceiling.",
+    "count": 12,
+    "scholarship_ids": [
+      3,
+      41,
+      43,
+      44,
+      46,
+      68,
+      89,
+      104,
+      109,
+      120,
+      133,
+      134
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "null income + scholarship_type/track; track split RC47"
+  },
+  "RC17": {
+    "label": "4Ps / Listahanan / per-capita need proxy",
+    "description": "Need assessed via 4Ps/Listahanan or per-capita poverty proxies.",
+    "count": 4,
+    "scholarship_ids": [
+      57,
+      66,
+      88,
+      113
+    ],
+    "scholarships": [
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "priority_groups + is_4ps_listahanan; members_only"
+  },
+  "RC18": {
+    "label": "Parent salary-grade ceiling",
+    "description": "Parent GSIS/civil-service salary grade upper bound.",
+    "count": 2,
+    "scholarship_ids": [
+      78,
+      84
+    ],
+    "scholarships": [
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "parent_salary_grade student field + policy/max"
+  },
+  "RC19": {
+    "label": "Numeric age bounds",
+    "description": "Min/max age in years (not birthdate-specific).",
+    "count": 18,
+    "scholarship_ids": [
+      7,
+      17,
+      20,
+      52,
+      53,
+      56,
+      59,
+      60,
+      84,
+      85,
+      86,
+      87,
+      94,
+      97,
+      99,
+      112,
+      113,
+      124
+    ],
+    "scholarships": [
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "min_age/max_age"
+  },
+  "RC20": {
+    "label": "Birthdate as-of cutoff",
+    "description": "Eligibility by birthdate relative to a fixed/intake date.",
+    "count": 6,
+    "scholarship_ids": [
+      64,
+      65,
+      80,
+      81,
+      82,
+      83
+    ],
+    "scholarships": [
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "policy+logic",
+    "implementation_note": "age_as_of in eligibility_policy"
+  },
+  "RC21": {
+    "label": "Named school / consortium / partner lock",
+    "description": "Must enroll in named partner/consortium schools.",
+    "count": 21,
+    "scholarship_ids": [
+      3,
+      7,
+      10,
+      13,
+      14,
+      15,
+      16,
+      54,
+      58,
+      60,
+      61,
+      63,
+      71,
+      75,
+      78,
+      88,
+      117,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 61,
+        "title": "Megaworld Foundation"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "eligible_schools — must populate"
+  },
+  "RC22": {
+    "label": "School category (SUC/LUC/public/private/COE)",
+    "description": "Restriction by school category/accreditation class.",
+    "count": 28,
+    "scholarship_ids": [
+      5,
+      10,
+      11,
+      15,
+      16,
+      17,
+      29,
+      31,
+      52,
+      53,
+      54,
+      55,
+      56,
+      58,
+      66,
+      73,
+      76,
+      78,
+      84,
+      93,
+      94,
+      96,
+      100,
+      117,
+      118,
+      119,
+      130,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "eligible_school_categories/types"
+  },
+  "RC23": {
+    "label": "Field / priority course restriction",
+    "description": "Restricted to priority fields/courses/strands.",
+    "count": 106,
+    "scholarship_ids": [
+      3,
+      5,
+      7,
+      10,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      62,
+      63,
+      64,
+      65,
+      66,
+      68,
+      69,
+      70,
+      71,
+      72,
+      74,
+      75,
+      77,
+      78,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      111,
+      112,
+      113,
+      117,
+      118,
+      119,
+      120,
+      124,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 10,
+        "title": "SM Foundation College"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 30,
+        "title": "Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 39,
+        "title": "Bislig City Collegiate Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 49,
+        "title": "Cebu Province Grants Intended for Tertiary Students (CP GIFTS Program)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 51,
+        "title": "Tabuk City College Academic Scholarship"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 69,
+        "title": "PUP Student Assistantship Program"
+      },
+      {
+        "id": 70,
+        "title": "UP College of Law Scholarship Program"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 74,
+        "title": "Australia Awards Scholarships (Philippines)"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 111,
+        "title": "Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data",
+    "implementation_note": "eligible_courses_psced/specific"
+  },
+  "RC24": {
+    "label": "Sector registry — NCFRS",
+    "description": "NCFRS coconut farmer (or dependent) registration required.",
+    "count": 1,
+    "scholarship_ids": [
+      117
+    ],
+    "scholarships": [
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "taxonomy+logic",
+    "implementation_note": "sector_registries + members_only"
+  },
+  "RC25": {
+    "label": "Sector registry — RSBSA",
+    "description": "RSBSA farmer/fisher registration required.",
+    "count": 1,
+    "scholarship_ids": [
+      55
+    ],
+    "scholarships": [
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "taxonomy+logic",
+    "implementation_note": "sector_registries + members_only"
+  },
+  "RC26": {
+    "label": "Sector registry — SRA",
+    "description": "SRA sugarcane farmer registration/certification required.",
+    "count": 1,
+    "scholarship_ids": [
+      118
+    ],
+    "scholarships": [
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "taxonomy+logic",
+    "implementation_note": "sector_registries + members_only"
+  },
+  "RC27": {
+    "label": "Affiliation — OFW/OWWA",
+    "description": "OFW member or dependent affiliation required.",
+    "count": 4,
+    "scholarship_ids": [
+      45,
+      85,
+      86,
+      124
+    ],
+    "scholarships": [
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "is_ofw_dependent + priority_groups/members_only"
+  },
+  "RC28": {
+    "label": "Affiliation — military/AFP/uniformed",
+    "description": "Military/AFP/uniformed dependent (or casualty) affiliation.",
+    "count": 3,
+    "scholarship_ids": [
+      56,
+      62,
+      80
+    ],
+    "scholarships": [
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "is_military_dependent + members_only"
+  },
+  "RC29": {
+    "label": "Affiliation — GSIS/SSS member dependent",
+    "description": "GSIS or SSS member-dependent affiliation.",
+    "count": 2,
+    "scholarship_ids": [
+      78,
+      84
+    ],
+    "scholarships": [
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "is_gsis_dependent + members_only"
+  },
+  "RC30": {
+    "label": "Affiliation — IP / NCIP",
+    "description": "Indigenous Peoples / NCIP certification.",
+    "count": 7,
+    "scholarship_ids": [
+      38,
+      52,
+      53,
+      54,
+      68,
+      70,
+      119
+    ],
+    "scholarships": [
+      {
+        "id": 38,
+        "title": "Special Educational Assistance Program (SEAP) for Lumad / Financial"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 70,
+        "title": "UP College of Law Scholarship Program"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "is_indigenous_people + members_only"
+  },
+  "RC31": {
+    "label": "Affiliation — HEI faculty/staff/educator",
+    "description": "Must be HEI faculty/staff/educator (or dependent barred from bank staff etc. as inverse).",
+    "count": 3,
+    "scholarship_ids": [
+      3,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "profile faculty/staff flag + members_only/policy"
+  },
+  "RC32": {
+    "label": "Equity groups — PWD / solo parent / underprivileged / GIDA",
+    "description": "Equity priority or reserved-slot groups.",
+    "count": 16,
+    "scholarship_ids": [
+      7,
+      15,
+      28,
+      33,
+      54,
+      57,
+      68,
+      77,
+      78,
+      88,
+      95,
+      99,
+      105,
+      113,
+      117,
+      119
+    ],
+    "scholarships": [
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 119,
+        "title": "CHED Scholarship Program for Future Statisticians (Estatistikolar)"
+      }
+    ],
+    "current_schema_supported": "yes",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "equity flags + priority_groups"
+  },
+  "RC33": {
+    "label": "Parent deceased or permanently incapacitated",
+    "description": "Parent status deceased/incapacitated as eligibility gate.",
+    "count": 3,
+    "scholarship_ids": [
+      57,
+      62,
+      124
+    ],
+    "scholarships": [
+      {
+        "id": 57,
+        "title": "DSWD Assistance to Individuals in Crisis Situations (AICS) Educational"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "parent_status enum on profile + policy/members"
+  },
+  "RC34": {
+    "label": "Grant exclusivity — national StuFAP/government",
+    "description": "Cannot concurrently hold other national government scholarships/StuFAPs.",
+    "count": 7,
+    "scholarship_ids": [
+      5,
+      52,
+      54,
+      60,
+      66,
+      73,
+      117
+    ],
+    "scholarships": [
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 66,
+        "title": "CHED-UniFAST Tertiary Education Subsidy (TES) (enacted under"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "conflict_scopes national_stufap"
+  },
+  "RC35": {
+    "label": "Grant exclusivity — LGU",
+    "description": "Cannot concurrently hold another LGU scholarship.",
+    "count": 2,
+    "scholarship_ids": [
+      88,
+      89
+    ],
+    "scholarships": [
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 89,
+        "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "conflict_scopes lgu_grant"
+  },
+  "RC36": {
+    "label": "One scholar per family/household",
+    "description": "Household/family cap of one scholar.",
+    "count": 8,
+    "scholarship_ids": [
+      25,
+      26,
+      37,
+      92,
+      93,
+      94,
+      101,
+      102
+    ],
+    "scholarships": [
+      {
+        "id": 25,
+        "title": "Pasig City Regular Academic Scholarship Program"
+      },
+      {
+        "id": 26,
+        "title": "Pasig City Arts and Design Scholarship Program"
+      },
+      {
+        "id": 37,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 93,
+        "title": "Pasig City Out-of-School Learners (OSL) Scholarship Program"
+      },
+      {
+        "id": 94,
+        "title": "Pasig City Sangguniang Kabataan (SK) Endorsed Scholarship Program"
+      },
+      {
+        "id": 101,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      },
+      {
+        "id": 102,
+        "title": "Scholarship on Tertiary Education Program – Financial Assistance"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "policy+explain",
+    "implementation_note": "disclosure until household graph; no fake hard gate"
+  },
+  "RC37": {
+    "label": "Minimum work experience",
+    "description": "Minimum years of work/professional experience.",
+    "count": 3,
+    "scholarship_ids": [
+      74,
+      90,
+      91
+    ],
+    "scholarships": [
+      {
+        "id": 74,
+        "title": "Australia Awards Scholarships (Philippines)"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "min_work_experience_years"
+  },
+  "RC38": {
+    "label": "Marital status — single required",
+    "description": "Must be single/unmarried.",
+    "count": 5,
+    "scholarship_ids": [
+      59,
+      62,
+      85,
+      86,
+      87
+    ],
+    "scholarships": [
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "atomic+logic",
+    "implementation_note": "marital_status"
+  },
+  "RC39": {
+    "label": "Exam / NMAT / qualifying exam prerequisite",
+    "description": "Must take/pass entrance, NMAT, or provider qualifying exam.",
+    "count": 6,
+    "scholarship_ids": [
+      33,
+      35,
+      54,
+      73,
+      85,
+      130
+    ],
+    "scholarships": [
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "data+explain",
+    "implementation_note": "has_qualifying_exam exists; hard gate only if profile has exam status"
+  },
+  "RC40": {
+    "label": "Prior bachelor's / degree required",
+    "description": "Completed bachelor's (or equivalent) required for entry.",
+    "count": 19,
+    "scholarship_ids": [
+      3,
+      20,
+      35,
+      42,
+      54,
+      63,
+      64,
+      65,
+      78,
+      80,
+      81,
+      90,
+      97,
+      103,
+      120,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 63,
+        "title": "Erasmus Mundus Joint Masters Scholarship"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+logic",
+    "implementation_note": "education_level Graduate + prior degree flag"
+  },
+  "RC41": {
+    "label": "First undergraduate degree only",
+    "description": "Must be pursuing first UG degree.",
+    "count": 1,
+    "scholarship_ids": [
+      5
+    ],
+    "scholarships": [
+      {
+        "id": 5,
+        "title": "CHED-UniFAST Tulong Dunong Program (CHED-TDP / UniFAST-TDP)"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "policy+logic",
+    "implementation_note": "first_degree_only in policy"
+  },
+  "RC42": {
+    "label": "Return service commitment",
+    "description": "Return service obligation as condition of award/eligibility.",
+    "count": 11,
+    "scholarship_ids": [
+      3,
+      17,
+      31,
+      35,
+      54,
+      90,
+      98,
+      103,
+      130,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 17,
+        "title": "Senior High School Voucher Program (SHS VP)"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 130,
+        "title": "DOST-SEI JLSS"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+explain",
+    "implementation_note": "has_return_service; details in policy"
+  },
+  "RC43": {
+    "label": "Full-time study / employment bar",
+    "description": "Must study full-time; employment/practice barred while on grant.",
+    "count": 3,
+    "scholarship_ids": [
+      3,
+      133,
+      134
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "policy",
+    "implementation_note": "post-award condition; soft/explain unless profile employment contradicts"
+  },
+  "RC44": {
+    "label": "Good moral / character certification",
+    "description": "Good moral or NBI/character required (process gate often).",
+    "count": 73,
+    "scholarship_ids": [
+      3,
+      7,
+      11,
+      13,
+      14,
+      15,
+      16,
+      18,
+      20,
+      23,
+      24,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      50,
+      52,
+      53,
+      54,
+      55,
+      56,
+      58,
+      59,
+      60,
+      62,
+      68,
+      69,
+      70,
+      71,
+      72,
+      75,
+      77,
+      78,
+      84,
+      85,
+      86,
+      87,
+      88,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      111,
+      117,
+      118,
+      120,
+      124,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 7,
+        "title": "GSIS GSP Main"
+      },
+      {
+        "id": 11,
+        "title": "Ayala Foundation U-Go Scholar Grant (U-GO Scholar Grant)"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 14,
+        "title": "BPI Foundation Pagpupugay Scholarship Program"
+      },
+      {
+        "id": 15,
+        "title": "San Miguel Foundation Educational Assistance / Community Scholarship"
+      },
+      {
+        "id": 16,
+        "title": "PLDT-Smart Foundation Gabay Guro Scholarship Program"
+      },
+      {
+        "id": 18,
+        "title": "Ateneo Senior High School Financial Aid Grant"
+      },
+      {
+        "id": 20,
+        "title": "Energy Regulatory Commission Graduate Fellowship Program"
+      },
+      {
+        "id": 23,
+        "title": "Philippine Normal University Institutional Scholarship Program"
+      },
+      {
+        "id": 24,
+        "title": "UP Presidential Scholarship Program"
+      },
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 30,
+        "title": "Taguig City L.A.N.I. Lifeline Bar and Board Review Assistance"
+      },
+      {
+        "id": 31,
+        "title": "Makati City College Scholarship Program – SUC and Priority Courses"
+      },
+      {
+        "id": 32,
+        "title": "University of Makati (UMak) Token Fee Exemption Program"
+      },
+      {
+        "id": 33,
+        "title": "Valenzuela City Dr. Pio Valenzuela Scholarship Program"
+      },
+      {
+        "id": 34,
+        "title": "NavotaAs Academic College Scholarship Program"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 40,
+        "title": "Ateneo de Manila University College Financial Aid Grant"
+      },
+      {
+        "id": 41,
+        "title": "Ateneo Director's List Scholarship"
+      },
+      {
+        "id": 42,
+        "title": "Ateneo Law School Financial Aid Program"
+      },
+      {
+        "id": 43,
+        "title": "DLSU Star Scholars Program"
+      },
+      {
+        "id": 44,
+        "title": "DLSU Archer Achievers Scholarship Program"
+      },
+      {
+        "id": 45,
+        "title": "UST San Martin de Porres Equity Scholarship"
+      },
+      {
+        "id": 46,
+        "title": "Mindanao State University System Admission and Scholarship Examination"
+      },
+      {
+        "id": 47,
+        "title": "Muntinlupa Most Outstanding Students (10 MOST) Academic"
+      },
+      {
+        "id": 48,
+        "title": "Muntinlupa Continuing Assistance for Reintegrating Students (CARES)"
+      },
+      {
+        "id": 50,
+        "title": "Parañaque City Tertiary Education Financial Assistance Program"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 54,
+        "title": "CHED MSRS"
+      },
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 56,
+        "title": "DND-CHED-PASUC Scholarship Program"
+      },
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 59,
+        "title": "Youth Servant Leadership and Education Program (YSLEP)"
+      },
+      {
+        "id": 60,
+        "title": "TaiwanICDF International Higher Education Scholarship Program"
+      },
+      {
+        "id": 62,
+        "title": "AFPSLAI Educational Grant Program (EGP) — Non-Business Track"
+      },
+      {
+        "id": 68,
+        "title": "PUP Entrance Scholarship Program"
+      },
+      {
+        "id": 69,
+        "title": "PUP Student Assistantship Program"
+      },
+      {
+        "id": 70,
+        "title": "UP College of Law Scholarship Program"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      },
+      {
+        "id": 72,
+        "title": "GBF STEM-College Scholarship (Formerly GBF-Gokongwei Group STEM"
+      },
+      {
+        "id": 75,
+        "title": "Aboitiz Future Leaders Scholarship Program (AFLSP) / Aboitiz Brights"
+      },
+      {
+        "id": 77,
+        "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) – Technical"
+      },
+      {
+        "id": 78,
+        "title": "GSIS GSSP STEM"
+      },
+      {
+        "id": 84,
+        "title": "GSIS Educational Subsidy Program (GESP)"
+      },
+      {
+        "id": 85,
+        "title": "Education for Development Scholarship Program (EDSP)"
+      },
+      {
+        "id": 86,
+        "title": "OFW Dependent Scholarship Program (ODSP)"
+      },
+      {
+        "id": 87,
+        "title": "Congressional Migrant Workers Scholarship Program (CMWSP)"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      },
+      {
+        "id": 97,
+        "title": "Taguig City L.A.N.I. Leadership and Educators Advancement and"
+      },
+      {
+        "id": 98,
+        "title": "Makati City Premier and Specialized School Scholarship"
+      },
+      {
+        "id": 99,
+        "title": "University of Makati Special Institutional Scholarship"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      },
+      {
+        "id": 104,
+        "title": "Ateneo Freshman Merit Scholarship (AFMS)"
+      },
+      {
+        "id": 105,
+        "title": "Ateneo Magis Scholarship"
+      },
+      {
+        "id": 106,
+        "title": "St. La Salle Financial Assistance Grant"
+      },
+      {
+        "id": 107,
+        "title": "DLSU Vaugirard Scholarship Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 109,
+        "title": "UST Santo Tomas Academic Scholarship"
+      },
+      {
+        "id": 111,
+        "title": "Regalo Mo, Kinabukasan Ko (RMKK) Scholarship Program (Agency"
+      },
+      {
+        "id": 117,
+        "title": "CHED CoScho"
+      },
+      {
+        "id": 118,
+        "title": "Scholarship Grant Program for Children and Dependents of Sugarcane"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 124,
+        "title": "Education and Livelihood Assistance Program (ELAP)"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "explain",
+    "implementation_note": "process requirement; not hard match v1"
+  },
+  "RC45": {
+    "label": "Health / medical fitness",
+    "description": "Medical fitness/health clearance required.",
+    "count": 23,
+    "scholarship_ids": [
+      3,
+      13,
+      35,
+      52,
+      53,
+      64,
+      65,
+      80,
+      81,
+      82,
+      83,
+      90,
+      91,
+      92,
+      103,
+      108,
+      112,
+      113,
+      120,
+      133,
+      134,
+      135,
+      136
+    ],
+    "scholarships": [
+      {
+        "id": 3,
+        "title": "DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering"
+      },
+      {
+        "id": 13,
+        "title": "Assistance for the Completion of College Education for Superior Students"
+      },
+      {
+        "id": 35,
+        "title": "Marikina City Medical Scholarship Program"
+      },
+      {
+        "id": 52,
+        "title": "NCIP Educational Assistance Program (EAP) – Degree Track"
+      },
+      {
+        "id": 53,
+        "title": "NCIP Merit-Based Scholarship Program (MBSP)"
+      },
+      {
+        "id": 64,
+        "title": "Global Korea Scholarship for Graduate Degrees (GKS-G)"
+      },
+      {
+        "id": 65,
+        "title": "Global Korea Scholarship for Undergraduate Degrees (GKS-U)"
+      },
+      {
+        "id": 80,
+        "title": "Japanese Government (MEXT) Scholarship – Research Student"
+      },
+      {
+        "id": 81,
+        "title": "Japanese Government (MEXT) Scholarship – Undergraduate Student"
+      },
+      {
+        "id": 82,
+        "title": "Japanese Government (MEXT) Scholarship – Specialized Training College"
+      },
+      {
+        "id": 83,
+        "title": "Japanese Government (MEXT) Scholarship – College of Technology"
+      },
+      {
+        "id": 90,
+        "title": "Fulbright-Philippine Space Agency (PhilSA) Foreign Student Program in"
+      },
+      {
+        "id": 91,
+        "title": "Chevening Scholarship"
+      },
+      {
+        "id": 92,
+        "title": "Pasig City Sports Scholarship Program"
+      },
+      {
+        "id": 103,
+        "title": "Medical and Law Education Assistance Program"
+      },
+      {
+        "id": 108,
+        "title": "UST San Lorenzo Ruiz Student Assistance Scholarship"
+      },
+      {
+        "id": 112,
+        "title": "Training for Work Scholarship Program (TWSP)"
+      },
+      {
+        "id": 113,
+        "title": "Special Training for Employment Program (STEP)"
+      },
+      {
+        "id": 120,
+        "title": "Scholarships for Staff and Instructors' Knowledge Advancement Program"
+      },
+      {
+        "id": 133,
+        "title": "Accelerated Science and Technology Human Resource Development"
+      },
+      {
+        "id": 134,
+        "title": "Engineering Research and Development for Technology (ERDT)"
+      },
+      {
+        "id": 135,
+        "title": "Capacity Building Program in Science and Mathematics Education"
+      },
+      {
+        "id": 136,
+        "title": "Science and Technology Education for Regional Development (STRAND) -"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "explain",
+    "implementation_note": "process requirement; not hard match v1"
+  },
+  "RC46": {
+    "label": "Voter registration",
+    "description": "Applicant/parent voter registration required.",
+    "count": 6,
+    "scholarship_ids": [
+      27,
+      28,
+      29,
+      36,
+      95,
+      96
+    ],
+    "scholarships": [
+      {
+        "id": 27,
+        "title": "Taguig City Lifeline Assistance for Neighbors In-Need (L.A.N.I.) Premier"
+      },
+      {
+        "id": 28,
+        "title": "Taguig City L.A.N.I. Priority Courses and Skills Training Scholarship"
+      },
+      {
+        "id": 29,
+        "title": "Taguig City L.A.N.I. State Universities and Colleges (SUC) / Local Colleges"
+      },
+      {
+        "id": 36,
+        "title": "Cebu City College Scholarship Program"
+      },
+      {
+        "id": 95,
+        "title": "Taguig City L.A.N.I. Full Scholarship Track"
+      },
+      {
+        "id": 96,
+        "title": "Taguig City L.A.N.I. Basic Scholarship Track"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "policy+explain",
+    "implementation_note": "optional profile flag; LGU-specific"
+  },
+  "RC47": {
+    "label": "Multi-track rule split (merit vs need/other)",
+    "description": "Single catalog program with divergent track rules.",
+    "count": 3,
+    "scholarship_ids": [
+      73,
+      76,
+      88
+    ],
+    "scholarships": [
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      },
+      {
+        "id": 76,
+        "title": "CHED BPMSP"
+      },
+      {
+        "id": 88,
+        "title": "QCSP"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "data+model",
+    "implementation_note": "split catalog rows or track objects under parent"
+  },
+  "RC48": {
+    "label": "Municipal residency duration",
+    "description": "Minimum years of local residency (e.g., 4 years).",
+    "count": 1,
+    "scholarship_ids": [
+      73
+    ],
+    "scholarships": [
+      {
+        "id": 73,
+        "title": "DOST-SEI Undergraduate"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "policy+logic",
+    "implementation_note": "min_residency_years in policy"
+  },
+  "RC49": {
+    "label": "Fisherfolk / farmer occupation affiliation (non-registry or local list)",
+    "description": "Parent fisherfolk/farmer affiliation via local registry/list (not only RSBSA).",
+    "count": 2,
+    "scholarship_ids": [
+      55,
+      100
+    ],
+    "scholarships": [
+      {
+        "id": 55,
+        "title": "Agricultural Competitiveness Enhancement Fund – Grants-in-Aid Higher"
+      },
+      {
+        "id": 100,
+        "title": "NavotaAs Fisherfolk Children Scholarship Track"
+      }
+    ],
+    "current_schema_supported": "partial",
+    "proposed_architecture_supported": "yes",
+    "implementation_needs": "taxonomy+logic",
+    "implementation_note": "fisher/farmer flags + local registry tags"
+  },
+  "RC50": {
+    "label": "Employee/dependent exclusion (sponsor conflict)",
+    "description": "Children of sponsor employees ineligible.",
+    "count": 2,
+    "scholarship_ids": [
+      58,
+      71
+    ],
+    "scholarships": [
+      {
+        "id": 58,
+        "title": "Security Bank Foundation State Universities Scholarship (Scholars for"
+      },
+      {
+        "id": 71,
+        "title": "Security Bank Foundation Scholars for Better Communities Scholarship"
+      }
+    ],
+    "current_schema_supported": "no",
+    "proposed_architecture_supported": "partial",
+    "implementation_needs": "policy+explain",
+    "implementation_note": "sponsor-employee exclusion; rare"
+  }
+}

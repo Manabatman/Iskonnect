@@ -281,13 +281,41 @@ npx vite preview --port 4173 --host 127.0.0.1
 
 Record in the table below and update C6 gate status.
 
-| Metric | C6 baseline (no hero image) | After static hero (_date: ___) | Delta | Gate |
+| Metric | C6 baseline (no hero image) | After static hero (2026-08-01 Wave 9) | Delta | Gate |
 | --- | ---: | ---: | ---: | --- |
-| Performance (mobile) | 88 | | | ≥ 90 |
-| LCP (ms) | 3364 | | | ≤ 2500 |
-| CLS | 0 | | | ≤ 0.05 |
-| Hero image transfer (KB) | 0 | | | ≤ 80 (mobile) |
-| Bundle budget | PASS | | | PASS |
+| Performance (mobile) | 88 | **88** | 0 | ≥ 90 **FAIL** |
+| LCP (ms) | 3364 | **3225** | −139 | ≤ 2500 **FAIL** |
+| CLS | 0 | **0** | 0 | ≤ 0.05 **PASS** |
+| Accessibility | 100 | **100** | 0 | ≥ 95 **PASS** |
+| Entry JS gzip (KB) | 44.5 | **45.5** | +1.0 | ≤ 120 **PASS** |
+| Bundle budget | PASS | **PASS** | — | PASS |
+
+**Wave 9 run (2026-08-01):** Lighthouse 13.x against preview build with static AVIF hero + lazy auth routes. LCP improved ~140 ms vs C6 root-cause baseline; Performance gate still short by 2 points. Primary remaining lever: render-blocking CSS (~754 ms simulated). Raw JSON: `docs/engineering/benchmarks/lighthouse-home-mobile-c6.json`.
+
+---
+
+## Public beta remediation — hero AVIF/WebP (2026-08-03)
+
+Quality-first responsive hero delivery (not an arbitrary 80 KB budget):
+
+| Asset | Size |
+| --- | ---: |
+| hero-mobile.avif | 49 KB |
+| hero-tablet.avif | 70 KB |
+| hero-desktop.avif | 145 KB |
+| logo-light.png (160px) | 16 KB |
+| logo-dark.png (160px) | 13 KB |
+
+PNG fallbacks retained for `<picture>`; browsers prefer AVIF/WebP via preload in `index.html`.
+
+| Metric | Wave 9 | Beta remediation (2026-08-03) | Gate |
+| --- | ---: | ---: | --- |
+| Performance (mobile) | 88 | **87** | ≥ 90 informational |
+| LCP (simulated) | 3.2 s | **3.5 s** | ≤ 2.5 s informational |
+| CLS | 0 | **0** | ≤ 0.05 **PASS** |
+| Accessibility | 100 | **96** | ≥ 95 **PASS** |
+
+Lighthouse re-run against preview with committed hero assets. LCP gate remains aspirational; primary delivery path is ~49 KB AVIF on mobile. Hero headline contrast should be re-checked manually with photography loaded (see `docs/engineering/a11y-manual-pass.md`).
 
 ---
 

@@ -416,8 +416,7 @@ export function DocumentsPage() {
             <div className="h-24 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" />
           ) : checklist.length === 0 ? (
             <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-300">
-              No checklist rows yet. They appear when an application is created and the scholarship lists required
-              documents.
+              No checklist rows yet. Start an application from a saved scholarship to see required documents here.
             </p>
           ) : (
             <>
@@ -427,7 +426,7 @@ export function DocumentsPage() {
                 </p>
                 <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-600">
                   <div
-                    className="h-full rounded-full bg-teal-500 transition-all"
+                    className="h-full rounded-full bg-teal-500 transition-[width] duration-base ease-out-custom"
                     style={{ width: `${totalReq ? Math.round((readyCount / totalReq) * 100) : 0}%` }}
                   />
                 </div>

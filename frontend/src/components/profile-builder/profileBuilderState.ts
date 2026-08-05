@@ -43,11 +43,25 @@ export interface ProfileBuilderState {
   is_uniformed_service_dependent: string;
   is_gsis_dependent: string;
   is_sss_dependent: string;
+  is_medical_frontliner_dependent: string;
+  study_destination_preference: string;
   employment_status: string;
   evening_weekend_program: string;
   athlete_level: string;
   /** "on" when user accepts RA 10173 consent (required to save). */
   privacy_consent: string;
+  /** Optional — unlocks prior-units and entry-path gates */
+  prior_tertiary_units: string;
+  class_rank: string;
+  class_size: string;
+  work_experience_years: string;
+  marital_status: string;
+  parent_salary_grade: string;
+  parent_status: string;
+  is_hei_faculty_or_staff: string;
+  residency_years_in_locality: string;
+  /** Comma-separated conflict scope codes e.g. national_stufap,lgu_grant */
+  active_grant_scopes: string;
 }
 
 export const DRAFT_KEY = "iskonnect_profile_draft";
@@ -82,6 +96,7 @@ export const PRIORITY_GROUP_FIELDS: (keyof ProfileBuilderState)[] = [
   "is_uniformed_service_dependent",
   "is_gsis_dependent",
   "is_sss_dependent",
+  "is_medical_frontliner_dependent",
 ];
 
 /** Not counted toward profile-builder completion % (optional UX fields). */
@@ -115,6 +130,16 @@ export const OPTIONAL_PROFILE_FIELDS = new Set<keyof ProfileBuilderState>([
   "field_of_study_specific",
   "preferred_course_1",
   "needs",
+  "prior_tertiary_units",
+  "class_rank",
+  "class_size",
+  "work_experience_years",
+  "marital_status",
+  "parent_salary_grade",
+  "parent_status",
+  "is_hei_faculty_or_staff",
+  "residency_years_in_locality",
+  "active_grant_scopes",
   ...PRIORITY_GROUP_FIELDS,
 ]);
 
@@ -163,10 +188,22 @@ export const INITIAL_STATE: ProfileBuilderState = {
   is_uniformed_service_dependent: "",
   is_gsis_dependent: "",
   is_sss_dependent: "",
+  is_medical_frontliner_dependent: "",
+  study_destination_preference: "PHILIPPINES_ONLY",
   employment_status: "",
   evening_weekend_program: "",
   athlete_level: "",
   privacy_consent: "",
+  prior_tertiary_units: "",
+  class_rank: "",
+  class_size: "",
+  work_experience_years: "",
+  marital_status: "",
+  parent_salary_grade: "",
+  parent_status: "",
+  is_hei_faculty_or_staff: "",
+  residency_years_in_locality: "",
+  active_grant_scopes: "",
 };
 
 export type ProfileBuilderStepDef = {
@@ -174,6 +211,7 @@ export type ProfileBuilderStepDef = {
   label: string;
   shortLabel: string;
   fields: (keyof ProfileBuilderState)[];
+  unlockHint: string;
 };
 
 export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
@@ -182,30 +220,35 @@ export const PROFILE_BUILDER_STEPS: ProfileBuilderStepDef[] = [
     label: "Personal Info",
     shortLabel: "Personal",
     fields: ["full_name", "email"],
+    unlockHint: "Unlocks saved matches and account sync.",
   },
   {
     id: 2,
     label: "Education",
     shortLabel: "Education",
     fields: [],
+    unlockHint: "Unlocks education-level and GWA filters in match scoring.",
   },
   {
     id: 3,
     label: "Location and Background",
     shortLabel: "Location",
     fields: ["region"],
+    unlockHint: "Unlocks region and income eligibility checks.",
   },
   {
     id: 4,
     label: "Field of Study and Skills",
     shortLabel: "Skills",
     fields: [],
+    unlockHint: "Unlocks course-alignment and field-based matches.",
   },
   {
     id: 5,
     label: "Eligibility and Goals",
     shortLabel: "Goals",
     fields: ["privacy_consent"],
+    unlockHint: "Unlocks priority-group scholarships and full match runs.",
   },
 ];
 

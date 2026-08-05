@@ -3,11 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="ISKONNECT helps Filipino students find scholarships they are actually eligible for — match, plan, and apply with confidence."
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Iskonnect — Scholarship Matching for Filipino Students" />
+    <meta
+      property="og:description"
+      content="Find scholarships you are actually eligible for. Match, plan ahead, and apply with confidence."
+    />
+    <meta property="og:image" content="/images/og-default.png" />
+    <meta property="og:url" content="https://iskonnect.ph/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" as="image" type="image/avif" href="/images/hero/hero-mobile.avif" media="(max-width: 767px)" />
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href="/images/hero/hero-tablet.avif"
+      media="(min-width: 768px) and (max-width: 1023px)"
+    />
+    <link rel="preload" as="image" type="image/avif" href="/images/hero/hero-desktop.avif" media="(min-width: 1024px)" />
     <title>Iskonnect - Scholarship Matching Platform</title>
     <!-- SEC-03: CSP report-only baseline for SPA. Move to enforcing header at hosting layer after violation review. -->
     <meta
       http-equiv="Content-Security-Policy-Report-Only"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://*.ingest.sentry.io; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+      content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://*.ingest.sentry.io; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
     />
     <!-- Apply theme class before React paints (avoids flash). Default = light when no key. -->
     <script>

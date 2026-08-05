@@ -44,7 +44,7 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-email" className={labelClass}>
             Email
           </label>
-          <p className={fieldHintClass}>For sign-in and deadline reminders — we never share it.</p>
+          <p className={fieldHintClass}>For sign-in and deadline reminders.</p>
           <input
             id="pb-email"
             type="email"
@@ -77,7 +77,7 @@ export function PersonalInfoStep({ state, onChange }: StepProps) {
           <label htmlFor="pb-gender" className={labelClass}>
             Gender
           </label>
-          <p className={fieldHintClass}>Some programs are gender-specific — leave blank if unsure.</p>
+          <p className={fieldHintClass}>Some programs are gender-specific.</p>
           <select
             id="pb-gender"
             value={state.gender}

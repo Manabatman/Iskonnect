@@ -65,7 +65,7 @@ export function ForgotPasswordPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
+              className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-3 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
               placeholder="you@example.com"
               autoComplete="email"
             />

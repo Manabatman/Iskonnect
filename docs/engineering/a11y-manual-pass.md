@@ -6,21 +6,38 @@ Template for documenting NVDA and TalkBack passes on five primary student flows.
 
 | Field | Value |
 | --- | --- |
-| Date | _YYYY-MM-DD_ |
-| Tester | _name_ |
-| App version / commit | _hash or tag_ |
-| Build environment | _local / staging / production_ |
+| Date | 2026-08-01 |
+| Tester | _pending — requires human operator_ |
+| App version / commit | `feature/design-system-v1` (Wave 8) |
+| Build environment | local preview + CI e2e |
 
 ## Platform availability
 
 | Platform | Available? | Performed? | Notes |
 | --- | --- | --- | --- |
-| NVDA + Chrome (Windows) | Yes / No | Yes / No | Mandatory when available |
-| TalkBack + Chrome (Android) | Yes / No | Yes / No | Mandatory — target device class |
-| VoiceOver + Safari (macOS) | Yes / No | Yes / No | Perform if available; record gap if not |
-| VoiceOver + Safari (iOS) | Yes / No | Yes / No | Perform if available; record gap if not |
+| NVDA + Chrome (Windows) | Yes | **No** | Wave 8 automated gates shipped; manual pass still required before public launch |
+| TalkBack + Chrome (Android) | Yes | **No** | Requires physical Android device |
+| VoiceOver + Safari (macOS) | Yes | No | Optional |
+| VoiceOver + Safari (iOS) | Yes | No | Optional |
 
-If a mandatory platform was unavailable, record **why** and treat the gap as a finding — not as passed coverage.
+## Automated Wave 8 coverage (CI)
+
+| Gate | Tool | Status |
+| --- | --- | --- |
+| axe-core 12 routes | `e2e/a11y.spec.ts` | **PASS** (no serious/critical) |
+| Contrast token pairs | `src/lib/contrast.test.ts` | **PASS** |
+| 200% / 400% zoom reflow (320px) | `e2e/zoom-reflow.spec.ts` on `/`, `/scholarships/search`, `/dashboard` | **PASS** (no horizontal overflow) |
+| Touch targets | `e2e/touch-targets.spec.ts` (allowlist) | Baseline debt — bell/menu bumped to 44px in Wave 8 |
+| Modal focus trap | `e2e/modal-focus.spec.ts` | Added — runs when match seed data present |
+
+### Zoom verification (automated partial)
+
+| Zoom | Routes tested | Result |
+| --- | --- | --- |
+| 200% | Landing, search, dashboard | **PASS** — no horizontal scroll at 320px viewport |
+| 400% | Landing, search, dashboard | **PASS** — no horizontal scroll at 320px viewport |
+
+Functional zoom testing (all student routes, all controls operable) still requires manual verification per ACCESSIBILITY_SPEC §6.
 
 ---
 
@@ -66,9 +83,9 @@ Each flow: start from a clean session (or documented starting state), complete t
 
 | # | Check | Pass | Notes |
 | --- | --- | --- | --- |
-| 3.1 | Match score and non-guarantee copy are read without extra interaction | ☐ | |
+| 3.1 | Match score and non-guarantee copy are read without extra interaction | ☐ | Modal disclaimer now `text-body-sm` (14px) |
 | 3.2 | “Not calculated yet” vs scored results are distinguishable | ☐ | |
-| 3.3 | Match analysis dialog traps focus; Escape closes; focus returns | ☐ | |
+| 3.3 | Match analysis dialog traps focus; Escape closes; focus returns | ☐ | Automated in `modal-focus.spec.ts` when seeded |
 | 3.4 | Card actions (Apply, Check match) have accessible names | ☐ | |
 | 3.5 | Empty / loading states are announced appropriately | ☐ | |
 
@@ -84,7 +101,7 @@ Each flow: start from a clean session (or documented starting state), complete t
 | --- | --- | --- | --- |
 | 4.1 | Search input behaves as combobox where applicable | ☐ | |
 | 4.2 | Result count live region announces updates (`aria-live="polite"`) | ☐ | |
-| 4.3 | Mobile filter sheet is reachable and dismissible | ☐ | |
+| 4.3 | Mobile filter sheet is reachable and dismissible | ☐ | Filters grouped in `<fieldset>` + `<legend>` (Wave 8) |
 | 4.4 | Pagination controls are labeled | ☐ | |
 | 4.5 | Filter chips / active filters are readable | ☐ | |
 
@@ -133,7 +150,7 @@ Each flow: start from a clean session (or documented starting state), complete t
 
 | ID | Flow | Severity | Description | File / component | Fixed? |
 | --- | --- | --- | --- | --- | --- |
-| SR-001 | | Critical / Serious / Moderate / Minor | | | ☐ |
+| SR-001 | Manual | — | NVDA + TalkBack five-flow pass not yet executed | — | ☐ |
 
 ---
 

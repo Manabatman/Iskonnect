@@ -58,7 +58,7 @@ export function AboutPage() {
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Trust and verification</h2>
             <p className="mt-2 leading-relaxed">
               Our recommendations are based on publicly available eligibility criteria from official sources. ISKONNECT
-              is not affiliated with any scholarship provider. We verify listings before publishing and show when
+              is not affiliated with any scholarship provider. We verify scholarships before publishing and show when
               information was last checked—but providers can change rules without notice.
             </p>
             <p className="mt-3 leading-relaxed font-medium text-slate-800 dark:text-slate-200">

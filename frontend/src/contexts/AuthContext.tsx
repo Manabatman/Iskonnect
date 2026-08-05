@@ -9,6 +9,7 @@ import {
 } from "react";
 import { NetworkError, apiFetch } from "../api/client";
 import { ERROR_COPY } from "../constants/errorCopy";
+import { parseApiDetail } from "../utils/apiErrors";
 import { clearProfileDraft } from "../components/profile-builder/profileBuilderState";
 import {
   installLoginWaterfallDevHelper,
@@ -42,6 +43,20 @@ export interface AuthUser {
   emailVerified: boolean;
   requireEmailVerification: boolean;
   hasProfile: boolean;
+}
+
+export type RegisterResult =
+  | { status: "authenticated"; user: AuthUser; betaNotice?: string }
+  | { status: "verify_required"; message: string; email: string };
+
+/** Thrown when login is blocked until the user verifies their email (HTTP 403). */
+export class EmailVerificationRequiredError extends Error {
+  readonly name = "EmailVerificationRequiredError";
+
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, EmailVerificationRequiredError.prototype);
+  }
 }
 
 type TokenPayload = {
@@ -101,7 +116,7 @@ interface AuthContextType {
   authError: string | null;
   clearAuthError: () => void;
   login: (email: string, password: string) => Promise<AuthUser>;
-  register: (email: string, password: string) => Promise<AuthUser>;
+  register: (email: string, password: string, turnstileToken?: string | null) => Promise<RegisterResult>;
   logout: () => Promise<void>;
   authHeaders: () => Record<string, string>;
 }
@@ -245,7 +260,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.detail ?? "Login failed");
+        const detail = data?.detail ?? "Login failed";
+        if (res.status === 403) {
+          throw new EmailVerificationRequiredError(parseApiDetail(detail, "Please verify your email before signing in."));
+        }
+        if (res.status === 429) {
+          throw new Error(parseApiDetail(detail, "Too many failed sign-in attempts. Please wait and try again."));
+        }
+        throw new Error(parseApiDetail(detail, "Login failed"));
       }
       markLoginFlow("login-response");
       measureLoginFlow("login-request", "submit", "login-response");
@@ -269,19 +291,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const register = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string, turnstileToken?: string | null) => {
+      const body: Record<string, string> = { email, password };
+      if (turnstileToken) body.turnstile_token = turnstileToken;
       const res = await apiFetch("/api/v1/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.detail ?? "Registration failed");
+        throw new Error(parseApiDetail(data?.detail, "Registration failed"));
       }
       const data = await res.json();
       if (!data.access_token || data.user_id == null) {
-        throw new Error(data.detail ?? "Registration could not be completed. Try signing in if you already have an account.");
+        const message = parseApiDetail(
+          data.detail,
+          "Check your email to verify your address before signing in.",
+        );
+        return { status: "verify_required" as const, message, email };
       }
       const authUser = userFromTokenPayload(data);
       setToken(data.access_token);
@@ -296,7 +324,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       lastAuthenticatedUserIdRef.current = data.user_id;
       dispatchAuthUserChanged(prevId, data.user_id);
-      return authUser;
+      const betaNotice =
+        typeof data.detail === "string" && data.detail.includes("Public Beta") ? data.detail : undefined;
+      return { status: "authenticated" as const, user: authUser, betaNotice };
     },
     [setToken, setRefreshToken]
   );

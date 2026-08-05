@@ -20,10 +20,12 @@ describe("OpportunityComingSoonPage", () => {
     expect(screen.getByRole("heading", { name: /search opportunities/i })).toBeInTheDocument();
   });
 
-  it("shows coming soon for unlaunched verticals", () => {
+  it("shows journey page for unlaunched verticals", () => {
     renderAt("/opportunities/internships");
-    expect(screen.getByRole("heading", { name: /internships/i })).toBeInTheDocument();
-    expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /internships on your opportunity journey/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/december 2026 to january 2027/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { level: 2, name: /^your opportunity journey$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /notify me/i })).toBeInTheDocument();
   });
 
   it("shows not found for unknown slugs", () => {

@@ -7,6 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import { NetworkError, apiFetch } from "../api/client";
+import { ERROR_COPY } from "../constants/errorCopy";
+import { parseApiDetail } from "../utils/apiErrors";
 import { useAuth } from "./AuthContext";
 import type { SavedScholarship } from "../types";
 
@@ -63,7 +65,8 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
         setSavedIds(new Set(list.map((s) => s.scholarship_id)));
         setError(null);
       } else {
-        setError(`Could not load saved scholarships (${res.status}).`);
+        const data = await res.json().catch(() => null);
+        setError(parseApiDetail(data?.detail, ERROR_COPY.load_failed.message));
       }
     } catch (e) {
       const msg =
@@ -124,7 +127,7 @@ export function SavedScholarshipsProvider({ children }: { children: ReactNode })
               await fetchSaved();
               return true;
             }
-            throw new Error(data?.detail ?? "Failed to save");
+            throw new Error(parseApiDetail(data?.detail, "Failed to save scholarship"));
           }
           const row = (await res.json()) as SavedScholarship;
           setSavedScholarships((prev) => [row, ...prev.filter((s) => s.scholarship_id !== id)]);

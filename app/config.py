@@ -117,6 +117,22 @@ class Settings(BaseSettings):
         validation_alias="RETENTION_INACTIVE_DAYS",
     )
 
+    # Eligibility migration v1 — per-gate rollout (default off in production)
+    gate_prior_units: bool = Field(default=False, validation_alias="GATE_PRIOR_UNITS")
+    gate_academic_or: bool = Field(default=False, validation_alias="GATE_ACADEMIC_OR")
+    gate_conflicts: bool = Field(default=False, validation_alias="GATE_CONFLICTS")
+    gate_affiliations: bool = Field(default=False, validation_alias="GATE_AFFILIATIONS")
+    gate_age_as_of: bool = Field(default=False, validation_alias="GATE_AGE_AS_OF")
+    gate_work_experience: bool = Field(default=False, validation_alias="GATE_WORK_EXPERIENCE")
+    gate_marital_status: bool = Field(default=False, validation_alias="GATE_MARITAL_STATUS")
+    gate_residency_years: bool = Field(default=False, validation_alias="GATE_RESIDENCY_YEARS")
+    gate_entry_path: bool = Field(default=False, validation_alias="GATE_ENTRY_PATH")
+    gate_parent_salary_grade: bool = Field(default=False, validation_alias="GATE_PARENT_SALARY_GRADE")
+    publishability_rule_validation: bool = Field(
+        default=True,
+        validation_alias="PUBLISHABILITY_RULE_VALIDATION",
+    )
+
     # When false, users can sign in without verifying email (beta testing). SMTP not required in production.
     require_email_verification: bool = Field(
         default=True,
@@ -152,6 +168,10 @@ class Settings(BaseSettings):
         default=5 * 1024 * 1024,
         validation_alias="SCHOLARSHIP_IMAGE_MAX_BYTES",
     )
+
+    # Cloudflare Turnstile (optional — verification skipped when secret unset)
+    turnstile_secret_key: str | None = Field(default=None, validation_alias="TURNSTILE_SECRET_KEY")
+    turnstile_site_key: str | None = Field(default=None, validation_alias="TURNSTILE_SITE_KEY")
 
     @property
     def cors_origins_list(self) -> list[str]:

@@ -35,7 +35,7 @@ export const LIFECYCLE_STATUS_GUIDE: Record<ScholarshipLifecycleStatus, StatusGu
   previous_cycle: {
     label: "Past cycle",
     shortDescription:
-      "This listing reflects a past application period we keep so you can plan for the next opening.",
+      "This scholarship reflects a past application period we keep so you can plan for the next opening.",
     whatToDo: "Use it to learn typical requirements and deadlines—not to apply right now.",
     tone: "neutral",
   },
@@ -56,7 +56,7 @@ export const LIFECYCLE_STATUS_GUIDE: Record<ScholarshipLifecycleStatus, StatusGu
   needs_verification: {
     label: "Needs verification",
     shortDescription:
-      "We are still confirming some details against official sources before treating this listing as fully current.",
+      "We are still confirming some details against official sources before treating this scholarship as fully current.",
     whatToDo: "Use it as a lead, but confirm all requirements and deadlines on the official provider website.",
     tone: "warning",
   },
@@ -165,7 +165,6 @@ export function humanizeVerificationSource(source: string | null | undefined): s
     scraper: "Verified by ISKONNECT team",
     team_verified: "Verified by ISKONNECT team",
     partner: "Partner organization",
-    csv_import: "Imported record",
   };
   const key = source.trim().toLowerCase();
   return mapping[key] ?? source.replaceAll("_", " ");

@@ -55,9 +55,12 @@ class RequirementCheck:
     result: RequirementResult
     verified: RequirementVerification
     evidence: str | None = None
+    changeable: str | None = None  # changeable | situational | fixed
+    blocker_explanation: str | None = None
+    change_hint: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        out: dict[str, Any] = {
             "key": self.key,
             "label": self.label,
             "kind": self.kind,
@@ -65,15 +68,33 @@ class RequirementCheck:
             "verified": self.verified.value,
             "evidence": self.evidence,
         }
+        if self.changeable is not None:
+            out["changeable"] = self.changeable
+        if self.blocker_explanation is not None:
+            out["blocker_explanation"] = self.blocker_explanation
+        if self.change_hint is not None:
+            out["change_hint"] = self.change_hint
+        return out
 
 
 # Requirement keys whose single UNMET failure is achievable (student can close the gap).
 _ACHIEVABLE_UNMET_KEYS = frozenset(
-    {"gwa", "education_level", "year_level", "enrollment_status", "field"}
+    {
+        "gwa",
+        "academic",
+        "education_level",
+        "year_level",
+        "enrollment_status",
+        "field",
+        "prior_units",
+        "work_experience",
+        "residency_years",
+    }
 )
 
 _REQUIREMENT_STUDENT_LABELS: dict[str, str] = {
     "age": "your age",
+    "age_as_of": "your birthdate",
     "education_level": "your education level",
     "region": "your location",
     "school_type": "your school type",
@@ -84,9 +105,97 @@ _REQUIREMENT_STUDENT_LABELS: dict[str, str] = {
     "citizenship": "your citizenship",
     "income": "your household income",
     "gwa": "your GWA",
+    "academic": "your academic credentials",
     "field": "your field of study",
     "members_only": "your priority group membership",
+    "prior_units": "your prior tertiary units",
+    "conflict_scope": "your active grants",
+    "required_affiliation": "your affiliations",
+    "study_destination": "your study destination preference",
+    "work_experience": "your work experience",
+    "marital_status": "your marital status",
+    "parent_salary_grade": "your parent's salary grade",
+    "residency_years": "your years of local residency",
+    "entry_path": "your entry path",
 }
+
+_CHANGEABLE_KEYS = frozenset({"gwa", "education_level", "year_level", "enrollment_status", "income"})
+_SITUATIONAL_KEYS = frozenset({"field", "region", "school", "school_category", "school_type", "members_only"})
+_FIXED_KEYS = frozenset({"citizenship", "age", "data_status"})
+
+_FIXED_CLOSURE = "Based on the program rules, this requirement cannot be changed."
+
+_BLOCKER_EXPLANATIONS: dict[str, str] = {
+    "citizenship": f"Only Filipino citizens are eligible. {_FIXED_CLOSURE}",
+    "age": f"Your age is outside the program's range. {_FIXED_CLOSURE}",
+    "data_status": f"This scholarship's eligibility data needs review before we can confirm a match. {_FIXED_CLOSURE}",
+    "region": f"This program is limited to specific locations. {_FIXED_CLOSURE}",
+}
+
+_CHANGE_HINTS: dict[str, str] = {
+    "gwa": "If you improve your GWA to meet the minimum, you may qualify.",
+    "education_level": "If you reach the required education level, you may qualify.",
+    "year_level": "If you reach the required year level, you may qualify.",
+    "enrollment_status": "If your enrollment status matches the program's requirements, you may qualify.",
+    "income": "If your household income falls within the program's range, you may qualify.",
+    "field": "If your field of study aligns with this program, you may qualify.",
+    "region": "If you study or reside in an eligible location, you may qualify.",
+    "school": "If you attend an eligible school, you may qualify.",
+    "school_category": "If your school category matches this program, you may qualify.",
+    "school_type": "If your school type matches this program, you may qualify.",
+    "members_only": "If you belong to this program's priority group, you may qualify.",
+}
+
+
+def _requirement_changeable_class(key: str) -> str:
+    if key in _FIXED_KEYS:
+        return "fixed"
+    if key in _CHANGEABLE_KEYS:
+        return "changeable"
+    if key in _SITUATIONAL_KEYS:
+        return "situational"
+    return "fixed"
+
+
+def _build_change_hint(req: RequirementCheck, profile: dict, scholarship: dict) -> str | None:
+    if req.result != RequirementResult.UNMET:
+        return None
+    changeable = _requirement_changeable_class(req.key)
+    if changeable == "fixed":
+        return None
+    if req.key == "year_level":
+        eligible = parse_json_list(scholarship.get("eligible_year_levels"))
+        current = profile.get("current_year_level")
+        if eligible and current is not None:
+            try:
+                levels = sorted(int(x) for x in eligible)
+                current_int = int(current)
+                future = [lv for lv in levels if lv > current_int]
+                if future:
+                    nxt = future[0]
+                    ordinals = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th"}
+                    ord_label = ordinals.get(nxt, f"{nxt}th")
+                    return f"If you become an incoming {ord_label}-year student, you may qualify."
+            except (TypeError, ValueError):
+                pass
+    return _CHANGE_HINTS.get(req.key)
+
+
+def _attach_requirement_metadata(
+    requirements: list[RequirementCheck],
+    profile: dict,
+    scholarship: dict,
+) -> None:
+    """Populate changeability and student-facing copy on each requirement check."""
+    for req in requirements:
+        req.changeable = _requirement_changeable_class(req.key)
+        if req.result == RequirementResult.UNMET and req.changeable == "fixed":
+            req.blocker_explanation = _BLOCKER_EXPLANATIONS.get(
+                req.key,
+                f"This requirement is not met based on your profile. {_FIXED_CLOSURE}",
+            )
+        elif req.result == RequirementResult.UNMET:
+            req.change_hint = _build_change_hint(req, profile, scholarship)
 
 
 def derive_provisional_disclosure(requirements: list[RequirementCheck]) -> tuple[list[str], str]:
@@ -633,6 +742,118 @@ def _evaluate_citizenship(profile: dict, sch: dict) -> RequirementCheck:
     )
 
 
+_PH_COUNTRY_ALIASES = frozenset(
+    {"philippines", "ph", "pilipinas", "republic of the philippines", "the philippines"}
+)
+
+
+def _program_countries(sch: dict) -> list[str]:
+    raw = sch.get("countries")
+    if raw is None:
+        return []
+    if isinstance(raw, list):
+        return [str(c).strip() for c in raw if c and str(c).strip()]
+    if isinstance(raw, str):
+        parsed = parse_json_list(raw)
+        if parsed:
+            return [str(c).strip() for c in parsed if c and str(c).strip()]
+        return [c.strip() for c in raw.split(",") if c.strip()]
+    return []
+
+
+def _classify_program_destinations(countries: list[str]) -> str:
+    if not countries:
+        return "none"
+    normalized = [c.strip().lower() for c in countries if c]
+    ph = any(c in _PH_COUNTRY_ALIASES for c in normalized)
+    abroad = any(c not in _PH_COUNTRY_ALIASES for c in normalized)
+    if ph and abroad:
+        return "both_hosts"
+    if abroad:
+        return "abroad_only"
+    return "ph_local"
+
+
+def _evaluate_destination_country(profile: dict, sch: dict) -> RequirementCheck:
+    countries = _program_countries(sch)
+    if not countries:
+        return RequirementCheck(
+            "study_destination",
+            "Study destination",
+            "hard",
+            RequirementResult.NOT_APPLICABLE,
+            RequirementVerification.VERIFIED,
+        )
+    pref = (profile.get("study_destination_preference") or "PHILIPPINES_ONLY").strip().upper()
+    program_class = _classify_program_destinations(countries)
+    dest_label = ", ".join(countries)
+
+    if program_class == "ph_local":
+        if pref == "ABROAD_ONLY":
+            return RequirementCheck(
+                "study_destination",
+                "Study destination (Philippines)",
+                "hard",
+                RequirementResult.UNMET,
+                RequirementVerification.VERIFIED,
+                "Program is for study in the Philippines",
+            )
+        return RequirementCheck(
+            "study_destination",
+            "Study destination (Philippines)",
+            "hard",
+            RequirementResult.MET,
+            RequirementVerification.VERIFIED,
+            "Program is for study in the Philippines",
+        )
+
+    if program_class == "abroad_only":
+        if pref == "PHILIPPINES_ONLY":
+            return RequirementCheck(
+                "study_destination",
+                f"Study destination ({dest_label})",
+                "hard",
+                RequirementResult.UNMET,
+                RequirementVerification.VERIFIED,
+                f"Program is for study in {dest_label}",
+            )
+        return RequirementCheck(
+            "study_destination",
+            f"Study destination ({dest_label})",
+            "hard",
+            RequirementResult.MET,
+            RequirementVerification.VERIFIED,
+            f"Program is for study in {dest_label}",
+        )
+
+    if pref == "PHILIPPINES_ONLY":
+        return RequirementCheck(
+            "study_destination",
+            f"Study destination ({dest_label})",
+            "hard",
+            RequirementResult.UNMET,
+            RequirementVerification.VERIFIED,
+            f"Program includes study abroad ({dest_label})",
+        )
+    if pref == "ABROAD_ONLY":
+        return RequirementCheck(
+            "study_destination",
+            f"Study destination ({dest_label})",
+            "hard",
+            RequirementResult.UNMET,
+            RequirementVerification.VERIFIED,
+            "Program includes study in the Philippines",
+        )
+    return RequirementCheck(
+        "study_destination",
+        f"Study destination ({dest_label})",
+        "hard",
+        RequirementResult.MET,
+        RequirementVerification.VERIFIED,
+        f"Program accepts study in the Philippines or abroad ({dest_label})",
+    )
+
+
 def _evaluate_school_type(profile: dict, sch: dict) -> RequirementCheck:
     eligible = parse_json_list(sch.get("eligible_school_types"))
     if not eligible:
@@ -893,22 +1114,77 @@ def _evaluate_members_only(profile: dict, sch: dict) -> RequirementCheck:
     )
 
 
+# --- Migration v1 gate evaluators (delegates to eligibility_gates) ---
+
+from app.matching import eligibility_gates as _gates
+
+
+def _evaluate_age_as_of(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_age_as_of(profile, sch)
+
+
+def _evaluate_prior_units(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_prior_tertiary_units(profile, sch)
+
+
+def _evaluate_entry_path(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_entry_path(profile, sch)
+
+
+def _evaluate_residency_years(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_min_residency(profile, sch)
+
+
+def _evaluate_required_affiliation(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_required_affiliations(profile, sch)
+
+
+def _evaluate_conflict_scope(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_conflict_scopes(profile, sch)
+
+
+def _evaluate_parent_salary_grade(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_parent_salary_grade(profile, sch)
+
+
+def _evaluate_academic(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_academic(profile, sch)
+
+
+def _evaluate_work_experience(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_work_experience(profile, sch)
+
+
+def _evaluate_marital_status(profile: dict, sch: dict) -> RequirementCheck:
+    return _gates.evaluate_marital_status(profile, sch)
+
+
 # Registry of evaluators keyed by opportunity_type. Default scholarship uses all current evaluators.
 _EVALUATOR_REGISTRY: dict[str, list] = {
     "scholarship": [
         _evaluate_data_status,
         _evaluate_age,
+        _evaluate_age_as_of,
+        _evaluate_prior_units,
+        _evaluate_entry_path,
         _evaluate_education_level,
+        _evaluate_enrollment_status,
+        _evaluate_year_level,
         _evaluate_region,
+        _evaluate_residency_years,
         _evaluate_school_type,
         _evaluate_school,
         _evaluate_school_category,
-        _evaluate_year_level,
-        _evaluate_enrollment_status,
+        _evaluate_required_affiliation,
+        _evaluate_conflict_scope,
         _evaluate_citizenship,
+        _evaluate_destination_country,
         _evaluate_income,
-        _evaluate_gwa,
+        _evaluate_parent_salary_grade,
+        _evaluate_academic,
         _evaluate_field,
+        _evaluate_work_experience,
+        _evaluate_marital_status,
         _evaluate_members_only,
     ],
 }
@@ -985,6 +1261,7 @@ def evaluate_eligibility(profile: dict, scholarship: dict) -> EligibilityResult:
             missing.append(f"{req.label} (not verified — add to profile)")
 
     unverified, provisional_reason = derive_provisional_disclosure(requirements)
+    _attach_requirement_metadata(requirements, profile, scholarship)
 
     return EligibilityResult(
         status=status,

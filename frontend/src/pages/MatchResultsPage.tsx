@@ -1,8 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, lazy, Suspense } from "react";
 import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import type { MatchResult, ProfileCompleteness, OpportunityTimeline, MatchDiagnostics } from "../types";
 import { ScholarshipCardV2 } from "../components/ScholarshipCardV2";
-import { MatchAnalysisModal } from "../components/MatchAnalysisModal";
 import { OpportunityTimelineView } from "../components/OpportunityTimeline";
 import { ProfileQualityCard } from "../components/ProfileQualityCard";
 import { ExcludedScholarshipsPanel } from "../components/ExcludedScholarshipsPanel";
@@ -10,6 +9,11 @@ import { useAuth } from "../contexts/AuthContext";
 import { NetworkError, apiFetch } from "../api/client";
 import { ERROR_COPY, getNetworkErrorMessage, resolveUserErrorMessage } from "../constants/errorCopy";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import { MatchResultsSkeleton, StaggeredRevealGrid } from "../components/match/StaggeredRevealGrid";
+
+const MatchAnalysisModal = lazy(() =>
+  import("../components/MatchAnalysisModal").then((m) => ({ default: m.MatchAnalysisModal }))
+);
 
 function fetchErrorMessage(err: unknown): string {
   if (err instanceof NetworkError) {
@@ -113,21 +117,7 @@ export function MatchResultsPage() {
   const hasExcluded = (diagnostics?.eliminated_scholarships ?? diagnostics?.hard_exclusions ?? []).length > 0;
 
   if (loading) {
-    return (
-      <section className="py-12">
-        <div className="mx-auto max-w-6xl px-4">
-          <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">Loading your match results…</p>
-          <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-12 dark:border-slate-700 dark:bg-slate-800">
-            <div className="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700" />
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-48 rounded-lg bg-slate-100 dark:bg-slate-700" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+    return <MatchResultsSkeleton />;
   }
 
   if (error) {
@@ -156,12 +146,17 @@ export function MatchResultsPage() {
         <ProfileQualityCard completeness={profileCompleteness} className="mb-6" />
 
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-            Your Match Results
-            <span className="ml-2 rounded-full bg-primary-100 px-2.5 py-0.5 text-sm font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
-              {opportunityTimeline?.summary.total_actionable ?? activeMatches.length}
-            </span>
-          </h2>
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+              {activeMatches.length} scholarship{activeMatches.length !== 1 ? "s" : ""} matched your profile
+            </h2>
+            <Link
+              to="/how-matching-works#methodology"
+              className="mt-1 inline-block text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
+            >
+              How we calculate eligibility fit →
+            </Link>
+          </div>
           <div className="flex flex-wrap items-center gap-3">
             {profileId && !runId ? (
               <Link
@@ -183,13 +178,13 @@ export function MatchResultsPage() {
         </div>
 
         {opportunityTimeline ? (
-          <div className="mb-10">
+          <div className="mb-12">
             <OpportunityTimelineView timeline={opportunityTimeline} onShowAnalysis={setAnalysisMatch} compact />
           </div>
         ) : null}
 
         {hasExcluded ? (
-          <ExcludedScholarshipsPanel diagnostics={diagnostics} profileId={profileId} className="mb-10" />
+          <ExcludedScholarshipsPanel diagnostics={diagnostics} profileId={profileId} className="mb-12" />
         ) : null}
 
         {matches.length === 0 && !opportunityTimeline ? (
@@ -231,22 +226,36 @@ export function MatchResultsPage() {
             </button>
           </div>
         ) : matches.length > 0 ? (
-          <div className="space-y-10">
+          <div className="space-y-12">
             {activeMatches.length > 0 ? (
-              <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {activeMatches.map((match) => (
-                  <ErrorBoundary key={match.id}>
-                    <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
-                  </ErrorBoundary>
-                ))}
-              </div>
+              <StaggeredRevealGrid
+                active={!loading}
+                count={activeMatches.length}
+                className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3"
+              >
+                {(index, visible) => {
+                  const match = activeMatches[index];
+                  return (
+                    <div
+                      key={match.id}
+                      className={`transition-opacity duration-base ease-out-custom ${
+                        visible ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      <ErrorBoundary>
+                        <ScholarshipCardV2 scholarship={match} onShowAnalysis={setAnalysisMatch} />
+                      </ErrorBoundary>
+                    </div>
+                  );
+                }}
+              </StaggeredRevealGrid>
             ) : null}
 
             {deadlinePassedMatches.length > 0 ? (
               <div>
                 <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
                   Eligible but deadline passed
-                  <span className="ml-2 rounded-full bg-rose-100 px-2.5 py-0.5 text-sm font-medium text-rose-800 dark:bg-rose-900 dark:text-rose-200">
+                  <span className="ml-2 rounded-full bg-rose-100 px-3 py-0.5 text-sm font-medium text-rose-800 dark:bg-rose-900 dark:text-rose-200">
                     {deadlinePassedMatches.length}
                   </span>
                 </h3>
@@ -266,7 +275,9 @@ export function MatchResultsPage() {
         ) : null}
       </div>
 
-      <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />
+      <Suspense fallback={null}>
+        <MatchAnalysisModal match={analysisMatch} open={analysisMatch != null} onOpenChange={handleAnalysisOpenChange} />
+      </Suspense>
     </section>
   );
 }

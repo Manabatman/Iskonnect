@@ -2,11 +2,11 @@ const _env = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string; PR
 const _apiBase = _env?.VITE_API_BASE_URL?.trim();
 const _isProd = Boolean(_env?.PROD);
 
-if (_isProd && !_apiBase) {
-  throw new Error(
-    "VITE_API_BASE_URL must be set in production builds. Configure it in your hosting provider (e.g. Vercel) environment variables.",
-  );
-}
+/** Set when production build is missing VITE_API_BASE_URL — checked in main.tsx before mount. */
+export const API_CONFIG_ERROR =
+  _isProd && !_apiBase
+    ? "This app is not configured correctly. The server address is missing. Please contact support or try again later."
+    : null;
 
 export const API_BASE_URL = _apiBase ?? "http://localhost:8000";
 if (!_apiBase && typeof console !== "undefined") {

@@ -209,13 +209,45 @@ def _status_priority_order(today: date | None = None):
     )
 
 
-def _apply_search_ordering(query, today: date | None = None):
+def _apply_search_ordering(query, sort: str = "relevance", today: date | None = None):
+    """Apply browse sort. Unknown values fall back to relevance."""
     today = today or date.today()
-    priority = _status_priority_order(today)
+    sort_key = (sort or "relevance").strip().lower()
+    if sort_key not in ("relevance", "deadline", "title", "verified"):
+        sort_key = "relevance"
+
     deadline_sort = case(
         (models.Scholarship.application_deadline.is_(None), 1),
         else_=0,
     )
+
+    if sort_key == "deadline":
+        return query.order_by(
+            deadline_sort.asc(),
+            models.Scholarship.application_deadline.asc(),
+            models.Scholarship.title.asc(),
+            models.Scholarship.id.asc(),
+        )
+
+    if sort_key == "title":
+        return query.order_by(
+            models.Scholarship.title.asc(),
+            models.Scholarship.id.asc(),
+        )
+
+    if sort_key == "verified":
+        verified_sort = case(
+            (models.Scholarship.last_verified_at.is_(None), 1),
+            else_=0,
+        )
+        return query.order_by(
+            verified_sort.asc(),
+            models.Scholarship.last_verified_at.desc(),
+            models.Scholarship.title.asc(),
+            models.Scholarship.id.asc(),
+        )
+
+    priority = _status_priority_order(today)
     return query.order_by(
         priority.asc(),
         deadline_sort.asc(),
@@ -299,6 +331,7 @@ def search_scholarships(
     timing: str = "",
     life_stage: str = "",
     include_archived: bool = False,
+    sort: str = "relevance",
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -307,6 +340,7 @@ def search_scholarships(
     Search scholarships with optional filters and pagination.
     Does not run the matching algorithm - browse-only.
     Use ``timing=closed`` or ``include_archived`` for lifecycle-specific views.
+    ``sort`` may be relevance (default), deadline, title, or verified.
     """
     timing_hdr = ServerTiming()
     logger.info(
@@ -380,7 +414,7 @@ def search_scholarships(
                 )
             )
 
-        q = _apply_search_ordering(q)
+        q = _apply_search_ordering(q, sort=sort)
 
     with timing_hdr.measure("count"):
         total = q.count()
@@ -414,6 +448,7 @@ def search_scholarships_semantic(
     timing: str = "",
     life_stage: str = "",
     include_archived: bool = False,
+    sort: str = "relevance",
     page: int = 1,
     limit: int = 20,
     db: Annotated[Session, Depends(get_db)] = None,
@@ -483,7 +518,7 @@ def search_scholarships_semantic(
             )
         )
 
-    q = _apply_search_ordering(q)
+    q = _apply_search_ordering(q, sort=sort)
     total = q.count()
     scholarships = q.offset(offset).limit(limit).all()
     results = [_public_scholarship_payload(s) for s in scholarships]

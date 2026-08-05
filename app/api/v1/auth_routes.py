@@ -28,10 +28,13 @@ from app.config import settings
 from app.db import get_db
 from app.limiter import limiter
 from app import models
+from app.utils.client_ip import get_client_ip
 from app.utils.email import send_email_verification_email, send_password_reset_email
 from app.utils.email_abuse import can_send_transactional_email, record_transactional_email_sent
 from app.utils.email_validation import validate_email_format
+from app.utils.login_lockout import clear_failed_logins, is_login_locked, record_failed_login
 from app.utils.server_timing import ServerTiming
+from app.utils.turnstile import require_turnstile_or_400
 from app.utils.timezone import utc_now_naive
 
 router = APIRouter()
@@ -41,6 +44,7 @@ logger = logging.getLogger(__name__)
 class RegisterRequest(BaseModel):
     email: EmailStr
     password: str
+    turnstile_token: str | None = None
 
     @field_validator("email")
     @classmethod
@@ -193,6 +197,8 @@ def register(
     db: Session = Depends(get_db),
 ):
     """Register a new user. Returns tokens for new accounts; generic 200 if email already exists."""
+    client_ip = get_client_ip(request)
+    require_turnstile_or_400(register_req.turnstile_token, client_ip)
     existing = db.query(models.User).filter(models.User.email == register_req.email).first()
     if existing:
         logger.warning("auth_register_failed user_hash=%s reason=already_registered", hash(register_req.email) % 10_000)
@@ -226,7 +232,8 @@ def register(
     tokens = _tokens_for_user(db, user)
     logger.info("auth_register_ok user_id=%s", user.id)
     register_detail = (
-        "Account created. You can sign in now."
+        "Welcome to the ISKONNECT Public Beta! Your account is ready. Email verification is temporarily "
+        "disabled while we validate the platform — please register with a valid email address."
         if auto_verify
         else "Account created. Check your email to verify your address."
     )
@@ -253,17 +260,26 @@ def login(
 ):
     """Login with email and password."""
     timing = ServerTiming()
+    if is_login_locked(req.email):
+        logger.warning("auth_login_failed user_hash=%s reason=locked", hash(req.email) % 10_000)
+        timing.attach(response)
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many failed sign-in attempts. Please wait 15 minutes and try again.",
+        )
     with timing.measure("db_lookup"):
         user = db.query(models.User).filter(models.User.email == req.email).first()
     with timing.measure("bcrypt", desc="password verify"):
         password_ok = user is not None and verify_password(req.password, user.password_hash)
     if not user or not password_ok:
+        record_failed_login(req.email)
         logger.warning("auth_login_failed user_hash=%s reason=invalid_credentials", hash(req.email) % 10_000)
         timing.attach(response)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
+    clear_failed_logins(req.email)
     if settings.require_email_verification and not bool(getattr(user, "email_verified", False)):
         logger.info("auth_login_blocked_unverified user_id=%s", user.id)
         timing.attach(response)

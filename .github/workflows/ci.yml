@@ -107,7 +107,7 @@ jobs:
           npm test -- --coverage
           npm run audit:dev-strings
           npm run audit:verification-copy
-          npm run audit:design-tokens
+          SPACING_LINT=enforced npm run audit:design-tokens
           npm run build
           npm run audit:bundle-budget
 
@@ -189,7 +189,7 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
           PLAYWRIGHT_SKIP_WEBSERVER: "1"
-        run: npx playwright test e2e/smoke.spec.ts e2e/a11y.spec.ts --project=desktop-chrome
+        run: npx playwright test e2e/smoke.spec.ts e2e/a11y.spec.ts e2e/zoom-reflow.spec.ts --project=desktop-chrome
 
       - name: Touch-target guard (MOB-01)
         env:

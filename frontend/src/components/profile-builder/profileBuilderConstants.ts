@@ -4,6 +4,8 @@ export {
   ENROLLMENT_STATUSES,
   EQUITY_FLAG_MAP,
   GWA_SCALES,
+  MARITAL_STATUSES,
+  ACTIVE_GRANT_SCOPES,
   SCHOOL_TYPES,
   YEAR_LEVELS,
 } from "../../constants/profileOptions";

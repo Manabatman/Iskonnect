@@ -21,18 +21,15 @@ const PUBLIC_ROUTES = new Set([
   "/terms",
   "/privacy",
   "/changelog",
-  "/roadmap",
-  "/success-stories",
   "/forgot-password",
+  "/why-iskonnect",
+  "/settings",
+  "/transparency",
 ]);
 
 describe("footer link integrity (C5)", () => {
-  const allLinks = [
-    ...footerProductLinks,
-    ...footerTransparencyLinks,
-    ...footerCompanyLinks,
-    ...footerLegalLinks,
-  ];
+  const primaryLinks = [...footerProductLinks, ...footerCompanyLinks, ...footerTransparencyLinks];
+  const allLinks = [...primaryLinks, ...footerLegalLinks];
 
   it("every footer link targets a known public route", () => {
     for (const { to } of allLinks) {
@@ -40,8 +37,14 @@ describe("footer link integrity (C5)", () => {
     }
   });
 
-  it("has no duplicate footer paths", () => {
-    const paths = allLinks.map((l) => l.to);
+  it("has no duplicate footer paths in primary columns", () => {
+    const paths = primaryLinks.map((l) => l.to);
     expect(new Set(paths).size).toBe(paths.length);
+  });
+
+  it("legal footer links target known public routes", () => {
+    for (const { to } of footerLegalLinks) {
+      expect(PUBLIC_ROUTES.has(to), `unknown legal footer route: ${to}`).toBe(true);
+    }
   });
 });

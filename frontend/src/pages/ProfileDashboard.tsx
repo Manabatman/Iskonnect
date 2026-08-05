@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { parseApiDetail } from "../utils/apiErrors";
 import { AUTH_USER_CHANGED_EVENT, useAuth } from "../contexts/AuthContext";
 import { useSavedScholarships } from "../contexts/SavedScholarshipsContext";
 import type { MatchResult, MatchRunSummary, ProfileCompleteness, StudentProfileResponse } from "../types";
@@ -10,7 +11,6 @@ import { formatDateMedium, formatDateTime, formatRelativeManila, startOfTodayMan
 import { formatDeadlineDisplay } from "../utils/formatDeadline";
 import { markLoginFlow, measureLoginFlow } from "../utils/perfTiming";
 import { MatchScoreRing } from "../components/MatchScoreRing";
-import { MatchConfidenceNote } from "../components/MatchConfidenceNote";
 import { QualificationStatusBadge } from "../components/QualificationStatusBadge";
 import { LifecycleStatusBadge } from "../components/LifecycleStatusBadge";
 
@@ -70,6 +70,9 @@ export function ProfileDashboard() {
   const [showCompletionBanner, setShowCompletionBanner] = useState(
     () => Boolean((location.state as { justCompletedProfile?: boolean } | null)?.justCompletedProfile),
   );
+  const [betaNotice] = useState(
+    () => (location.state as { betaNotice?: string } | null)?.betaNotice ?? null,
+  );
   const autoMatchTriggeredRef = useRef(false);
   const [profile, setProfile] = useState<StudentProfileResponse | null>(null);
   const [runs, setRuns] = useState<MatchRunSummary[]>([]);
@@ -83,7 +86,8 @@ export function ProfileDashboard() {
   const { toggleSave, savedScholarships, savedListLoading: savedLoading } = useSavedScholarships();
 
   useEffect(() => {
-    if ((location.state as { justCompletedProfile?: boolean } | null)?.justCompletedProfile) {
+    const state = location.state as { justCompletedProfile?: boolean; betaNotice?: string } | null;
+    if (state?.justCompletedProfile || state?.betaNotice) {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.pathname, location.state, navigate]);
@@ -222,7 +226,7 @@ export function ProfileDashboard() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.detail ?? "Failed to run matches");
+        throw new Error(parseApiDetail(data?.detail, "Failed to run matches"));
       }
       const data = await res.json();
       setRuns((prev) => [
@@ -357,6 +361,7 @@ export function ProfileDashboard() {
       : 0);
   const profileNeedsWork = qualityPercent < 100;
   const topThree = latestMatches.slice(0, 3);
+  const nextDeadline = upcomingDeadlines[0] ?? null;
 
   return (
     <section className="py-8 sm:py-12">
@@ -369,12 +374,20 @@ export function ProfileDashboard() {
             {error}
           </div>
         )}
+        {betaNotice && (
+          <div
+            className="mb-6 rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-900 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-100"
+            role="status"
+          >
+            {betaNotice}
+          </div>
+        )}
         {user && user.requireEmailVerification && !user.emailVerified && (
           <div
             className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
             role="status"
           >
-            Please verify your email — check your inbox for the verification link from Iskonnect.
+            Please verify your email. Check your inbox for the verification link from Iskonnect.
             {" "}
             <button
               type="button"
@@ -409,6 +422,27 @@ export function ProfileDashboard() {
                       ? "Run a match to see scholarships you qualify for, or browse the catalog."
                       : "Complete your profile to unlock personalized matching."}
                   </p>
+                  {nextDeadline?.scholarship ? (
+                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/90 px-4 py-3 dark:border-amber-900 dark:bg-amber-950/30">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-amber-900 dark:text-amber-200">
+                        Next deadline
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                        {nextDeadline.scholarship.title}
+                      </p>
+                      <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">
+                        {nextDeadline.scholarship.application_deadline
+                          ? formatDateMedium(nextDeadline.scholarship.application_deadline)
+                          : "Date not listed"}
+                      </p>
+                      <Link
+                        to={`/scholarship/${nextDeadline.scholarship_id}`}
+                        className="focus-visible-ring mt-2 inline-flex text-sm font-semibold text-primary-700 hover:underline dark:text-primary-400"
+                      >
+                        View scholarship
+                      </Link>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:items-stretch sm:text-right">
                   {!profile ? (
@@ -430,14 +464,14 @@ export function ProfileDashboard() {
                   )}
                   <Link
                     to="/scholarships/search"
-                    className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                    className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                   >
                     Browse opportunities
                   </Link>
                   {profile?.id ? (
                     <Link
                       to={`/planner/${profile.id}`}
-                      className="inline-flex items-center justify-center rounded-2xl border border-primary-200 bg-primary-50 px-5 py-2.5 text-sm font-semibold text-primary-800 transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-200 dark:hover:bg-primary-900/50"
+                      className="inline-flex items-center justify-center rounded-2xl border border-primary-200 bg-primary-50 px-5 py-3 text-sm font-semibold text-primary-800 transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-200 dark:hover:bg-primary-900/50"
                     >
                       Opportunity planner
                     </Link>
@@ -459,7 +493,7 @@ export function ProfileDashboard() {
               {profileNeedsWork ? (
                 <Link
                   to="/profile-builder"
-                  className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                  className="glass flex flex-col rounded-2xl p-4 transition duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3"
                 >
                   <span className="text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">
                     Profile
@@ -470,7 +504,7 @@ export function ProfileDashboard() {
               ) : null}
               <Link
                 to="/applications"
-                className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="glass flex flex-col rounded-2xl p-4 transition duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3"
               >
                 <span className="text-xs font-semibold uppercase tracking-wide text-accent-700 dark:text-accent-400">
                   Applications
@@ -482,7 +516,7 @@ export function ProfileDashboard() {
               </Link>
               <Link
                 to="/documents"
-                className="glass flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="glass flex flex-col rounded-2xl p-4 transition duration-base ease-out-custom motion-safe:hover:-translate-y-px hover:shadow-3"
               >
                 <span className="text-xs font-semibold uppercase tracking-wide text-teal-700 dark:text-teal-400">
                   Documents
@@ -576,9 +610,8 @@ export function ProfileDashboard() {
                               <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{m.provider}</p>
                             </div>
                           </div>
-                          <div className="flex shrink-0 flex-col items-center gap-1">
+                          <div className="flex shrink-0 flex-col items-center">
                             <MatchScoreRing score={score} size={isTop ? 58 : 52} />
-                            <MatchConfidenceNote variant="compact" className="max-w-[7rem] text-center" />
                           </div>
                         </div>
                         {deadlineLine ? (
@@ -598,7 +631,7 @@ export function ProfileDashboard() {
                           to={`/scholarship/${m.id}`}
                           className="mt-3 inline-flex text-sm font-semibold text-primary-600 hover:underline dark:text-primary-400"
                         >
-                          View details →
+                          View details
                         </Link>
                       </div>
                     );
@@ -636,7 +669,7 @@ export function ProfileDashboard() {
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div className="min-w-0 flex-1 space-y-2">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="inline-flex rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
+                                <span className="inline-flex rounded-full bg-primary-100 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
                                   {typeLabel}
                                 </span>
                                 {sch ? (
@@ -679,7 +712,7 @@ export function ProfileDashboard() {
                                 </p>
                               ) : null}
                             </div>
-                            <div className="flex shrink-0 gap-2 opacity-100 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
+                            <div className="flex shrink-0 gap-2 opacity-100 sm:opacity-0 sm:transition-opacity sm:duration-fast sm:group-hover:opacity-100">
                               <Link
                                 to={`/scholarship/${item.scholarship_id}`}
                                 className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
@@ -790,7 +823,7 @@ export function ProfileDashboard() {
                             <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:items-end">
                               <Link
                                 to={`/match/${run.profile_id}?run=${run.id}`}
-                                className="inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-center text-sm font-bold text-white shadow hover:bg-primary-700"
+                                className="inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-3 text-center text-sm font-bold text-white shadow hover:bg-primary-700"
                               >
                                 View results
                               </Link>

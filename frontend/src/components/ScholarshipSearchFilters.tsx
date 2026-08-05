@@ -33,6 +33,8 @@ interface ScholarshipFilterOptions {
 interface ScholarshipSearchFiltersProps {
   filters: ScholarshipSearchFilters;
   onChange: (filters: ScholarshipSearchFilters) => void;
+  /** drawer = mobile sheet trigger; sidebar = desktop aside panel (D-11). */
+  variant?: "drawer" | "sidebar";
 }
 
 const TIMING_LABELS: Record<string, string> = {
@@ -73,6 +75,10 @@ export function mostRestrictiveFilterHint(filters: ScholarshipSearchFilters): st
   return null;
 }
 
+export function countActiveFilters(filters: ScholarshipSearchFilters): number {
+  return describeActiveFilters(filters).length;
+}
+
 export function describeActiveFilters(filters: ScholarshipSearchFilters): string[] {
   const labels: string[] = [];
   if (filters.region) labels.push(`Region: ${filters.region}`);
@@ -90,7 +96,11 @@ export function describeActiveFilters(filters: ScholarshipSearchFilters): string
   return labels;
 }
 
-export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearchFiltersProps) {
+export function ScholarshipSearchFilters({
+  filters,
+  onChange,
+  variant = "sidebar",
+}: ScholarshipSearchFiltersProps) {
   const [filterOptions, setFilterOptions] = useState<ScholarshipFilterOptions>({
     providers: [],
     education_levels: [],
@@ -179,9 +189,17 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
   const inputClassName =
     "mt-1 w-full min-h-[44px] rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-3 text-base sm:text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:ring-2 focus:ring-primary-200 focus:border-primary-500";
 
+  const activeFilterCount = countActiveFilters(filters);
+
+  const fieldsetClass = "space-y-4 border-0 p-0 min-w-0";
+  const legendClass =
+    "mb-1 block w-full text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
+
   const filterFields = (
-    <div className="space-y-4">
-        <div>
+    <div className="space-y-6">
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Location</legend>
+          <div>
           <label htmlFor="filter-region" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Region
           </label>
@@ -199,7 +217,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             ))}
           </select>
         </div>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Eligibility</legend>
         <div>
           <label htmlFor="filter-education" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Education Level
@@ -267,7 +288,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
           />
           Include discontinued programs
         </label>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Study & school</legend>
         <div>
           <label htmlFor="filter-field" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Study area
@@ -295,7 +319,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             className={inputClassName}
           />
         </div>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Financial</legend>
         <div>
           <label htmlFor="filter-income" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Max Household Income
@@ -320,7 +347,10 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             ))}
           </select>
         </div>
+        </fieldset>
 
+        <fieldset className={fieldsetClass}>
+          <legend className={legendClass}>Provider</legend>
         <div className="relative">
           <label htmlFor="filter-provider" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Scholarship Provider
@@ -337,9 +367,14 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             }}
             placeholder="e.g. DOST, CHED"
             className={inputClassName}
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={providerOpen}
+            aria-controls="filter-provider-listbox"
           />
           {providerOpen && providerSuggestions.length > 0 && (
             <ul
+              id="filter-provider-listbox"
               className="absolute z-50 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 py-1 shadow-lg"
               role="listbox"
             >
@@ -361,6 +396,7 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
             </ul>
           )}
         </div>
+        </fieldset>
       </div>
   );
 
@@ -375,34 +411,37 @@ export function ScholarshipSearchFilters({ filters, onChange }: ScholarshipSearc
     </div>
   );
 
+  if (variant === "drawer") {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button type="button" variant="outline" className="min-h-[44px] w-full gap-2 sm:w-auto">
+            <SlidersHorizontal className="h-4 w-4" aria-hidden />
+            Filters
+            {activeFilterCount > 0 ? (
+              <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                {activeFilterCount}
+              </span>
+            ) : null}
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-xl">
+          <SheetHeader>
+            <SheetTitle>Search filters</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4">
+            {filterHeader}
+            {filterFields}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
   return (
-    <>
-      <div className="mb-4 lg:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button type="button" variant="outline" className="w-full gap-2">
-              <SlidersHorizontal className="h-4 w-4" aria-hidden />
-              Filters
-              {hasActiveFilters ? (
-                <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">Active</span>
-              ) : null}
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-xl">
-            <SheetHeader>
-              <SheetTitle>Search filters</SheetTitle>
-            </SheetHeader>
-            <div className="mt-4">
-              {filterHeader}
-              {filterFields}
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
-      <aside className="hidden rounded-xl border border-border bg-card p-4 shadow-2 lg:block">
-        {filterHeader}
-        {filterFields}
-      </aside>
-    </>
+    <aside className="rounded-xl border border-border bg-card p-4 shadow-2">
+      {filterHeader}
+      {filterFields}
+    </aside>
   );
 }

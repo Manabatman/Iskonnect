@@ -5,7 +5,7 @@ import type { MatchResult } from "../../types";
 import { ScholarshipCardV2 } from "../ScholarshipCardV2";
 import { primaryButtonClass } from "./Section";
 
-const EDUCATION_LEVELS = ["Grade 12", "College", "TVET", "Graduate"];
+const EDUCATION_LEVELS = ["Senior High School", "College", "TVET", "Graduate"];
 const REGIONS = ["NCR", "Region IV-A - CALABARZON", "Region III - Central Luzon", "Region VII - Central Visayas"];
 const FIELDS = ["Engineering", "Education", "Business", "Health", "Agriculture"];
 
@@ -42,18 +42,14 @@ export function MiniProfileWizard() {
   }, [educationLevel, region, field]);
 
   return (
-    <section
-      id="wizard"
-      data-testid="landing-wizard"
-      className="border-b border-slate-200 bg-slate-50 py-12 dark:border-slate-800 dark:bg-slate-900/50 sm:py-16"
-    >
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+    <section className="border-b border-slate-200 bg-slate-50 py-16 dark:border-slate-800 dark:bg-slate-900/50" data-testid="landing-wizard">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
             Preview scholarship matching
           </h2>
           <p className="mt-2 text-slate-600 dark:text-slate-400">
-            See how ISKONNECT evaluates eligibility from our verified scholarship database—create a free account
+            See how ISKONNECT evaluates eligibility from our verified scholarship database. Create a free account
             for full personalized matching.
           </p>
         </div>
@@ -118,7 +114,7 @@ export function MiniProfileWizard() {
           <div className="mt-10">
             {matches.length === 0 ? (
               <p className="text-center text-slate-600 dark:text-slate-400">
-                No matches yet — complete a full profile for better results.
+                No matches yet. Complete a full profile for better results.
               </p>
             ) : (
               <div className="grid gap-6 md:grid-cols-2">

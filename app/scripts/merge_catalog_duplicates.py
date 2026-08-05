@@ -31,13 +31,14 @@ from app.utils.scholarship_versioning import diff_snapshots, record_scholarship_
 
 logger = logging.getLogger(__name__)
 
-# canonical_id -> duplicate_id
+# canonical_id -> duplicate_id (archive duplicate, keep canonical)
 MERGE_PAIRS: dict[int, int] = {
-    1: 114,   # CHED Merit
-    10: 115,  # SM Foundation
-    61: 116,  # Megaworld
-    75: 126,  # Aboitiz
-    124: 110,  # OWWA ELAP (keep 124)
+    1: 129,   # CHED Merit / CMSP
+    10: 131,  # SM Foundation
+    61: 132,  # Megaworld
+    75: 128,  # Aboitiz Brights / Future Leaders
+    124: 127,  # OWWA ELAP
+    54: 125,  # CHED MSRS / DOH duplicate
 }
 
 UMBRELLA_UPDATES: dict[int, dict] = {

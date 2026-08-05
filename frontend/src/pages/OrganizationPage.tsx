@@ -43,7 +43,7 @@ export function OrganizationPage() {
     return (
       <section className="py-12">
         <div className="mx-auto max-w-3xl px-4">
-          <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-10 dark:border-slate-700 dark:bg-slate-800">
+          <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-12 dark:border-slate-700 dark:bg-slate-800">
             <div className="h-8 w-2/3 rounded bg-slate-200 dark:bg-slate-700" />
             <div className="mt-4 h-4 w-full rounded bg-slate-100 dark:bg-slate-700" />
           </div>
@@ -137,7 +137,7 @@ export function OrganizationPage() {
             <Link to="/scholarships/search" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
               scholarship search
             </Link>
-            . Counts reflect active listings on ISKONNECT, not guaranteed availability on the provider&apos;s site.
+            . Counts reflect active scholarships on ISKONNECT, not guaranteed availability on the provider&apos;s site.
           </p>
         </article>
 

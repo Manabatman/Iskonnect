@@ -8,7 +8,7 @@ const factors = [
     name: "Academic Performance",
     weight: 30,
     description: "How your grades compare to the scholarship's minimum GWA requirement.",
-    tip: "Keep your GWA updated — even a decimal point can change your score.",
+    tip: "Keep your GWA updated. Even a decimal point can change your score.",
   },
   {
     name: "Financial Need",
@@ -21,14 +21,14 @@ const factors = [
     name: "Field of Study",
     weight: 22,
     description: "Whether your intended course matches what the scholarship is designed to fund.",
-    tip: "Add all your possible course interests — not just your first choice.",
+    tip: "Add all your possible course interests, not just your first choice.",
   },
   {
     name: "Location Match",
     weight: 10,
     description:
       "Whether your region, city, or province fits the scholarship's geographic rules (when the program has location limits).",
-    tip: "Be as specific as possible — city-level data scores higher than region-level.",
+    tip: "Be as specific as possible. City-level data scores higher than region-level.",
   },
   {
     name: "Priority Group",
@@ -49,7 +49,7 @@ const factorRationale: Record<string, { why: string; examples: string }> = {
     examples: "4Ps-linked grants, TESDA livelihood scholarships, LGU educational assistance for indigent students.",
   },
   "Field of Study": {
-    why: "Scholarships often target specific courses—STEM, education, agriculture, or health sciences. Aligning your declared field with program intent helps you find programs you can actually use.",
+    why: "Scholarships often target specific courses: STEM, education, agriculture, or health sciences. Aligning your declared field with program intent helps you find programs you can actually use.",
     examples: "DOST-SEI priority S&T courses, CHED priority programs, industry-sponsored engineering scholarships.",
   },
   "Location Match": {
@@ -57,7 +57,7 @@ const factorRationale: Record<string, { why: string; examples: string }> = {
     examples: "Provincial LGU grants, regional CHED allocations, city-specific university scholarships.",
   },
   "Priority Group": {
-    why: "Philippine scholarship policy often recognizes equity groups—PWD, indigenous peoples, solo parents, 4Ps beneficiaries, and others. This factor reflects documented priority-group eligibility without overriding hard rules.",
+    why: "Philippine scholarship policy often recognizes equity groups: PWD, indigenous peoples, solo parents, 4Ps beneficiaries, and others. This factor reflects documented priority-group eligibility without overriding hard rules.",
     examples: "RA 7277 (PWD), IP education programs, solo-parent educational assistance, 4Ps-aligned grants.",
   },
 };
@@ -66,7 +66,7 @@ const whyReasons = [
   {
     title: "They never heard about it",
     problem:
-      "Scholarships are announced on different government portals, university sites, LGU Facebook pages, and foundation newsletters—often with no single place to search.",
+      "Scholarships are announced on different government portals, university sites, LGU Facebook pages, and foundation newsletters, often with no single place to search.",
     solution:
       "ISKONNECT brings programs from CHED, DOST-SEI, TESDA, LGUs, universities, and private foundations into one catalog you can browse and match against your profile.",
   },
@@ -74,14 +74,14 @@ const whyReasons = [
     title: "They missed the deadline",
     problem: "Application windows can be short. By the time a student finds a program, the deadline may already have passed.",
     solution:
-      "Your scholarship plan shows what's open now, what's opening soon, and what's expected to reopen—so you can prepare before the rush.",
+      "Your scholarship plan shows what's open now, what's opening soon, and what's expected to reopen, so you can prepare before the rush.",
   },
   {
     title: "They weren't eligible yet",
     problem:
       "Many programs require a specific grade level, GWA, or course. Students often discover a scholarship only after they've already missed the window to qualify.",
     solution:
-      "ISKONNECT flags future eligibility—scholarships you might qualify for later—so you can plan ahead instead of learning about them too late.",
+      "ISKONNECT flags future eligibility: scholarships you might qualify for later, so you can plan ahead instead of learning about them too late.",
   },
   {
     title: "They didn't have time to prepare",
@@ -93,7 +93,7 @@ const whyReasons = [
     title: "The information was confusing or outdated",
     problem: "Deadlines change, links break, and requirements differ between cycles. It's hard to know what still applies.",
     solution:
-      "We verify listings against official sources, show when information was last checked, and link you to the provider's site so you can confirm details yourself.",
+      "We verify scholarships against official sources, show when information was last checked, and link you to the provider's site so you can confirm details yourself.",
   },
 ] as const;
 
@@ -144,7 +144,7 @@ function WeightBar({ widthPercent }: { widthPercent: number }) {
   return (
     <div ref={ref} className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
       <div
-        className="h-full rounded-full bg-primary-500 transition-[width] duration-700 ease-out dark:bg-primary-400"
+        className="h-full rounded-full bg-primary-500 transition-[width] duration-reveal ease-out-custom dark:bg-primary-400"
         style={{ width: visible ? `${widthPercent}%` : "0%" }}
       />
     </div>
@@ -162,7 +162,7 @@ export function HowMatchingWorksPage() {
           How ISKONNECT matches you to scholarships
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-          Your match score measures eligibility fit — not your odds of winning. This page explains why ISKONNECT exists,
+          Your match score measures eligibility fit, not your odds of winning. This page explains why ISKONNECT exists,
           how scores are built, and what we cannot see.
         </p>
 
@@ -172,20 +172,20 @@ export function HowMatchingWorksPage() {
               A high match score means strong eligibility fit, not a guarantee of acceptance.
             </strong>{" "}
             Providers may consider interviews, essays, quotas, and other factors ISKONNECT cannot see. Use scores to
-            prioritize where to invest your time — not as a prediction of outcome.
+            prioritize where to invest your time, not as a prediction of outcome.
           </p>
         </div>
 
         <div id="why" className="mt-12 scroll-mt-24 space-y-6">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Why ISKONNECT exists</h2>
           <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            Filipino students deserve a fair shot at scholarships — not just those who already know where to look.
+            Filipino students deserve a fair shot at scholarships, not just those who already know where to look.
             ISKONNECT was built because too many qualified students miss opportunities they could have reached.
           </p>
           <div className="rounded-xl border border-primary-200 bg-primary-50/60 p-5 dark:border-primary-800 dark:bg-primary-950/30">
             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Our mission</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-              Help Filipino students discover scholarships they qualify for — today, soon, or in the future — and give
+              Help Filipino students discover scholarships they qualify for today, soon, or in the future, and give
               them enough time and clarity to apply with confidence.
             </p>
           </div>
@@ -245,7 +245,7 @@ export function HowMatchingWorksPage() {
                 <WeightBar widthPercent={f.weight} />
                 <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{f.description}</p>
                 <p className="mt-2 text-sm text-primary-600 dark:text-primary-400">
-                  <span aria-hidden>→ </span>
+                  <span className="font-medium">Tip: </span>
                   {f.tip}
                 </p>
               </div>
@@ -261,7 +261,7 @@ export function HowMatchingWorksPage() {
             the other weights are scaled so the total still makes sense.
           </p>
           <p className="text-sm leading-relaxed">
-            Document readiness (uploaded vs. required documents) is shown on your scholarship and documents pages — it is{" "}
+            Document readiness (uploaded vs. required documents) is shown on your scholarship and documents pages. It is{" "}
             <strong className="font-semibold">not</strong> part of this match score, so your fit rank reflects program
             rules, not how many files you have uploaded yet.
           </p>
@@ -273,8 +273,8 @@ export function HowMatchingWorksPage() {
             Weights reflect how often each dimension appears as a decisive eligibility rule across Philippine scholarship
             programs. Academic performance and financial need together account for most of the score because they are the
             most common published gates. Field of study and location matter when programs are course- or region-specific.
-            Priority groups receive a smaller but meaningful share because they apply to targeted equity programs — not
-            every listing.
+            Priority groups receive a smaller but meaningful share because they apply to targeted equity programs, not
+            every scholarship.
           </p>
           <div className="mt-6 space-y-4">
             {scoringFactors.map((factor) => {
@@ -286,7 +286,7 @@ export function HowMatchingWorksPage() {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h3 className="font-semibold text-slate-900 dark:text-slate-100">{factor.name}</h3>
-                    <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-semibold text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
+                    <span className="rounded-full bg-primary-100 px-3 py-0.5 text-xs font-semibold text-primary-800 dark:bg-primary-900/50 dark:text-primary-200">
                       {factor.weight}% of score
                     </span>
                   </div>
@@ -308,27 +308,27 @@ export function HowMatchingWorksPage() {
           </div>
         </div>
 
-        <div className="mt-10 space-y-4">
+        <div className="mt-12 space-y-4">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Fairness commitments</h2>
           <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            <li>Hard eligibility rules are applied before scoring — programs you clearly cannot qualify for are filtered out.</li>
+            <li>Hard eligibility rules are applied before scoring. Programs you clearly cannot qualify for are filtered out.</li>
             <li>Merit-only programs do not penalize students for income data; need-based programs weight financial fit appropriately.</li>
             <li>Priority-group scoring reflects published program criteria, not assumptions about your background.</li>
             <li>Scores are explainable: every match shows which factors helped or held you back.</li>
           </ul>
         </div>
 
-        <div className="mt-10 rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/30">
+        <div className="mt-12 rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/30">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Current limitations</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             <li>We cannot see essay quality, interviews, or provider-internal quotas.</li>
             <li>Some scholarships publish incomplete criteria; we flag those as needing verification.</li>
-            <li>Document readiness is tracked separately — it does not change your eligibility fit score.</li>
+            <li>Document readiness is tracked separately. It does not change your eligibility fit score.</li>
             <li>Weights are calibrated for Philippine undergraduate and TVET programs; graduate-specific rules are still expanding.</li>
           </ul>
         </div>
 
-        <div className="mt-10 space-y-4">
+        <div className="mt-12 space-y-4">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Future improvements</h2>
           <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             <li>Community feedback loops to refine weights as we learn which factors students find most useful.</li>
@@ -338,16 +338,16 @@ export function HowMatchingWorksPage() {
           </ul>
         </div>
 
-        <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900">
+        <div className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Why your score might change</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             Scores are recalculated every time you update your profile, when an administrator adjusts program weights for a
-            new cycle, or when new scholarship data is published. This is intentional — it keeps results accurate as your
+            new cycle, or when new scholarship data is published. This is intentional. It keeps results accurate as your
             situation and available programs evolve.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2">
           <Link
             to="/how-we-verify"
             className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-primary-300 dark:border-slate-700 dark:bg-slate-800/80"

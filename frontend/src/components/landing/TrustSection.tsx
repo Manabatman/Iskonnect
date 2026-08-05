@@ -6,11 +6,11 @@ import { Section, SectionHeader, cardClass, IconTile } from "./Section";
 
 export function TrustSection() {
   return (
-    <Section variant="tint" border="bottom" id="trust">
+    <Section variant="tint" border="bottom" data-testid="landing-trust">
       <SectionHeader
         eyebrow="Why trust us"
-        title="We show our work—scores, sources, and limits included."
-        description="Your match score measures eligibility fit—not your chances of winning. Here's exactly what goes into it."
+        title="Built on transparency, not guesswork."
+        description="Your match score measures eligibility fit, not your chances of winning. Here is exactly what goes into it."
       />
 
       <Reveal delay={0.08}>
@@ -20,7 +20,7 @@ export function TrustSection() {
           </p>
           <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             After you pass eligibility checks, five weighted factors combine into a score from 0 to 100. A score of 85
-            means your profile strongly matches the program&apos;s criteria—it does <strong>not</strong> mean you have an
+            means your profile strongly matches the program&apos;s criteria. It does <strong>not</strong> mean you have an
             85% chance of receiving the scholarship.
           </p>
           <div className="mt-6 space-y-4">
@@ -59,7 +59,7 @@ export function TrustSection() {
       <Reveal delay={0.32}>
         <p className="mt-10 text-center">
           <Link
-            to="/how-matching-works#methodology"
+            to="/match-methodology"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-primary-400 dark:hover:text-primary-300 dark:focus-visible:ring-offset-slate-900"
           >
             Why these weights exist
@@ -69,7 +69,7 @@ export function TrustSection() {
             ·
           </span>
           <Link
-            to="/how-matching-works"
+            to="/transparency"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-primary-400 dark:hover:text-primary-300 dark:focus-visible:ring-offset-slate-900"
           >
             See how scores are built

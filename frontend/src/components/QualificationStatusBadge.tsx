@@ -1,7 +1,6 @@
 import type { QualificationStatus } from "../types";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { MATCH_CONFIDENCE_COMPACT } from "./MatchConfidenceNote";
 
 const REQUIREMENT_PROFILE_LINKS: Record<string, string> = {
   age: "/profile-builder?step=personal",
@@ -41,7 +40,7 @@ export function QualificationStatusBadge({
   const cfg = STATUS_VARIANT[key];
   if (!cfg) return null;
   return (
-    <Badge variant={cfg.variant} className={className} title={MATCH_CONFIDENCE_COMPACT}>
+    <Badge variant={cfg.variant} className={className}>
       {cfg.label}
     </Badge>
   );

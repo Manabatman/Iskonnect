@@ -14,14 +14,6 @@ vi.mock("../components/landing/Reveal", () => ({
   Reveal: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
-vi.mock("../components/landing/MiniProfileWizard", () => ({
-  MiniProfileWizard: () => <section data-testid="landing-wizard" id="wizard" />,
-}));
-
-vi.mock("../components/landing/OfficialSourcesBar", () => ({
-  OfficialSourcesBar: () => <section data-testid="landing-sources" id="sources" />,
-}));
-
 import { LANDING_SECTION_ORDER, LandingPage } from "./LandingPage";
 
 describe("LandingPage (C4)", () => {

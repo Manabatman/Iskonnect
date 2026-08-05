@@ -15,6 +15,7 @@ from app.utils.application_status import sync_application_status
 from app.utils.editorial_state import ARCHIVED, NEEDS_REVIEW, PUBLISHED, apply_editorial_state
 from app.utils.field_evidence import create_field_evidence
 from app.utils.opportunity_quality import apply_quality_scores
+from app.utils.publishability_rules import validate_scholarship_publish_rules
 from app.utils.scholarship_versioning import diff_snapshots, record_scholarship_version, snapshot_scholarship_row
 from app.utils.timezone import utc_now_naive
 
@@ -143,7 +144,18 @@ def deactivate_scholarship(db: Session, scholarship: models.Scholarship) -> None
     sync_application_status(scholarship)
 
 
+def _assert_rule_publishable(scholarship: models.Scholarship, db: Session) -> None:
+    from app.matching.scholarship_enrichment import attach_scholarship_join_fields
+    from app.serialization.scholarship import scholarship_to_catalog_dict
+
+    payload = attach_scholarship_join_fields(db, scholarship_to_catalog_dict(scholarship))
+    errors = validate_scholarship_publish_rules(payload)
+    if errors:
+        raise CatalogAdminError("; ".join(errors))
+
+
 def restore_scholarship(db: Session, scholarship: models.Scholarship) -> None:
+    _assert_rule_publishable(scholarship, db)
     apply_editorial_state(scholarship, PUBLISHED)
     sync_application_status(scholarship)
     apply_quality_scores(scholarship, db)
@@ -156,6 +168,7 @@ def mark_needs_review(db: Session, scholarship: models.Scholarship) -> None:
 
 
 def verify_refresh(db: Session, scholarship: models.Scholarship) -> None:
+    _assert_rule_publishable(scholarship, db)
     scholarship.last_verified_at = utc_now_naive()
     apply_editorial_state(scholarship, PUBLISHED)
     apply_quality_scores(scholarship, db)

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "@/components/ui/sonner";
 import { apiFetch, NetworkError } from "../api/client";
 import { ERROR_COPY, getNetworkErrorMessage } from "../constants/errorCopy";
 import {
@@ -7,6 +8,7 @@ import {
   type DuplicatePair,
 } from "../components/admin/DuplicateCandidatesPanel";
 import { PermanentDeleteScholarshipModal } from "../components/admin/PermanentDeleteScholarshipModal";
+import { ScholarshipEditSheet } from "../components/admin/ScholarshipEditSheet";
 import { useAuth } from "../contexts/AuthContext";
 import type { ScholarshipInfo } from "../types";
 import { formatDateTime } from "../utils/formatDate";
@@ -47,14 +49,19 @@ const FEEDBACK_TRIAGE_OPTIONS = [
 function FeedbackTriageRow({
   feedback,
   busy,
+  deleteBusy,
   onSave,
+  onDelete,
 }: {
   feedback: AdminFeedback;
   busy: boolean;
+  deleteBusy: boolean;
   onSave: (id: number, status: string, note: string | null) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
 }) {
   const [status, setStatus] = useState(feedback.triage_status ?? "new");
   const [note, setNote] = useState(feedback.triage_note ?? "");
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     setStatus(feedback.triage_status ?? "new");
@@ -75,7 +82,7 @@ function FeedbackTriageRow({
       {feedback.contact_email ? (
         <p className="mt-1 text-xs text-slate-500">Contact: {feedback.contact_email}</p>
       ) : null}
-      <div className="mt-3 grid gap-2 sm:grid-cols-[10rem_1fr_auto] sm:items-start">
+      <div className="mt-3 grid gap-2 sm:grid-cols-[10rem_1fr_auto_auto] sm:items-start">
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
@@ -101,8 +108,38 @@ function FeedbackTriageRow({
           onClick={() => void onSave(feedback.id, status, note || null)}
           className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
         >
-          {busy ? "Saving…" : "Save triage"}
+          {busy ? "Updating…" : "Update status"}
         </button>
+        {confirmDelete ? (
+          <div className="flex flex-wrap items-center gap-2 sm:col-span-4">
+            <span className="text-xs text-slate-600 dark:text-slate-400">Delete this feedback permanently?</span>
+            <button
+              type="button"
+              disabled={deleteBusy}
+              onClick={() => void onDelete(feedback.id)}
+              className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-700 disabled:opacity-50"
+            >
+              {deleteBusy ? "Deleting…" : "Confirm delete"}
+            </button>
+            <button
+              type="button"
+              disabled={deleteBusy}
+              onClick={() => setConfirmDelete(false)}
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs dark:border-slate-600"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            disabled={deleteBusy || busy}
+            onClick={() => setConfirmDelete(true)}
+            className="rounded-lg border border-rose-200 px-3 py-1.5 text-sm text-rose-700 hover:bg-rose-50 disabled:opacity-50 dark:border-rose-900 dark:text-rose-300 dark:hover:bg-rose-950/40"
+          >
+            Delete
+          </button>
+        )}
       </div>
     </li>
   );
@@ -195,6 +232,7 @@ export function AdminPage() {
   const [matchRuns, setMatchRuns] = useState<AdminMatchRun[]>([]);
   const [feedback, setFeedback] = useState<AdminFeedback[]>([]);
   const [feedbackTriageBusy, setFeedbackTriageBusy] = useState<number | null>(null);
+  const [feedbackDeleteBusy, setFeedbackDeleteBusy] = useState<number | null>(null);
   const [reports, setReports] = useState<AdminReport[]>([]);
   const [maintenanceRuns, setMaintenanceRuns] = useState<MaintenanceRunRow[]>([]);
   const [healthJson, setHealthJson] = useState<string | null>(null);
@@ -211,11 +249,12 @@ export function AdminPage() {
   const [schPage, setSchPage] = useState(1);
   const [reviewQueue, setReviewQueue] = useState<(typeof REVIEW_QUEUES)[number]["id"]>("needs_review");
   const [reviewItems, setReviewItems] = useState<Record<string, unknown>[]>([]);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editProvider, setEditProvider] = useState("");
-  const [editLink, setEditLink] = useState("");
+  const [editSheetOpen, setEditSheetOpen] = useState(false);
+  const [editSheetScholarship, setEditSheetScholarship] = useState<ScholarshipInfo | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [createTitle, setCreateTitle] = useState("");
+  const [createProvider, setCreateProvider] = useState("");
+  const [createLink, setCreateLink] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [permanentDeleteTarget, setPermanentDeleteTarget] = useState<ScholarshipInfo | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
@@ -580,36 +619,53 @@ export function AdminPage() {
             : row,
         ),
       );
+      toast.success("Feedback status updated");
     } finally {
       setFeedbackTriageBusy(null);
     }
   };
 
-  const handleSaveScholarship = async (scholarshipId?: number) => {
+  const handleFeedbackDelete = async (feedbackId: number) => {
+    setFeedbackDeleteBusy(feedbackId);
+    try {
+      const res = await apiFetch(`/api/v1/admin/feedback/${feedbackId}`, {
+        method: "DELETE",
+        headers: headers(),
+      });
+      if (!res.ok) throw new Error("Failed to delete feedback");
+      setFeedback((prev) => prev.filter((row) => row.id !== feedbackId));
+      toast.success("Feedback deleted");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to delete feedback");
+    } finally {
+      setFeedbackDeleteBusy(null);
+    }
+  };
+
+  const handleCreateScholarship = async () => {
     const payload = {
-      title: editTitle.trim(),
-      provider: editProvider.trim() || null,
-      link: editLink.trim() || null,
+      title: createTitle.trim(),
+      provider: createProvider.trim() || null,
+      link: createLink.trim() || null,
       source: "manual",
     };
     if (!payload.title) {
       setError("Title is required");
       return;
     }
-    const res = await apiFetch(
-      scholarshipId ? `/api/v1/scholarships/${scholarshipId}` : "/api/v1/scholarships",
-      {
-        method: scholarshipId ? "PUT" : "POST",
-        headers: { ...headers(), "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
+    const res = await apiFetch("/api/v1/scholarships", {
+      method: "POST",
+      headers: { ...headers(), "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
     if (!res.ok) {
       const data = await res.json().catch(() => null);
       throw new Error(data?.detail ?? "Save failed");
     }
-    setEditingId(null);
     setShowCreate(false);
+    setCreateTitle("");
+    setCreateProvider("");
+    setCreateLink("");
     fetchScholarships();
   };
 
@@ -720,9 +776,9 @@ export function AdminPage() {
                 type="button"
                 onClick={() => {
                   setShowCreate(true);
-                  setEditTitle("");
-                  setEditProvider("");
-                  setEditLink("");
+                  setCreateTitle("");
+                  setCreateProvider("");
+                  setCreateLink("");
                 }}
                 className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white"
               >
@@ -776,44 +832,41 @@ export function AdminPage() {
                 </button>
               </div>
             ) : null}
-            {(showCreate || editingId !== null) && (
+            {showCreate && (
               <div className="mb-4 rounded-lg border border-slate-200 p-4 dark:border-slate-700">
-                <h3 className="mb-2 font-medium">{editingId ? "Edit scholarship" : "New scholarship"}</h3>
+                <h3 className="mb-2 font-medium">New scholarship</h3>
                 <div className="grid gap-2 sm:grid-cols-3">
                   <input
                     className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
                     placeholder="Title"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
+                    value={createTitle}
+                    onChange={(e) => setCreateTitle(e.target.value)}
                   />
                   <input
                     className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
                     placeholder="Provider"
-                    value={editProvider}
-                    onChange={(e) => setEditProvider(e.target.value)}
+                    value={createProvider}
+                    onChange={(e) => setCreateProvider(e.target.value)}
                   />
                   <input
                     className="rounded border px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-900"
                     placeholder="Application link"
-                    value={editLink}
-                    onChange={(e) => setEditLink(e.target.value)}
+                    value={createLink}
+                    onChange={(e) => setCreateLink(e.target.value)}
                   />
                 </div>
                 <div className="mt-2 flex gap-2">
                   <button
                     type="button"
                     className="rounded bg-primary-600 px-3 py-1 text-sm text-white"
-                    onClick={() => void handleSaveScholarship(editingId ?? undefined).catch((e) => setError(String(e)))}
+                    onClick={() => void handleCreateScholarship().catch((e) => setError(String(e)))}
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     className="rounded border px-3 py-1 text-sm"
-                    onClick={() => {
-                      setEditingId(null);
-                      setShowCreate(false);
-                    }}
+                    onClick={() => setShowCreate(false)}
                   >
                     Cancel
                   </button>
@@ -915,10 +968,8 @@ export function AdminPage() {
                           <button
                             type="button"
                             onClick={() => {
-                              setEditingId(s.id);
-                              setEditTitle(s.title);
-                              setEditProvider(s.provider ?? "");
-                              setEditLink(s.link ?? "");
+                              setEditSheetScholarship(s);
+                              setEditSheetOpen(true);
                               setShowCreate(false);
                             }}
                             className="text-primary-600 hover:underline"
@@ -1176,7 +1227,9 @@ export function AdminPage() {
                   key={f.id}
                   feedback={f}
                   busy={feedbackTriageBusy === f.id}
+                  deleteBusy={feedbackDeleteBusy === f.id}
                   onSave={handleFeedbackTriageUpdate}
+                  onDelete={handleFeedbackDelete}
                 />
               ))
             )}
@@ -1419,6 +1472,18 @@ export function AdminPage() {
           </div>
         )}
       </div>
+      <ScholarshipEditSheet
+        open={editSheetOpen}
+        onOpenChange={(open) => {
+          setEditSheetOpen(open);
+          if (!open) setEditSheetScholarship(null);
+        }}
+        scholarshipId={editSheetScholarship?.id ?? null}
+        rowFallback={editSheetScholarship ?? undefined}
+        authHeaders={headers}
+        onSaved={fetchScholarships}
+        onError={(msg) => setError(msg)}
+      />
       <PermanentDeleteScholarshipModal
         open={permanentDeleteTarget !== null}
         onOpenChange={(open) => {

@@ -28,14 +28,14 @@ export function ChangelogPage() {
           technical release notes. We improve ISKONNECT based on what students need.
         </p>
 
-        <div className="mt-10 space-y-10">
+        <div className="mt-12 space-y-12">
           {CHANGELOG_VERSIONS.map((release) => (
             <article
               key={release.version}
               className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800/80"
             >
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-slate-100 pb-4 dark:border-slate-700">
-                <span className="rounded-md bg-primary-100 px-2.5 py-1 text-sm font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-200">
+                <span className="rounded-md bg-primary-100 px-3 py-1 text-sm font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-200">
                   v{release.version}
                 </span>
                 <span className="text-sm text-slate-500 dark:text-slate-400">{release.date}</span>

@@ -74,8 +74,42 @@ def create_field_evidence(
     return row
 
 
-def list_public_field_evidence(db: Session, scholarship_id: int) -> list[dict[str, Any]]:
-    """Active evidence rows for public scholarship detail (no reviewer PII)."""
+_INTERNAL_SNIPPET_MARKERS = (
+    "iskonnect id",
+    "migration_v1",
+    "gemini",
+    "notebooklm",
+    "cursor remediation",
+    "field_changes",
+)
+
+
+def _is_internal_snippet(text: str | None) -> bool:
+    if not text:
+        return False
+    lower = text.lower()
+    return any(m in lower for m in _INTERNAL_SNIPPET_MARKERS)
+
+
+def _evidence_to_dict(row: models.FieldEvidence, *, include_internal: bool = False) -> dict[str, Any]:
+    snippet = row.evidence_snippet
+    if not include_internal and _is_internal_snippet(snippet):
+        snippet = None
+    return {
+        "id": row.id,
+        "field_key": row.field_key,
+        "value_snapshot": row.value_snapshot,
+        "source_url": row.source_url,
+        "source_type": row.source_type,
+        "evidence_snippet": snippet,
+        "confidence": row.confidence,
+        "retrieved_at": row.retrieved_at.isoformat() if row.retrieved_at else None,
+        "created_at": row.created_at.isoformat() if row.created_at else None,
+    }
+
+
+def list_admin_field_evidence(db: Session, scholarship_id: int) -> list[dict[str, Any]]:
+    """Full evidence trail for admin/reviewer surfaces."""
     rows = (
         db.query(models.FieldEvidence)
         .filter(
@@ -85,22 +119,12 @@ def list_public_field_evidence(db: Session, scholarship_id: int) -> list[dict[st
         .order_by(models.FieldEvidence.field_key, models.FieldEvidence.created_at.desc())
         .all()
     )
-    out: list[dict[str, Any]] = []
-    for row in rows:
-        out.append(
-            {
-                "id": row.id,
-                "field_key": row.field_key,
-                "value_snapshot": row.value_snapshot,
-                "source_url": row.source_url,
-                "source_type": row.source_type,
-                "evidence_snippet": row.evidence_snippet,
-                "confidence": row.confidence,
-                "retrieved_at": row.retrieved_at.isoformat() if row.retrieved_at else None,
-                "created_at": row.created_at.isoformat() if row.created_at else None,
-            }
-        )
-    return out
+    return [_evidence_to_dict(row, include_internal=True) for row in rows]
+
+
+def list_public_field_evidence(db: Session, scholarship_id: int) -> list[dict[str, Any]]:
+    """Deprecated for student detail — use admin endpoint. Kept for backwards compatibility."""
+    return list_admin_field_evidence(db, scholarship_id)
 
 
 def promote_evidence_from_staging_payload(

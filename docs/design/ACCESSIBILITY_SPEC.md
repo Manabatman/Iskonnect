@@ -24,10 +24,10 @@
 
 | Tool | Flows | Status |
 | --- | --- | --- |
-| NVDA + Chrome (Windows) | 5 critical flows | Template only — not executed |
-| TalkBack + Chrome (Android) | 5 critical flows | Template only — not executed |
-| 200% zoom | All student routes | Unverified |
-| 400% zoom | All student routes | Unverified |
+| NVDA + Chrome (Windows) | 5 critical flows | Automated gates shipped — **manual pass pending** |
+| TalkBack + Chrome (Android) | 5 critical flows | **Not executed** — see `a11y-manual-pass.md` |
+| 200% zoom | All student routes | **Partial** — Playwright on landing, search, dashboard |
+| 400% zoom | All student routes | **Partial** — Playwright on landing, search, dashboard |
 
 Manual pass template: `docs/engineering/a11y-manual-pass.md`
 

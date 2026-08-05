@@ -4,13 +4,12 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Iskonnect\\scholarship-match\\frontend\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "e2e/touch-targets.spec.ts",
-      "--project=desktop-chrome"
+      "e2e/touch-targets.spec.ts"
     ],
     "configFile": "C:\\Iskonnect\\scholarship-match\\frontend\\playwright.config.ts",
     "rootDir": "C:/Iskonnect/scholarship-match/frontend/e2e",
     "failOnFlakyTests": false,
-    "forbidOnly": false,
+    "forbidOnly": true,
     "fullyParallel": false,
     "globalSetup": null,
     "globalTeardown": null,
@@ -19,16 +18,16 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 2
     },
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "C:/Iskonnect/scholarship-match/frontend/test-results",
         "repeatEach": 1,
-        "retries": 0,
+        "retries": 1,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "mobile-chrome",
         "name": "mobile-chrome",
@@ -42,9 +41,9 @@
       {
         "outputDir": "C:/Iskonnect/scholarship-match/frontend/test-results",
         "repeatEach": 1,
-        "retries": 0,
+        "retries": 1,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "desktop-chrome",
         "name": "desktop-chrome",
@@ -79,7 +78,12 @@
     "updateSourceMethod": "patch",
     "version": "1.62.1",
     "workers": 6,
-    "webServer": null
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": false,
+      "timeout": 120000
+    }
   },
   "suites": [
     {
@@ -111,23 +115,304 @@
                       "timeout": 120000,
                       "annotations": [],
                       "expectedStatus": "passed",
-                      "projectId": "desktop-chrome",
-                      "projectName": "desktop-chrome",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
                       "results": [
                         {
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 1107,
+                          "duration": 7745,
                           "errors": [],
                           "stdout": [
                             {
-                              "text": "[touch-audit] /: 19 elements under 44px\n"
+                              "text": "[touch-audit] /: 18 elements under 44px\n"
                             }
                           ],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-08-01T05:26:51.117Z",
+                          "startTime": "2026-08-02T14:55:56.853Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "31af1b6f0fbef132df93-6abc79f52da9590fe13d",
+                  "file": "touch-targets.spec.ts",
+                  "line": 51,
+                  "column": 7
+                },
+                {
+                  "title": "audit /login",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2923,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /login: 7 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-08-02T14:56:04.938Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "31af1b6f0fbef132df93-2df6580677637b25c4db",
+                  "file": "touch-targets.spec.ts",
+                  "line": 51,
+                  "column": 7
+                },
+                {
+                  "title": "audit /register",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2361,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /register: 6 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-08-02T14:56:07.892Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "31af1b6f0fbef132df93-e82cc2ca781eff1c4f65",
+                  "file": "touch-targets.spec.ts",
+                  "line": 51,
+                  "column": 7
+                },
+                {
+                  "title": "audit /scholarships/search",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 16727,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /scholarships/search: 5 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-08-02T14:56:10.281Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "31af1b6f0fbef132df93-0bb36f3c199f0f0acc2a",
+                  "file": "touch-targets.spec.ts",
+                  "line": 51,
+                  "column": 7
+                },
+                {
+                  "title": "audit /scholarship-status",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2721,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /scholarship-status: 6 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-08-02T14:56:27.063Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "31af1b6f0fbef132df93-af7e49a7992ea41a4dab",
+                  "file": "touch-targets.spec.ts",
+                  "line": 51,
+                  "column": 7
+                },
+                {
+                  "title": "audit /faq",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 2815,
+                          "error": {
+                            "message": "Error: Touch targets under 44px (not allowlisted):\n[\n  {\n    \"route\": \"/\",\n    \"tag\": \"select\",\n    \"text\": \"Senior High SchoolCollegeTVETGraduate\",\n    \"width\": 278,\n    \"height\": 37,\n    \"selector\": \"select[data-touch-audit=\\\"6\\\"]\"\n  },\n  {\n    \"route\": \"/\",\n    \"tag\": \"a\",\n    \"text\": \"Browse Senior High School\",\n    \"width\": 215,\n    \"height\": 34,\n    \"selector\": \"a[data-touch-audit=\\\"10\\\"]\"\n  }\n]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 18\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 37,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"select[data-touch-audit=\\\"6\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"select\",\u001b[39m\n\u001b[31m+     \"text\": \"Senior High SchoolCollegeTVETGraduate\",\u001b[39m\n\u001b[31m+     \"width\": 278,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 34,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"a[data-touch-audit=\\\"10\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"a\",\u001b[39m\n\u001b[31m+     \"text\": \"Browse Senior High School\",\u001b[39m\n\u001b[31m+     \"width\": 215,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                            "stack": "Error: Touch targets under 44px (not allowlisted):\n[\n  {\n    \"route\": \"/\",\n    \"tag\": \"select\",\n    \"text\": \"Senior High SchoolCollegeTVETGraduate\",\n    \"width\": 278,\n    \"height\": 37,\n    \"selector\": \"select[data-touch-audit=\\\"6\\\"]\"\n  },\n  {\n    \"route\": \"/\",\n    \"tag\": \"a\",\n    \"text\": \"Browse Senior High School\",\n    \"width\": 215,\n    \"height\": 34,\n    \"selector\": \"a[data-touch-audit=\\\"10\\\"]\"\n  }\n]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 18\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 37,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"select[data-touch-audit=\\\"6\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"select\",\u001b[39m\n\u001b[31m+     \"text\": \"Senior High SchoolCollegeTVETGraduate\",\u001b[39m\n\u001b[31m+     \"width\": 278,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 34,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"a[data-touch-audit=\\\"10\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"a\",\u001b[39m\n\u001b[31m+     \"text\": \"Browse Senior High School\",\u001b[39m\n\u001b[31m+     \"width\": 215,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts:131:7",
+                            "location": {
+                              "file": "C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts",
+                              "column": 7,
+                              "line": 131
+                            },
+                            "snippet": "  129 |         ? `Touch targets under ${MIN_TOUCH_PX}px (not allowlisted):\\n${JSON.stringify(blockingViolations, null, 2)}`\n  130 |         : undefined,\n> 131 |     ).toEqual([]);\n      |       ^\n  132 |   });\n  133 | });\n  134 |"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts",
+                                "column": 7,
+                                "line": 131
+                              },
+                              "message": "Error: Touch targets under 44px (not allowlisted):\n[\n  {\n    \"route\": \"/\",\n    \"tag\": \"select\",\n    \"text\": \"Senior High SchoolCollegeTVETGraduate\",\n    \"width\": 278,\n    \"height\": 37,\n    \"selector\": \"select[data-touch-audit=\\\"6\\\"]\"\n  },\n  {\n    \"route\": \"/\",\n    \"tag\": \"a\",\n    \"text\": \"Browse Senior High School\",\n    \"width\": 215,\n    \"height\": 34,\n    \"selector\": \"a[data-touch-audit=\\\"10\\\"]\"\n  }\n]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 18\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 37,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"select[data-touch-audit=\\\"6\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"select\",\u001b[39m\n\u001b[31m+     \"text\": \"Senior High SchoolCollegeTVETGraduate\",\u001b[39m\n\u001b[31m+     \"width\": 278,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 34,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"a[data-touch-audit=\\\"10\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"a\",\u001b[39m\n\u001b[31m+     \"text\": \"Browse Senior High School\",\u001b[39m\n\u001b[31m+     \"width\": 215,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  129 |         ? `Touch targets under ${MIN_TOUCH_PX}px (not allowlisted):\\n${JSON.stringify(blockingViolations, null, 2)}`\n  130 |         : undefined,\n> 131 |     ).toEqual([]);\n      |       ^\n  132 |   });\n  133 | });\n  134 |\n    at C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts:131:7"
+                            }
+                          ],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /faq: 7 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-08-02T14:56:29.818Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "C:\\Iskonnect\\scholarship-match\\frontend\\test-results\\touch-targets-Touch-target-f3bf6-0px-public-routes-audit-faq-mobile-chrome\\error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts",
+                            "column": 7,
+                            "line": 131
+                          }
+                        },
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1941,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /faq: 7 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 1,
+                          "startTime": "2026-08-02T14:56:33.408Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "C:\\Iskonnect\\scholarship-match\\frontend\\test-results\\touch-targets-Touch-target-f3bf6-0px-public-routes-audit-faq-mobile-chrome-retry1\\trace.zip"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "flaky"
+                    }
+                  ],
+                  "id": "31af1b6f0fbef132df93-f8ebc5187670e97d05f0",
+                  "file": "touch-targets.spec.ts",
+                  "line": 51,
+                  "column": 7
+                },
+                {
+                  "title": "audit /",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "desktop-chrome",
+                      "projectName": "desktop-chrome",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 7620,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /: 18 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-08-02T14:55:56.869Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -153,19 +438,19 @@
                       "projectName": "desktop-chrome",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 1038,
+                          "duration": 2953,
                           "errors": [],
                           "stdout": [
                             {
-                              "text": "[touch-audit] /login: 8 elements under 44px\n"
+                              "text": "[touch-audit] /login: 7 elements under 44px\n"
                             }
                           ],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-08-01T05:26:52.401Z",
+                          "startTime": "2026-08-02T14:56:04.843Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -191,19 +476,19 @@
                       "projectName": "desktop-chrome",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 1480,
+                          "duration": 2398,
                           "errors": [],
                           "stdout": [
                             {
-                              "text": "[touch-audit] /register: 7 elements under 44px\n"
+                              "text": "[touch-audit] /register: 6 elements under 44px\n"
                             }
                           ],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-08-01T05:26:53.452Z",
+                          "startTime": "2026-08-02T14:56:07.836Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -229,19 +514,19 @@
                       "projectName": "desktop-chrome",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 6031,
+                          "duration": 14233,
                           "errors": [],
                           "stdout": [
                             {
-                              "text": "[touch-audit] /scholarships/search: 129 elements under 44px\n"
+                              "text": "[touch-audit] /scholarships/search: 5 elements under 44px\n"
                             }
                           ],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-08-01T05:26:54.957Z",
+                          "startTime": "2026-08-02T14:56:10.277Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -267,19 +552,19 @@
                       "projectName": "desktop-chrome",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 1518,
+                          "duration": 2630,
                           "errors": [],
                           "stdout": [
                             {
-                              "text": "[touch-audit] /scholarship-status: 8 elements under 44px\n"
+                              "text": "[touch-audit] /scholarship-status: 6 elements under 44px\n"
                             }
                           ],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-08-01T05:27:01.021Z",
+                          "startTime": "2026-08-02T14:56:24.541Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -305,152 +590,83 @@
                       "projectName": "desktop-chrome",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 1831,
-                          "errors": [],
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "failed",
+                          "duration": 2529,
+                          "error": {
+                            "message": "Error: Touch targets under 44px (not allowlisted):\n[\n  {\n    \"route\": \"/\",\n    \"tag\": \"select\",\n    \"text\": \"Senior High SchoolCollegeTVETGraduate\",\n    \"width\": 278,\n    \"height\": 37,\n    \"selector\": \"select[data-touch-audit=\\\"6\\\"]\"\n  },\n  {\n    \"route\": \"/\",\n    \"tag\": \"a\",\n    \"text\": \"Browse Senior High School\",\n    \"width\": 215,\n    \"height\": 34,\n    \"selector\": \"a[data-touch-audit=\\\"10\\\"]\"\n  }\n]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 18\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 37,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"select[data-touch-audit=\\\"6\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"select\",\u001b[39m\n\u001b[31m+     \"text\": \"Senior High SchoolCollegeTVETGraduate\",\u001b[39m\n\u001b[31m+     \"width\": 278,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 34,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"a[data-touch-audit=\\\"10\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"a\",\u001b[39m\n\u001b[31m+     \"text\": \"Browse Senior High School\",\u001b[39m\n\u001b[31m+     \"width\": 215,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                            "stack": "Error: Touch targets under 44px (not allowlisted):\n[\n  {\n    \"route\": \"/\",\n    \"tag\": \"select\",\n    \"text\": \"Senior High SchoolCollegeTVETGraduate\",\n    \"width\": 278,\n    \"height\": 37,\n    \"selector\": \"select[data-touch-audit=\\\"6\\\"]\"\n  },\n  {\n    \"route\": \"/\",\n    \"tag\": \"a\",\n    \"text\": \"Browse Senior High School\",\n    \"width\": 215,\n    \"height\": 34,\n    \"selector\": \"a[data-touch-audit=\\\"10\\\"]\"\n  }\n]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 18\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 37,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"select[data-touch-audit=\\\"6\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"select\",\u001b[39m\n\u001b[31m+     \"text\": \"Senior High SchoolCollegeTVETGraduate\",\u001b[39m\n\u001b[31m+     \"width\": 278,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 34,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"a[data-touch-audit=\\\"10\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"a\",\u001b[39m\n\u001b[31m+     \"text\": \"Browse Senior High School\",\u001b[39m\n\u001b[31m+     \"width\": 215,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts:131:7",
+                            "location": {
+                              "file": "C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts",
+                              "column": 7,
+                              "line": 131
+                            },
+                            "snippet": "  129 |         ? `Touch targets under ${MIN_TOUCH_PX}px (not allowlisted):\\n${JSON.stringify(blockingViolations, null, 2)}`\n  130 |         : undefined,\n> 131 |     ).toEqual([]);\n      |       ^\n  132 |   });\n  133 | });\n  134 |"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts",
+                                "column": 7,
+                                "line": 131
+                              },
+                              "message": "Error: Touch targets under 44px (not allowlisted):\n[\n  {\n    \"route\": \"/\",\n    \"tag\": \"select\",\n    \"text\": \"Senior High SchoolCollegeTVETGraduate\",\n    \"width\": 278,\n    \"height\": 37,\n    \"selector\": \"select[data-touch-audit=\\\"6\\\"]\"\n  },\n  {\n    \"route\": \"/\",\n    \"tag\": \"a\",\n    \"text\": \"Browse Senior High School\",\n    \"width\": 215,\n    \"height\": 34,\n    \"selector\": \"a[data-touch-audit=\\\"10\\\"]\"\n  }\n]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 18\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 37,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"select[data-touch-audit=\\\"6\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"select\",\u001b[39m\n\u001b[31m+     \"text\": \"Senior High SchoolCollegeTVETGraduate\",\u001b[39m\n\u001b[31m+     \"width\": 278,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"height\": 34,\u001b[39m\n\u001b[31m+     \"route\": \"/\",\u001b[39m\n\u001b[31m+     \"selector\": \"a[data-touch-audit=\\\"10\\\"]\",\u001b[39m\n\u001b[31m+     \"tag\": \"a\",\u001b[39m\n\u001b[31m+     \"text\": \"Browse Senior High School\",\u001b[39m\n\u001b[31m+     \"width\": 215,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  129 |         ? `Touch targets under ${MIN_TOUCH_PX}px (not allowlisted):\\n${JSON.stringify(blockingViolations, null, 2)}`\n  130 |         : undefined,\n> 131 |     ).toEqual([]);\n      |       ^\n  132 |   });\n  133 | });\n  134 |\n    at C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts:131:7"
+                            }
+                          ],
                           "stdout": [
                             {
-                              "text": "[touch-audit] /faq: 9 elements under 44px\n"
+                              "text": "[touch-audit] /faq: 7 elements under 44px\n"
                             }
                           ],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-08-01T05:27:02.568Z",
+                          "startTime": "2026-08-02T14:56:27.221Z",
                           "annotations": [],
-                          "attachments": []
+                          "attachments": [
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "C:\\Iskonnect\\scholarship-match\\frontend\\test-results\\touch-targets-Touch-target-f3bf6-0px-public-routes-audit-faq-desktop-chrome\\error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "C:\\Iskonnect\\scholarship-match\\frontend\\e2e\\touch-targets.spec.ts",
+                            "column": 7,
+                            "line": 131
+                          }
+                        },
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 2209,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "[touch-audit] /faq: 7 elements under 44px\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 1,
+                          "startTime": "2026-08-02T14:56:31.223Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "C:\\Iskonnect\\scholarship-match\\frontend\\test-results\\touch-targets-Touch-target-f3bf6-0px-public-routes-audit-faq-desktop-chrome-retry1\\trace.zip"
+                            }
+                          ]
                         }
                       ],
-                      "status": "expected"
+                      "status": "flaky"
                     }
                   ],
                   "id": "31af1b6f0fbef132df93-715cbee9833af236e871",
                   "file": "touch-targets.spec.ts",
                   "line": 51,
                   "column": 7
-                }
-              ]
-            },
-            {
-              "title": "authenticated routes",
-              "file": "touch-targets.spec.ts",
-              "line": 61,
-              "column": 10,
-              "specs": [
-                {
-                  "title": "audit auth /dashboard",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 120000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "desktop-chrome",
-                      "projectName": "desktop-chrome",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 3933,
-                          "errors": [],
-                          "stdout": [
-                            {
-                              "text": "[touch-audit] /dashboard: 16 elements under 44px\n"
-                            }
-                          ],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2026-08-01T05:27:04.426Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "31af1b6f0fbef132df93-8a95fe192e6218605c9c",
-                  "file": "touch-targets.spec.ts",
-                  "line": 63,
-                  "column": 9
-                },
-                {
-                  "title": "audit auth /profile-builder",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 120000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "desktop-chrome",
-                      "projectName": "desktop-chrome",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 3667,
-                          "errors": [],
-                          "stdout": [
-                            {
-                              "text": "[touch-audit] /profile-builder: 21 elements under 44px\n"
-                            }
-                          ],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2026-08-01T05:27:08.390Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "31af1b6f0fbef132df93-0126941a70a35bb07ecc",
-                  "file": "touch-targets.spec.ts",
-                  "line": 63,
-                  "column": 9
-                },
-                {
-                  "title": "audit auth /settings",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 120000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "desktop-chrome",
-                      "projectName": "desktop-chrome",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 3484,
-                          "errors": [],
-                          "stdout": [
-                            {
-                              "text": "[touch-audit] /settings: 25 elements under 44px\n"
-                            }
-                          ],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2026-08-01T05:27:12.088Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "31af1b6f0fbef132df93-b1355ce38082d0057dc6",
-                  "file": "touch-targets.spec.ts",
-                  "line": 63,
-                  "column": 9
                 }
               ]
             }
@@ -461,11 +677,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-08-01T05:26:50.673Z",
-    "duration": 25168.933,
-    "expected": 9,
+    "startTime": "2026-08-02T14:55:53.794Z",
+    "duration": 42222.164,
+    "expected": 10,
     "skipped": 0,
     "unexpected": 0,
-    "flaky": 0
+    "flaky": 2
   }
 }

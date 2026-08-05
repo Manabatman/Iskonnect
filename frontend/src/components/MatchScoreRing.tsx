@@ -24,7 +24,7 @@ export function MatchScoreRing({
   showMatchLabel = false,
 }: MatchScoreRingProps) {
   const pct = clamp(Math.round(score), 0, 100);
-  const scoreMeaning = `${pct}% eligibility fit based on your profile — not your chance of being accepted`;
+  const scoreMeaning = `${pct}% eligibility fit`;
   const stroke = size >= 80 ? 6 : 5;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;

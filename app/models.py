@@ -145,6 +145,8 @@ class Student(Base):
     is_uniformed_service_dependent = Column(Boolean, default=False)
     is_gsis_dependent = Column(Boolean, default=False)
     is_sss_dependent = Column(Boolean, default=False)
+    is_medical_frontliner_dependent = Column(Boolean, default=False)
+    study_destination_preference = Column(String, nullable=False, server_default="PHILIPPINES_ONLY")
     employment_status = Column(String, nullable=True)
     evening_weekend_program = Column(Boolean, nullable=True)
     athlete_level = Column(String, nullable=True)
@@ -166,6 +168,17 @@ class Student(Base):
     guardian_full_name = Column(String(255), nullable=True)
     guardian_email = Column(String(255), nullable=True)
     guardian_consent_at = Column(DateTime, nullable=True)
+
+    # === ELIGIBILITY MIGRATION V1 (progressive profile inputs) ===
+    prior_tertiary_units = Column(Integer, nullable=True)
+    class_rank = Column(Integer, nullable=True)
+    class_size = Column(Integer, nullable=True)
+    work_experience_years = Column(Integer, nullable=True)
+    marital_status = Column(String, nullable=True)
+    parent_salary_grade = Column(Integer, nullable=True)
+    parent_status = Column(String, nullable=True)
+    is_hei_faculty_or_staff = Column(Boolean, nullable=True)
+    residency_years_in_locality = Column(Integer, nullable=True)
 
 
 class Scholarship(Base):
@@ -264,6 +277,74 @@ class Scholarship(Base):
     link_status = Column(String, nullable=True)  # ok | broken | timeout | unchecked
     link_last_checked_at = Column(DateTime, nullable=True)
     link_failure_count = Column(Integer, nullable=True)
+
+    # === ELIGIBILITY MIGRATION V1 (sparse atomic rule columns) ===
+    max_prior_tertiary_units = Column(Integer, nullable=True)
+    min_work_experience_years = Column(Integer, nullable=True)
+    max_class_rank = Column(Integer, nullable=True)
+    max_class_percentile = Column(Float, nullable=True)
+    academic_gate_mode = Column(String(8), nullable=True)  # and | or
+    allow_transferee = Column(Boolean, nullable=True)
+    allow_shiftee = Column(Boolean, nullable=True)
+    first_undergraduate_only = Column(Boolean, nullable=False, server_default="0")
+    min_residency_years = Column(Integer, nullable=True)
+    age_as_of_date = Column(Date, nullable=True)
+    age_as_of_rule = Column(String(32), nullable=True)
+    max_parent_salary_grade = Column(Integer, nullable=True)
+    parent_program_id = Column(Integer, ForeignKey("scholarships.id", ondelete="SET NULL"), nullable=True)
+
+
+class ConflictScope(Base):
+    """Catalog of grant exclusivity / conflict scope codes."""
+
+    __tablename__ = "conflict_scopes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(64), nullable=False, unique=True, index=True)
+    label = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+
+
+class ScholarshipConflictScope(Base):
+    __tablename__ = "scholarship_conflict_scopes"
+
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), primary_key=True)
+    scope_id = Column(Integer, ForeignKey("conflict_scopes.id", ondelete="CASCADE"), primary_key=True)
+
+
+class StudentActiveGrantScope(Base):
+    __tablename__ = "student_active_grant_scopes"
+
+    student_id = Column(Integer, ForeignKey("students.id", ondelete="CASCADE"), primary_key=True)
+    scope_id = Column(Integer, ForeignKey("conflict_scopes.id", ondelete="CASCADE"), primary_key=True)
+    source = Column(String(64), nullable=True)
+    verified = Column(Boolean, nullable=False, server_default="0")
+
+
+class AffiliationCode(Base):
+    """Required affiliation / registry membership codes."""
+
+    __tablename__ = "affiliation_codes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(64), nullable=False, unique=True, index=True)
+    kind = Column(String(32), nullable=False)  # registry | equity | employment | other
+    label = Column(String(255), nullable=False)
+
+
+class ScholarshipRequiredAffiliation(Base):
+    __tablename__ = "scholarship_required_affiliations"
+
+    scholarship_id = Column(Integer, ForeignKey("scholarships.id", ondelete="CASCADE"), primary_key=True)
+    affiliation_id = Column(Integer, ForeignKey("affiliation_codes.id", ondelete="CASCADE"), primary_key=True)
+
+
+class StudentAffiliation(Base):
+    __tablename__ = "student_affiliations"
+
+    student_id = Column(Integer, ForeignKey("students.id", ondelete="CASCADE"), primary_key=True)
+    affiliation_id = Column(Integer, ForeignKey("affiliation_codes.id", ondelete="CASCADE"), primary_key=True)
+    attested_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
 class FieldEvidence(Base):

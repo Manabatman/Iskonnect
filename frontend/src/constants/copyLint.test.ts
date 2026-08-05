@@ -1,22 +1,34 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { ERROR_COPY } from "./errorCopy";
 
 const BANNED_STANDALONE = /^Something went wrong\.?$/i;
 
-function collectTsxFiles(dir: string, acc: string[] = []): string[] {
-  for (const name of readdirSync(dir)) {
-    const full = join(dir, name);
-    const stat = statSync(full);
-    if (stat.isDirectory()) {
-      if (name === "node_modules" || name === "dist") continue;
-      collectTsxFiles(full, acc);
-    } else if (/\.(tsx|ts)$/.test(name) && !name.endsWith(".test.ts") && !name.endsWith(".test.tsx")) {
-      acc.push(full);
-    }
+const COPY_LINT_SKIP = new Set(["AdminPage.tsx", "DesignSystemPage.tsx"]);
+
+const pageSources = import.meta.glob<string>("../pages/**/*.tsx", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
+const landingSources = import.meta.glob<string>("../components/landing/**/*.tsx", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
+function fileBase(path: string): string {
+  const parts = path.split(/[/\\]/);
+  return parts[parts.length - 1] ?? path;
+}
+
+function hasBannedUserCopy(source: string): boolean {
+  const strings = source.match(/(["'`])((?:\\.|(?!\1)[^\\])*)\1/g) ?? [];
+  for (const literal of strings) {
+    if (literal.includes("→")) return true;
+    if (/—/.test(literal) && literal.replace(/\\./g, "").length > 5) return true;
   }
-  return acc;
+  return false;
 }
 
 describe("copy lint", () => {
@@ -28,13 +40,21 @@ describe("copy lint", () => {
   });
 
   it("student-facing pages avoid standalone 'Something went wrong'", () => {
-    const srcRoot = join(process.cwd(), "src", "pages");
-    const files = collectTsxFiles(srcRoot);
     const offenders: string[] = [];
-    for (const file of files) {
-      const text = readFileSync(file, "utf8");
+    for (const [path, text] of Object.entries(pageSources)) {
       if (/["'`]Something went wrong["'`]/.test(text)) {
-        offenders.push(file);
+        offenders.push(path);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("student-facing source avoids em dashes and arrow link glyphs in JSX strings", () => {
+    const offenders: string[] = [];
+    for (const [path, text] of Object.entries({ ...pageSources, ...landingSources })) {
+      if (COPY_LINT_SKIP.has(fileBase(path))) continue;
+      if (hasBannedUserCopy(text)) {
+        offenders.push(path);
       }
     }
     expect(offenders).toEqual([]);

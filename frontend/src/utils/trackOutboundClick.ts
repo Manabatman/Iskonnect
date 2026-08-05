@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../api/client";
 
-export type ReferralSurface = "card" | "detail_page" | "detail_panel" | "trust_source";
+export type ReferralSurface = "card" | "detail_page" | "detail_panel" | "detail_sticky_bar" | "trust_source";
 export type ReferralLinkKind = "apply_official" | "check_official" | "view_source";
 
 const ALLOWED_SURFACES = new Set<string>(["card", "detail_page", "detail_panel", "trust_source"]);

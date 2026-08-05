@@ -77,7 +77,7 @@ export function TrustCard({
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {verificationBadgeLabel ? (
-          <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${confidenceTone(verificationBadge)}`}>
+          <span className={`rounded-full px-3 py-0.5 text-xs font-semibold ${confidenceTone(verificationBadge)}`}>
             {verificationBadgeLabel}
           </span>
         ) : null}

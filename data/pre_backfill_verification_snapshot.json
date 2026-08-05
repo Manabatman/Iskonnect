@@ -1,0 +1,147 @@
+{
+  "104": {
+    "last_verified_at": null,
+    "verification_source": "csv_import",
+    "title": "Ateneo Freshman Merit Scholarship"
+  },
+  "77": {
+    "last_verified_at": null,
+    "verification_source": "csv_import",
+    "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - TVET Track"
+  },
+  "90": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "Fulbright-PhilSA Graduate Program"
+  },
+  "132": {
+    "last_verified_at": "2026-08-01T06:44:15.408511",
+    "verification_source": "csv_import",
+    "title": "Megaworld Foundation College Scholarship"
+  },
+  "54": {
+    "last_verified_at": "2026-06-30T12:31:17.780959",
+    "verification_source": "manual",
+    "title": "CHED Medical Scholarship and Return Service (MSRS)"
+  },
+  "55": {
+    "last_verified_at": null,
+    "verification_source": "csv_import",
+    "title": "Department of Agriculture ACEF GIAHEP SUC Track"
+  },
+  "60": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "Taiwan ICDF Higher Education Scholarship Program"
+  },
+  "61": {
+    "last_verified_at": "2026-08-03T00:00:00",
+    "verification_source": "manual",
+    "title": "Megaworld Foundation Scholarship Program"
+  },
+  "52": {
+    "last_verified_at": "2026-08-03T00:00:00",
+    "verification_source": "manual",
+    "title": "NCIP Educational Assistance Program Degree Track"
+  },
+  "81": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "MEXT Scholarship - Undergraduate Track"
+  },
+  "80": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "MEXT Scholarship - Research Category"
+  },
+  "136": {
+    "last_verified_at": "2026-08-03T09:11:01.618104",
+    "verification_source": "audit_remediation",
+    "title": "Science and Technology Education for Regional Development (STRAND)"
+  },
+  "73": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "DOST-SEI Undergraduate Scholarships (RA 7687 / Merit)"
+  },
+  "65": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "Global Korea Scholarship (GKS) Undergraduate"
+  },
+  "88": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "Quezon City Scholarship Program (QCSP)"
+  },
+  "76": {
+    "last_verified_at": "2026-07-09T00:00:00",
+    "verification_source": "manual",
+    "title": "Bagong Pilipinas Merit Scholarship Program (BPMSP) - Higher Education Track"
+  },
+  "135": {
+    "last_verified_at": "2026-08-03T09:11:01.442426",
+    "verification_source": "audit_remediation",
+    "title": "Capacity Building Program in Science and Mathematics Education (CBPSME)"
+  },
+  "89": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "Manuel L. Quezon Filipino Language and Literature Scholarship Program"
+  },
+  "117": {
+    "last_verified_at": "2026-08-01T06:44:16.491702",
+    "verification_source": "csv_import",
+    "title": "Scholarship Program for Coconut Farmers and their Families (CoScho)"
+  },
+  "10": {
+    "last_verified_at": "2026-08-03T00:00:00",
+    "verification_source": "csv_import",
+    "title": "SM Foundation College Scholarship"
+  },
+  "66": {
+    "last_verified_at": "2026-08-03T00:00:00",
+    "verification_source": "manual",
+    "title": "CHED-UniFAST Tertiary Education Subsidy (TES)"
+  },
+  "82": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "MEXT Scholarship - Specialized Training Track"
+  },
+  "83": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "MEXT Scholarship - College of Technology (KOSEN)"
+  },
+  "64": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "Global Korea Scholarship (GKS) Graduate"
+  },
+  "118": {
+    "last_verified_at": "2026-08-01T06:44:17.457459",
+    "verification_source": "csv_import",
+    "title": "Scholarship Grant Program for Children and Dependents of Sugarcane Industry Workers and Small Sugarcane Farmers (SIDA-SGP)"
+  },
+  "78": {
+    "last_verified_at": "2026-06-30T13:53:07.174548",
+    "verification_source": "manual",
+    "title": "GSIS Subsidy for STEM Program (GSSP)"
+  },
+  "84": {
+    "last_verified_at": "2026-07-26T00:00:00",
+    "verification_source": "manual",
+    "title": "GSIS Educational Subsidy Program (GESP)"
+  },
+  "91": {
+    "last_verified_at": null,
+    "verification_source": "csv_import",
+    "title": "Chevening Scholarship"
+  },
+  "5": {
+    "last_verified_at": "2026-07-09T00:00:00",
+    "verification_source": "csv_import",
+    "title": "Tulong Dunong Program (TDP)"
+  }
+}

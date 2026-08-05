@@ -18,7 +18,7 @@ function injectCriticalFontPreloads(): Plugin {
             (fileName) =>
               fileName.endsWith(".woff2") &&
               (/inter-latin-(400|500|600)-normal/.test(fileName) ||
-                /russo-one-latin-400-normal/.test(fileName)),
+                /montserrat-latin-900-normal/.test(fileName)),
           )
           .map((fileName) => {
             const href = `/${fileName.replace(/\\/g, "/")}`;

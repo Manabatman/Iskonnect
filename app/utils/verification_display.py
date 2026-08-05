@@ -78,12 +78,71 @@ def verification_badge_for_row(row: Any, db: Any) -> str:
 
 
 def verification_badge_label(badge: str) -> str:
+    """Internal/admin badge label (catalog health, admin dashboards)."""
     return {
         "verified": "Verified against official source",
         "partially_verified": "Partially verified",
         "imported_unverified": "Imported — not independently verified",
         "needs_review": "Needs review",
     }.get(badge, "Needs review")
+
+
+def student_verification_status(row: Any, *, internal_badge: str | None = None) -> str:
+    """
+    Student-facing trust status: verified | needs_review | archived.
+    Wording is about the scholarship opportunity, not database import state.
+    """
+    app_status = (_get(row, "application_status") or "").strip().lower()
+    is_active = _get(row, "is_active")
+    ds = (_get(row, "data_status") or "").strip().lower()
+    if is_active is False or app_status in ("closed", "archived", "discontinued") or ds in (
+        "expired",
+        "past_deadline",
+        "archived",
+    ):
+        return "archived"
+    badge = internal_badge or verification_badge(
+        row, has_field_evidence=bool(_get(row, "_has_field_evidence"))
+    )
+    if badge == "verified":
+        return "verified"
+    return "needs_review"
+
+
+def student_verification_label(status: str) -> str:
+    return {
+        "verified": "Verified",
+        "needs_review": "Needs Review",
+        "archived": "Archived",
+    }.get(status, "Needs Review")
+
+
+def student_verification_message(status: str) -> str:
+    messages = {
+        "verified": "Information has been checked against an official source.",
+        "needs_review": (
+            "Some information could not be confirmed recently. "
+            "Always confirm details on the official website before applying."
+        ),
+        "archived": "This opportunity is no longer accepting applications.",
+    }
+    return messages.get(status, messages["needs_review"])
+
+
+def _official_website_host(row: Any) -> str | None:
+    link = (_get(row, "link") or "").strip()
+    if not link:
+        return None
+    try:
+        from urllib.parse import urlparse
+
+        parsed = urlparse(link if "://" in link else f"https://{link}")
+        host = (parsed.netloc or "").lower()
+        if host.startswith("www."):
+            host = host[4:]
+        return host or None
+    except Exception:
+        return None
 
 
 def _get(row: Any, key: str, default=None):
@@ -100,13 +159,14 @@ def _completeness(row: Any) -> int:
 
 
 def attach_verification_fields(payload: dict[str, Any]) -> dict[str, Any]:
-    """Add user-facing verification/trust fields to a scholarship payload."""
+    """Add verification/trust fields to a scholarship payload."""
     evidence = payload.get("field_evidence")
     has_evidence = False
     if isinstance(evidence, list) and len(evidence) > 0:
         has_evidence = True
     elif payload.get("_has_field_evidence"):
         has_evidence = True
+    payload["_has_field_evidence"] = has_evidence
     badge = verification_badge(payload, has_field_evidence=has_evidence)
     score = _completeness(payload)
     verified_at = _get(payload, "last_verified_at")
@@ -116,6 +176,14 @@ def attach_verification_fields(payload: dict[str, Any]) -> dict[str, Any]:
     payload["verification_source_label"] = humanize_verification_source(vsource)
     payload["completeness_label"] = public_completeness_label(score)
     payload["completeness_tier"] = completeness_tier(score)
+    student_status = student_verification_status(payload, internal_badge=badge)
+    payload["student_verification_status"] = student_status
+    payload["student_verification_label"] = student_verification_label(student_status)
+    payload["student_verification_message"] = student_verification_message(student_status)
+    link = (_get(payload, "link") or "").strip()
+    if link:
+        payload["official_website"] = link
+        payload["official_website_host"] = _official_website_host(payload)
     if verified_at:
         dt = _parse_dt(verified_at)
         if dt:

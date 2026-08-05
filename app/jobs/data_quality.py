@@ -158,6 +158,7 @@ def run_data_quality_checks() -> dict[str, int]:
 def recompute_completeness_scores() -> int:
     """Recompute data_completeness_score for all active scholarships. Returns rows updated."""
     from app.utils.data_completeness import compute_data_completeness_score
+    from app.scholarship_cache import invalidate_scholarship_cache
 
     db = SessionLocal()
     updated = 0
@@ -169,6 +170,8 @@ def recompute_completeness_scores() -> int:
                 row.data_completeness_score = score
                 updated += 1
         db.commit()
+        if updated:
+            invalidate_scholarship_cache()
         logger.info("recompute_completeness_scores updated=%s", updated)
         return updated
     except Exception:

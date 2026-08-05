@@ -38,8 +38,8 @@ async function waitForPageStable(page: Page) {
     }
     return true;
   });
-  // Framer-motion Reveal on landing uses a 500ms easeOut transition.
-  await page.waitForTimeout(550);
+  // Framer-motion Reveal on landing uses the reveal token (320ms).
+  await page.waitForTimeout(400);
 }
 
 async function waitForRouteReady(page: Page) {

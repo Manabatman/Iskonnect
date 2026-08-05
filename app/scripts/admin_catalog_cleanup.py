@@ -38,16 +38,12 @@ REPORT_PATH = ROOT / "data" / "admin_catalog_cleanup_report.json"
 
 # canonical_id -> duplicate_id (delete duplicate, keep canonical)
 MERGE_PAIRS: dict[int, int] = {
-    1: 114,
-    10: 115,
-    61: 116,
-    75: 126,
-    124: 110,
-    88: 22,
-    66: 6,
-    73: 2,
-    72: 12,
-    25: 21,
+    1: 129,
+    10: 131,
+    61: 132,
+    75: 128,
+    124: 127,
+    54: 125,
 }
 
 STANDALONE_DELETE = [79, 19]

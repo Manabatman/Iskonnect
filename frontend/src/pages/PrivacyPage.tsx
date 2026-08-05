@@ -21,7 +21,7 @@ const SUBPROCESSORS = [
 const VERSION_HISTORY = [
   { version: "2026-07-public-beta", summary: "Honest solo-developer contact; removed formal DPO claim; student project disclosure" },
   { version: "2026-07", summary: "Field collection table, subprocessors, retention periods, export right" },
-  { version: "2026-01", summary: "Initial privacy policy — profile data for matching only" },
+  { version: "2026-01", summary: "Initial privacy policy. Profile data used for matching only." },
 ] as const;
 
 export function PrivacyPage() {
@@ -35,23 +35,18 @@ export function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Who operates ISKONNECT</h2>
             <p className="mt-2">
-              ISKONNECT is a student project built and maintained by Mark Justin S. Manabat (University of the
-              Philippines Diliman). It is not a registered company and does not have a formal Data Protection Officer.
+              ISKONNECT is a student project by Mark Justin S. Manabat (University of the Philippines Diliman).
+              It is not a registered company.
             </p>
             <p className="mt-2">
-              For privacy requests, data access, correction, or erasure under the Data Privacy Act of 2012 (RA 10173),
-              contact:
-            </p>
-            <p className="mt-2">
+              Privacy questions or requests (access, correction, or deletion under RA 10173):{" "}
               <a
                 href="mailto:manabat.markjustin@gmail.com"
                 className="font-medium text-primary-600 hover:underline dark:text-primary-400"
               >
                 manabat.markjustin@gmail.com
               </a>
-            </p>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              You can also export or delete your account data directly from{" "}
+              . You can also export or delete your data from{" "}
               <Link to="/settings" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
                 Account Settings
               </Link>
@@ -102,8 +97,8 @@ export function PrivacyPage() {
                 <strong>Account &amp; profile data:</strong> kept until you delete your account from Settings.
               </li>
               <li>
-                <strong>Server &amp; access logs:</strong> retained up to 90 days for security and debugging, then
-                deleted or aggregated.
+                <strong>Basic server activity:</strong> kept for a short time to keep the site secure and fix problems,
+                then removed.
               </li>
               <li>
                 <strong>Anonymous feedback:</strong> may be kept after account deletion if submitted without identifying

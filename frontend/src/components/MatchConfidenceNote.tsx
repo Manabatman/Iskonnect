@@ -1,44 +1,38 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-export const MATCH_CONFIDENCE_COMPACT =
-  "ISKONNECT estimate — the provider decides who is accepted.";
-
-export const MATCH_CONFIDENCE_FULL =
-  "This score reflects how well your profile fits the listed requirements. It is not a guarantee of funding or acceptance — always verify on the official provider site.";
+/** Two-sentence non-guarantee copy — match-explanation surfaces only (TRUST-04 / D-08). */
+export const MATCH_CONFIDENCE_EXPLANATION = [
+  "Scholarship providers make the final selection.",
+  "Meeting eligibility does not guarantee acceptance.",
+] as const;
 
 interface MatchConfidenceNoteProps {
-  variant?: "compact" | "full";
   className?: string;
   showMethodologyLink?: boolean;
 }
 
-/** Shared non-guarantee copy for match scores and qualification badges (TRUST-04). */
 export function MatchConfidenceNote({
-  variant = "compact",
   className,
-  showMethodologyLink = variant === "full",
+  showMethodologyLink = true,
 }: MatchConfidenceNoteProps) {
-  const text = variant === "full" ? MATCH_CONFIDENCE_FULL : MATCH_CONFIDENCE_COMPACT;
-
   return (
-    <p
-      className={cn(
-        "text-slate-600 dark:text-slate-400",
-        variant === "compact" ? "text-[11px] leading-snug" : "text-xs leading-relaxed",
-        className
-      )}
+    <div
+      className={cn("space-y-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400", className)}
       role="note"
     >
-      {text}{" "}
+      <p>{MATCH_CONFIDENCE_EXPLANATION[0]}</p>
+      <p>{MATCH_CONFIDENCE_EXPLANATION[1]}</p>
       {showMethodologyLink ? (
-        <Link
-          to="/how-matching-works"
-          className="font-medium text-primary-600 underline-offset-2 hover:underline dark:text-primary-400"
-        >
-          How we match
-        </Link>
+        <p className="pt-1">
+          <Link
+            to="/how-matching-works"
+            className="font-medium text-primary-600 underline-offset-2 hover:underline dark:text-primary-400"
+          >
+            Learn how matching works
+          </Link>
+        </p>
       ) : null}
-    </p>
+    </div>
   );
 }

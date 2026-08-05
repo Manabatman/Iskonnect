@@ -1,5 +1,7 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { getOpportunityType, OPPORTUNITY_TYPES } from "../constants/opportunityTypes";
+import { OpportunityJourneyTimeline } from "../components/OpportunityJourneyTimeline";
+import { OpportunityNotifyForm } from "../components/OpportunityNotifyForm";
+import { getOpportunityType } from "../constants/opportunityTypes";
 
 export function OpportunityComingSoonPage() {
   const { typeSlug } = useParams<{ typeSlug: string }>();
@@ -12,7 +14,7 @@ export function OpportunityComingSoonPage() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Opportunity type not found</h1>
           <p className="mt-4 text-slate-600 dark:text-slate-400">
             <Link to="/scholarships/search" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
-              Back to Search Opportunities
+              Back to search
             </Link>
           </p>
         </div>
@@ -24,47 +26,56 @@ export function OpportunityComingSoonPage() {
     return <Navigate to={oppType.searchPath} replace />;
   }
 
-  const availableTypes = OPPORTUNITY_TYPES.filter((t) => t.available);
-
   return (
     <section className="py-12">
       <div className="mx-auto max-w-3xl px-4">
-        <p className="text-sm font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">Coming soon</p>
-        <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">{oppType.label}</h1>
-        <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">{oppType.description}</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+          {oppType.label} on your opportunity journey
+        </h1>
+        <p className="mt-3 text-lg text-slate-600 dark:text-slate-400">{oppType.description}</p>
+        {oppType.plannedFor ? (
+          <p className="mt-2 text-sm font-medium text-primary-700 dark:text-primary-300">
+            Planned for {oppType.plannedFor}
+          </p>
+        ) : null}
 
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Why it&apos;s not live yet</h2>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{oppType.roadmapNote}</p>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            ISKONNECT is becoming a unified student opportunity platform — not just a scholarship directory. During public
-            beta, scholarships are the only fully supported opportunity type. Every listing type we add must meet the
-            same standard: verified sources, honest eligibility rules, and explainable matching.
+        <div className="mt-12">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Your opportunity journey</h2>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            ISKONNECT is building one place for every student opportunity, starting with scholarships.
+          </p>
+          <div className="mt-6">
+            <OpportunityJourneyTimeline selectedSlug={oppType.slug} linkItems />
+          </div>
+        </div>
+
+        <div className="mt-12 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Why we build in this order</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Every new opportunity type must meet the same bar as scholarships: verified sources, honest eligibility rules,
+            and explainable matching. {oppType.roadmapNote}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            We ship verticals when the data and workflows are trustworthy, not before.
           </p>
         </div>
 
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Available now</h2>
-          <ul className="mt-3 space-y-2">
-            {availableTypes.map((t) => (
-              <li key={t.slug}>
-                <Link
-                  to={t.searchPath ?? "/scholarships/search"}
-                  className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
-                >
-                  {t.label} →
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <div className="mt-12 rounded-2xl border border-primary-200 bg-primary-50/50 p-6 dark:border-primary-800 dark:bg-primary-950/30">
+          <OpportunityNotifyForm opportunitySlug={oppType.slug} opportunityLabel={oppType.label} />
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 flex flex-wrap gap-4">
           <Link
             to="/scholarships/search"
-            className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400"
+            className="focus-visible-ring inline-flex min-h-[44px] items-center rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-primary-700"
           >
-            ← Back to Search Opportunities
+            Explore scholarships now
+          </Link>
+          <Link
+            to="/scholarships/search"
+            className="inline-flex min-h-[44px] items-center text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
+          >
+            Back to search
           </Link>
         </div>
       </div>

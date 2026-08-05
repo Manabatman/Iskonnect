@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouse
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { apiFetch } from "../../api/client";
+import { NotificationsPanel, type NotificationItem } from "./NotificationsPanel";
 
 export interface DashboardTopbarProps {
   onOpenMobileSidebar: () => void;
@@ -18,25 +19,28 @@ type ScholarshipSearchApiResponse = {
   total: number;
 };
 
-type NotificationItem = {
-  id: number;
-  type: string;
-  title: string;
-  body?: string | null;
-  scholarship_id?: number | null;
-  is_read: boolean;
-  created_at: string;
-};
+function useIsSmUp() {
+  const [isSmUp, setIsSmUp] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(min-width: 640px)").matches : true
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const onChange = () => setIsSmUp(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return isSmUp;
+}
 
 function titleForPath(pathname: string): string {
   if (pathname === "/dashboard") return "Dashboard";
-  if (pathname.startsWith("/scholarships/search")) return "Opportunity search";
-  if (pathname.startsWith("/scholarships")) return "Explore scholarships";
+  if (pathname.startsWith("/scholarships/search")) return "Scholarships";
+  if (pathname.startsWith("/scholarships")) return "Scholarships";
   if (pathname.startsWith("/scholarship/")) return "Scholarship";
   if (pathname.startsWith("/applications")) return "Applications";
   if (pathname.startsWith("/documents")) return "Documents";
   if (pathname.startsWith("/profile-builder")) return "Complete Your Profile";
-  if (pathname.startsWith("/settings")) return "Account settings";
+  if (pathname.startsWith("/settings")) return "Settings";
   if (pathname.startsWith("/match-compare")) return "Compare matches";
   if (pathname.startsWith("/match/")) return "Match results";
   if (pathname.startsWith("/admin/analytics")) return "Admin analytics";
@@ -92,6 +96,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
   const notifRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isSmUp = useIsSmUp();
 
   const pageTitle = titleForPath(location.pathname);
 
@@ -126,6 +131,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
         setMenuOpen(false);
       }
       if (notifRef.current && !notifRef.current.contains(t)) {
+        if (!isSmUp) return;
         setNotifOpen(false);
       }
       if (searchRef.current && !searchRef.current.contains(t)) {
@@ -134,7 +140,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isSmUp]);
 
   const runSearch = useCallback(
     async (q: string) => {
@@ -288,7 +294,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
     <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-3 border-b border-slate-200 bg-white/95 px-3 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-800/95 sm:px-4">
       <button
         type="button"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 lg:hidden"
+        className="focus-visible-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 lg:hidden"
         onClick={onOpenMobileSidebar}
         aria-label="Open navigation menu"
       >
@@ -296,9 +302,6 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
       </button>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
-          Iskonnect
-        </p>
         <h1 className="truncate text-lg font-semibold text-slate-900 dark:text-slate-100">{pageTitle}</h1>
       </div>
 
@@ -376,7 +379,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
           <button
             type="button"
             onClick={toggleNotif}
-            className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+            className="focus-visible-ring relative flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
             aria-label="Notifications"
             aria-expanded={notifOpen}
           >
@@ -387,71 +390,18 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
               </span>
             ) : null}
           </button>
-          {notifOpen ? (
-            <div className="absolute right-0 z-40 mt-1 w-80 max-w-[calc(100vw-2rem)] rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-600 dark:bg-slate-800">
-              <div className="flex items-center justify-between border-b border-slate-100 px-3 py-2 dark:border-slate-700">
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications</p>
-                {notifItems.length > 0 ? (
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => void markAllNotificationsRead()}
-                      className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
-                    >
-                      Mark all read
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void clearAllNotifications()}
-                      className="text-xs font-medium text-red-600 hover:underline dark:text-red-400"
-                    >
-                      Clear all
-                    </button>
-                  </div>
-                ) : null}
-              </div>
-              <div className="max-h-80 overflow-y-auto">
-                {notifLoading ? (
-                  <p className="px-3 py-4 text-sm text-slate-500">Loading…</p>
-                ) : notifItems.length === 0 ? (
-                  <p className="px-3 py-4 text-sm text-slate-500 dark:text-slate-400">No notifications yet.</p>
-                ) : (
-                  notifItems.map((n) => (
-                    <div
-                      key={n.id}
-                      className={`flex items-start gap-2 border-b border-slate-50 dark:border-slate-700 ${
-                        !n.is_read ? "bg-primary-50/50 dark:bg-primary-950/20" : ""
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        className="min-w-0 flex-1 px-3 py-2.5 text-left text-sm text-slate-800 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-700/80"
-                        onClick={() => {
-                          if (!n.is_read) void markNotificationRead(n.id);
-                          if (n.scholarship_id) {
-                            navigate(`/scholarship/${n.scholarship_id}`);
-                            setNotifOpen(false);
-                          }
-                        }}
-                      >
-                        <p className="font-medium">{n.title}</p>
-                        {n.body ? <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{n.body}</p> : null}
-                        <p className="mt-1 text-[10px] text-slate-400">{formatNotifTime(n.created_at)}</p>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => void deleteNotification(n.id, e)}
-                        className="shrink-0 px-2 py-2.5 text-xs text-slate-400 hover:text-red-600 dark:hover:text-red-400"
-                        aria-label="Delete notification"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          ) : null}
+          <NotificationsPanel
+            open={notifOpen}
+            onOpenChange={setNotifOpen}
+            items={notifItems}
+            loading={notifLoading}
+            onMarkRead={(id) => void markNotificationRead(id)}
+            onMarkAllRead={() => void markAllNotificationsRead()}
+            onClearAll={() => void clearAllNotifications()}
+            onDelete={(id, e) => void deleteNotification(id, e)}
+            formatTime={formatNotifTime}
+            useSheet={!isSmUp}
+          />
         </div>
 
         <div className="relative" ref={menuRef}>
@@ -489,7 +439,7 @@ export function DashboardTopbar({ onOpenMobileSidebar }: DashboardTopbarProps) {
                 role="menuitem"
                 onClick={() => setMenuOpen(false)}
               >
-                Account Settings
+                Settings
               </Link>
               <button
                 type="button"

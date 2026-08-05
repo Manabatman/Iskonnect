@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { captureSentryException, isSentryConfigured } from "../lib/sentry";
 import { ERROR_COPY } from "../constants/errorCopy";
+import { isChunkLoadError } from "../utils/apiErrors";
 
 interface Props {
   children: ReactNode;
@@ -11,6 +12,7 @@ interface State {
 }
 
 const sentryEnabled = isSentryConfigured();
+const CHUNK_RELOAD_KEY = "iskonnect-chunk-reload-attempted";
 
 /**
  * Catches render errors in child trees so one bad page does not white-screen the whole app.
@@ -23,6 +25,15 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   override componentDidCatch(error: Error, info: ErrorInfo) {
+    if (isChunkLoadError(error) && typeof sessionStorage !== "undefined") {
+      if (!sessionStorage.getItem(CHUNK_RELOAD_KEY)) {
+        sessionStorage.setItem(CHUNK_RELOAD_KEY, "1");
+        window.location.reload();
+        return;
+      }
+      sessionStorage.removeItem(CHUNK_RELOAD_KEY);
+    }
+
     if (!import.meta.env.PROD) {
       console.error("[ErrorBoundary]", error, info.componentStack);
     }
@@ -30,6 +41,15 @@ export class ErrorBoundary extends Component<Props, State> {
       void captureSentryException(error, { componentStack: info.componentStack });
     }
   }
+
+  private handleRecovery = () => {
+    const { error } = this.state;
+    if (error && isChunkLoadError(error)) {
+      window.location.reload();
+      return;
+    }
+    this.setState({ error: null });
+  };
 
   override render() {
     if (this.state.error) {
@@ -44,7 +64,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <button
             type="button"
             className="mt-6 rounded-xl bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700"
-            onClick={() => this.setState({ error: null })}
+            onClick={this.handleRecovery}
           >
             {ERROR_COPY.generic.recoveryAction}
           </button>

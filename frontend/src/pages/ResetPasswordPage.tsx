@@ -74,7 +74,7 @@ export function ResetPasswordPage() {
                 minLength={10}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
+                className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-3 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
                 autoComplete="new-password"
               />
             </div>
@@ -89,7 +89,7 @@ export function ResetPasswordPage() {
                 minLength={10}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
+                className="mt-1 w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-3 text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-100"
                 autoComplete="new-password"
               />
             </div>

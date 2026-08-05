@@ -1,5 +1,8 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { cn, MIN_TOUCH_TARGET_CLASS } from "@/lib/utils";
 
 type Props = {
   className?: string;
@@ -8,18 +11,19 @@ type Props = {
 /** Context-aware back link — dashboard when signed in, home when logged out. */
 export function BackNavLink({ className }: Props) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const to = user ? "/dashboard" : "/";
   const label = user ? "Back to Dashboard" : "Back to home";
 
   return (
-    <Link
-      to={to}
-      className={
-        className ??
-        "inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-      }
+    <Button
+      type="button"
+      variant="ghost"
+      className={cn(MIN_TOUCH_TARGET_CLASS, className)}
+      onClick={() => navigate(to)}
     >
-      ← {label}
-    </Link>
+      <ChevronLeft className="size-4" aria-hidden />
+      {label}
+    </Button>
   );
 }

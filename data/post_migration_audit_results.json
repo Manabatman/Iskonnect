@@ -1,0 +1,550 @@
+{
+  "generated_at": "2026-08-05T13:24:23.138382+00:00",
+  "verdict": "GO \u2014 Data Ready, Gates Off",
+  "gate_ready": true,
+  "phases": [
+    {
+      "name": "A_deployment",
+      "passed": true,
+      "checks": [
+        {
+          "check": "alembic_head_048",
+          "ok": true,
+          "detail": "got '048'"
+        },
+        {
+          "check": "column_scholarships.max_prior_tertiary_units",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.min_work_experience_years",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.max_class_rank",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.max_class_percentile",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.academic_gate_mode",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.allow_transferee",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.allow_shiftee",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.first_undergraduate_only",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.min_residency_years",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.age_as_of_date",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.age_as_of_rule",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.max_parent_salary_grade",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "column_scholarships.parent_program_id",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "table_conflict_scopes",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "table_scholarship_conflict_scopes",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "table_student_active_grant_scopes",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "table_affiliation_codes",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "table_scholarship_required_affiliations",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "table_student_affiliations",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "check": "seed_conflict_national_stufap",
+          "ok": true,
+          "detail": "have ['lgu_grant', 'national_stufap']"
+        },
+        {
+          "check": "seed_conflict_lgu_grant",
+          "ok": true,
+          "detail": "have ['lgu_grant', 'national_stufap']"
+        },
+        {
+          "check": "seed_affiliation_ncfrs",
+          "ok": true,
+          "detail": "have 14 codes"
+        },
+        {
+          "check": "seed_affiliation_rsbsa",
+          "ok": true,
+          "detail": "have 14 codes"
+        },
+        {
+          "check": "seed_affiliation_sra",
+          "ok": true,
+          "detail": "have 14 codes"
+        },
+        {
+          "check": "seed_affiliation_gsis_member",
+          "ok": true,
+          "detail": "have 14 codes"
+        },
+        {
+          "check": "seed_affiliation_hei_faculty",
+          "ok": true,
+          "detail": "have 14 codes"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "B_data",
+      "passed": true,
+      "checks": [
+        {
+          "check": "critical_73_exists",
+          "ok": true,
+          "detail": "DOST UG"
+        },
+        {
+          "check": "critical_73_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "critical_73_min_residency_years",
+          "ok": true,
+          "detail": "expected 4, got 4"
+        },
+        {
+          "check": "critical_73_enroll_incoming_freshman",
+          "ok": true,
+          "detail": "enrollment=['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "critical_73_enroll_enrolled",
+          "ok": true,
+          "detail": "enrollment=['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "critical_73_conflict_national_stufap",
+          "ok": true,
+          "detail": "scopes=['national_stufap']"
+        },
+        {
+          "check": "critical_76_exists",
+          "ok": true,
+          "detail": "BPMSP HE"
+        },
+        {
+          "check": "critical_76_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "critical_76_academic_gate_mode",
+          "ok": true,
+          "detail": "expected 'or', got 'or'"
+        },
+        {
+          "check": "critical_76_max_class_rank",
+          "ok": true,
+          "detail": "expected 5, got 5"
+        },
+        {
+          "check": "critical_76_enroll_incoming_freshman",
+          "ok": true,
+          "detail": "enrollment=['incoming_freshman']"
+        },
+        {
+          "check": "critical_77_exists",
+          "ok": true,
+          "detail": "BPMSP TVET"
+        },
+        {
+          "check": "critical_77_academic_gate_mode",
+          "ok": true,
+          "detail": "expected 'or', got 'or'"
+        },
+        {
+          "check": "critical_77_max_class_rank",
+          "ok": true,
+          "detail": "expected 5, got 5"
+        },
+        {
+          "check": "critical_10_exists",
+          "ok": true,
+          "detail": "SM Foundation"
+        },
+        {
+          "check": "critical_10_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "critical_10_enroll_incoming_freshman",
+          "ok": true,
+          "detail": "enrollment=['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "critical_10_enroll_enrolled",
+          "ok": true,
+          "detail": "enrollment=['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "critical_66_exists",
+          "ok": true,
+          "detail": "TES"
+        },
+        {
+          "check": "critical_66_conflict_national_stufap",
+          "ok": true,
+          "detail": "scopes=['national_stufap']"
+        },
+        {
+          "check": "critical_54_exists",
+          "ok": true,
+          "detail": "MSRS"
+        },
+        {
+          "check": "critical_54_conflict_national_stufap",
+          "ok": true,
+          "detail": "scopes=['national_stufap']"
+        },
+        {
+          "check": "critical_117_exists",
+          "ok": true,
+          "detail": "CoScho"
+        },
+        {
+          "check": "critical_117_conflict_national_stufap",
+          "ok": true,
+          "detail": "scopes=['national_stufap']"
+        },
+        {
+          "check": "critical_117_aff_ncfrs",
+          "ok": true,
+          "detail": "affiliations=['ncfrs']"
+        },
+        {
+          "check": "critical_61_exists",
+          "ok": true,
+          "detail": "Megaworld"
+        },
+        {
+          "check": "critical_61_partner_schools",
+          "ok": false,
+          "detail": "eligible_schools empty \u2014 prior remediation not applied; gate will be N/A",
+          "warning": true
+        },
+        {
+          "check": "critical_132_exists",
+          "ok": true,
+          "detail": "Megaworld College"
+        },
+        {
+          "check": "critical_132_partner_schools",
+          "ok": false,
+          "detail": "eligible_schools empty \u2014 prior remediation not applied; gate will be N/A",
+          "warning": true
+        },
+        {
+          "check": "manifest_73_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "manifest_73_eligible_enrollment_status",
+          "ok": true,
+          "detail": "expected ['incoming_freshman', 'enrolled'], got ['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "manifest_73_min_residency_years",
+          "ok": true,
+          "detail": "expected 4, got 4"
+        },
+        {
+          "check": "manifest_76_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "manifest_76_academic_gate_mode",
+          "ok": true,
+          "detail": "expected 'or', got 'or'"
+        },
+        {
+          "check": "manifest_76_min_gwa_normalized",
+          "ok": true,
+          "detail": "expected 95, got 95.0"
+        },
+        {
+          "check": "manifest_76_max_class_rank",
+          "ok": true,
+          "detail": "expected 5, got 5"
+        },
+        {
+          "check": "manifest_76_eligible_enrollment_status",
+          "ok": true,
+          "detail": "expected ['incoming_freshman'], got ['incoming_freshman']"
+        },
+        {
+          "check": "manifest_77_academic_gate_mode",
+          "ok": true,
+          "detail": "expected 'or', got 'or'"
+        },
+        {
+          "check": "manifest_77_min_gwa_normalized",
+          "ok": true,
+          "detail": "expected 90, got 90.0"
+        },
+        {
+          "check": "manifest_77_max_class_rank",
+          "ok": true,
+          "detail": "expected 5, got 5"
+        },
+        {
+          "check": "manifest_10_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "manifest_10_eligible_enrollment_status",
+          "ok": true,
+          "detail": "expected ['incoming_freshman', 'enrolled'], got ['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "manifest_104_academic_gate_mode",
+          "ok": true,
+          "detail": "expected 'or', got 'or'"
+        },
+        {
+          "check": "manifest_104_max_class_rank",
+          "ok": true,
+          "detail": "expected 5, got 5"
+        },
+        {
+          "check": "manifest_5_first_undergraduate_only",
+          "ok": true,
+          "detail": "expected True, got True"
+        },
+        {
+          "check": "manifest_5_max_prior_tertiary_units",
+          "ok": true,
+          "detail": "expected 0, got 0"
+        },
+        {
+          "check": "manifest_5_eligible_enrollment_status",
+          "ok": true,
+          "detail": "expected ['incoming_freshman', 'enrolled'], got ['incoming_freshman', 'enrolled']"
+        },
+        {
+          "check": "manifest_74_min_work_experience_years",
+          "ok": true,
+          "detail": "expected 2, got 2"
+        },
+        {
+          "check": "manifest_90_min_work_experience_years",
+          "ok": true,
+          "detail": "expected 2, got 2"
+        },
+        {
+          "check": "manifest_91_min_work_experience_years",
+          "ok": true,
+          "detail": "expected 2, got 2"
+        },
+        {
+          "check": "consortium_ASTHRDP_3",
+          "ok": true,
+          "detail": "umbrella row skipped (multi-program title)",
+          "warning": true
+        },
+        {
+          "check": "consortium_ASTHRDP_133",
+          "ok": true,
+          "detail": "schools=['ateneo-de-manila-university', 'de-la-salle-university', 'university-of-the-philippines-diliman', 'university-of-the-philippines-los-banos'] expected subset ['ateneo-de-manila-university', 'de-la-salle-university', 'university-of-the-philippines-diliman', 'university-of-the-philippines-los-banos']"
+        },
+        {
+          "check": "consortium_ERDT_3",
+          "ok": true,
+          "detail": "umbrella row skipped (multi-program title)",
+          "warning": true
+        },
+        {
+          "check": "consortium_ERDT_134",
+          "ok": true,
+          "detail": "schools=['mapua-university', 'technological-university-of-the-philippines', 'university-of-the-philippines-diliman', 'university-of-the-philippines-los-banos'] expected subset ['mapua-university', 'technological-university-of-the-philippines', 'university-of-the-philippines-diliman', 'university-of-the-philippines-los-banos']"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "C_engine",
+      "passed": true,
+      "checks": [
+        {
+          "check": "pytest_migration_persona_regression",
+          "ok": true,
+          "detail": "see pytest output"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "D_cross_surface",
+      "passed": true,
+      "checks": [
+        {
+          "check": "cross_incoming_freshman_g12_73_status_parity",
+          "ok": true,
+          "detail": "match=almost_qualified api=almost_qualified detail=almost_qualified filtered=False svc=excluded_by_hard_filter"
+        },
+        {
+          "check": "cross_incoming_freshman_g12_10_status_parity",
+          "ok": true,
+          "detail": "match=almost_qualified api=almost_qualified detail=almost_qualified filtered=False svc=excluded_by_hard_filter"
+        },
+        {
+          "check": "cross_incoming_freshman_g12_76_status_parity",
+          "ok": true,
+          "detail": "match=not_eligible api=not_eligible detail=not_eligible filtered=False svc=excluded_by_hard_filter"
+        },
+        {
+          "check": "cross_college_enrolled_units_73_status_parity",
+          "ok": true,
+          "detail": "match=provisionally_qualified svc=provisionally_qualified api=provisionally_qualified detail=provisionally_qualified filtered=True"
+        },
+        {
+          "check": "cross_college_enrolled_units_10_status_parity",
+          "ok": true,
+          "detail": "match=provisionally_qualified svc=provisionally_qualified api=provisionally_qualified detail=provisionally_qualified filtered=True"
+        },
+        {
+          "check": "cross_stufap_conflict_66_status_parity",
+          "ok": true,
+          "detail": "match=provisionally_qualified svc=provisionally_qualified api=provisionally_qualified detail=provisionally_qualified filtered=True"
+        },
+        {
+          "check": "cross_stufap_conflict_54_status_parity",
+          "ok": true,
+          "detail": "match=almost_qualified api=almost_qualified detail=almost_qualified filtered=False svc=excluded_by_hard_filter"
+        },
+        {
+          "check": "cross_stufap_conflict_73_status_parity",
+          "ok": true,
+          "detail": "match=almost_qualified api=almost_qualified detail=almost_qualified filtered=False svc=excluded_by_hard_filter"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "E_production_health",
+      "passed": true,
+      "checks": [
+        {
+          "check": "scores_recomputed",
+          "ok": true,
+          "detail": "completeness rows=114"
+        },
+        {
+          "check": "confidence_present",
+          "ok": true,
+          "detail": "confidence rows=114"
+        },
+        {
+          "check": "spec13_manifest_scholarships",
+          "ok": true,
+          "detail": "0 manifest violations; 2 total active"
+        },
+        {
+          "check": "spec13_active_catalog_total",
+          "ok": true,
+          "detail": "2 violations (Megaworld schools + TDP enrollment known gaps)"
+        },
+        {
+          "check": "score_audit_artifact",
+          "ok": true,
+          "detail": "C:\\Iskonnect\\scholarship-match\\data\\post_migration_score_audit.json"
+        },
+        {
+          "check": "catalog_quality_report",
+          "ok": true,
+          "detail": "ok"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "F_verification_integrity",
+      "passed": true,
+      "checks": [
+        {
+          "check": "backfill_did_not_bump_last_verified_at",
+          "ok": true,
+          "detail": "checked 29 IDs"
+        },
+        {
+          "check": "backfill_field_evidence_written",
+          "ok": true,
+          "detail": "rows=40"
+        },
+        {
+          "check": "write_path_classification",
+          "ok": true,
+          "detail": "migration_v1_backfill uses create_field_evidence only; scholarship_persist / staging promote / verify_refresh may bump last_verified_at intentionally"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "pytest_ok": true,
+  "provider_acceptance_ok": true
+}

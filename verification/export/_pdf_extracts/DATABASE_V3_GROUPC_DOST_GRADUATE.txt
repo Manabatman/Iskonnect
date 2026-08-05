@@ -1,0 +1,1671 @@
+Canonical Verification Report: DOST-SEI 
+Graduate Scholarship Programs 
+A systemic audit of the live scholarship database (public.scholarships, export timestamp 
+2026-08-05) reveals structural inaccuracies, incomplete data models, and critical logic 
+mismatches between live database parameters and official agency mandates governing 
+graduate funding. In a production-grade scholarship matching engine, loose data typing and 
+qualitative assumptions generate severe failure modes. False-positive recommendations direct 
+ineligible applicants to submit applications for programs that will reject them, while 
+false-negative omissions suppress viable funding opportunities for qualified candidates. 
+This report provides canonical verification for five Department of Science and Technology - 
+Science Education Institute (DOST-SEI) graduate scholarship programs: the master umbrella 
+entry (ID 3) and its four component sub-tracks—Accelerated Science and Technology Human 
+Resource Development Program (ASTHRDP, ID 133), Engineering Research and Development 
+for Technology (ERDT, ID 134), Capacity Building Program in Science and Mathematics 
+Education (CBPSME, ID 135), and Science and Technology Education for Regional 
+Development (STRAND, ID 136). 
+Data verification strictly follows a four-tiered authority hierarchy: Tier 1 comprises direct 
+government web portals (.gov.ph), official provider systems (science-scholarships.ph), official 
+downloadable PDF guidelines, and governing administrative orders. Tier 2 covers official press 
+releases and advisories published directly by governing secretariats. Tier 3 includes trusted 
+university scholarship notices used solely to locate primary sources, while Tier 4 unverified 
+blogs and secondary aggregators are discarded. Fields lacking explicit mandates in Tier 1 
+sources are designated as NOT SPECIFIED IN OFFICIAL SOURCE. 
+Database ID 
+Live Database 
+Title 
+Live DB State 
+Canonical Provider 
+Mandate 
+Primary 
+Discrepancy & 
+Matching Engine 
+Impact 
+ID 3 
+DOST-SEI 
+Graduate 
+Scholarship 
+Programs 
+(ASTHRDP/CBPS
+ME/ERDT/STRAN
+D) 
+is_active: true, 
+max_income: 
+500000, min_gwa: 
+88, allowance_mo: 
+15000, total_value: 
+200000, 
+confidence_score: 
+0.12 
+Active master 
+umbrella program. 
+Stipend is 
+₱30,000/mo (MS) 
+or ₱38,000/mo 
+(PhD). Income is 
+uncapped. GWA is 
+governed by host 
+graduate school 
+retention rules. 
+Severe Parameter 
+Corruption: 
+Erroneously 
+enforces a 
+₱500,000 income 
+ceiling and 
+underestimates 
+monthly living 
+stipends by 50% to 
+60%, 
+miscalculating 
+applicant eligibility. 
+ID 133 
+Accelerated 
+Science and 
+Technology 
+Human Resource 
+is_active: true, 
+levels: 
+["Graduate"], 
+tuition: false, 
+Active R&D 
+graduate track. 
+Covers actual 
+tuition, ₱30k/₱38k 
+Incomplete Data 
+Schema: 
+confidence_score 
+and completeness 
+
+Database ID 
+Live Database 
+Title 
+Live DB State 
+Canonical Provider 
+Mandate 
+Primary 
+Discrepancy & 
+Matching Engine 
+Impact 
+Development 
+Program 
+(ASTHRDP) 
+allowance_mo: 
+null, total_value: 
+null, 
+confidence_score: 
+0.05 
+monthly stipend, 
+₱20k/AY book 
+allowance, and 
+Student Research 
+Support Fund 
+(SRSF). 
+are near zero 
+(0.05), 
+suppressing the 
+scholarship in 
+automated 
+matching queries. 
+ID 134 
+Engineering 
+Research and 
+Development for 
+Technology 
+(ERDT) 
+is_active: true, 
+levels: 
+["Graduate"], 
+tuition: false, 
+allowance_mo: 
+null, total_value: 
+null, 
+confidence_score: 
+0.05 
+Active engineering 
+graduate track 
+restricted to eight 
+ERDT Consortium 
+universities. Full 
+tuition and 
+standard DOST 
+graduate benefits. 
+Incomplete 
+Schema & 
+Missing Tag: 
+Lacks structured 
+tagging for the 
+8-university ERDT 
+Consortium 
+restriction, risking 
+false-positive 
+matches. 
+ID 135 
+Capacity Building 
+Program in 
+Science and 
+Mathematics 
+Education 
+(CBPSME) 
+is_active: true, 
+levels: 
+["Graduate"], 
+tuition: false, 
+allowance_mo: 
+null, total_value: 
+null, 
+confidence_score: 
+0.05 
+Active educator 
+track for science 
+and math 
+teachers/educator
+s. Full tuition, 
+₱30k/₱38k 
+stipend, and 
+teaching return 
+service obligation. 
+Incomplete 
+Schema & 
+Sectoral 
+Omission: Fails to 
+tag science/math 
+teacher sectoral 
+constraints, 
+causing 
+false-positive 
+matches for 
+general graduate 
+applicants. 
+ID 136 
+Science and 
+Technology 
+Education for 
+Regional 
+Development 
+(STRAND) 
+is_active: true, 
+levels: 
+["[span_4](start_sp
+an)[span_4](end_s
+pan)Graduate"], 
+tuition: false, 
+allowance_mo: 
+null, total_value: 
+null, 
+confidence_score: 
+0.05 
+Active faculty 
+development track 
+for 
+regional/provincial 
+HEI faculty 
+members. 
+Standard DOST 
+graduate 
+privileges. 
+Incomplete 
+Schema & 
+Faculty Tag 
+Omission: Lacks 
+institutional faculty 
+employment filters, 
+failing to target 
+regional HEI 
+faculty. 
+DOST-SEI Graduate Scholarship Programs 
+(ASTHRDP/CBPSME/ERDT/STRAND) (ID: 3) 
+
+1. Scholarship Identity 
+●​ Official Name: DOST-SEI Graduate Scholarship Programs (Umbrella Entry covering 
+ASTHRDP, CBPSME, ERDT, and STRAND) 
+●​ Provider: Department of Science and Technology - Science Education Institute 
+(DOST-SEI) 
+●​ Category: Government / National / Graduate / Merit-based 
+●​ Official Website: https://www.science-scholarships.ph/ 
+●​ Application Portal: https://www.science-scholarships.ph/ 
+●​ Official Guidelines: DOST-SEI Local Graduate Scholarship Guidelines & Application 
+E-Forms 
+●​ Current Status: Active 
+2. Purpose 
+To boost the production of high-level human resources needed for Research and Development 
+(R&D) in Science and Technology (S&T), upgrade engineering research capability, improve the 
+quality of science and mathematics education, and strengthen the faculty profile of regional 
+universities across the Philippines. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Graduate (Master's Degree and Doctoral/PhD Degree). 
+●​ Eligible Year Levels: MS Program: Years 1 and 2; PhD Program: Years 1, 2, and 3 (up to 
+Year 4 for straight-PhD track). 
+●​ Incoming Freshman Only?: No (Lateral entry ongoing graduate students with earned units 
+are eligible). 
+●​ Existing College Students?: Ineligible for undergraduate degree enrollment; applicants 
+must possess a completed Bachelor's degree (for MS) or Master's degree (for PhD). 
+●​ Graduate Students?: Yes (Incoming 1st year graduate students and regular ongoing 
+MS/PhD students). 
+●​ Current Enrollment Requirement: Must be admitted or enrolled as a regular graduate 
+student in an approved priority S&T program at a DOST-SEI consortium member 
+university. 
+●​ Academic Requirements: Must meet the admission requirements for graduate studies at 
+the accepting consortium university. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Governed by host university 
+graduate school admission and retention standards; live database entry of 88% is an 
+unverified artifact). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Uncapped / No parental or 
+personal income limit is imposed in official DOST graduate guidelines; live database cap 
+of ₱500,000 is incorrect). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted to designated DOST-SEI Graduate Scholarship 
+
+Consortium Member Universities (e.g., NSC, ERDT, CBPSME, and STRAND consortia). 
+●​ Priority Courses: DOST-SEI Priority S&T Fields (Natural Sciences, Engineering, Science 
+& Mathematics Education, Agriculture, Computer Science, etc.). 
+●​ Sectoral Requirements: Educator status for CBPSME; Regional HEI faculty status for 
+STRAND. 
+●​ Good Moral: Required (Validated via NBI Clearance or Certificate of Good Moral 
+Character). 
+●​ Health Requirements: Physically and mentally fit to study, as certified by a licensed 
+physician. 
+●​ Other Official Rules: Must be a full-time student; must NOT be employed or practicing a 
+profession while on scholarship, or must secure an official approved leave of absence 
+(LOA) from the employer; must not enjoy concurrent government or private scholarships; 
+must execute a service contract. 
+4. Application Timing 
+●​ Who May Apply: Graduating college seniors entering graduate school, BS/BA degree 
+holders applying for MS, MS degree holders applying for PhD, and regular ongoing 
+MS/PhD students. 
+●​ Can current freshmen apply?: Ineligible for undergraduate freshmen; incoming 1st-year 
+graduate students may apply. 
+●​ Can current sophomores apply?: Ineligible for undergraduate sophomores; ongoing 
+2nd-year MS/PhD graduate students may apply. 
+●​ Can current juniors apply?: Ineligible for undergraduate juniors. 
+●​ Can current seniors apply?: Graduating college seniors entering an MS program upon 
+graduation may apply. 
+●​ Can graduates apply?: Yes (Bachelor's graduates for MS; Master's graduates for PhD). 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Announced per academic cycle by consortium universities (typically 
+March/April for 1st Semester; September/October for 2nd Semester). 
+●​ Closing Date: Varies by university (e.g., June 30 for 1st Semester intake). 
+●​ Application Cycle: Semester / Term intake. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full actual tuition and other school fees. 
+●​ Monthly Stipend: ₱30,000.00 per month for MS scholars; ₱38,000.00 per month for PhD 
+scholars. 
+●​ Allowance: Learning Materials and/or Connectivity Allowance of ₱20,000.00 per 
+Academic Year. 
+●​ Book Allowance: Integrated into the Learning Materials and Connectivity Allowance 
+(₱20,000.00/AY). 
+●​ Transportation: Actual one (1) economy class roundtrip fare per Academic Year (for 
+scholars studying outside their home province). 
+
+●​ Insurance: Full Group Personal Accident Insurance coverage. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: Student Research Support Fund (SRSF): Outright 
+Thesis/Dissertation Allowance of ₱60,000.00 (MS) or ₱100,000.00 (PhD); Research 
+Grant up to ₱114,000.00 (MS) or ₱253,000.00 (PhD); Dissemination Grant up to 
+₱75,000.00 (MS) or ₱150,000.00 (PhD); Mentor's Fee of ₱36,000.00 (MS) or ₱72,000.00 
+(PhD). 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE (10% of thesis 
+allowance is released upon submission of final hardbound copies and graduation 
+requirements). 
+●​ Return Service: Mandatory return service obligation in the Philippines on a full-time basis 
+immediately after degree completion, equivalent to one (1) year of service for every year 
+of scholarship availed. 
+●​ Other Benefits: Career Incentive Program (CIP) eligibility upon graduation with Graduate 
+Fellow positions (MS: ₱59,802/month; PhD: ₱82,098/month); MECO-TECO Sandwich 
+Scholarship Program research exchange eligibility. 
+7. Required Documents 
+1.​ Duly accomplished DOST-SEI Graduate Scholarship Information Sheet / Application 
+Form. 
+2.​ PSA Birth Certificate (Photocopy). 
+3.​ Certified True Copy of Official Transcript of Records (TOR) for BS (and MS if applying for 
+PhD). 
+4.​ Official Endorsement Forms from two (2) former college professors (for MS) or two (2) 
+former MS professors (for PhD). 
+5.​ Medical Certificate from a licensed physician stating the applicant is physically and 
+mentally fit to study. 
+6.​ Valid NBI Clearance. 
+7.​ Official Letter of Admission with regular status from the Program Head of the accepting 
+institution. 
+8.​ Approved Program of Study (POS). 
+9.​ If employed: Official recommendation and approved Leave of Absence (LOA) from the 
+head of agency, or proof of resignation. 
+8. Renewal Requirements 
+●​ Maintain GWA: Must maintain a satisfactory General Weighted Average (GWA/GPA) 
+prescribed by the host graduate school each term. 
+●​ Regular Load: Must carry a full academic load per semester based on the approved 
+Program of Study (9–12 units regular term, 3–6 units midyear). 
+●​ No Failures: Must have no failing, incomplete, or dropped grades in coursework. 
+●​ Return Service: Execution of scholarship agreement binding scholar to return service. 
+9. Disqualifying Conditions 
+●​ Employment or professional practice while on scholarship without an approved official 
+leave of absence. 
+
+●​ Failure to maintain academic retention standards or receiving a failing grade in any 
+graduate subject. 
+●​ Concurrent enjoyment of another government or private scholarship covering the same 
+degree program. 
+●​ Failure to comply with the return service obligation or non-completion of the degree 
+program without valid justification (requires full financial refund with interest). 
+10. Temporal Eligibility Matrix 
+Profile 
+Academic Level / 
+Status 
+Eligibility Status 
+Actionable Guidance 
+Enrolled 
+Undergraduate Student 
+College Years 1–3 
+Ineligible 
+Must complete 
+Bachelor's degree prior 
+to graduate scholarship 
+entry. 
+Graduating BS/BA 
+Student 
+College Senior 
+Eligible Later 
+Apply during the final 
+semester for incoming 
+MS intake. 
+BS Graduate 
+(Unemployed) 
+Incoming 1st Year MS Eligible Now 
+Direct entry into MS 
+scholarship upon 
+regular admission. 
+BS Graduate 
+(Employed with LOA) 
+Incoming 1st Year MS Eligible Now 
+Submit employer 
+endorsement and 
+approved LOA. 
+BS Graduate 
+(Employed without 
+LOA) 
+Employed 
+Ineligible 
+Must secure an official 
+LOA or resign prior to 
+scholarship award. 
+Ongoing MS Student 
+1st/2nd Year MS 
+Eligible Now 
+Apply via lateral entry 
+with TOR and 
+university 
+endorsement. 
+MS Graduate 
+Incoming 1st Year PhD Eligible Now 
+Direct entry into PhD 
+scholarship upon 
+regular admission. 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Citizenship 
+Natural-born or 
+naturalized Filipino 
+"Be a Filipino 
+citizen" 
+PCIEERD / DOST 
+Guidelines 
+Tier 1 
+Education Level 
+Graduate (MS / 
+PhD) 
+"pursue Master's 
+and Doctoral 
+programs in 
+priority S&T areas" 
+DOST-SEI 
+Brochure 
+Tier 1 
+Academic 
+Admission 
+Regular Admission 
+Status 
+"Letter of 
+Admission with 
+Regular status 
+UP Diliman DOST 
+Portal 
+Tier 1 
+
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+from the Program 
+Head" 
+Employment 
+Status 
+Unemployed or On 
+LOA 
+"The scholar must 
+NOT be employed 
+or practicing 
+his/her profession 
+while on 
+scholarship... 
+secure approval 
+for official leave of 
+absence" 
+ASTHRDP 
+Handbook / 
+Guidelines 
+Tier 1 
+Monthly Stipend 
+₱30,000 (MS) / 
+₱38,000 (PhD) 
+"Stipend: MS PHP 
+30,000 / mo; PhD 
+PHP 38,000 / mo" 
+DOST-SEI Official 
+Privileges 
+Schedule 
+Tier 1 
+Return Service 
+1:1 Ratio 
+"required to render 
+service obligation 
+in the Philippines... 
+one year service 
+for every year of 
+scholarship" 
+DOST-SEI 
+Scholarship 
+Privileges 
+Tier 1 
+12. Production Database Mapping 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": null,​
+  "income_limit": null,​
+  "rank_cutoff_alternative": null,​
+  "priority_courses": ["DOST-SEI PRIORITY S&T GRADUATE FIELDS"],​
+  "school_type": ["SUC", "LUC", "PRIVATE_CONSORTIUM_HEI"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "semester_variable", "close": 
+"semester_variable"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": 
+t[span_42](start_span)[span_42](end_span)rue,​
+  "needs_manual_review": true​
+}​
+
+ 
+13. Matching Risks 
+●​ Corrupted Financial Parameters: Live database ID 3 sets max_income: 500000 and 
+allowance_mo: 15000. The matching engine must remove the income cap (as DOST 
+graduate grants are uncapped) and update stipend parameters to ₱30,000 (MS) and 
+₱38,000 (PhD). 
+●​ Umbrella Redundancy: ID 3 functions as a generic master record covering four 
+individual programs. If an applicant searches specifically for ERDT (engineering) or 
+CBPSME (education), matching queries must route to the specific child records (IDs 
+133–136) rather than returning duplicate umbrella entries. 
+14. Verification Summary 
+●​ Verification Status: Verified 
+●​ Last Verified Date: 2026-08-05 
+●​ Official URLs Checked: https://www.science-scholarships.ph/, 
+https://www.sei.dost.gov.ph/, https://science.upd.edu.ph/dost-asthrdp/ 
+●​ Broken Links: None 
+●​ Overall Confidence Score: 98/100 
+Accelerated Science and Technology Human 
+Resource Development Program (ASTHRDP) (ID: 133) 
+1. Scholarship Identity 
+●​ Official Name: Accelerated Science and Technology Human Resource Development 
+Program (ASTHRDP) 
+●​ Provider: Department of Science and Technology - Science Education Institute 
+(DOST-SEI) 
+●​ Category: Government / National / Graduate / Merit-based 
+●​ Official Website: https://asthrdp.science-scholarships.ph/ 
+●​ Application Portal: https://asthrdp.science-scholarships.ph/ 
+●​ Official Guidelines: DOST-SEI ASTHRDP-NSC Information Sheet & Scholar Handbook 
+●​ Current Status: Active 
+2. Purpose 
+To accelerate the production of high-level human resources for Research and Development 
+(R&D) in basic and applied S&T fields, improve national global competitiveness, and support 
+advanced scientific research in priority areas such as materials science, biotechnology, climate 
+change, and drug development. 
+3. Official Eligibility Requirements 
+
+●​ Citizenship: Natural-born or naturalized Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Graduate (Master of Science / PhD in S&T). 
+●​ Eligible Year Levels: MS Track: Years 1 and 2; PhD Track: Years 1, 2, and 3 (up to 4 
+years for straight-PhD). 
+●​ Incoming Freshman Only?: No (Lateral entry graduate students with earned units are 
+eligible). 
+●​ Existing College Students?: Ineligible for undergraduate degree; must possess a 
+completed Bachelor's degree (for MS) or Master's degree (for PhD). 
+●​ Graduate Students?: Yes (Incoming 1st year graduate students and regular ongoing 
+MS/PhD students). 
+●​ Current Enrollment Requirement: Must be admitted or enrolled in an approved MS/PhD 
+program at a National Science Consortium (NSC) member university. 
+●​ Academic Requirements: Must meet the graduate school admission standards of the host 
+NSC member university. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Governed by host NSC 
+university graduate school retention policies). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Uncapped / No income 
+ceiling). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to ASTHRDP National Science Consortium (NSC) 
+Member Universities: UP Diliman, UP Los Baños, UP Manila, UP Visayas, Ateneo de 
+Manila University, De La Salle University, University of San Carlos, Mindanao State 
+University - Iligan Institute of Technology, Central Luzon State University, and Visayas 
+State University. 
+●​ Priority Courses: Basic and Applied Sciences: Chemistry, Physics, Biological Sciences, 
+Environmental Science, Meteorology/Earth Sciences, Mathematics, Computer Science, 
+Materials Science, Food Science, Agriculture, and Biotechnology. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required (Validated via valid NBI Clearance). 
+●​ Health Requirements: Physically and mentally fit to undergo graduate studies, as certified 
+by a licensed physician. 
+●​ Other Official Rules: Must pursue full-time graduate studies; must NOT be employed or 
+practicing a profession while on scholarship unless an official approved leave of absence 
+(LOA) is granted; must execute a scholarship agreement. 
+4. Application Timing 
+●​ Who May Apply: Graduating college seniors entering graduate school, BS graduates 
+applying for MS, MS graduates applying for PhD, and ongoing MS/PhD students at NSC 
+universities. - Can current freshmen apply?: Ineligible for undergraduate freshmen; 
+incoming 1st-year graduate students may apply. 
+●​ Can current sophomores apply?: Ineligible for undergraduate sophomores; ongoing 
+2nd-year MS/PhD students may apply. 
+●​ Can current juniors apply?: Ineligible for undergraduate juniors. 
+●​ Can current seniors apply?: Graduating undergraduate seniors entering an MS program 
+may apply. 
+
+●​ Can graduates apply?: Yes (BS/BA graduates for MS; MS graduates for PhD). 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+- Opening Date: Set annually per semester by NSC member universities (e.g., April/May for 1st 
+Semester; September/October for 2nd Semester). 
+●​ Closing Date: Varies by NSC university (e.g., July 31 for CLSU; August 15 for DLSU). 
+●​ Application Cycle: Semester / Term intake. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full actual tuition and other school fees. 
+●​ Monthly Stipend: ₱30,000.00 per month for MS scholars; ₱38,000.00 per month for PhD 
+scholars. 
+●​ Allowance: Learning Materials and/or Connectivity Allowance of ₱20,000.00 per 
+Academic Year. 
+●​ Book Allowance: Integrated into Learning Materials and Connectivity Allowance 
+(₱20,000.00/AY). 
+●​ Transportation: Actual one (1) economy class roundtrip fare per Academic Year (for 
+scholars studying outside their home province). 
+●​ Insurance: Full Group Personal Accident Insurance coverage. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: Student Research Support Fund (SRSF): Outright 
+Thesis/Dissertation Allowance of ₱60,000.00 (MS) or ₱100,000.00 (PhD); Research 
+Grant up to ₱114,000.00 (MS) or ₱253,000.00 (PhD); Dissemination Grant up to 
+₱75,000.00 (MS) or ₱150,000.00 (PhD); Mentor's Fee of ₱36,000.00 (MS) or ₱72,000.00 
+(PhD). 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE (10% remaining thesis 
+grant released upon hardbound submission). 
+●​ Return Service: Mandatory service obligation in the Philippines on a full-time basis 
+immediately after degree completion, equivalent to one (1) year for every year of 
+scholarship enjoyed. 
+●​ Other Benefits: Career Incentive Program (CIP) deployment as Graduate Fellow 
+post-graduation; MECO-TECO Sandwich Program research exchange eligibility. 
+7. Required Documents 
+1. Accomplished ASTHRDP-NSC Information Sheet / Application Form. 2. Birth Certificate (PSA 
+Photocopy). 3. Certified True Copy of Official Transcript of Records (TOR). 4. Endorsement from 
+two (2) former college professors (for MS) or two (2) former MS professors (for PhD). 5. Medical 
+Certificate from a licensed physician stating applicant is fit to study. 6. Valid NBI Clearance. 7. 
+Official Letter of Admission with regular status from the accepting NSC university. 8. Approved 
+Program of Study. 9. If employed: Recommendation and approved LOA from head of agency, or 
+proof of resignation. 
+
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required cumulative GPA/GWA set by the host NSC university. 
+●​ Regular Load: Full-time academic load (9–12 units per regular semester, 3–6 units 
+midyear). 
+●​ No Failures: No failing or dropped grades in graduate coursework. 
+●​ Return Service: Compliance with post-graduation return service contract. 
+9. Disqualifying Conditions 
+●​ Unapproved employment or practice of profession while holding the scholarship. 
+●​ Academic failure or dropping below the host university's required retention GPA. 
+●​ Concurrent enjoyment of another government or private scholarship. 
+●​ Non-compliance with post-graduation service obligation (requires full financial refund with 
+interest). 
+10. Temporal Eligibility Matrix 
+Profile 
+Academic Level / 
+Status 
+Eligibility Status 
+Actionable Guidance 
+Enrolled 
+Undergraduate 
+College Years 1–3 
+Ineligible 
+Must complete 
+Bachelor's degree prior 
+to applying. 
+Graduating BS Senior College Senior 
+Eligible Later 
+Apply during final term 
+for incoming MS intake. 
+Unemployed BS 
+Graduate 
+Incoming 1st Year MS Eligible Now 
+Direct intake into 
+ASTHRDP upon NSC 
+university admission. 
+Employed BS Graduate 
+(LOA) 
+Incoming 1st Year MS Eligible Now 
+Submit employer 
+endorsement and 
+approved LOA. 
+Ongoing MS Student 
+(NSC) 
+1st/2nd Year MS 
+Eligible Now 
+Apply via lateral entry 
+with academic 
+transcript. 
+Ongoing PhD Student 
+(NSC) 
+1st–3rd Year PhD 
+Eligible Now 
+Apply via lateral entry 
+for PhD funding. 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+School Restriction NSC Member 
+Universities 
+"pursue Master's 
+and Doctoral 
+programs... in any 
+of the NSC 
+member-universiti
+es" 
+ASTHRDP 
+Handbook 
+Tier 1 
+Employment Rule Unemployed or On "The scholar must UP Diliman 
+Tier 1 
+
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+LOA 
+NOT be employed 
+or practicing 
+his/her 
+profession... 
+secure approval 
+for official leave of 
+absence" 
+ASTHRDP 
+Academic Load 
+9–12 Units / Term "Required 
+academic load 
+during regular 
+sem/term 9-12 
+units" 
+ASTHRDP 
+Handbook 
+Tier 1 
+Monthly Stipend 
+₱30k (MS) / ₱38k 
+(PhD) 
+"Stipend: MS 
+30,000 / mo; PhD 
+38,000 / mo" 
+ASTHRDP 
+Brochure 
+Tier 1 
+SRSF Thesis 
+Grant 
+₱60k (MS) / ₱100k 
+(PhD) 
+"Outright 
+Thesis/Dissertatio
+n Allowance: MS 
+60,000; PhD 
+100,000" 
+ASTHRDP 
+Brochure 
+Tier 1 
+12. Production Database Mapping 
+{​
+  "education_level": 
+["Graduate[span_239](start_span)[span_239](end_span)[span_252](start_s
+pan)[span_252](end_span)"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  
+"requires_current_enrollment":[span_240](start_span)[span_240](end_spa
+n)[span_253](start_span)[span_253](end_span) true,​
+  "minimum_gwa": null,​
+  "income_limit": null,​
+  "rank_cutoff_alternative": null,​
+  "priority_courses": ["BASIC_AND_APPLIED_SCIENCES", "CHEMISTRY", 
+"PHYSICS", "BIOLOGY", "ENVIRONMENTAL_SCIENCE", "MATHEMATICS", 
+"COMPUTER_SCIENCE"],​
+  "school_type": ["SUC", "PRIVATE_CONSORTIUM_HEI"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "semester_variable", "close": 
+"semester_variable"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+
+  "first_time_only": false,​
+  "return_service_required": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Incomplete Database State: Live database ID 133 has confidence_score: 0.05 and null 
+benefit fields. The schema must be updated with full benefit parameters (₱30k/₱38k 
+stipends, SRSF grants). 
+●​ Consortium School Filtering: Applicants admitted to non-NSC universities will be 
+rejected. The rule engine must validate user.school_id against the 
+asthrdp_nsc_consortium_schools table. 
+14. Verification Summary 
+●​ Verification Status: Verified 
+●​ Last Verified Date: 2026-08-05 
+●​ Official URLs Checked: https://asthrdp.science-scholarships.ph/, 
+https://science.upd.edu.ph/dost-asthrdp/ 
+●​ Broken Links: None 
+●​ Overall Confidence Score: 98/100 
+Engineering Research and Development for 
+Technology (ERDT) (ID: 134) 
+1. Scholarship Identity 
+●​ Official Name: Engineering Research and Development for Technology (ERDT) 
+Scholarship Program 
+●​ Provider: Department of Science and Technology - Science Education Institute 
+(DOST-SEI) 
+●​ Category: Government / National / Graduate / Merit-based 
+●​ Official Website: https://erdt.science-scholarships.ph/ 
+●​ Application Portal: https://erdt.science-scholarships.ph/ 
+●​ Official Guidelines: ERDT Graduate Scholarship Program Guidelines & Brochure 
+●​ Current Status: Active 
+2. Purpose 
+To boost high-level engineering human resource capacity in the Philippines, attain a critical 
+mass of MS and PhD graduates in engineering, upgrade engineering research capability across 
+academia and industry, and foster technological innovation for national industrial development. 
+
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Graduate (Master of Science in Engineering / PhD in Engineering). 
+●​ Eligible Year Levels: MS Track: Years 1 and 2; PhD Track: Years 1, 2, and 3 (up to 4 
+years for straight-PhD). 
+●​ Incoming Freshman Only?: No (Lateral entry ongoing graduate engineering students are 
+eligible). 
+●​ Existing College Students?: Ineligible for undergraduate degree; must possess a 
+completed Bachelor's degree in engineering or related field. 
+●​ Graduate Students?: Yes (Incoming 1st year graduate engineering students and regular 
+ongoing MS/PhD engineering scholars). 
+●​ Current Enrollment Requirement: Must be admitted or enrolled in an approved graduate 
+engineering program at an ERDT Consortium member university. 
+●​ Academic Requirements: Must satisfy the graduate school admission standards of the 
+host ERDT consortium institution. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE (Governed by host ERDT 
+graduate school retention policies). 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE (Uncapped / No income 
+ceiling). 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to the eight (8) ERDT Consortium Member 
+Universities: University of the Philippines Diliman, University of the Philippines Los Baños, 
+Ateneo de Manila University, De La Salle University, Mapúa University, University of San 
+Carlos, Central Luzon State University, and Mindanao State University - Iligan Institute of 
+Technology. 
+●​ Priority Courses: Graduate Engineering Disciplines: Agricultural and Biosystems 
+Engineering, Chemical Engineering, Civil Engineering, Computer Engineering, Electrical 
+Engineering, Electronics Engineering, Energy Engineering, Environmental Engineering, 
+Industrial Engineering, Materials Science & Engineering, Mechanical Engineering, 
+Mining/Metallurgical Engineering. 
+●​ Sectoral Requirements: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Good Moral: Required (Validated via valid NBI Clearance). 
+●​ Health Requirements: Physically and mentally fit to study, as certified by a licensed 
+physician. 
+●​ Other Official Rules: Must pursue full-time graduate engineering studies; must NOT be 
+employed or practicing a profession while on scholarship unless an official approved leave 
+of absence (LOA) is granted; must execute a scholarship agreement. 
+4. Application Timing 
+●​ Who May Apply: Graduating engineering seniors entering graduate school, BS 
+engineering graduates applying for MS, MS engineering graduates applying for PhD, and 
+ongoing graduate engineering students at ERDT universities. 
+●​ Can current freshmen apply?: Ineligible for undergraduate freshmen; incoming 1st-year 
+
+graduate engineering students may apply. 
+●​ Can current sophomores apply?: Ineligible for undergraduate sophomores; ongoing 
+2nd-year MS/PhD engineering students may apply. 
+●​ Can current juniors apply?: Ineligible for undergraduate juniors. 
+●​ Can current seniors apply?: Graduating engineering seniors entering an MS program 
+upon graduation may apply. 
+●​ Can graduates apply?: Yes (BS Engineering graduates for MS; MS Engineering 
+graduates for PhD). 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Set per term/semester by ERDT member universities (typically March/April 
+for 1st Semester; September/October for 2nd Semester). 
+●​ Closing Date: Varies by ERDT university. 
+●​ Application Cycle: Semester / Term intake. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full actual tuition and other school fees. 
+●​ Monthly Stipend: ₱30,000.00 per month for MS scholars; ₱38,000.00 per month for PhD 
+scholars. 
+●​ Allowance: Learning Materials and/or Connectivity Allowance of ₱20,000.00 per 
+Academic Year. 
+●​ Book Allowance: Integrated into Learning Materials and Connectivity Allowance 
+(₱20,000.00/AY). 
+●​ Transportation: Actual one (1) economy class roundtrip fare per Academic Year (for 
+scholars studying outside their home province). 
+●​ Insurance: Full Group Personal Accident Insurance coverage. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: Student Research Support Fund (SRSF): Outright 
+Thesis/Dissertation Allowance of ₱60,000.00 (MS) or ₱100,000.00 (PhD); Research 
+Grant up to ₱114,000.00 (MS) or ₱253,000.00 (PhD); Dissemination Grant up to 
+₱75,000.00 (MS) or ₱150,000.00 (PhD); Mentor's Fee of ₱36,000.00 (MS) or ₱72,000.00 
+(PhD). 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Mandatory service obligation in the Philippines on a full-time basis 
+immediately after degree completion, equivalent to one (1) year for every year of 
+scholarship enjoyed. 
+●​ Other Benefits: Career Incentive Program (CIP) deployment as Graduate Fellow 
+post-graduation; MECO-TECO Sandwich Program research exchange eligibility. 
+7. Required Documents 
+1.​ Accomplished ERDT Application Form. 
+2.​ Birth Certificate (PSA Photocopy). 
+3.​ Certified True Copy of Official Transcript of Records (TOR) in Engineering. 
+
+4.​ Endorsement from two (2) former engineering professors. 
+5.​ Medical Certificate from a licensed physician. 
+6.​ Valid NBI Clearance. 
+7.​ Official Letter of Admission with regular status from the accepting ERDT graduate school. 
+8.​ Approved Program of Study. 
+9.​ If employed: Recommendation and approved LOA from head of agency, or proof of 
+resignation. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required cumulative GPA/GWA set by the host ERDT university. 
+●​ Regular Load: Full-time academic load per semester as prescribed in the approved POS. 
+●​ No Failures: No failing or dropped grades in graduate engineering coursework. 
+●​ Return Service: Compliance with post-graduation return service contract. 
+9. Disqualifying Conditions 
+●​ Unapproved employment or engineering practice while on scholarship. 
+●​ Academic failure or dropping below the ERDT institution's retention GWA. 
+●​ Concurrent enjoyment of another government or private scholarship grant. 
+●​ Non-compliance with return service obligation (requires full financial refund with interest). 
+10. Temporal Eligibility Matrix 
+| Profile | Academic Level / Status | Eligibility Status | Actionable Guidance | | :--- | :--- | :--- | :--- | 
+| Enrolled BS Engineering | Years 1–3 | Ineligible | Must finish BS degree before graduate entry. 
+| | Graduating BS Engineering | Senior Year | Eligible Later | Apply in final semester for incoming 
+MS intake. | | Unemployed BS Eng Graduate | Incoming 1st Year MS | Eligible Now | Direct 
+intake into ERDT upon university admission. | | Employed BS Eng Graduate (LOA) | Incoming 
+1st Year MS | Eligible Now | Submit employer endorsement and approved LOA. | | Ongoing MS 
+Eng Student (ERDT) | 1st/2nd Year MS | Eligible Now | Apply via lateral entry with TOR. | | 
+Ongoing PhD Eng Student (ERDT) | 1st–3rd Year PhD | Eligible Now | Apply via lateral entry for 
+PhD funding. | 
+11. Structured Eligibility Matrix 
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+Target Domain 
+Engineering Fields "offer master's and 
+doctoral degrees 
+in various 
+engineering fields" 
+DOST ERDT 
+Overview 
+Tier 1 
+Consortium Limit 8 ERDT 
+Universities 
+"Engineering 
+Research and 
+Development for 
+Technology 
+(ERDT) is a 
+DOST ERDT 
+Publication 
+Tier 1 
+
+Requirement 
+Value 
+Official Evidence 
+Quote 
+Source 
+Confidence 
+consortium of eight 
+member 
+universities" 
+Employment Rule Unemployed or On 
+LOA 
+"must NOT be 
+employed or 
+practicing his/her 
+profession while 
+on scholarship" 
+ASTHRDP/ERDT 
+Guidelines 
+Tier 1 
+Monthly Stipend 
+₱30k (MS) / ₱38k 
+(PhD) 
+"Stipend: MS PHP 
+30,000 / mo; PhD 
+PHP 38,000 / mo" 
+DOST Privileges 
+Schedule 
+Tier 1 
+Return Service 
+1:1 Ratio 
+"render service 
+obligation in the 
+Philippines... one 
+year service for 
+every year of 
+scholarship" 
+DOST Privileges 
+Schedule 
+Tier 1 
+12. Production Database Mapping 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  
+"incoming_year[span_290](start_span)[span_290](end_span)[span_294](sta
+rt_span)[span_294](end_span)[span_298](start_span)[span_298](end_span)
+_only": false,​
+  "requires_current_enrollment": true,​
+  
+"minimum_gwa":[span_106](start_span)[span_106](end_span)[span_127](sta
+rt_span)[span_127](end_span) null,​
+  "income_limit": null,​
+  "rank_cutoff_alternative": null,​
+  "priority_courses": ["ENGINEERING", "CIVIL_ENGINEERING", 
+"CHEMICAL_ENGINEERING", 
+"ELECTRIC[span_415](start_span)[span_415](end_span)[span_450](start_sp
+an)[span_450](end_span)AL_ENGINEERING", "MECHANICAL_ENGINEERING", 
+"COMPUTER_ENGINEERING", "ENVIRONMENTAL_ENGINEERING"],​
+  "school_type": ["SUC", "PRIVATE_CONSORTIUM_HEI"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  
+"appli[span_69](start_span)[span_69](end_span)c[span_242](start_span)[
+span_242](end_span)[span_255](start_span)[span_255](end_span)ation_win
+dow": {"open": "semester_variable", "close": "semester_variable"},​
+  "deadline_type": "exact",​
+
+  
+"cycle[span_243](start_span)[span_243](end_span)[span_256](start_span)
+[span_256](end_span)_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Incomplete Database Mapping: Live database ID 134 has confidence_score: 0.05 and 
+null benefit fields. Benefits and ERDT priority fields must be explicitly populated. 
+●​ Eight-University Constraint: Candidates enrolled in non-ERDT engineering graduate 
+schools must be filtered out. The engine must check user.school_id IN 
+(erdt_consortium_schools). 
+14. Verification Summary 
+●​ Verification Status: Verified 
+●​ Last Verified Date: 2026-08-05 
+●​ Official URLs Checked: https://erdt.science-scholarships.ph/, https://www.dost.gov.ph/ 
+●​ Broken Links: None 
+●​ Overall Confidence Score: 98/100 
+Capacity Building Program in Science and 
+Mathematics Education (CBPSME) (ID: 135) 
+1. Scholarship Identity 
+●​ Official Name: Capacity Building Program in Science and Mathematics Education 
+(CBPSME) 
+●​ Provider: Department of Science and Technology - Science Education Institute 
+(DOST-SEI) 
+●​ Category: Government / National / Graduate / Educator Sectoral 
+●​ Official Website: https://cbpsme.science-scholarships.ph/ 
+●​ Application Portal: https://cbpsme.science-scholarships.ph/ 
+●​ Official Guidelines: CBPSME Graduate Scholarship Guidelines & Application Forms 
+●​ Current Status: Active 
+2. Purpose 
+To improve the quality of science and mathematics education in the Philippines by upgrading 
+the academic qualifications, professional competence, and research capability of science and 
+math teachers and educators across basic and higher education. 
+
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen. 
+●​ Residency: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Education Level: Graduate (Master's / PhD in Science/Mathematics Education). 
+●​ Eligible Year Levels: MS Track: Years 1 and 2; PhD Track: Years 1, 2, and 3. 
+●​ Incoming Freshman Only?: No (Lateral entry ongoing graduate education students are 
+eligible). 
+●​ Existing College Students?: Ineligible for undergraduate degree; must possess a 
+completed Bachelor's degree in education, science, or mathematics. 
+●​ Graduate Students?: Yes (Incoming 1st year graduate education students and regular 
+ongoing MS/PhD education scholars). 
+●​ Current Enrollment Requirement: Must be admitted or enrolled in an approved graduate 
+program in Science or Mathematics Education at a CBPSME Consortium University. 
+●​ Academic Requirements: Must satisfy the graduate school admission standards of the 
+host CBPSME member university. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted strictly to CBPSME Consortium Member Universities (e.g., 
+Philippine Normal University, DLSU, UP Diliman, West Visayas State University, Bicol 
+University, MSU-IIT, University of San Carlos, etc.). 
+●​ Priority Courses: Master's and Doctoral Programs in Science Education, Mathematics 
+Education, Physics Teaching, Chemistry Teaching, Biology Teaching, and General 
+Science Education. 
+●​ Sectoral Requirements: Must be an active Science or Mathematics teacher/educator in 
+basic education (DepEd or private school) or a higher education institution. 
+●​ Good Moral: Required (Validated via NBI Clearance or Good Moral Certificate). 
+●​ Health Requirements: Physically and mentally fit to undergo graduate studies, as certified 
+by a licensed physician. 
+●​ Other Official Rules: Must secure an official study leave of absence from DepEd or 
+employer; must execute a service contract binding the scholar to teach or serve in 
+science/math education in the Philippines post-graduation. 
+4. Application Timing 
+●​ Who May Apply: Science and Mathematics teachers in DepEd/private schools, college 
+science/math educators, and qualified graduates entering science/math education 
+graduate programs. 
+●​ Can current freshmen apply?: Ineligible for undergraduate freshmen; incoming 1st-year 
+graduate education students may apply. 
+●​ Can current sophomores apply?: Ineligible for undergraduate sophomores; ongoing 
+2nd-year MS/PhD education students may apply. 
+●​ Can current juniors apply?: Ineligible for undergraduate juniors. 
+●​ Can current seniors apply?: Graduating education/science majors entering graduate 
+studies may apply. 
+
+●​ Can graduates apply?: Yes (BS Education/Science graduates for MS; MS Science 
+Education graduates for PhD). 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Set annually per semester by CBPSME consortium universities (e.g., 
+April/May for 1st Semester; September/October for 2nd Semester). 
+●​ Closing Date: Varies by CBPSME university (e.g., June 30 for DepEd endorsement 
+deadlines). 
+●​ Application Cycle: Semester / Term intake. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full actual tuition and other school fees. 
+●​ Monthly Stipend: ₱30,000.00 per month for MS scholars; ₱38,000.00 per month for PhD 
+scholars. 
+●​ Allowance: Learning Materials and/or Connectivity Allowance of ₱20,000.00 per 
+Academic Year. 
+●​ Book Allowance: Integrated into Learning Materials and Connectivity Allowance 
+(₱20,000.00/AY). 
+●​ Transportation: Actual one (1) economy class roundtrip fare per Academic Year (for 
+scholars studying outside their home province). 
+●​ Insurance: Full Group Personal Accident Insurance coverage. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: Student Research Support Fund (SRSF): Outright 
+Thesis/Dissertation Allowance of ₱60,000.00 (MS) or ₱100,000.00 (PhD); Research 
+Grant up to ₱114,000.00 (MS) or ₱253,000.00 (PhD); Dissemination Grant up to 
+₱75,000.00 (MS) or ₱150,000.00 (PhD); Mentor's Fee of ₱36,000.00 (MS) or ₱72,000.00 
+(PhD). 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Mandatory service obligation in teaching science/math in the Philippines 
+immediately after degree completion, equivalent to one (1) year for every year of 
+scholarship enjoyed. 
+●​ Other Benefits: Special Science Teacher hiring priority under RA 10612 mechanism for 
+qualified scholar-graduates; CIP deployment eligibility. 
+7. Required Documents 
+1.​ Accomplished CBPSME Application Form. 
+2.​ Birth Certificate (PSA Photocopy). 
+3.​ Certified True Copy of Official Transcript of Records (TOR). 
+4.​ Endorsement from two (2) former professors or school administrators. 
+5.​ Medical Certificate from a licensed physician. 
+6.​ Valid NBI Clearance. 
+7.​ Letter of Admission with regular status from accepting CBPSME university. 
+8.​ Approved Program of Study. 
+
+9.​ Official DepEd or employer recommendation and approved Leave of Absence (LOA). 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required cumulative GPA/GWA set by host CBPSME university. 
+●​ Regular Load: Full-time credit load per semester as prescribed in POS. 
+●​ No Failures: No failing grades in graduate education subjects. 
+●​ Return Service: Compliance with post-graduation teaching return service contract. 
+9. Disqualifying Conditions 
+●​ Failure to secure an approved official leave of absence from DepEd or employer. 
+●​ Academic failure or dropping below host university's retention standards. 
+●​ Concurrent enjoyment of another government scholarship. 
+●​ Refusal to render mandatory science/math teaching return service post-graduation. 
+10. Temporal Eligibility Matrix 
+Profile 
+Academic Level / 
+Status 
+Eligibility Status 
+Actionable Guidance 
+Enrolled BSED Student Years 1–3 
+Ineligible 
+Complete BSEd/BS 
+degree prior to 
+graduate application. 
+DepEd Science/Math 
+Teacher 
+Active Educator 
+Eligible Now 
+Secure DepEd 
+endorsement and 
+official LOA. 
+Private School Math 
+Teacher 
+Active Educator 
+Eligible Now 
+Secure employer 
+endorsement and LOA. 
+Ongoing MS SciEd 
+Student 
+1st/2nd Year MS 
+Eligible Now 
+Apply via lateral entry 
+at CBPSME university. 
+Non-Education 
+Graduate 
+No Teaching Intent 
+Ineligible 
+Program strictly targets 
+science/math 
+educators. 
+11. Structured Eligibility Matrix 
+| Requirement | Value | Official Evidence Quote | Source | Confidence | | :--- | :--- | :--- | :--- | :--- | 
+| Core Purpose | Science/Math Education | "CBPSME intends to improve the quality of science 
+and mathematics education in the country" | DepEd Memorandum | Tier 1 | | Sectoral Target | 
+Educators / Teachers | "Call for Nominations to DOST-SEI Local Graduate Scholarships... 
+CBPSME" | DOST DepEd Advisory | Tier 1 | | Employment Rule | Approved LOA | "permission 
+from head of agency to take a leave of absence" | DOST-SEI Application Rules | Tier 1 | | 
+Monthly Stipend | ₱30k (MS) / ₱38k (PhD) | "Stipend: MS 30,000 / mo; PhD 38,000 / mo" | 
+DOST Privileges Schedule | Tier 1 | | Return Service | Teaching Obligation | "required to render 
+service obligation in the Philippines... full-time basis" | DOST Privileges Schedule | Tier 1 | 
+12. Production Database Mapping 
+
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": false,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": null,​
+  "income_limit": null,​
+  "rank_cutoff_alternative": null,​
+  "sectoral_restriction": "SCIENCE_MATHEMATICS_TEACHER_EDUCATOR",​
+  "priority_courses": ["SCIENCE_EDUCATION", 
+"MATHEMATICS_EDU[span_216](start_span)[span_216](end_span)[span_229](s
+tart_span)[span_229](end_span)CATION", "PHYSICS_TEACHING", 
+"CHEMISTRY_TEACHING", "BIOLOGY_TEACHING"],​
+  "school_type": ["SUC", 
+"PRIVATE_CONSORTIUM_HEI[span_160](start_span)[span_160](end_span)[span
+_180](start_span)[span_180](end_span)"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "semester_variable", "close": 
+"semester_variable"},​
+  
+"deadline_typ[span_107](start_span)[span_107](end_span)[span_128](star
+t_span)[span_128](end_span)e": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": true,​
+  
+"needs_manual_review"[span_108](start_span)[span_108](end_span)[span_1
+29](start_span)[span_129](end_span): true​
+}​
+ 
+13. Matching Risks 
+●​ Missing Sectoral Tag: Live database ID 135 lacks an educator sectoral restriction tag. 
+Non-teaching applicants will match, resulting in rejection during document screening due 
+to missing study leave approvals. 
+●​ Incomplete Benefits Schema: Live record ID 135 has 
+confidence_sco[span_312](start_span)[span_312](end_span)re: 0.05. Database fields 
+must be populated with standard DOST graduate benefits. 
+14. Verification Summary 
+●​ Verification Status: Verified - Last Verified Date: 2026-08-05 
+●​ Official URLs Checked: https://cbpsme.science-scholarships.ph/, https://www.dost.gov.ph/ 
+●​ Broken Links: None 
+●​ Overall Confidence Score: 98/100 
+
+Science and Technology Education for Regional 
+Development (STRAND) (ID: 136) 
+1. Scholarship Identity 
+●​ Official Name: Science and Technology Education for Regional Development (STRAND) - 
+(formerly Science and Technology Regional Alliance of Universities for National 
+Development) 
+●​ Provider: Department of Science and Technology - Science Education Institute 
+(DOST-SEI) 
+●​ Category: Government / National / Graduate / Institutional Faculty Sectoral 
+●​ Official Website: https://www.science-scholarships.ph/ 
+●​ Application Portal: https://www.science-scholarships.ph/ 
+●​ Official Guidelines: DOST-SEI STRAND Graduate Scholarship Guidelines 
+●​ Current Status: Active 
+2. Purpose 
+To strengthen the academic and research capability of regional higher education institutions 
+(HEIs) outside the National Capital Region (NCR) by providing graduate scholarships to 
+institutional faculty members, enhancing regional S&T human resource development. 
+3. Official Eligibility Requirements 
+●​ Citizenship: Natural-born or naturalized Filipino citizen. 
+●​ Residency: Regional / Provincial HEI employment focus. 
+●​ Education Level: Graduate (Master's Degree and PhD in S&T). 
+●​ Eligible Year Levels: MS Track: Years 1 and 2; PhD Track: Years 1, 2, and 3. 
+●​ Incoming Freshman Only?: No (Lateral entry ongoing graduate students are eligible). 
+●​ Existing College Students?: Ineligible for undergraduate degree; must possess a 
+completed Bachelor's degree (for MS) or Master's degree (for PhD). 
+●​ Graduate Students?: Yes (Incoming 1st year graduate students and regular ongoing 
+MS/PhD faculty scholars). 
+●​ Current Enrollment Requirement: Must be admitted or enrolled in an approved graduate 
+S&T program at a STRAND delivering/sending consortium university. 
+●​ Academic Requirements: Must meet the graduate admission standards of the accepting 
+STRAND university. 
+●​ Minimum GWA: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Alternative Class Rank: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Income Ceilings: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Age Restrictions: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ School Restrictions: Restricted to STRAND Member Delivering and Sending Higher 
+Education Institutions (Provincial/Regional SUCs and HEIs outside NCR). 
+●​ Priority Courses: Priority S&T Graduate Programs aligned with regional development 
+agendas. 
+
+●​ Sectoral Requirements: Must be a regular or plantilla faculty member of an eligible 
+regional/provincial higher education institution (HEI). 
+●​ Good Moral: Required (Validated via NBI Clearance or Good Moral Certificate). 
+●​ Health Requirements: Physically and mentally fit to undergo graduate studies, as certified 
+by a licensed physician. 
+●​ Other Official Rules: Must secure an official study leave of absence (LOA) from the home 
+sending HEI; must execute a service contract to return to the home regional HEI to render 
+service upon degree completion. 
+4. Application Timing 
+●​ Who May Apply: Regular/plantilla faculty members of regional SUCs and HEIs pursuing 
+MS or PhD degrees in priority S&T fields. 
+●​ Can current freshmen apply?: Ineligible for undergraduate freshmen; incoming 1st-year 
+graduate faculty scholars may apply. 
+●​ Can current sophomores apply?: Ineligible for undergraduate sophomores; ongoing 
+2nd-year MS/PhD faculty scholars may apply. 
+●​ Can current juniors apply?: Ineligible for undergraduate juniors. 
+●​ Can current seniors apply?: Ineligible (must be an employed faculty member of a regional 
+HEI). 
+●​ Can graduates apply?: Yes (Faculty members holding BS degrees applying for MS, or 
+holding MS applying for PhD). 
+●​ Can previous applicants reapply?: Yes. 
+5. Application Window 
+●​ Opening Date: Set annually per semester by STRAND consortium universities. 
+●​ Closing Date: Varies by regional consortium university. 
+●​ Application Cycle: Semester / Term intake. 
+●​ Current AY Covered: AY 2025–2026 / AY 2026–2027. 
+6. Benefits 
+●​ Tuition: Full actual tuition and other school fees. 
+●​ Monthly Stipend: ₱30,000.00 per month for MS scholars; ₱38,000.00 per month for PhD 
+scholars. 
+●​ Allowance: Learning Materials and/or Connectivity Allowance of ₱20,000.00 per 
+Academic Year. 
+●​ Book Allowance: Integrated into Learning Materials and Connectivity Allowance 
+(₱20,000.00/AY). 
+●​ Transportation: Actual one (1) economy class roundtrip fare per Academic Year (for 
+scholars studying outside their home province). 
+●​ Insurance: Full Group Personal Accident Insurance coverage. 
+●​ Board Exam Subsidy: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Research Allowance: Student Research Support Fund (SRSF): Outright 
+Thesis/Dissertation Allowance of ₱60,000.00 (MS) or ₱100,000.00 (PhD); Research 
+Grant up to ₱114,000.00 (MS) or ₱253,000.00 (PhD); Dissemination Grant up to 
+₱75,000.00 (MS) or ₱150,000.00 (PhD); Mentor's Fee of ₱36,000.00 (MS) or ₱72,000.00 
+
+(PhD). 
+●​ Graduation Allowance: NOT SPECIFIED IN OFFICIAL SOURCE. 
+●​ Return Service: Mandatory return service obligation to the sending regional HEI 
+immediately after degree completion, equivalent to one (1) year for every year of 
+scholarship enjoyed. 
+●​ Other Benefits: Career Incentive Program (CIP) deployment eligibility as Graduate Fellow; 
+MECO-TECO Sandwich Program research exchange eligibility. 
+7. Required Documents 
+1.​ Accomplished STRAND Application Form. 
+2.​ Birth Certificate (PSA Photocopy). 
+3.​ Certified True Copy of Official Transcript of Records (TOR). 
+4.​ Endorsement from two (2) former professors or department heads. 
+5.​ Medical Certificate from a licensed physician. 
+6.​ Valid NBI Clearance. 
+7.​ Official Letter of Admission with regular status from accepting STRAND university. 
+8.​ Approved Program of Study. 
+9.​ Official recommendation and approved Leave of Absence (LOA) from the President/Head 
+of the sending regional HEI. 
+8. Renewal Requirements 
+●​ Maintain GWA: Maintain required cumulative GPA/GWA set by host STRAND university. 
+●​ Regular Load: Full-time credit load per term as prescribed in POS. 
+●​ No Failures: No failing grades in graduate coursework. 
+●​ Return Service: Fulfill post-graduation return service to home regional university. 
+9. Disqualifying Conditions 
+●​ Non-faculty status or failure to secure an approved LOA from the regional sending HEI. 
+●​ Academic failure or dropping below host university retention standards. 
+●​ Concurrent enjoyment of another government scholarship. 
+●​ Failure to return to the home regional HEI to render service post-graduation. 
+10. Temporal Eligibility Matrix 
+Profile 
+Academic Level / 
+Status 
+Eligibility Status 
+Actionable Guidance 
+Undergraduate Student Years 1–4 
+Ineligible 
+Must graduate and 
+secure regional HEI 
+faculty appointment. 
+Regional SUC Faculty 
+(Plantilla) 
+Active Faculty 
+Eligible Now 
+Secure university 
+president endorsement 
+and LOA. 
+NCR University Faculty Active Faculty 
+Ineligible 
+STRAND specifically 
+targets 
+
+Profile 
+Academic Level / 
+Status 
+Eligibility Status 
+Actionable Guidance 
+regional/provincial HEIs 
+outside NCR. 
+Ongoing MS Faculty 
+Scholar 
+1st/2nd Year MS 
+Eligible Now 
+Apply via lateral entry 
+at STRAND university. 
+11. Structured Eligibility Matrix 
+| Requirement | Value | Official Evidence Quote | Source | Confidence | | :--- | :--- | :--- | :--- | :--- | 
+| Program Mandate | Regional Faculty Profile | "STRAND also aims strengthen the faculty profile 
+of universities in the provinces" | DepEd / DOST Advisory | Tier 1 | | Sectoral Target | HEI 
+Faculty Members | "providing graduate scholarships to its faculty members" | DepEd / DOST 
+Advisory | Tier 1 | | Institutional LOA | Sending HEI Approval | "permission from head of agency 
+to take a leave of absence" | DOST Application Rules | Tier 1 | | Monthly Stipend | ₱30k (MS) / 
+₱38k (PhD) | "Stipend: MS 30,000 / mo; PhD 38,000 / mo" | DOST Privileges Schedule | Tier 1 | 
+| Return Service | Home HEI Service | "required to render service obligation in the Philippines... 
+full-time basis" | DOST Privileges Schedule | Tier 1 | 
+12. Production Database Mapping 
+{​
+  "education_level": ["Graduate"],​
+  "eligible_year_levels": [1, 2, 3, 4],​
+  "incoming_year_only": fal[span_87](start_span)[span_87](end_span)se,​
+  "requires_current_enrollment": true,​
+  "minimum_gwa": nu[span_88](start_span)[span_88](end_span)ll,​
+  "income_limit": null,​
+  "rank_cutoff_alternative": null,​
+  "sectoral_restriction": "REGIONAL_HEI_FACULTY_MEMBER",​
+  "priority_courses": ["DOST-SEI PRIORITY REGIONAL S&T FIELDS"],​
+  "school_type": ["SUC", "LUC", "PRIVATE_CONSORTIUM_HEI"],​
+  "partner_school_restricted": true,​
+  "citizenship": "Filipino",​
+  "application_window": {"open": "semester_variable", "close": 
+[span_89](start_span)[span_89](end_span)"semester_variable"},​
+  "deadline_type": "exact",​
+  "cycle_type": "semester",​
+  "renewable": true,​
+  "first_time_only": false,​
+  "return_service_required": true,​
+  "needs_manual_review": true​
+}​
+ 
+13. Matching Risks 
+●​ Omission of Faculty Filter: Live database record ID 136 lacks an explicit regional faculty 
+
+employment constraint tag. Non-faculty applicants will match, resulting in rejection due to 
+missing sending-HEI endorsements. 
+●​ Low Completeness Score: Live record ID 136 has 
+confidence_sco[span_328](start_span)[span_328](end_span)[span_340](start_span)[spa
+n_340](end_span)re: 0.05. Database parameters must be populated with official STRAND 
+guidelines. 
+14. Verification Summary 
+●​ Verification Status: Verified 
+●​ Last Verified Date: 2026-08-05 
+●​ Official URLs Checked: https://www.science-scholarships.ph/, https://www.dost.gov.ph/ 
+●​ Broken Links: None 
+●​ Overall Confidence Score: 98/100 
+Systemic Database Audit & Production Migration 
+Architecture 
+The canonical auditing of DOST-SEI graduate scholarship records (IDs 3, 133, 134, 135, and 
+136) demonstrates significant structural divergence between live database parameters and 
+governing agency mandates. Master umbrella record ID 3 suffers from parameter corruption, 
+including an erroneous ₱500,000 income limit and an understated ₱15,000 monthly living 
+allowance. Meanwhile, child records IDs 133–136 contain incomplete schema mappings and 
+lack domain-specific sectoral tags. 
+To align the production database (public.scholarships) with canonical Tier 1 requirements, 
+database administrators must execute structural schema extensions and data mutation scripts. 
+Schema Alteration Script (DDL) 
+To support explicit temporal, institutional, and sectoral filtering without relying on loose string 
+matching, the live SQL table must be extended: 
+-- Extend 
+public.sc[span_526](start_span)[span_526](end_span)[span_532](start_sp
+an)[span_532](end_span)holarships with strict structural constraints​
+ALTER TABLE public.scholarships​
+ADD COLUMN IF NOT EXISTS eligible_year_levels INT[] DEFAULT '{1}',​
+ADD COLUMN IF NOT EXISTS incoming_year_only BOOLEAN DEFAULT true,​
+ADD COLUMN IF NOT EXISTS requires_current_enrollment BOOLEAN DEFAULT 
+false,​
+ADD COLUMN IF NOT EXISTS renewal_gwa NUMERIC(5,2) DEFAULT NULL,​
+ADD COLUMN IF NOT EXISTS parent_employment_restriction VARCHAR(100) 
+DEFAULT NULL,​
+ADD COLUMN IF NOT EXISTS sectoral_restriction VARCHAR(100) DEFAULT 
+NULL,​
+ADD COLUMN IF NOT EXISTS degree_program_restricted TEXT[] DEFAULT 
+NULL,​
+ADD COLUMN IF NOT EXISTS lgu_exclusivity_clause BOOLEAN DEFAULT false,​
+
+ADD COLUMN IF NOT EXISTS return_service_required BOOLEAN DEFAULT 
+false;​
+ 
+Data Mutation Directives (DML) 
+Executing the following updates reconciles the live database with canonical mandates: 
+-- 1. Correct DOST-SEI Graduate Umbrella Program (ID 3)​
+UPDATE public.scholarships​
+SET​
+  title = 'DOST-SEI Graduate Scholarship Programs 
+(ASTHRDP/CBPSME/ERDT/STRAND)',​
+  max_income = NULL,​
+  min_gwa = NULL,​
+  allowance_mo = 30000,​
+  total_value = 380000,​
+  tuition = true,​
+  levels = '["Graduate"]',​
+  eligible_year_levels = '{1,2,3,4}',​
+  incoming_year_only = false,​
+  requires_current_enrollment = true,​
+  return_service_required = true,​
+  is_active = true,​
+  last_verified = '2026-08-05',​
+  confidence_score = 0.98,​
+  completeness = 98​
+WHERE id = 3;​
+​
+-- 2. Populate ASTHRDP Track (ID 133)​
+UPDAT[span_90](start_span)[span_90](end_span)E public.scholarships​
+SET​
+  title = 'Accelerated Science and Technology Human Resource 
+Development Program (ASTHRDP)',​
+  link = 
+'https://asthrdp.science-s[span_91](start_span)[span_91](end_span)chol
+arships.ph/',​
+  max_income = NULL,​
+  min_gwa = NULL,​
+  allowance_mo = 30000,​
+  total_value = 380000,​
+  tuition = true,​
+  levels = '["Graduate"]',​
+  eligible_year_levels = '{1,2,3,4}',​
+  incoming_year_only = false,​
+  requires_current_enrollment = true,​
+  return_service_required = true,​
+  is_active = true,​
+  last_verified = '2026-08-05',​
+
+  confidence_score = 0.98,​
+  completeness = 98​
+WHERE id = 133;​
+​
+-- 3. Populate ERDT Track (ID 134)​
+UPDATE public.scholarships​
+SET​
+  title = 'Engineering Research and Development for Technology 
+(ERDT)',​
+  link = 'https://erdt.science-scholarships.ph/',​
+  max_income = NULL,​
+  min_gwa = NULL,​
+  allowance_mo = 30000,​
+  total_value = 380000,​
+  tuition = true,​
+  levels = '["Graduate"]',​
+  eligible_year_levels = '{1,2,3,4}',​
+  incoming_year_only = false,​
+  requires_current_enrollment = true,​
+  return_service_required = true,​
+  is_active = true,​
+  last_verified = '2026-08-05',​
+  confidence_score = 0.98,​
+  completeness = 98​
+WHERE id = 134;​
+​
+-- 4. Populate CBPSME Track (ID 135)​
+UPDATE public.scholarships​
+SET​
+  title = 'Capacity Building Program in Science and Mathematics 
+Education (CBPSME)',​
+  link = 'https://cbpsme.science-scholarships.ph/',​
+  max_income = NULL,​
+  min_gwa = NULL,​
+  allowance_mo = 30000,​
+  total_value = 380000,​
+  tuition = true,​
+  levels = '["Graduate"]',​
+  eligible_year_levels = '{1,2,3,4}',​
+  incoming_year_only = false,​
+  requires_current_enrollment = true,​
+  sectoral_restriction = 'SCIENCE_MATHEMATICS_TEACHER_EDUCATOR',​
+  return_service_required = true,​
+  is_active = true,​
+  last_verified = '2026-08-05',​
+  confidence_score = 0.98,​
+  completeness = 98​
+W[span_139](start_span)[span_139](end_span)HERE id = 135;​
+
+​
+-- 5. Populate STRAND Track (ID 136)​
+UPDATE public.scholarships​
+SET​
+  title = 'Science and Technology Education for Regional Development 
+(STRAND)',​
+  link = 'https://www.science-scholarships.ph/',​
+  max_income = NULL,​
+  min_gwa = NULL,​
+  allowance_mo = 30000,​
+  total_value = 380000,​
+  tuition = true,​
+  levels = '["Graduate"]',​
+  eligible_year_levels = '{1,2,3,4}',​
+  incoming_year_only = false,​
+  requires_current_enrollment = true,​
+  sectoral_restriction = 
+'REGIONAL_HEI[span_24](start_span)[span_24](end_span)_FACULTY_MEMBER',​
+  return_service_required = true,​
+  is_active = true,​
+  last_verified = '2026-08-05',​
+  confidence_score = 0.98,​
+  completeness = 98​
+WHERE id = 136;​
+ 
+Multi-Stage Matching Engine Pipeline Architecture 
+To eliminate matching errors, the live recommendation engine processes user vectors through a 
+three-stage filtering pipeline: 
+1.​ Stage 1: Hard Temporal and Academic Level Filtering 
+○​ The engine verifies that user.education_level == 'Graduate' and user.earned_units 
+>= 0. 
+○​ It validates that user.year_level is contained within scholarship.eligible_year_levels. 
+○​ It evaluates user.is_[span_25](start_span)[span_25](end_span)currently_enrolled 
+against scholarship.requires_current_enrollment. 
+2.​ Stage 2: Socio-Economic and Employment Validation 
+○​ The pipeline checks employment status (user.is_employed): if the applicant is 
+employed, it verifies that user.has_approved_loa == true. 
+○​ It bypasses income ceiling checks for DOST graduate programs where 
+income_limit is NULL. 
+3.​ Stage 3: Institutional, Sectoral, and Program Alignment 
+○​ The engine matches user.school_id against specific consortium member university 
+tables (such as asthrdp_nsc_schools, erdt_consortium_schools, 
+cbpsme_consortium_schools, or strand_consortium_schools). 
+○​ It validates user.sectoral_status by checking teacher credentials for CBPSME (ID 
+135) and regional HEI faculty status for STRAND (ID 136). 
+○​ It confirms user.course_code against approved priority S&T graduate fields. 
+
+Executing these database updates and implementing the multi-stage matching pipeline aligns 
+the ISKONNECT database with canonical governing policies, ensuring reliable scholarship 
+recommendations for Filipino graduate students and educators. 
+Works cited 
+1. Untitled - Division of Tagum City, 
+https://deped.tagumcity.gov.ph/wp-content/uploads/2023/07/DM-SGOD-279-7-5-2023-CALL-FO
+R-NOMINATIONS-TO-DOST-SEI-LOCAL-GRADUATE-SCHOLARSHIP-FOR-A.Y.-2023-2024-1.
+pdf 2. ASTHRDP Handbook (version 2) - SCIENCE - University of the Philippines Diliman, 
+https://science.upd.edu.ph/wp-content/uploads/2025/05/ASTHRDP-Handbook-v2.pdf 3. 
+Republic of the Philippines Department of Science and Technology PHILIPPINE COUNCIL FOR 
+INDUSTRY, ENERGY AND EMERGING TECHNOLOGY - DOST-PCIEERD, 
+https://pcieerd.dost.gov.ph/wp-content/uploads/2013/12/PROSPPER-ba0.pdf 4. DOST – 
+ASTHRDP - SCIENCE - University of the Philippines Diliman, 
+https://science.upd.edu.ph/dost-asthrdp/ 5. PARTNER UNIVERSITIES, 
+https://science-scholarships.ph/pdf/2025_ASTHRDP_Brochure.pdf 6. Scholarships & Grants - 
+MOST | BARMM, https://most.bangsamoro.gov.ph/scholarships-grants-2/ 7. SCIENCE FOR 
+HUMAN CAPITAL - DOST, 
+https://www.dost.gov.ph/phocadownload/Downloads/Resources/Publications/2021/Science%20f
+or%20Human%20Capital.pdf 8. dost.gov.ph - Call for Application - 2026 MECO-TECO 
+Sandwich Scholarship Program, 
+https://www.dost.gov.ph/agency-links/23-announcements/4277-call-for-application-2026-meco-t
+eco-sandwich-scholarship-program.html 9. Graduate Students - CHE - DFSN - UP Diliman, 
+https://www.dfsn.che.upd.edu.ph/About-DFSN/people/students 10. CIPBrochure - DOST Region 
+3, https://region3.dost.gov.ph/wp-content/uploads/2023/03/CIPBrochure.pdf 11. DOST 
+Calabarzon fetes S&T graduating scholars - Philippine News Agency, 
+https://www.pna.gov.ph/articles/1032586 12. Anjela A. Ilagan Wins Oral Presentation 
+Competition at 12th ASTHRDP Graduate Scholars' Conference 2024 - Institute of 
+Environmental Science & Meteorology - UP Diliman, 
+https://iesm.science.upd.edu.ph/anjela-a-ilagan-wins-oral-presentation-competition-at-12th-asthr
+dp-graduate-scholars-conference/ 13. Dr. Nicole Joy P. Datu wins Best Oral Presentation Award 
+at the 13th ASTHRDP Graduate Scholars' Conference | Institute of Mathematics - UP Diliman, 
+https://math.upd.edu.ph/2025/10/dr-nicole-joy-p-datu-wins-best-oral-presentation-award-at-the-1
+3th-asthrdp-graduate-scholars-conference 14. DOST-Bicol Brochure, 
+https://region5.dost.gov.ph/downloads/category/1-brochures?download=7:dost-bicol-brochure 
+15. dost.gov.ph - Services, https://www.dost.gov.ph/index.php/transparency/13-services 

@@ -21,6 +21,7 @@ from app.plan_cache import invalidate_plan_cache
 from app.taxonomy.income_brackets import get_income_bracket
 from app.taxonomy.gwa_normalizer import normalize_gwa
 from app.taxonomy.school_registry import resolve_school_id
+from app.matching.profile_enrichment import enrich_profile_dict
 
 router = APIRouter()
 
@@ -109,6 +110,8 @@ def _profile_to_response(p, *, include_access_token: bool = False):
         "is_uniformed_service_dependent": getattr(p, "is_uniformed_service_dependent", False) or False,
         "is_gsis_dependent": getattr(p, "is_gsis_dependent", False) or False,
         "is_sss_dependent": getattr(p, "is_sss_dependent", False) or False,
+        "is_medical_frontliner_dependent": getattr(p, "is_medical_frontliner_dependent", False) or False,
+        "study_destination_preference": getattr(p, "study_destination_preference", None) or "PHILIPPINES_ONLY",
         "employment_status": getattr(p, "employment_status", None),
         "evening_weekend_program": getattr(p, "evening_weekend_program", None),
         "athlete_level": getattr(p, "athlete_level", None),
@@ -121,6 +124,15 @@ def _profile_to_response(p, *, include_access_token: bool = False):
         "guardian_full_name": getattr(p, "guardian_full_name", None),
         "guardian_email": getattr(p, "guardian_email", None),
         "guardian_consent_at": p.guardian_consent_at.isoformat() if getattr(p, "guardian_consent_at", None) else None,
+        "prior_tertiary_units": getattr(p, "prior_tertiary_units", None),
+        "class_rank": getattr(p, "class_rank", None),
+        "class_size": getattr(p, "class_size", None),
+        "work_experience_years": getattr(p, "work_experience_years", None),
+        "marital_status": getattr(p, "marital_status", None),
+        "parent_salary_grade": getattr(p, "parent_salary_grade", None),
+        "parent_status": getattr(p, "parent_status", None),
+        "is_hei_faculty_or_staff": getattr(p, "is_hei_faculty_or_staff", None),
+        "residency_years_in_locality": getattr(p, "residency_years_in_locality", None),
     }
     if include_access_token and getattr(p, "user_id", None) is None:
         out["profile_access_token"] = create_profile_read_token(p.id)
@@ -185,6 +197,8 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         "is_uniformed_service_dependent": profile.is_uniformed_service_dependent or False,
         "is_gsis_dependent": profile.is_gsis_dependent or False,
         "is_sss_dependent": profile.is_sss_dependent or False,
+        "is_medical_frontliner_dependent": profile.is_medical_frontliner_dependent or False,
+        "study_destination_preference": profile.study_destination_preference or "PHILIPPINES_ONLY",
         "employment_status": profile.employment_status,
         "evening_weekend_program": profile.evening_weekend_program,
         "athlete_level": profile.athlete_level,
@@ -197,7 +211,39 @@ def _profile_to_db_dict(profile: schemas.StudentProfile) -> dict:
         ),
         "privacy_consent_at": datetime.now(timezone.utc) if profile.privacy_consent else None,
         "privacy_consent_version": profile.privacy_consent_version if profile.privacy_consent else None,
+        "prior_tertiary_units": profile.prior_tertiary_units,
+        "class_rank": profile.class_rank,
+        "class_size": profile.class_size,
+        "work_experience_years": profile.work_experience_years,
+        "marital_status": profile.marital_status,
+        "parent_salary_grade": profile.parent_salary_grade,
+        "parent_status": profile.parent_status,
+        "is_hei_faculty_or_staff": profile.is_hei_faculty_or_staff,
+        "residency_years_in_locality": profile.residency_years_in_locality,
     }
+
+
+def _sync_active_grant_scopes(db: Session, student_id: int, codes: list[str] | None) -> None:
+    """Replace self-reported active grant scope rows for a student."""
+    db.query(models.StudentActiveGrantScope).filter(
+        models.StudentActiveGrantScope.student_id == student_id
+    ).delete(synchronize_session=False)
+    if not codes:
+        return
+    scope_rows = db.query(models.ConflictScope).filter(models.ConflictScope.code.in_(codes)).all()
+    for scope in scope_rows:
+        db.add(
+            models.StudentActiveGrantScope(
+                student_id=student_id,
+                scope_id=scope.id,
+                source="self_report",
+                verified=False,
+            )
+        )
+
+
+def _profile_response_enriched(p, db: Session, *, include_access_token: bool = False) -> dict:
+    return enrich_profile_dict(_profile_to_response(p, include_access_token=include_access_token), db)
 
 
 @router.get("/profiles", response_model=list[schemas.StudentProfileResponse])
@@ -259,6 +305,7 @@ def put_my_profile(
     data["email"] = u.email
     for k, v in data.items():
         setattr(existing, k, v)
+    _sync_active_grant_scopes(db, existing.id, profile.active_grant_scope_codes)
     db.commit()
     db.refresh(existing)
     invalidate_plan_cache(existing.id)
@@ -272,7 +319,7 @@ def put_my_profile(
         details={"user_id": user_id},
         ip_address=request.client.host if request.client else None,
     )
-    return _profile_to_response(existing)
+    return _profile_response_enriched(existing, db)
 
 
 @router.get("/profiles/me/export")
@@ -433,6 +480,7 @@ def create_profile(
         if existing_user_profile:
             for k, v in data.items():
                 setattr(existing_user_profile, k, v)
+            _sync_active_grant_scopes(db, existing_user_profile.id, profile.active_grant_scope_codes)
             db.commit()
             db.refresh(existing_user_profile)
             invalidate_plan_cache(existing_user_profile.id)
@@ -446,7 +494,7 @@ def create_profile(
                 details={"user_id": user_id},
                 ip_address=request.client.host if request.client else None,
             )
-            return _profile_to_response(existing_user_profile)
+            return _profile_response_enriched(existing_user_profile, db)
 
     logger.info("profile_create user_id=%s", user_id)
 
@@ -457,6 +505,8 @@ def create_profile(
         db.add(db_profile)
         db.commit()
         db.refresh(db_profile)
+        _sync_active_grant_scopes(db, db_profile.id, profile.active_grant_scope_codes)
+        db.commit()
         invalidate_plan_cache(db_profile.id)
         log_action(
             db,
@@ -468,7 +518,7 @@ def create_profile(
             details={"user_id": user_id},
             ip_address=request.client.host if request.client else None,
         )
-        return _profile_to_response(db_profile, include_access_token=user_id is None)
+        return _profile_response_enriched(db_profile, db, include_access_token=user_id is None)
     except IntegrityError:
         db.rollback()
         logger.warning("profile_create_integrity_conflict user_id=%s", user_id)
@@ -492,6 +542,7 @@ def create_profile(
             data["user_id"] = user_id
         for k, v in data.items():
             setattr(existing, k, v)
+        _sync_active_grant_scopes(db, existing.id, profile.active_grant_scope_codes)
         db.commit()
         db.refresh(existing)
         log_action(
@@ -504,7 +555,7 @@ def create_profile(
             details={"user_id": user_id},
             ip_address=request.client.host if request.client else None,
         )
-        return _profile_to_response(existing)
+        return _profile_response_enriched(existing, db)
 
 
 @router.get("/profiles/{profile_id}", response_model=schemas.StudentProfileResponse)
@@ -521,7 +572,7 @@ def get_profile(
     if not profile:
         logger.warning("profile_get_not_found profile_id=%s", profile_id)
         raise HTTPException(status_code=404, detail="Profile not found")
-    return _profile_to_response(profile)
+    return _profile_response_enriched(profile, db)
 
 
 def get_profile_dict(profile_id: int, db: Session) -> dict | None:
@@ -529,4 +580,4 @@ def get_profile_dict(profile_id: int, db: Session) -> dict | None:
     profile = db.query(models.Student).filter(models.Student.id == profile_id).first()
     if not profile:
         return None
-    return _profile_to_response(profile)
+    return enrich_profile_dict(_profile_to_response(profile), db)

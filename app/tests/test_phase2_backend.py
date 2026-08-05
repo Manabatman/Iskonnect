@@ -1,6 +1,6 @@
 """Phase 2 backend: editorial state, quality, organizations, reports, catalog health."""
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from app import models
 from app.auth import create_access_token
@@ -83,6 +83,38 @@ def test_apply_quality_scores_populates_legacy_columns(db_session):
     apply_quality_scores(sch, db_session)
     assert sch.data_completeness_score is not None
     assert sch.confidence_score is not None
+
+
+def test_apply_quality_scores_uses_completeness_not_opportunity(db_session):
+    from app.utils.data_completeness import compute_data_completeness_score
+
+    sch = models.Scholarship(
+        title="Evidence Gated",
+        provider="DOST-SEI",
+        link="https://example.com/dost",
+        eligible_levels='["College"]',
+        eligible_regions='["NCR"]',
+        application_deadline=date.today(),
+        is_active=True,
+        data_status="active",
+        last_verified_at=datetime.utcnow(),
+        verification_source="manual",
+    )
+    db_session.add(sch)
+    db_session.commit()
+    db_session.add(
+        models.FieldEvidence(
+            scholarship_id=sch.id,
+            field_key="title",
+            source_url="https://example.com/evidence",
+        )
+    )
+    db_session.commit()
+    opp = compute_opportunity_quality(sch, db_session)
+    completeness = compute_data_completeness_score(sch)
+    assert opp.score != completeness
+    apply_quality_scores(sch, db_session)
+    assert sch.data_completeness_score == completeness
 
 
 def test_backfill_organizations(db_session):

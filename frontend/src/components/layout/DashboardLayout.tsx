@@ -57,12 +57,12 @@ export function DashboardLayout() {
         />
         <div
           className={[
-            "flex min-h-screen flex-col transition-[padding] duration-200",
-            sidebarCollapsed ? "lg:pl-16" : "lg:pl-64",
+            "flex min-h-screen flex-col transition-[padding] duration-base",
+            sidebarCollapsed ? "lg:pl-16" : "lg:pl-sidebar",
           ].join(" ")}
         >
           <DashboardTopbar onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-          <main id="main-content" className="flex-1 overflow-auto pb-20 lg:pb-0">
+          <main id="main-content" className="flex-1 overflow-auto pb-bottom-nav lg:pb-0">
             <ErrorBoundary>
               <Outlet />
             </ErrorBoundary>

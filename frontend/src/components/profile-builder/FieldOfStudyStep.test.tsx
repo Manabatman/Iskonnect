@@ -1,8 +1,9 @@
 /** @vitest-environment jsdom */
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { FieldOfStudyStep } from "./FieldOfStudyStep";
 import { FIELDS_OF_STUDY_FALLBACK } from "../../constants/profileOptions";
+import { INITIAL_STATE } from "./profileBuilderState";
 
 vi.mock("../../api/client", () => ({
   apiFetch: vi.fn(() => Promise.reject(new Error("offline"))),
@@ -13,15 +14,7 @@ describe("FieldOfStudyStep", () => {
     const onChange = vi.fn();
     render(
       <FieldOfStudyStep
-        state={{
-          field_of_study_broad: "",
-          field_of_study_specific: "",
-          preferred_course_1: "",
-          preferred_course_2: "",
-          preferred_course_3: "",
-          extracurriculars: "",
-          awards: "",
-        }}
+        state={INITIAL_STATE}
         onChange={onChange}
       />
     );

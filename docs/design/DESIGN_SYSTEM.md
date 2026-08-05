@@ -15,7 +15,7 @@
 
 CSS custom properties in `frontend/src/index.css` are the single source of truth. Tailwind maps to these via `tailwind.config.js`. New surfaces consume tokens — not ad-hoc `slate-*` for brand colors.
 
-**Enforcement:** `npm run audit:design-tokens` (local; not yet CI-hard-gated).
+**Enforcement:** `npm run audit:design-tokens` runs in CI for palette utilities (DS-17) on guarded paths. Spacing scale violations (DS-10) are **enforced** repo-wide via `SPACING_LINT=enforced` in CI (Wave 9).
 
 **Reference route:** `/design-system` (dev showcase).
 
@@ -61,6 +61,8 @@ Semantic utilities with justified sizes. Base: 16px (`1rem`) body.
 
 **Justification:** 16px body meets WCAG readability at 200% zoom. 14px minimum for secondary UI. 12px only for non-critical metadata — never for disclaimers or eligibility text.
 
+**Implementation:** Encoded in `frontend/tailwind.config.js` as `fontSize` entries — use `text-display`, `text-h1`, … `text-label`. The `/design-system` route renders the full scale.
+
 ---
 
 ## 3. Spacing system
@@ -88,6 +90,12 @@ Semantic utilities with justified sizes. Base: 16px (`1rem`) body.
 **Section vertical rhythm:** `py-12 sm:py-16 lg:py-20` (landing and content pages).
 
 **Generous whitespace is the primary "professional" signal (P5):** when in doubt, choose the larger step.
+
+### Enforcement (Wave 1)
+
+- Keep Tailwind’s numeric scale (`1`–`32`); do **not** introduce named aliases (`spacing-sm`, etc.).
+- `scripts/check-design-tokens.mjs` flags off-scale steps (`p-7`, `gap-10`, `m-11`) and arbitrary values (`p-[13px]`) across `frontend/src`.
+- **Enforced in CI (Wave 9)** — off-scale spacing fails `npm run audit:design-tokens` when `SPACING_LINT=enforced`.
 
 ---
 
@@ -167,8 +175,8 @@ Label always reads **"Eligibility fit"** — never "Match score" or "Win probabi
 
 | Token | Value | Usage |
 | --- | --- | --- |
-| `--shadow-1` | Subtle | Inputs, chips |
-| `--shadow-2` | Default card | Scholarship cards at rest |
+| `--shadow-1` | Subtle | `ui/card` primitive at rest, inputs, chips |
+| `--shadow-2` | Default card | Interactive list cards (scholarship cards at rest) |
 | `--shadow-3` | Elevated | Dropdowns, popovers |
 | `--shadow-4` | Modal | Dialogs, sheets |
 
@@ -436,16 +444,21 @@ Tailwind defaults (not overridden):
 
 ## 20. Design tokens reference
 
-Full token list in `frontend/src/index.css`. Key additions for redesign:
+Full token list in `frontend/src/index.css`. Layout and motion additions (Wave 1):
 
 ```css
-/* Proposed — add during implementation */
+--page-gutter: 1rem;
+--section-gap: 3rem;
+--card-padding: 1.5rem;
+--stack-gap: 0.75rem;
 --nav-height-mobile: 3.5rem;        /* 56px bottom nav */
 --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 --feedback-fab-offset: calc(var(--nav-height-mobile) + var(--safe-area-bottom) + 1rem);
 --duration-celebrate: 400ms;
 --hero-scrim: linear-gradient(to top, rgb(15 23 42 / 0.7), transparent 60%);
 ```
+
+Mapped in Tailwind as `spacing.page-gutter`, `spacing.section-gap`, `spacing.nav-mobile`, and `transitionDuration.celebrate`.
 
 ---
 

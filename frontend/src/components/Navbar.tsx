@@ -1,32 +1,35 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
-import { usePublicStats } from "../hooks/usePublicStats";
-import {
-  brandLogoSrc,
-  BRAND_LOGO_NAV_CLASS,
-  BRAND_LOGO_NAV_HEIGHT,
-  BRAND_LOGO_NAV_WIDTH,
-  LOGO_LIGHT_SRC,
-} from "../lib/brandLogo";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { cn, MIN_TOUCH_TARGET_CLASS } from "@/lib/utils";
+import { MIN_TOUCH_TARGET_CLASS } from "@/lib/utils";
+import { brandLogoSrc, BRAND_LOGO_NAV_CLASS, BRAND_LOGO_NAV_HEIGHT, BRAND_LOGO_NAV_WIDTH, LOGO_LIGHT_SRC } from "../lib/brandLogo";
 
-const navLinkClass = (active: boolean) =>
-  cn(
-    "inline-flex min-h-11 items-center rounded-md px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-    active ? "font-medium text-primary" : "text-muted-foreground hover:text-primary"
-  );
+const desktopNavLinkClass = (active: boolean) =>
+  [
+    "text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded px-1",
+    active
+      ? "font-medium text-primary-600 dark:text-primary-400"
+      : "text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400",
+  ].join(" ");
+
+const mobileNavLinkClass = (active: boolean) =>
+  [
+    "rounded-xl px-3 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+    active
+      ? "bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
+      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800",
+  ].join(" ");
+
+const primaryNavClass =
+  "inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900";
 
 export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { resolvedTheme } = useTheme();
-  const stats = usePublicStats();
   const path = location.pathname;
   const logoSrc = brandLogoSrc(resolvedTheme);
 
@@ -34,14 +37,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled((prev) => {
-        if (!prev && y > 24) return true;
-        if (prev && y < 8) return false;
-        return prev;
-      });
-    };
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -51,156 +47,219 @@ export function Navbar() {
     setMobileOpen(false);
   }, [path]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
-  const navItems: { to: string; label: string; match?: () => boolean }[] = [
-    { to: "/how-it-works", label: "How it works" },
-    { to: "/scholarships/search", label: "Scholarships", match: () => path.startsWith("/scholarships") },
-    {
-      to: "/how-matching-works",
-      label: "Transparency",
-      match: () => isActive("/how-matching-works") || isActive("/how-we-verify"),
-    },
-    { to: "/faq", label: "FAQ" },
-  ];
+  const desktopNavLinks = (
+    <>
+      <Link to="/" className={desktopNavLinkClass(isActive("/"))}>
+        Home
+      </Link>
+      <Link to="/scholarships/search" className={desktopNavLinkClass(path.startsWith("/scholarships"))}>
+        Scholarships
+      </Link>
+      <Link
+        to="/how-it-works"
+        className={desktopNavLinkClass(isActive("/how-it-works") || isActive("/transparency") || isActive("/match-methodology"))}
+      >
+        Trust & matching
+      </Link>
+    </>
+  );
 
-  const navLinks = (mobile = false) =>
-    navItems.map(({ to, label, match }) => {
-      const active = match ? match() : isActive(to);
-      return (
-        <Link
-          key={to}
-          to={to}
-          className={cn(navLinkClass(active), mobile && "w-full")}
-          aria-current={active ? "page" : undefined}
-          onClick={() => mobile && setMobileOpen(false)}
-        >
-          {label}
-        </Link>
-      );
-    });
+  const mobileNavLinks = (
+    <>
+      <Link to="/" className={mobileNavLinkClass(isActive("/"))} onClick={() => setMobileOpen(false)}>
+        Home
+      </Link>
+      <Link
+        to="/scholarships/search"
+        className={mobileNavLinkClass(path.startsWith("/scholarships"))}
+        onClick={() => setMobileOpen(false)}
+      >
+        Scholarships
+      </Link>
+      <Link
+        to="/how-it-works"
+        className={mobileNavLinkClass(isActive("/how-it-works") || isActive("/transparency") || isActive("/match-methodology"))}
+        onClick={() => setMobileOpen(false)}
+      >
+        Trust & matching
+      </Link>
+    </>
+  );
 
-  const authLinks = (mobile = false) =>
-    user ? (
-      <>
-        <Link
-          to="/dashboard"
-          className={cn(navLinkClass(path.startsWith("/dashboard")), mobile && "w-full")}
-          aria-current={path.startsWith("/dashboard") ? "page" : undefined}
-          onClick={() => mobile && setMobileOpen(false)}
-        >
-          Dashboard
-        </Link>
-        <span
-          className="hidden max-w-[10rem] truncate text-sm text-muted-foreground sm:inline"
-          title={user.email}
-        >
-          {user.email}
-        </span>
-        <Button
-          type="button"
-          variant="ghost"
-          className={cn("text-sm", mobile && "w-full justify-start")}
-          onClick={() => {
-            logout();
-            navigate("/");
-            setMobileOpen(false);
-          }}
-        >
-          Log out
-        </Button>
-      </>
-    ) : (
-      <>
-        <Link
-          to="/login"
-          className={cn(navLinkClass(isActive("/login")), mobile && "w-full")}
-          aria-current={isActive("/login") ? "page" : undefined}
-          onClick={() => mobile && setMobileOpen(false)}
-        >
-          Sign in
-        </Link>
-        <Button asChild className={mobile ? "w-full" : undefined}>
-          <Link to="/register" onClick={() => mobile && setMobileOpen(false)}>
-            Get started free
-          </Link>
-        </Button>
-      </>
-    );
+  const desktopAuthLinks = user ? (
+    <>
+      <Link to="/dashboard" className={desktopNavLinkClass(path.startsWith("/dashboard"))}>
+        Dashboard
+      </Link>
+      <span
+        className="hidden max-w-[10rem] truncate text-sm text-slate-500 dark:text-slate-400 sm:inline"
+        title={user.email}
+      >
+        {user.email}
+      </span>
+      <button
+        type="button"
+        onClick={() => {
+          logout();
+          navigate("/");
+        }}
+        className="text-sm text-slate-600 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:text-primary-400"
+      >
+        Log out
+      </button>
+    </>
+  ) : (
+    <>
+      <Link
+        to="/login"
+        className="text-sm font-medium text-slate-600 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:text-primary-400"
+      >
+        Login
+      </Link>
+      <Link to="/register" className={primaryNavClass}>
+        Get Started
+      </Link>
+    </>
+  );
+
+  const mobileAuthLinks = user ? (
+    <>
+      <Link to="/dashboard" className={mobileNavLinkClass(path.startsWith("/dashboard"))} onClick={() => setMobileOpen(false)}>
+        Dashboard
+      </Link>
+      <span className="truncate px-3 text-sm text-slate-500 dark:text-slate-400" title={user.email}>
+        {user.email}
+      </span>
+      <button
+        type="button"
+        onClick={() => {
+          logout();
+          navigate("/");
+          setMobileOpen(false);
+        }}
+        className={`${mobileNavLinkClass(false)} w-full text-left`}
+      >
+        Log out
+      </button>
+    </>
+  ) : (
+    <>
+      <Link to="/login" className={mobileNavLinkClass(false)} onClick={() => setMobileOpen(false)}>
+        Login
+      </Link>
+      <Link to="/register" className={`${primaryNavClass} w-full`} onClick={() => setMobileOpen(false)}>
+        Get Started
+      </Link>
+    </>
+  );
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 border-b pt-[env(safe-area-inset-top)] transition-all duration-base motion-reduce:transition-none",
-        scrolled ? "border-border bg-background/95 py-0 shadow-1 backdrop-blur-sm" : "border-border/80 bg-background py-0.5"
-      )}
-    >
-      <div
-        className={cn(
-          "mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6 transition-all duration-base motion-reduce:transition-none",
-          scrolled ? "py-1.5" : "py-2 sm:py-2.5"
-        )}
+    <>
+      <header
+        className={`sticky top-0 z-40 border-b transition-colors duration-200 ${
+          scrolled
+            ? "border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
+            : "border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900"
+        }`}
       >
-        <Link to="/" className="flex shrink-0 items-center gap-3">
-          <img
-            src={logoSrc}
-            alt=""
-            className={cn(BRAND_LOGO_NAV_CLASS, scrolled && "scale-95 motion-reduce:scale-100")}
-            width={BRAND_LOGO_NAV_WIDTH}
-            height={BRAND_LOGO_NAV_HEIGHT}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
-            }}
-          />
-          <span className={cn("transition-all duration-base motion-reduce:transition-none", scrolled && "hidden sm:inline")}>
-            <span className="block font-display text-xl tracking-tight text-primary sm:text-2xl">Iskonnect</span>
-            {!scrolled ? (
-              <span className="hidden text-xs font-medium text-muted-foreground sm:block">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6 sm:py-2.5">
+          <Link to="/" className="flex shrink-0 items-center gap-3">
+            <img
+              src={logoSrc}
+              alt=""
+              className={BRAND_LOGO_NAV_CLASS}
+              width={BRAND_LOGO_NAV_WIDTH}
+              height={BRAND_LOGO_NAV_HEIGHT}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
+              }}
+            />
+            <span>
+              <span className="block font-brand text-xl font-black tracking-tight text-primary-700 dark:text-primary-400 sm:text-2xl">
+                Iskonnect
+              </span>
+              <span className="hidden text-xs font-medium text-slate-500 dark:text-slate-400 sm:block">
                 Connecting Filipino Students to Opportunity
               </span>
-            ) : null}
-          </span>
-        </Link>
+            </span>
+          </Link>
 
-        <nav className="hidden items-center gap-x-1 md:flex" aria-label="Primary">
-          {navLinks()}
+          <nav className="hidden items-center gap-x-5 md:flex" aria-label="Primary">
+            {desktopNavLinks}
+          </nav>
+
+          <div className="hidden items-center gap-3 md:flex">{desktopAuthLinks}</div>
+
+          <button
+            type="button"
+            className={`inline-flex size-11 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 md:hidden dark:text-slate-300 dark:hover:bg-slate-800 ${MIN_TOUCH_TARGET_CLASS}`}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
+            {mobileOpen ? <X className="h-6 w-6" aria-hidden /> : <Menu className="h-6 w-6" aria-hidden />}
+          </button>
+        </div>
+      </header>
+
+      {mobileOpen ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm md:hidden"
+          aria-label="Close navigation menu"
+          onClick={() => setMobileOpen(false)}
+        />
+      ) : null}
+
+      <aside
+        id="mobile-nav"
+        className={[
+          "fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col border-r border-slate-200 bg-white shadow-xl transition-transform duration-200 dark:border-slate-700 dark:bg-slate-900 md:hidden",
+          mobileOpen ? "translate-x-0" : "-translate-x-full pointer-events-none",
+        ].join(" ")}
+        aria-hidden={!mobileOpen}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-slate-200 px-4 dark:border-slate-700">
+          <Link to="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
+            <img
+              src={logoSrc}
+              alt=""
+              className="h-8 w-8 object-contain"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = LOGO_LIGHT_SRC;
+              }}
+            />
+            <span className="font-brand text-lg font-black tracking-tight text-primary-700 dark:text-primary-400">
+              Iskonnect
+            </span>
+          </Link>
+          <button
+            type="button"
+            className={`inline-flex size-11 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 ${MIN_TOUCH_TARGET_CLASS}`}
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
+          >
+            <X className="h-6 w-6" aria-hidden />
+          </button>
+        </div>
+
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-3" aria-label="Mobile primary">
+          {mobileNavLinks}
+          <div className="mt-3 flex flex-col gap-1 border-t border-slate-200 pt-3 dark:border-slate-700">{mobileAuthLinks}</div>
         </nav>
-
-        <div className="hidden items-center gap-2 md:flex">{authLinks()}</div>
-
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className={cn("md:hidden", MIN_TOUCH_TARGET_CLASS)}
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            >
-              <Menu className="h-6 w-6" aria-hidden />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[min(100vw-2rem,20rem)]">
-            <SheetHeader>
-              <SheetTitle>Menu</SheetTitle>
-            </SheetHeader>
-            <nav className="mt-6 flex flex-col gap-2" aria-label="Mobile primary">
-              {navLinks(true)}
-              <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">{authLinks(true)}</div>
-            </nav>
-            {stats?.last_catalog_verification_at ? (
-              <p className="mt-6 text-xs text-muted-foreground">
-                Catalog last verified{" "}
-                {new Date(stats.last_catalog_verification_at).toLocaleDateString(undefined, {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            ) : null}
-          </SheetContent>
-        </Sheet>
-      </div>
-    </header>
+      </aside>
+    </>
   );
 }
